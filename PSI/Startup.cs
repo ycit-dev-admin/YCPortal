@@ -39,8 +39,9 @@ namespace PSI
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDefaultFiles();  // 可以指定預設頁面可搜尋MSDN了解細節
             app.UseStaticFiles();  //主要是要讓專案可以讀wwwrot內的靜態檔案
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
