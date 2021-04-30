@@ -1,4 +1,4 @@
-﻿namespace PSI.Core.Interfaces
+﻿namespace PSI.Core.Interfaces.Entities
 {
     public interface IEntity
     {

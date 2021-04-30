@@ -1,4 +1,4 @@
-﻿using PSI.Core.Interfaces;
+﻿using PSI.Core.Interfaces.Entities;
 
 namespace PSI.Core.Entities
 {
