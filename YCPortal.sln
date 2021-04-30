@@ -4,8 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSI", "PSI\PSI.csproj", "{1F436449-538C-4D79-A775-97E894A02502}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB} = {EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB}
+		{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA} = {8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSI.Core", "PSI.Core\PSI.Core.csproj", "{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PSI.Core", "PSI.Core\PSI.Core.csproj", "{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSI.Service", "PSI.Service\PSI.Service.csproj", "{EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA} = {8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +30,10 @@ Global
 		{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CABCAC5-20DB-4A2D-A28A-9036B1D409DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB51AFB1-3E9B-4E77-95A7-8A2FCB217EAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
