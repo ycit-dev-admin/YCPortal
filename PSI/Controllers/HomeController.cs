@@ -10,7 +10,14 @@ namespace PSI.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Title"] = "Index";
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult CreatePDoc()
+        {            
+            return PartialView("_CreatePurchaseDocPartial");
         }
     }
 }

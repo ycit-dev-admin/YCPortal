@@ -5,6 +5,9 @@
   "devDependencies": {},
   "dependencies": {
     "admin-lte": "^3.1.0",
-    "@types/jquery": "3.5.5"
+    "@types/jquery": "3.5.5",
+    "@types/bootstrap": "4.6.0",
+    "@types/moment": "2.11.29",
+    "@types/select2": "4.0.53"
   }
 }

@@ -2,5 +2,72 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    <div>hi1238</div>
+    <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
 }
+
+<button id="testBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#gridSystemModal" data-url="@Url.Action("CreatePDoc")">
+    磅單建立
+</button>
+<!--Create purchase model DOM-->
+<div id="PurchaseModelDOM"></div>
+@await Html.PartialAsync("~/Views/HOME/_CreatePurchaseDocPartial.cshtml")
+
+
+
+<script src="~/lib/admin-lte/plugins/jquery/jquery.min.js"></script>
+<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+<script src="~/psi/create-purchase-doc.js"></script>
+
+<script>
+    /* $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });*/
+    /*Initialize Elements*/
+    // Datetimepicker
+    $('#reservationdatetime').datetimepicker({
+        defaultDate: moment(),
+        locale: 'zh-tw',
+        icons: { time: 'far fa-clock' }
+    });
+    // Select2 Elements
+    $('.select2bs4').select2({
+        theme: 'bootstrap4'
+    })
+    $('#testBtn').click(function (event) {
+        $('#reservationdatetime').on("change.datetimepicker", function (e) {
+            console.log(e.date);
+        });
+        //$('#reservationdatetime').datetimepicker("clear");
+        //$('#reservationdatetime').datetimepicker("hide");
+        //$('#reservationdatetime').datetimepicker('show');
+
+        //var purchaseModelDOM = $('#PurchaseModelDOM');
+        //var url = $(this).data('url');
+        //$.get(url).done(function (data) {
+        //    purchaseModelDOM.html(data);
+        //    purchaseModelDOM.find('.modal').modal('show');
+
+
+        //    //  IniElements();
+        //})
+    })
+    $(function () {
+        $('#reservationdatetime').on("change.datetimepicker", function (e) {
+            console.log(e.date);
+        });
+
+    })
+
+
+
+
+
+
+
+
+</script>
+<!--Create purchase doc model-->
+@*<script src="~/psi/create-purchase-doc.js"></script>*@
