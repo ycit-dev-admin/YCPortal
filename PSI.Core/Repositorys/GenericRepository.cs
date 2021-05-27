@@ -3,6 +3,7 @@ using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,34 +17,35 @@ namespace PSI.Core.Repositorys
     /// <seealso cref="Sample.Repository.Interface.IGenericRepository{TEntity}" />
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-       
+
         /// <summary>
         /// UnitOfWork 實體
         /// </summary>
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly DbContext _context;
         private bool disposedValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericRepository{TEntity}"/> class.
         /// </summary>
-        /// <param name="unitofwork">The unitofwork.</param>
-        public GenericRepository(IUnitOfWork unitofwork)
+        /// <param name="context">db context.</param>
+        public GenericRepository(DbContext context)
         {
-            this._unitOfWork = unitofwork;
+            this._context = context;
         }
 
         /// <summary>
         /// 新增
         /// </summary>
         /// <param name="entity">實體</param>
-        public void Insert(TEntity entity)
+        /// <exception cref="ArgumentNullException">entity</exception>
+        public void Add(TEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
 
-            _unitOfWork.Context.Set<TEntity>().Add(entity);
+            _context.Set<TEntity>().Add(entity);
         }
 
         /// <summary>
@@ -52,8 +54,17 @@ namespace PSI.Core.Repositorys
         /// <returns></returns>
         public async Task<ICollection<TEntity>> GetAllAsync()
         {
-            return await this._unitOfWork.Context.Set<TEntity>().ToListAsync();
+            return await this._context.Set<TEntity>().ToListAsync();
         }
+
+        /// <summary>
+        /// 取得全部
+        /// </summary>
+        /// <returns></returns>
+        //public ICollection<TEntity> GetAll()
+        //{
+        //    return this._context.Set<TEntity>().ToList();
+        //}
 
         /// <summary>
         /// 取得單筆
@@ -62,27 +73,29 @@ namespace PSI.Core.Repositorys
         /// <returns></returns>
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await this._unitOfWork.Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+            return await this._context.Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
         /// <summary>
         /// 刪除
         /// </summary>
         /// <param name="entity">實體</param>
-        public void Delete(TEntity entity)
+        /// <exception cref="ArgumentNullException">entity</exception>
+        public void Remove(TEntity entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
 
-            this._unitOfWork.Context.Entry(entity).State = EntityState.Deleted;
+            this._context.Entry(entity).State = EntityState.Deleted;
         }
 
         /// <summary>
         /// 更新
         /// </summary>
         /// <param name="entity">實體</param>
+        /// <exception cref="ArgumentNullException">entity</exception>
         public void Update(TEntity entity)
         {
             if (entity == null)
@@ -90,9 +103,17 @@ namespace PSI.Core.Repositorys
                 throw new ArgumentNullException("entity");
             }
 
-            this._unitOfWork.Context.Entry(entity).State = EntityState.Modified;
+            this._context.Entry(entity).State = EntityState.Modified;
         }
 
+
+
+        // // TODO: 僅有當 'Dispose(bool disposing)' 具有會釋出非受控資源的程式碼時，才覆寫完成項
+        // ~GenericRepository()
+        // {
+        //     // 請勿變更此程式碼。請將清除程式碼放入 'Dispose(bool disposing)' 方法
+        //     Dispose(disposing: false);
+        // }
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -107,13 +128,6 @@ namespace PSI.Core.Repositorys
                 disposedValue = true;
             }
         }
-
-        // // TODO: 僅有當 'Dispose(bool disposing)' 具有會釋出非受控資源的程式碼時，才覆寫完成項
-        // ~GenericRepository()
-        // {
-        //     // 請勿變更此程式碼。請將清除程式碼放入 'Dispose(bool disposing)' 方法
-        //     Dispose(disposing: false);
-        // }
 
         public void Dispose()
         {

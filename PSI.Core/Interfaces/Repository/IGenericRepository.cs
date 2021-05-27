@@ -12,7 +12,7 @@ namespace PSI.Core.Interfaces.Repository
         /// 新增
         /// </summary>
         /// <param name="entity">實體</param>
-        void Insert(TEntity entity);
+        void Add(TEntity entity);
 
         /// <summary>
         /// 取得全部
@@ -31,7 +31,7 @@ namespace PSI.Core.Interfaces.Repository
         /// 刪除
         /// </summary>
         /// <param name="entity">實體</param>
-        void Delete(TEntity entity);
+        void Remove(TEntity entity);
 
         /// <summary>
         /// 更新

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PSI.Core.Entities;
+using PSI.Core.Infrastructure.DBContext;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Repositorys;
@@ -10,30 +12,30 @@ using System.Threading.Tasks;
 
 namespace PSI.Core.UnitOfWorks
 {
-    class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private DbContext _context { get; set; }
-        private bool _disposed = false;
-        private Hashtable _repositories;
+        private bool disposed = false;
+        public IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        /// <param name="blogRepository">The blog repository.</param>
+        /// <param name="purchaseWeightNoteRepository">The blog repository.</param>
         public UnitOfWork(
-            DbContext context)
+            DbContext context,
+            IGenericRepository<PurchaseWeightNote> purchaseWeightNoteRepository)
         {
-            _context = context;
+            this.Context = context;
+            this.PurchaseWeightNoteRepository = purchaseWeightNoteRepository;
         }
-        /// <summary>
-        /// </summary>
-        // public IGenericRepository<Blog> BlogRepository { get; private set; }
+
+
 
         /// <summary>
         /// Context
         /// </summary>
-
+        public DbContext Context { get; private set; }
 
         /// <summary>
         /// Dispose
@@ -48,39 +50,9 @@ namespace PSI.Core.UnitOfWorks
         /// SaveChange
         /// </summary>
         /// <returns></returns>
-        public async Task<int> SaveChangeAsync()
+        public int SaveChange()
         {
-            return await _context.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// 取得某一個Entity的Repository。
-        /// 如果沒有取過，會initialise一個
-        /// 如果有就取得之前initialise的那個。
-        /// </summary>
-        /// <typeparam name="T">此Context裡面的Entity Type</typeparam>
-        /// <returns>Entity的Repository</returns>
-        public IGenericRepository<T> Repository<T>() where T : class
-        {
-            if (_repositories == null)
-            {
-                _repositories = new Hashtable();
-            }
-
-            var type = typeof(T).Name;
-
-            if (!_repositories.ContainsKey(type))
-            {
-                var repositoryType = typeof(GenericRepository<>);
-
-                var repositoryInstance =
-                    Activator.CreateInstance(repositoryType
-                            .MakeGenericType(typeof(T)), _context);
-
-                _repositories.Add(type, repositoryInstance);
-            }
-
-            return (IGenericRepository<T>)_repositories[type];
+            return this.Context.SaveChanges();
         }
 
         /// <summary>
@@ -89,15 +61,15 @@ namespace PSI.Core.UnitOfWorks
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (!this.disposed)
             {
                 if (disposing)
                 {
-                    _context.Dispose();
-                    _context = null;
+                    this.Context.Dispose();
+                    this.Context = null;
                 }
             }
-            _disposed = true;
+            this.disposed = true;
         }
     }
 }

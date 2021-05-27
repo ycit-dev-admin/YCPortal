@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PSI.Core.Entities;
+using PSI.Service.IService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +10,23 @@ namespace PSI.Controllers
 {
     public class HomeController : Controller
     {
+
+        
+
+        public HomeController()
+        {
+            
+        }
+
+        //[FormValidator]
         public IActionResult Index()
         {
             ViewData["Title"] = "Index";
             return View();
         }
 
-        [HttpGet]
-        public IActionResult CreatePDoc()
-        {            
-            return PartialView("_CreatePurchaseDocPartial");
-        }
+        
+
+        
     }
 }

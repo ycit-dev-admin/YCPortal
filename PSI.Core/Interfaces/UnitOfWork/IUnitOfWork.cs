@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PSI.Core.Entities;
+using PSI.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +13,7 @@ namespace PSI.Core.Interfaces.UnitOfWork
         /// <summary>
         ///
         /// </summary>
-        //IGenericRepository<Blog> BlogRepository { get; }
+        IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; }
 
         /// <summary>
         /// DB Context
@@ -22,6 +24,6 @@ namespace PSI.Core.Interfaces.UnitOfWork
         /// Saves the change.
         /// </summary>
         /// <returns></returns>
-        Task<int> SaveChangeAsync();
+        int SaveChange();
     }
 }

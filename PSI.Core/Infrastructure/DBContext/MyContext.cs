@@ -15,6 +15,7 @@ namespace PSI.Core.Infrastructure.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //base.OnModelCreating(modelBuilder);
             // base.OnModelCreating(modelBuilder);  ??
             // modelBuilder.Entity<PurchaseWeightNote>().ToTable("abc");  // 相依在 Microsoft.EntityFrameworkCore.Relational
 
