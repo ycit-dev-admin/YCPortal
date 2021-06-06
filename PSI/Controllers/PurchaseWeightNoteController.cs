@@ -29,9 +29,19 @@ namespace PSI.Controllers
 
 
         [HttpGet]
-        public IActionResult CreatePurchaseWeightNote()
+        public IActionResult Create()
         {
-            return View("CreatePurchaseWeightNote");
+            ViewData["Title"] = "進貨磅單建立";
+            return View("Create");
+        }
+
+        [HttpGet]
+        public IActionResult CurMonthList()
+        {
+            var haha = _psiService.GetAllPurchaseWeigntNotes();
+            var abc = haha.ToList();
+            ViewData["Title"] = "當月磅單查詢";
+            return View(abc);
         }
 
         [HttpPost, FormValidator]
@@ -42,7 +52,7 @@ namespace PSI.Controllers
 
             if (!ModelState.IsValid)
             { // re-render the view when validation failed.
-                return PartialView("_CreatePurchaseDocPartial", purchaseWeightNote);
+                return View(purchaseWeightNote);
             }
 
             var purchaseWeightNote2 = new PurchaseWeightNote

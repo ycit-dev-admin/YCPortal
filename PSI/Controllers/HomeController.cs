@@ -21,7 +21,7 @@ namespace PSI.Controllers
         //[FormValidator]
         public IActionResult Index()
         {
-            ViewData["Title"] = "Index";
+            ViewData["Title"] = "首頁";
             return View();
         }
 

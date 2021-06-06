@@ -4,6 +4,7 @@ using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Service.IService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,12 @@ namespace PSI.Service.Service
             _purchaseWeightNoteRepository.Add(purchaseWeightNote);
             _unitOfwork.SaveChange();
             return true;
+        }
+
+        public IEnumerable<PurchaseWeightNote> GetAllPurchaseWeigntNotes()
+        {
+            var qq = _purchaseWeightNoteRepository.GetAllAsync().Result.Where(aa=> aa.Id!=1);
+            return qq;
         }
     }
 }
