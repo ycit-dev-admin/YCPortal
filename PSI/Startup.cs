@@ -20,7 +20,6 @@ using PSI.Core.Repositorys;
 using FluentValidation.AspNetCore;
 using PSI.VM_Models.PurchaseWeightNote;
 using FluentValidation;
-using PSI.VM_Models.Home;
 using FormHelper;
 
 namespace PSI
@@ -37,16 +36,21 @@ namespace PSI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews()
+            services.AddControllersWithViews() // 似乎是可以讓該專案使用Controller的相關功能 如驗證 及 View帶有Razor Page開發風格
                     .AddFluentValidation(s => s.RunDefaultMvcValidationAfterFluentValidationExecutes = false)
-                    .AddFormHelper();// 似乎是可以讓該專案使用Controller的相關功能 如驗證 及 View帶有Razor Page開發風格
+                    .AddFormHelper();
 
             services.AddTransient<IValidator<VM_PurchaseWeightNote>, VM_PurchaseWeightNoteValidator>();
-            services.AddTransient<IValidator<TestVM>, TestVMValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
-            services.AddScoped<IPsiService, PsiService>();
+            services.AddScoped<IPsiService, PsiService>();      
             services.AddScoped<IGenericRepository<PurchaseWeightNote>, GenericRepository<PurchaseWeightNote>>();
+            services.AddScoped<IGenericRepository<CustomerInfo>, GenericRepository<CustomerInfo>>();
+            services.AddScoped<IGenericRepository<CustomerCar>, GenericRepository<CustomerCar>>();
+            services.AddScoped<IGenericRepository<CustomerContract>, GenericRepository<CustomerContract>>();
+            services.AddScoped<IGenericRepository<ProductItem>, GenericRepository<ProductItem>>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<DbContext, MyContext>();
             services.AddDbContext<MyContext>(options =>
