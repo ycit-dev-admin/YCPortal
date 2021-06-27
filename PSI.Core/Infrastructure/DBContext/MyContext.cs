@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using PSI.Core.Entities;
+using PSI.Core.Entities.EntityConfigurations;
 
 namespace PSI.Core.Infrastructure.DBContext
 {
@@ -11,15 +12,20 @@ namespace PSI.Core.Infrastructure.DBContext
         public MyContext(DbContextOptions<MyContext> options) : base(options)
         {
         }
+        // Table要加S
         public DbSet<PurchaseWeightNote> PurchaseWeightNotes { get; set; }
+        public DbSet<CustomerInfo> CustomerInfos { get; set; }
+        public DbSet<ProductItem> ProductItems { get; set; }
+        public DbSet<CustomerContract> CustomerContracts { get; set; }
+        public DbSet<CustomerCar> CustomerCars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
             // base.OnModelCreating(modelBuilder);  ??
             // modelBuilder.Entity<PurchaseWeightNote>().ToTable("abc");  // 相依在 Microsoft.EntityFrameworkCore.Relational
 
-            //modelBuilder.ApplyConfiguration(new PurchaseWeightNotesConfiguration());
+            modelBuilder.ApplyConfiguration(new CustomerInfosConfiguration());
             //modelBuilder.ApplyConfiguration(new ProductItemsConfiguration());
             //modelBuilder.ApplyConfiguration(new CustomerInfosConfiguration());
         }

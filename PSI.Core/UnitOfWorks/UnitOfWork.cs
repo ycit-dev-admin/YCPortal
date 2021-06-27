@@ -16,6 +16,9 @@ namespace PSI.Core.UnitOfWorks
     {
         private bool disposed = false;
         public IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; private set; }
+        public IGenericRepository<CustomerInfo> CustomerInfoRepository { get; private set; }
+        public IGenericRepository<ProductItem> ProductItemRepository { get; private set; }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
@@ -24,10 +27,15 @@ namespace PSI.Core.UnitOfWorks
         /// <param name="purchaseWeightNoteRepository">The blog repository.</param>
         public UnitOfWork(
             DbContext context,
-            IGenericRepository<PurchaseWeightNote> purchaseWeightNoteRepository)
+            IGenericRepository<PurchaseWeightNote> purchaseWeightNoteRepository,
+            IGenericRepository<CustomerInfo> customerInfoRepository,
+            IGenericRepository<ProductItem> productItemRepository)
+
         {
             this.Context = context;
             this.PurchaseWeightNoteRepository = purchaseWeightNoteRepository;
+            this.CustomerInfoRepository = customerInfoRepository;
+            this.ProductItemRepository = productItemRepository;
         }
 
 
