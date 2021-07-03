@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PSI.Service.IService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,16 @@ namespace PSI.APIControllers
     //[AllowAnonymous]  //允許匿名用戶
     public class CustomerContractController : ControllerBase
     {
+        private readonly ICustomerService _customerService;
+
+
+        public CustomerContractController(ICustomerService customerService)
+        {
+            _customerService = customerService;
+        }
+
+
+
         // GET: api/<CustomerContractController>
         [HttpGet]
         public IEnumerable<string> Get()
