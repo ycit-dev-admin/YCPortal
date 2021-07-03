@@ -12,7 +12,7 @@ namespace PSI.Core.Entities.EntityConfigurations
             builder.Property(x => x.TaxId).IsRequired();
             builder.Property(x => x.CustomerName).IsRequired();
             builder.Property(x => x.PsiType).IsRequired().HasMaxLength(1); // 進出貨類別(1:進貨 2:出貨 3:Both)
-            builder.Property(x => x.IsShow).IsRequired().HasMaxLength(1);
+            builder.Property(x => x.IsEffective).IsRequired().HasMaxLength(1);
         }
     }
 }

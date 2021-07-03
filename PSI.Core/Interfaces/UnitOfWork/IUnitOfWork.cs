@@ -15,6 +15,7 @@ namespace PSI.Core.Interfaces.UnitOfWork
         /// </summary>
         IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; }
         IGenericRepository<CustomerInfo> CustomerInfoRepository { get; }
+        IGenericRepository<CustomerContract> CustomerContractRepository { get; }
         IGenericRepository<ProductItem> ProductItemRepository { get; }
 
         /// <summary>

@@ -17,6 +17,7 @@ namespace PSI.Core.UnitOfWorks
         private bool disposed = false;
         public IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; private set; }
         public IGenericRepository<CustomerInfo> CustomerInfoRepository { get; private set; }
+        public IGenericRepository<CustomerContract> CustomerContractRepository { get; private set; }
         public IGenericRepository<ProductItem> ProductItemRepository { get; private set; }
 
 
@@ -29,12 +30,14 @@ namespace PSI.Core.UnitOfWorks
             DbContext context,
             IGenericRepository<PurchaseWeightNote> purchaseWeightNoteRepository,
             IGenericRepository<CustomerInfo> customerInfoRepository,
+            IGenericRepository<CustomerContract> customerContractRepository,
             IGenericRepository<ProductItem> productItemRepository)
 
         {
             this.Context = context;
             this.PurchaseWeightNoteRepository = purchaseWeightNoteRepository;
             this.CustomerInfoRepository = customerInfoRepository;
+            this.CustomerContractRepository = customerContractRepository;
             this.ProductItemRepository = productItemRepository;
         }
 
