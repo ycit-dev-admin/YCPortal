@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using FormHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
@@ -17,6 +18,7 @@ namespace PSI.Controllers
 {
     public class PurchaseWeightNoteController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPsiService _psiService;
         private readonly ICustomerService _customerService;
         private readonly IProductItemService _productItemService;
@@ -25,11 +27,13 @@ namespace PSI.Controllers
 
         public PurchaseWeightNoteController(IPsiService psiService,
                                             ICustomerService customerService,
-                                            IProductItemService productItemService)
+                                            IProductItemService productItemService,
+                                            IHttpContextAccessor httpContextAccessor)
         {
             _psiService = psiService;
             _customerService = customerService;
             _productItemService = productItemService;
+            _httpContextAccessor = httpContextAccessor;
             //_haha = haha;
         }
 
@@ -46,13 +50,13 @@ namespace PSI.Controllers
         public IActionResult Create()
         {
             ViewData["Title"] = "進貨磅單建立";
-
+            string host = _httpContextAccessor.HttpContext.Request.Host.Value;
             var customerInfoItems = _customerService.GetCustomerInfosByPsiType("1").Select(aa => new SelectListItem
             {
                 Text = aa.CustomerName,
                 Value = aa.Id.ToString()
             });
-            var productItemItems = _productItemService.GetProductItemsByPsiType("1").Select(aa => new SelectListItem
+            var productItemItems = _productItemService.GetPurchaseProductItems().Select(aa => new SelectListItem
             {
                 Text = aa.ProductName,
                 Value = aa.Id.ToString()
@@ -71,14 +75,21 @@ namespace PSI.Controllers
         [HttpGet]
         public IActionResult CurMonthList()
         {
-            var haha = _psiService.GetAllPurchaseWeigntNotes();
-            var abc = haha.ToList();
+            var curMonthPWeightNotes = _psiService.GetAllPurchaseWeightNotes();
+            var vmModel = curMonthPWeightNotes.Select(aa => new VM_PurchaseWeightNote
+            {
+                FullWeightTime = aa.FullWeightTime,
+                DefectiveWeight = aa.DefectiveWeight.ToString(),
+                FullWeight = aa.FullWeight.ToString(),
+
+            }).ToList();
+
+
             ViewData["Title"] = "當月磅單查詢";
-            return View(abc);
+            return View(vmModel);
         }
 
-        [HttpPost]
-        [FormValidator]
+        [HttpPost, FormValidator]
         public IActionResult Create(VM_PurchaseWeightNote purchaseWeightNote)
         {
 
@@ -91,19 +102,22 @@ namespace PSI.Controllers
             if (!ModelState.IsValid)
             { // re-render the view when validation failed.
                 return View(purchaseWeightNote);
+                return FormResult.CreateWarningResult("'Abc' is already exist in the database.");
             }
+
+
 
             var purchaseWeightNote2 = new PurchaseWeightNote
             {
-                CarNo = "ABC-123",
-                FullWeight = 123,
-                FullWeightTime = DateTime.Now,
-                DefectiveWeight = 1,
+                CarNo = purchaseWeightNote.CarNoName,
+                FullWeight = double.Parse(purchaseWeightNote.FullWeight),
+                FullWeightTime = purchaseWeightNote.FullWeightTime.Value,
+                DefectiveWeight = double.Parse(purchaseWeightNote.DefectiveWeight),
                 ExcavatorOpTime = DateTime.Now,
-                CarWeight = 10,
+                CarWeight = double.Parse(purchaseWeightNote.FullWeight),
                 CarWeightTime = DateTime.Now,
-                TradeWeight = 100,
-                FinalDefectiveWeight = 99,
+                TradeWeight = double.Parse(purchaseWeightNote.DefectiveWeight),
+                FinalDefectiveWeight = double.Parse(purchaseWeightNote.FullWeight),
                 UnitPrice = 1,
                 WantPrice = 2,
                 HasTax = true,
@@ -113,8 +127,10 @@ namespace PSI.Controllers
                 CustomerId = 1,
                 EffectiveTime = DateTime.Now,
             };
-            _psiService.CreatePurchaseWeightNote(purchaseWeightNote2);
-            return PartialView("_CreatePurchaseDocPartial");
+
+            return _psiService.CreatePurchaseWeightNote(purchaseWeightNote2) ?
+                               FormResult.CreateSuccessResult("建立成功", Url.Action("CurMonthList", "PurchaseWeightNote")) :
+                               FormResult.CreateErrorResult("錯誤發生");
         }
     }
 }

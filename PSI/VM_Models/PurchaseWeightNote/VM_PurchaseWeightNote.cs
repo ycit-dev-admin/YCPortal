@@ -11,7 +11,6 @@ namespace PSI.VM_Models.PurchaseWeightNote
         public DateTime? FullWeightTime { get; set; }
         public string ScaleNo { get; set; }
         public string ExcavatorOpEmpNo { get; set; }
-
         public long? CustomerId { get; set; }
         public string CustomerName { get; set; }  // 當下客戶名     
         public string SelectPurchaseDetailInfos { get; set; }
@@ -19,6 +18,9 @@ namespace PSI.VM_Models.PurchaseWeightNote
         public string TraficUnitPrice { get; set; }
         public string WeightFee { get; set; }
         public string IsHasText { get; set; }
+        public string ContractFrom { get; set; }
+        public string CarNoId { get; set; }
+        public string CarNoName { get; set; }
         //public List<PurchaseDetailInfo> PurchaseDetailInfos { get; set; }
 
         // Page Field

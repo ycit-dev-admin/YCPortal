@@ -20,27 +20,13 @@
             </div>
             <span asp-validation-for="FullWeightTime" class="text-danger"></span>
         </div>
-        <div class="form-group col-sm-3">
-            <label>磅秤類型</label>
-            <br>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" checked>大磅
-                </label>
-            </div>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input">小磅
-                </label>
-            </div>
-        </div>
     </div>
     <div class="form-row">
         <div class="form-group col-sm-3">
             <label>進貨對象</label>
             <select asp-for="CustomerId" asp-items="@Model.CustomerInfoItems" class="select2bs5" style="width: 100%;">
                 <option></option>
-                <option value="99">0.新客戶</option>
+                <option value="0">0.新客戶</option>
             </select>
             <span asp-validation-for="CustomerId" class="text-danger"></span>
         </div>
@@ -48,20 +34,19 @@
             <label>客戶名稱</label>
             <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" disabled="disabled">
             <span asp-validation-for="CustomerName" class="text-danger"></span>
-
         </div>
         <div class="form-group col-sm-3">
             <label>客戶車牌</label>
-            <select class="select2bs6" style="width: 100%;">
+            <select asp-for="CarNoId" class="select2bs6" style="width: 100%;">
                 <option></option>
-                <option value='11'>0.新車牌</option>
-                <option value='12'>ABC-123</option>
-                <option value='13'>BCD-456</option>
-                <option value='14'>CDE-789</option>
+                <option value="0">0.新車牌</option>
             </select>
+            <span asp-validation-for="CarNoId" class="text-danger"></span>
         </div>
         <div class="form-group col-sm-3">
-            <label>客戶車牌</label>
+            <label>車牌名稱</label>
+            <input asp-for="CarNoName" class="form-control" type="text" placeholder="新車牌才需要填寫" disabled="disabled">
+            <span asp-validation-for="CarNoName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-row">
@@ -71,11 +56,11 @@
                 <h6 id="total"><span>無選擇項目</span></h6>
                 <input asp-for="SelectPurchaseDetailInfos" type="hidden" />
                 <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>
-                <select id="user-select-proditem" class="select2bs4" multiple="multiple" data-placeholder="選擇品項" style="width: 100%;">
-                    <option value='11'>工一</option>
+                <select id="user-select-proditem" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" data-placeholder="選擇品項" style="width: 100%;">
+                    @*<option value='11'>工一</option>
                     <option value='12'>工二</option>
                     <option value='13'>廢鐵</option>
-                    <option value='14'>垃圾</option>
+                    <option value='14'>垃圾</option>*@
                     @*
                         <option value='{"name":"工4","value":"14"}'>垃圾</option>*@
                 </select>
@@ -112,6 +97,29 @@
     </div>
     <div class="form-row">
         <div class="form-group col-sm-4">
+            <label>合約認列</label>
+            <select asp-for="ContractFrom" class="select2bs6" style="width: 100%;">
+                <option></option>
+                <option value='11'>0.無</option>
+                <option value='12'>阿桃A約qq</option>
+                <option value='13'>阿桃B約cc</option>
+                <option value='14'>紅紅C約dd</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-4">
+            <label>合約資訊</label>
+            <label>合約名稱</label>
+            <label>合約重量</label>
+            <label>已認列重量</label>
+            <label>合約單價</label>
+        </div>
+        <div class="form-group col-sm-4">
+            <label>預計認列重量</label>
+            <input  class="form-control" type="text" placeholder="有認列合約才需要填寫" disabled="disabled">
+        </div>        
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-4">
             <label>是否含稅</label>
             <br>
             <div class="form-check-inline">
@@ -126,16 +134,16 @@
             </div>
         </div>
         <div class="form-group col-sm-4">
-            <label>是否簽約</label>
+            <label>磅秤類型</label>
             <br>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio">是
+                    <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" checked>大磅
                 </label>
             </div>
             <div class="form-check-inline">
                 <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="optradio" checked>否
+                    <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input">小磅
                 </label>
             </div>
         </div>

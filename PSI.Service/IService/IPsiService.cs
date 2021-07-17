@@ -11,6 +11,6 @@ namespace PSI.Service.IService
     {
         bool CreatePurchaseWeightNote(PurchaseWeightNote purchaseWeightNote);
 
-        IEnumerable<PurchaseWeightNote> GetAllPurchaseWeigntNotes();
+        IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes();
     }
 }

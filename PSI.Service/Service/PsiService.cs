@@ -30,10 +30,14 @@ namespace PSI.Service.Service
             return true;
         }
 
-        public IEnumerable<PurchaseWeightNote> GetAllPurchaseWeigntNotes()
+        public IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes()
         {
-            var qq = _purchaseWeightNoteRepository.GetAllAsync().Result.Where(aa=> aa.Id!=1);
-            return qq;
+            var nowTime = DateTime.Now;
+            var curMonthDate = nowTime.AddDays(1 - nowTime.Day);
+            var qq = curMonthDate.Date;
+            var result = _purchaseWeightNoteRepository.GetAllAsync().Result
+                                                      .Where(aa => aa.EffectiveTime.Date >= curMonthDate.Date);
+            return result;
         }
     }
 }

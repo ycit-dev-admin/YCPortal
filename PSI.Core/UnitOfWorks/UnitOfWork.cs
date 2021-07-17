@@ -18,6 +18,7 @@ namespace PSI.Core.UnitOfWorks
         public IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; private set; }
         public IGenericRepository<CustomerInfo> CustomerInfoRepository { get; private set; }
         public IGenericRepository<CustomerContract> CustomerContractRepository { get; private set; }
+        public IGenericRepository<CustomerCar> CustomerCarRepository { get; private set; }
         public IGenericRepository<ProductItem> ProductItemRepository { get; private set; }
 
 
@@ -31,6 +32,7 @@ namespace PSI.Core.UnitOfWorks
             IGenericRepository<PurchaseWeightNote> purchaseWeightNoteRepository,
             IGenericRepository<CustomerInfo> customerInfoRepository,
             IGenericRepository<CustomerContract> customerContractRepository,
+            IGenericRepository<CustomerCar> customerCarRepository,
             IGenericRepository<ProductItem> productItemRepository)
 
         {
@@ -38,6 +40,7 @@ namespace PSI.Core.UnitOfWorks
             this.PurchaseWeightNoteRepository = purchaseWeightNoteRepository;
             this.CustomerInfoRepository = customerInfoRepository;
             this.CustomerContractRepository = customerContractRepository;
+            this.CustomerCarRepository = customerCarRepository;
             this.ProductItemRepository = productItemRepository;
         }
 

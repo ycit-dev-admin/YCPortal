@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PSI.Core.Entities;
 using PSI.Service.IService;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ namespace PSI.APIControllers
     [Route("api/[controller]")]
     [ApiController]
     //[AllowAnonymous]  //允許匿名用戶
-    public class CustomerContractController : ControllerBase
+    public class CustomerContractsController : ControllerBase
     {
         private readonly ICustomerService _customerService;
 
 
-        public CustomerContractController(ICustomerService customerService)
+        public CustomerContractsController(ICustomerService customerService)
         {
             _customerService = customerService;
         }
@@ -26,16 +27,17 @@ namespace PSI.APIControllers
 
         // GET: api/<CustomerContractController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<CustomerContract> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _customerService.GetEffectiveCustomerContracts();
+            //return new string[] { "value1", "value2" };
         }
 
         // GET api/<CustomerContractController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IEnumerable<CustomerContract> Get(long id)
         {
-            return "value";
+            return _customerService.GetCustomerContractsByCustomerId(id);
         }
 
         // POST api/<CustomerContractController>

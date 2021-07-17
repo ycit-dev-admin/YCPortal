@@ -25,8 +25,19 @@ namespace PSI.Service.Service
         public IEnumerable<ProductItem> GetProductItemsByPsiType(string psiType)
         {
             var queryRs = _productItemRepository.GetAllAsync().Result
-                                                .Where(aa => aa.PsiType == psiType &&
+                                                .Where(aa => aa.PsiType == psiType
+                                                             &&
                                                              aa.IsEffective == "1");
+            return queryRs;
+        }
+
+        public IEnumerable<ProductItem> GetPurchaseProductItems()
+        {
+            var needPsiTypes = new[] { "1", "3" };
+            var queryRs = _productItemRepository.GetAllAsync().Result
+                                                 .Where(aa => needPsiTypes.Contains(aa.PsiType)
+                                                              &&
+                                                              aa.IsEffective == "1");
             return queryRs;
         }
     }

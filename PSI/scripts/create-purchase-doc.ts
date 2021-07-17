@@ -11,11 +11,71 @@ $('#CustomerId').on('change', function () {
     const curCustomerIdObj = $(this).find(':selected');
 
     $('#CustomerName').val("");
-    if (curCustomerIdObj.val() === "99") {
+    if (curCustomerIdObj.val() === "0") {
         $('#CustomerName').removeAttr('disabled');
     } else {
         $('#CustomerName').attr('disabled', 'disabled');
         $('#CustomerName').val(curCustomerIdObj.text());
+    }
+
+    // 變更簽約單的Select內容 透過API
+    fetch('http://localhost:5000/api/CustomerContracts')
+        .then((response) => {
+            console.log(response)
+            return response.json()
+            //return response.text()
+        }).then((myJson) => {
+            // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
+            // contractFromList.remove();
+            $("#ContractFrom").html('');
+            myJson.forEach(function (item) {
+                let newOption = new Option(item.contractName, item.id, false, false);
+                $('#ContractFrom').append(newOption);
+                    //.trigger('change');
+                //let test = document.createElement("option") as HTMLOptionElement;
+                //test.value = user.id;
+                //test.text = user.contractName;
+                //console.log(test);
+                //contractFromList.append(test);
+            });
+
+            $('#ContractFrom').val(null)
+        })
+
+    // 取得車牌內容 透過API
+    fetch('http://localhost:5000/api/CustomerCars')
+        .then((response) => {
+            console.log(response)
+            return response.json()
+            //return response.text()
+        }).then((myJson) => {
+            // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
+            // contractFromList.remove();
+            $("#CarNoId").html('');
+            myJson.forEach(function (item) {
+                let newOption = new Option(item.carName, item.id, false, false);
+                $('#CarNoId').append(newOption);
+                //.trigger('change');
+                //let test = document.createElement("option") as HTMLOptionElement;
+                //test.value = user.id;
+                //test.text = user.contractName;
+                //console.log(test);
+                //contractFromList.append(test);
+            });
+
+            $('#CarNoId').val(null)
+        })
+});
+
+$('#CarNoId').on('change', function () {
+    const thisSelectObj = $(this).find(':selected');
+
+    $('#CarNoName').val("");
+    if (thisSelectObj.val() === "0") {
+        $('#CarNoName').removeAttr('disabled');
+    } else {
+        $('#CarNoName').attr('disabled', 'disabled');
+        $('#CarNoName').val(thisSelectObj.text());
     }
 });
 $('#user-select-proditem').on('change', function () {
