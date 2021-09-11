@@ -36,6 +36,19 @@ namespace PSI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+           
+            //services.AddCors(options =>
+            //{ 
+            //    // CorsPolicy 是自訂的 Policy 名稱
+            //    options.AddPolicy("CorsPolicy", policy =>
+            //    {
+            //        policy.WithOrigins("http://localhost:3000")
+            //              .AllowAnyHeader()
+            //              .AllowAnyMethod()
+            //              .AllowCredentials();
+            //    });
+            //});
+
             services.AddControllersWithViews() // 似乎是可以讓該專案使用Controller的相關功能 如驗證 及 View帶有Razor Page開發風格
                     .AddFluentValidation(s => s.RunDefaultMvcValidationAfterFluentValidationExecutes = false)
                     .AddFormHelper();
@@ -67,7 +80,8 @@ namespace PSI
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseDefaultFiles();  // 可以指定預設頁面可搜尋MSDN了解細節
+            app.UseDefaultFiles();  // 可以指定預設頁面 可自己去搜尋MSDN的資訊了解細節用法
+            //app.UsePathBase(Configuration["pathBase"] ?? "/psi");
             app.UseStaticFiles();  //主要是要讓專案可以讀wwwrot內的靜態檔案
             app.UseFormHelper();
             app.UseRouting();

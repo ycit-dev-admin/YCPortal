@@ -19,7 +19,7 @@ $('#CustomerId').on('change', function () {
     }
 
     // 變更簽約單的Select內容 透過API
-    fetch('http://localhost:5000/api/CustomerContracts')
+    fetch(`${window.location.origin}/api/CustomerContracts`)
         .then((response) => {
             console.log(response)
             return response.json()
@@ -42,8 +42,8 @@ $('#CustomerId').on('change', function () {
             $('#ContractFrom').val(null)
         })
 
-    // 取得車牌內容 透過API
-    fetch('http://localhost:5000/api/CustomerCars')
+    // 取得車牌內容 透過API        
+    fetch(`${window.location.origin}/api/CustomerCars`)
         .then((response) => {
             console.log(response)
             return response.json()
