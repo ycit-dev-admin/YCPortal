@@ -21,6 +21,7 @@ using FluentValidation.AspNetCore;
 using PSI.VM_Models.PurchaseWeightNote;
 using FluentValidation;
 using FormHelper;
+using Microsoft.AspNetCore.Identity;
 
 namespace PSI
 {
@@ -36,7 +37,7 @@ namespace PSI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-           
+
             //services.AddCors(options =>
             //{ 
             //    // CorsPolicy 是自訂的 Policy 名稱
@@ -52,11 +53,12 @@ namespace PSI
             services.AddControllersWithViews() // 似乎是可以讓該專案使用Controller的相關功能 如驗證 及 View帶有Razor Page開發風格
                     .AddFluentValidation(s => s.RunDefaultMvcValidationAfterFluentValidationExecutes = false)
                     .AddFormHelper();
+            services.AddRazorPages();  // For Dotnet core identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IValidator<VM_PurchaseWeightNote>, VM_PurchaseWeightNoteValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
-            services.AddScoped<IPsiService, PsiService>();      
+            services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<IGenericRepository<PurchaseWeightNote>, GenericRepository<PurchaseWeightNote>>();
             services.AddScoped<IGenericRepository<CustomerInfo>, GenericRepository<CustomerInfo>>();
             services.AddScoped<IGenericRepository<CustomerCar>, GenericRepository<CustomerCar>>();
@@ -70,6 +72,12 @@ namespace PSI
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddDbContext<IdentityContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+            });
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<IdentityContext>();
 
         }
 
@@ -86,6 +94,10 @@ namespace PSI
             app.UseFormHelper();
             app.UseRouting();
 
+            // For Dotnet core identity
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 //endpoints.MapGet("/", async context =>
@@ -97,6 +109,7 @@ namespace PSI
                 endpoints.MapControllerRoute(
                    name: "default",
                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();  //For DotNet core Identity pages
             });
         }
     }

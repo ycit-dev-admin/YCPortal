@@ -6,6 +6,14 @@ namespace PSI.VM_Models.PurchaseWeightNote
 {
     public class VM_PurchaseWeightNote
     {
+        // Entity
+        public double TradeWeight { get; set; }
+        public decimal ActualPrice { get; set; }
+        public string PayType { get; set; }
+        public string CreateEmpNo { get; set; }
+        public string Remark { get; set; }
+        public DateTime EffectiveTime { get; set; }
+        //
         public string FullWeight { get; set; }
         public string DefectiveWeight { get; set; }
         public DateTime? FullWeightTime { get; set; }

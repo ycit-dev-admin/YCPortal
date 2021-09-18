@@ -5,30 +5,50 @@
     <link href="~/lib/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
 }
-
+<div>
+    <a href="@Url.Action("Create","PurchaseWeightNote")" class="btn btn-primary mb-3">建立進貨磅單</a>
+</div>
 <table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>FullWeightTime. </th>
-            <th>DefectiveWeight. </th>
-            <th>FullWeight. </th>
+            <th>車牌</th>
+            <th>交易重量</th>
+            <th>單價</th>
+            <th>交易金額</th>
+            <th>扣重</th>
+            <th>支付類型</th>
+            <th>建立人員</th>
+            <th>備註</th>
+            <th>生效時間</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.FullWeightTime</td>
+                <td>@item.CarNoName</td>
+                <td>@item.TradeWeight</td>
+                <td>@item.UnitPrice</td>
+                <td>@item.ActualPrice</td>
                 <td>@item.DefectiveWeight</td>
-                <td>@item.FullWeight</td>
+                <td>@item.PayType</td>
+                <td>@item.CreateEmpNo</td>
+                <td>@item.Remark</td>
+                <td>@item.EffectiveTime</td>
             </tr>
         }
     </tbody>
     <tfoot>
         <tr>
-            <th>FullWeightTime. </th>
-            <th>DefectiveWeight. </th>
-            <th>FullWeight. </th>
+            <th>車牌</th>
+            <th>交易重量</th>
+            <th>單價</th>
+            <th>交易金額</th>
+            <th>扣重</th>
+            <th>支付類型</th>
+            <th>建立人員</th>
+            <th>備註</th>
+            <th>生效時間</th>
         </tr>
     </tfoot>
 </table>

@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\" />
+    <Folder Include="Files\Images\Logo\" />
+    <Folder Include="Files\Images\" />
     <Folder Include="Views\templated\NewFolder\" />
     <Folder Include="VM_Models\Home\" />
     <Folder Include="wwwroot\css\" />
@@ -280,6 +281,7 @@
     <Folder Include="wwwroot\lib\admin-lte\plugins\tempusdominus-bootstrap-4\js\" />
     <Folder Include="wwwroot\lib\admin-lte\plugins\toastr\" />
     <Folder Include="wwwroot\lib\admin-lte\plugins\uplot\" />
+    <Folder Include="wwwroot\lib\site-public\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -290,8 +292,11 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.1.0" />
     <PackageReference Include="FormHelper" Version="4.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.14">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -299,6 +304,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.11" />
   </ItemGroup>
 

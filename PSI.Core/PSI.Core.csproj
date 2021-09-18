@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.cs" />
+    <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.14" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.11" />

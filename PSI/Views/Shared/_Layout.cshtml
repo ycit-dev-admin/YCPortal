@@ -13,7 +13,7 @@
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
     <div class="wrapper">
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="/docs/3.1//assets/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+            <img class="animation__shake" src="/lib/admin-lte/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
         </div>
         <nav class="main-header navbar navbar-expand navbar-light">
             <ul class="navbar-nav">
@@ -36,8 +36,8 @@
 
             <ul class="navbar-nav ml-auto">
                 <!-- <li class="nav-item d-none d-sm-inline-block">
-              <a href="index3.html" class="nav-link">Home</a>
-            </li> -->
+                  <a href="index3.html" class="nav-link">Home</a>
+                </li> -->
                 <li class="nav-item">
                     <div class="theme-switch-wrapper nav-link">
                         <label class="theme-switch" for="checkbox">
@@ -46,27 +46,28 @@
                         </label>
                     </div>
                 </li>
-                <!-- <li class="nav-item">
-              <em class="nav-link">Enable Dark Mode!</em>
-            </li> -->
+                <partial name="_LoginPartial">
+                    <!-- <li class="nav-item">
+                      <em class="nav-link">Enable Dark Mode!</em>
+                    </li> -->
             </ul>
 
             <!-- SEARCH FORM -->
             <!-- <form class="form-check-inline ml-3">
-          <div class="input-group input-group-sm">
-            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-              <button class="btn btn-navbar" type="submit">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
-        </form> -->
+              <div class="input-group input-group-sm">
+                <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                  <button class="btn btn-navbar" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form> -->
         </nav>
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="/Home/Index" class="brand-link logo-switch">
-                <img src="/docs/3.1//assets/img/logo-xs.png" alt="AdminLTE Docs Logo Small" class="brand-image-xl logo-xs">
-                <img src="/docs/3.1//assets/img/logo-xl.png" alt="AdminLTE Docs Logo Large" class="brand-image-xs logo-xl" style="left: 12px">
+                <img src="~/psi/imges/yclogo.png" alt="AdminLTE Docs Logo Small" class="brand-image-xl logo-xs">
+                <img src="~/psi/imges/yclogo.png" alt="AdminLTE Docs Logo Large" class="brand-image-xs logo-xl" style="left: 12px">
             </a>
             <div class="sidebar">
                 <div class="form-inline mt-2">
@@ -82,29 +83,18 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu">
 
-
-                        <li class="nav-item">
-
-
-                            <a href="/docs/3.1//index.html" class="nav-link">
-                                <i class="nav-icon fas fa-microchip"></i>
-                                <p>
-                                    Installation
-
-                                </p>
-                            </a>
+                        <!--選項可直接超連結示範(打開註解)-->
+                        @*<li class="nav-item">
+                                <a href="/docs/3.1//index.html" class="nav-link">
+                                    <i class="nav-icon fas fa-microchip"></i>
+                                    <p>
+                                        選項可直接超連結示範(打開註解)
+                                    </p>
+                                </a>
+                            </li>*@
 
 
-                        </li>
-                        <li class="nav-item">
-                            @*<a href="/docs/3.1//components" class="nav-link active">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Components
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>*@
-
+                        <li class="nav-item menu-open">
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
@@ -118,18 +108,15 @@
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>當月進貨磅單查詢</p>
                                     </a>
-                                </li>                                
+                                </li>
                             </ul>
                         </li>
-
-
-                        <li class="nav-item menu-open">
-
-
+                        <!-- class 給 menu-open 可預設直接打開項目  <li class="nav-item menu-open">-->
+                        <li class="nav-item">
                             <a href="/docs/3.1//components" class="nav-link active">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
-                                    Components
+                                    系統管理
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -138,61 +125,7 @@
                                 <li class="nav-item">
                                     <a href="/docs/3.1//components/main-header.html" class="nav-link active">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Main Header</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/main-sidebar.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Main Sidebar</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/control-sidebar.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Control Sidebar</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/cards.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Card</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/boxes.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Small-/ Info-Box</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/direct-chat.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Direct Chat</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/timeline.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Timeline</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/ribbons.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Ribbons</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/miscellaneous.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Miscellaneous</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/docs/3.1//components/plugins.html" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Plugins</p>
+                                        <p>客戶設定</p>
                                     </a>
                                 </li>
                             </ul>
@@ -205,7 +138,7 @@
         <script src="~/lib/admin-lte/plugins/jquery/jquery.min.js"></script>
         <script src="~/lib/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="~/lib/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <script src="~/lib/admin-lte/dist/js/adminlte.min.js"></script> 
+        <script src="~/lib/admin-lte/dist/js/adminlte.min.js"></script>
         <div class="content-wrapper px-4 py-2">
 
             <div class="content-header">
@@ -223,7 +156,7 @@
             <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
         </footer>
     </div>
-    
+
     <script>
         var toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
         var currentTheme = localStorage.getItem('theme');
@@ -266,5 +199,6 @@
 
         toggleSwitch.addEventListener('change', switchTheme, false);
     </script>
+    @RenderSection("Scripts", required: false)  @*For DotNet Mvc & core Identity*@
 </body>
 </html>

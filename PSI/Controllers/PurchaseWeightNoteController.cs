@@ -78,10 +78,15 @@ namespace PSI.Controllers
             var curMonthPWeightNotes = _psiService.GetAllPurchaseWeightNotes();
             var vmModel = curMonthPWeightNotes.Select(aa => new VM_PurchaseWeightNote
             {
-                FullWeightTime = aa.FullWeightTime,
+                CarNoName = aa.CarNo,
+                TradeWeight = aa.TradeWeight,
+                UnitPrice = aa.UnitPrice.ToString(),
+                ActualPrice = aa.ActualPrice,
                 DefectiveWeight = aa.DefectiveWeight.ToString(),
-                FullWeight = aa.FullWeight.ToString(),
-
+                PayType = aa.PayType,
+                CreateEmpNo = aa.CreateEmpNo,
+                Remark = aa.Remark,
+                EffectiveTime = aa.EffectiveTime
             }).ToList();
 
 
