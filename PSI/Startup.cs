@@ -1,27 +1,23 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using FormHelper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PSI.Core.Entities;
 using PSI.Core.Infrastructure.DBContext;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using PSI.Core.Interfaces.Repository;
+using PSI.Core.Interfaces.UnitOfWork;
+using PSI.Core.Repositorys;
+using PSI.Core.UnitOfWorks;
+using PSI.Models.PurchaseWeightNote;
 using PSI.Service.IService;
 using PSI.Service.Service;
-using PSI.Core.Interfaces.UnitOfWork;
-using PSI.Core.UnitOfWorks;
-using PSI.Core.Entities;
-using PSI.Core.Interfaces.Repository;
-using PSI.Core.Repositorys;
-using FluentValidation.AspNetCore;
-using PSI.VM_Models.PurchaseWeightNote;
-using FluentValidation;
-using FormHelper;
-using Microsoft.AspNetCore.Identity;
 
 namespace PSI
 {
@@ -104,6 +100,10 @@ namespace PSI
                 //{
                 //    await context.Response.WriteAsync("Hello World!");
                 //});
+                // Area的Route Setting
+                endpoints.MapControllerRoute(
+                   name: "MyArea",
+                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 // 似乎為定義MVC的Router的方式
                 endpoints.MapControllerRoute(
