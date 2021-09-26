@@ -1,5 +1,4 @@
-﻿@model TestVM
-@{
+﻿@{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
@@ -11,8 +10,8 @@
 }
 
 @*<button id="testBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="gridSystemModal" data-url="@Url.Action("CreatePurchaseWeightNote","PurchaseWeightNote")">
-    建立進貨磅單
-</button>*@
+        建立進貨磅單
+    </button>*@
 
 
 
@@ -36,10 +35,10 @@
 
 
 <script>
-   
 
-        // your page initialization code here
-        // the DOM will be available here
+
+    // your page initialization code here
+    // the DOM will be available here
     /* $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });*/
 
 
@@ -49,57 +48,57 @@
 
 
 
-        $('#testBtn').click(function (event) {
-            //$('#reservationdatetime').on("change.datetimepicker", function (e) {
-            //    console.log(e.date);
-            //});
-            //$('#reservationdatetime').datetimepicker("clear");
-            //$('#reservationdatetime').datetimepicker("hide");
-            //$('#reservationdatetime').datetimepicker('show');
+    $('#testBtn').click(function (event) {
+        //$('#reservationdatetime').on("change.datetimepicker", function (e) {
+        //    console.log(e.date);
+        //});
+        //$('#reservationdatetime').datetimepicker("clear");
+        //$('#reservationdatetime').datetimepicker("hide");
+        //$('#reservationdatetime').datetimepicker('show');
 
-            var purchaseModelDOM = $('#PurchaseModelDOM');
-            var url = $(this).data('url');
-            $.get(url).done(function (data) {
-                purchaseModelDOM.html(data);
-
-
-
-                /*Initialize Elements*/
-                // Datetimepicker
-                $('#reservationdatetime').datetimepicker({
-                    defaultDate: moment(),
-                    locale: 'zh-tw',
-                    icons: { time: 'far fa-clock' }
-                });
-                // Select2 Elements
-                $('.select2bs4').select2({
-                    theme: 'bootstrap4'
-                })
-
-                purchaseModelDOM.find('.modal').modal('show');
+        var purchaseModelDOM = $('#PurchaseModelDOM');
+        var url = $(this).data('url');
+        $.get(url).done(function (data) {
+            purchaseModelDOM.html(data);
 
 
-                // Event
-                purchaseModelDOM.on('click', '[data-create="modal"]', function (event) {
-                    var form = $(this).parents('.modal').find('form');
-                    var actionUrl = form.attr('action');
-                    var sendData = form.serialize();
-                    $.post(actionUrl, sendData).done(function (data) {
-                        purchaseModelDOM.find('.modal').modal('hide');
-                    })
-                });
 
-                $('.select2bs4').on('change', function () {
-                    /*$('li[name="abc"]').remove();*/
-                    $('#testLs li').remove();
-                    $.each($('.select2bs4').find(':selected'), function (key, value) {
-                        $('#testLs').append('<li>' + $(this).val() + "_" + $(this).text() + '<i class="fas fa-minus-circle"></i><i class="fas fa-plus-circle"></i></li>');
-                        /*var val = $.parseJSON(value);*/
-                    })
-                    //console.log($('.select2bs4:checked'));
-                    //alert($(".select2bs4:checked").val());
-                });
+            /*Initialize Elements*/
+            // Datetimepicker
+            $('#reservationdatetime').datetimepicker({
+                defaultDate: moment(),
+                locale: 'zh-tw',
+                icons: { time: 'far fa-clock' }
+            });
+            // Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
             })
+
+            purchaseModelDOM.find('.modal').modal('show');
+
+
+            // Event
+            purchaseModelDOM.on('click', '[data-create="modal"]', function (event) {
+                var form = $(this).parents('.modal').find('form');
+                var actionUrl = form.attr('action');
+                var sendData = form.serialize();
+                $.post(actionUrl, sendData).done(function (data) {
+                    purchaseModelDOM.find('.modal').modal('hide');
+                })
+            });
+
+            $('.select2bs4').on('change', function () {
+                /*$('li[name="abc"]').remove();*/
+                $('#testLs li').remove();
+                $.each($('.select2bs4').find(':selected'), function (key, value) {
+                    $('#testLs').append('<li>' + $(this).val() + "_" + $(this).text() + '<i class="fas fa-minus-circle"></i><i class="fas fa-plus-circle"></i></li>');
+                    /*var val = $.parseJSON(value);*/
+                })
+                //console.log($('.select2bs4:checked'));
+                //alert($(".select2bs4:checked").val());
+            });
+        })
         //})
 
 
