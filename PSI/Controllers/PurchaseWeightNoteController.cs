@@ -1,18 +1,12 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
+﻿using System;
+using System.Linq;
 using FormHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
+using PSI.Models.PurchaseWeightNote;
 using PSI.Service.IService;
-using PSI.VM_Models;
-using PSI.VM_Models.PurchaseWeightNote;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PSI.Controllers
 {
@@ -106,7 +100,7 @@ namespace PSI.Controllers
 
             if (!ModelState.IsValid)
             { // re-render the view when validation failed.
-                return View(purchaseWeightNote);
+                // return View(purchaseWeightNote);
                 return FormResult.CreateWarningResult("'Abc' is already exist in the database.");
             }
 
