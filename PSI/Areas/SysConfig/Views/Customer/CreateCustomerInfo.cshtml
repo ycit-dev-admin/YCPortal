@@ -9,40 +9,54 @@
 <form asp-area="SysConfig" asp-controller="Customer" asp-action="CreateCustomerInfo" method="post" autocomplete="off">
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="inputEmail4">公司名稱</label>
-            <input asp-for="CompanyName" class="form-control" type="text" placeholder="必填欄位">
+            <label for="CompanyName">公司名稱</label>
+            <input asp-for="CompanyName" type="text" class="form-control" placeholder="必填欄位">
         </div>
         <div class="form-group col-md-4">
-            <label for="inputPassword4">統一編號</label>
-            <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+            <label for="TaxId">統一編號</label>
+            <input asp-for="TaxId" type="text" class="form-control" id="inputPassword4">
         </div>
         <div class="form-group col-md-4">
-            <label for="inputAddress">客戶名稱</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+            <label for="CustomerName">客戶名稱</label>
+            <input asp-for="CustomerName" type="text" class="form-control" placeholder="必填欄位">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="inputCity">進出貨歸屬</label>
-            <input type="text" class="form-control" id="inputCity">
+            <label for="PsiType">進出貨歸屬</label>
+            <select asp-for="PsiType" class="select2bs6" style="width: 100%;">
+                <option>必選一項</option>
+                <option value="0">0.新車牌</option>
+            </select>
         </div>
         <div class="form-group col-md-8">
-            <label for="inputAddress2">職稱</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+            <label for="Title">職稱</label>
+            <input asp-for="Title" type="text" class="form-control">
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group">
+        <div class="form-group col-md-2">
             <label for="inputZip">車牌維護</label>
-            <button type="submit" class="btn btn-primary">新增車牌</button>
-            <input type="text" class="form-control" id="inputZip">
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="車牌號碼">
+                <button class="btn btn-outline-secondary" type="button">新增車牌</button>
+            </div>
+
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group">
-            <label for="inputZip">合約資訊</label>
-            <button type="submit" class="btn btn-primary">新增合約</button>
-            <input type="text" class="form-control" id="inputZip">
+        <div class="form-group col-md-2">
+            <div class="input-group">
+                <label for="inputZip">合約維護</label>
+            </div>
+            <button class="btn btn-outline-secondary" type="button">新增合約</button>
+            <ul>
+                <li>合約1</li>
+                <li>合約2</li>
+                <li>合約3</li>
+            </ul>
+
         </div>
     </div>
     <div class="form-row">
@@ -61,15 +75,8 @@
             <input type="text" class="form-control">
         </div>
     </div>
-    <div class="form-group">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="gridCheck">
-            <label class="form-check-label" for="gridCheck">
-                Check me out
-            </label>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+
+    <button type="submit" class="btn btn-primary">建立</button>
 </form>
 
 
