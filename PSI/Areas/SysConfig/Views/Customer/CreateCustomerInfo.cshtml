@@ -8,42 +8,57 @@
 
 <form asp-area="SysConfig" asp-controller="Customer" asp-action="CreateCustomerInfo" method="post" autocomplete="off">
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="inputEmail4">公司名稱</label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+            <input asp-for="CompanyName" class="form-control" type="text" placeholder="必填欄位">
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="inputPassword4">統一編號</label>
             <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
         </div>
-    </div>
-    <div class="form-group">
-        <label for="inputAddress">客戶名稱</label>
-        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="form-group">
-        <label for="inputAddress2">職稱</label>
-        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+        <div class="form-group col-md-4">
+            <label for="inputAddress">客戶名稱</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-4">
             <label for="inputCity">進出貨歸屬</label>
             <input type="text" class="form-control" id="inputCity">
         </div>
-        <div class="form-group col-md-2">
-            <label for="inputState">備註</label>
-            <select id="inputState" class="form-control">
-                <option selected>Choose...</option>
-                <option>...</option>
-            </select>
+        <div class="form-group col-md-8">
+            <label for="inputAddress2">職稱</label>
+            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
         </div>
-        <div class="form-group col-md-2">
+    </div>
+    <div class="form-row">
+        <div class="form-group">
             <label for="inputZip">車牌維護</label>
+            <button type="submit" class="btn btn-primary">新增車牌</button>
             <input type="text" class="form-control" id="inputZip">
         </div>
-        <div class="form-group col-md-2">
-            <label for="inputZip">合約維護</label>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="inputZip">合約資訊</label>
+            <button type="submit" class="btn btn-primary">新增合約</button>
             <input type="text" class="form-control" id="inputZip">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="inputZip">聯絡方式</label>
+            <input type="text" class="form-control" id="inputZip">
+        </div>
+        <div class="form-group col-md-9">
+            <label for="inputZip">地址</label>
+            <input type="text" class="form-control" id="inputZip">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="inputState">備註</label>
+            <input type="text" class="form-control">
         </div>
     </div>
     <div class="form-group">
@@ -65,7 +80,7 @@
 <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
 <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
-<script src="~/psi/create-purchase-doc.js"></script>
+
 <script src="/formhelper/formhelper.bundle.min.js"></script>
 
 
@@ -96,7 +111,7 @@
 
 
         // Page Event Ini
-        IniPageEvent();
+        //IniPageEvent();
     })
 </script>
 

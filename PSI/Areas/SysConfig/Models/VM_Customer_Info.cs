@@ -20,6 +20,8 @@ namespace PSI.Areas.SysConfig.Models
         public string Remark { get; set; }
         public string UpdateEmpNo { get; set; }
         public DateTime UpdateTime { get; set; }
+        public string Address { get; set; }
+        public string ContentInfo { get; set; }
 
     }
 }
