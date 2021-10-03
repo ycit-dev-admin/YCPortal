@@ -94,10 +94,12 @@
 </form>
 
 
+@section modals{
+    @await Html.PartialAsync("CustomerInfo", new List<VM_Customer_Info>())
+}
 
-
-
-
+@*@await Html.PartialAsync("~/Views/HOME/_CreatePurchaseDocPartial.cshtml")*@  <!-- 效能較差  但語法較單純 -->
+@*@{await Html.RenderPartialAsync("CustomerInfo", new List<VM_Customer_Info>());}*@ <!-- 效能較好  但語法較複雜 一定要有{}  -->
 @*<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
     <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
@@ -115,6 +117,7 @@
         })
     </script>
 }
+
 
 
 

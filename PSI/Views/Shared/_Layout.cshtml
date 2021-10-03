@@ -159,6 +159,7 @@
 
             <div class="content px-2">
                 @RenderBody()
+                @RenderSection("modals", required: false)  @*For DotNet Mvc & core Identity*@
             </div>
         </div>
         <footer class="main-footer">
