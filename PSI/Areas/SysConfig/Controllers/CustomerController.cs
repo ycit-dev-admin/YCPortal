@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model;
 using PSI.Areas.SysConfig.Models;
 
 namespace PSI.Areas.SysConfig.Controllers
@@ -17,7 +18,8 @@ namespace PSI.Areas.SysConfig.Controllers
         [HttpGet]
         public IActionResult CreateCustomerInfo()
         {
-            var pageModel = new VM_Customer_Info();
+            var pageModel = new VM_Customer_Info().IniPageModel();
+
             return View(pageModel);
         }
 

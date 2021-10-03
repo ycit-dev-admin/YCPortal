@@ -24,9 +24,7 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="PsiType">進出貨歸屬</label>
-            <select asp-for="PsiType" class="select2bs6" style="width: 100%;">
-                <option>必選一項</option>
-                <option value="0">0.新車牌</option>
+            <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs6 form-control" style="width: 100%;" data-placeholder="選擇品項">
             </select>
         </div>
         <div class="form-group col-md-8">
@@ -37,20 +35,36 @@
     <div class="form-row">
         <div class="form-group col-md-2">
             <label for="inputZip">車牌維護</label>
-
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="車牌號碼">
-                <button class="btn btn-outline-secondary" type="button">新增車牌</button>
+                <input id="haha" type="text" class="form-control" placeholder="車牌號碼">
+                <button class="btn btn-outline-secondary" type="button" id="testBut">新增車牌</button>
             </div>
-
+            <h6 id="carno-message">無相關車牌</h6>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-12">
+            <ul id="selected-carno">
+            </ul>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-sm-6">
+            <ul id="evenProductLs">
+            </ul>
+        </div>
+        <div class="form-group col-sm-6">
+            <ul id="oddProductLs">
+            </ul>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-2">
             <div class="input-group">
                 <label for="inputZip">合約維護</label>
+                <i class="fas fa-plus-circle" style="color:blue;cursor:pointer"> </i>
             </div>
-            <button class="btn btn-outline-secondary" type="button">新增合約</button>
+            <h6 id="total"><span>無相關合約</span></h6>
             <ul>
                 <li>合約1</li>
                 <li>合約2</li>
@@ -84,43 +98,24 @@
 
 
 
-<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
-<script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+@*<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/formhelper/formhelper.bundle.min.js"></script>*@
 
-<script src="/formhelper/formhelper.bundle.min.js"></script>
-
-
-
-<script>
-    $(function () {
-        /*Initialize Elements*/
-        // Datetimepicker
-        $('#reservationdatetime').datetimepicker({
-            defaultDate: moment(),
-            locale: 'zh-tw',
-            icons: { time: 'far fa-clock' }
-        });
-        // Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
+@section scripts{
+    <script src="~/psi/create-customer-info.js"></script>
+    <script>
+        $(function () {
+            let pClass = new PageJsClass();
+            $("#testBut").on("click", function () {
+                pClass.CarNoList.AppendToList($('#haha').val());
+                pClass.CarNoList.ShowCarNoList();
+            });
         })
-        // Select2 Elements
-        $('.select2bs5').select2({
-            theme: 'bootstrap4',
-            placeholder: "請選擇"
-        })
-        // Select2 Elements
-        $('.select2bs6').select2({
-            theme: 'bootstrap4',
-            placeholder: "請選擇"
-        })
+    </script>
+}
 
-
-        // Page Event Ini
-        //IniPageEvent();
-    })
-</script>
 
 
 
