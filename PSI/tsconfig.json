@@ -6,7 +6,8 @@
     "removeComments": false,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "target": "es5",
+    "lib": [ "ES2017","DOM" ],
+    "target": "ES5", //¥i¿ï ES3¡B ES5 ¡B ES2015 ¡B ES2016 ¡B ES2017 ¡B ES2018 ¡B ESNext ©M JSON
     "outDir": "wwwroot/psi"
   },
   "include": [
