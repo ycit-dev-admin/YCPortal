@@ -25,7 +25,7 @@ namespace PSI.Service.Service
         public bool CreatePurchaseWeightNote(PurchaseWeightNote purchaseWeightNote)
         {
             // var qcd = _purchaseWeightNoteRepository.GetAllAsync().Result;
-            _purchaseWeightNoteRepository.Add(purchaseWeightNote);
+            _purchaseWeightNoteRepository.Create(purchaseWeightNote);
             _unitOfwork.SaveChange();
             return true;
         }

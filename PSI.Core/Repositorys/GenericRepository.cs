@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
-using PSI.Core.Interfaces.UnitOfWork;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PSI.Core.Repositorys
@@ -38,14 +36,100 @@ namespace PSI.Core.Repositorys
         /// </summary>
         /// <param name="entity">實體</param>
         /// <exception cref="ArgumentNullException">entity</exception>
-        public void Add(TEntity entity)
+        public FunctionResult Create(TEntity entity)
         {
+            var funcRs = new FunctionResult();
+
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
 
-            _context.Set<TEntity>().Add(entity);
+            try
+            {
+                _context.Set<TEntity>().Add(entity);
+                this.SaveChanges();
+                funcRs.ResultSuccess("新增成功");
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultFailure(ex.Message);
+            }
+
+
+
+            return funcRs;
+        }
+        /// <summary>
+        /// 新增多筆
+        /// </summary>
+        /// <param name="entity">實體</param>
+        /// <exception cref="ArgumentNullException">entity</exception>
+        public FunctionResult Create(List<TEntity> entityLs)
+        {
+            var funcRs = new FunctionResult();
+            if (entityLs == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            try
+            {
+                _context.Set<TEntity>().AddRange(entityLs);
+                this.SaveChanges();
+                funcRs.ResultSuccess("新增成功");
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultFailure(ex.Message);
+            }
+            return funcRs;
+        }
+
+        public FunctionResult CreateNotSave(TEntity entity)
+        {
+            var funcRs = new FunctionResult();
+
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            try
+            {
+                _context.Set<TEntity>().Add(entity);
+                //this.SaveChanges();
+                funcRs.ResultSuccess("新增成功");
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultFailure(ex.Message);
+            }
+
+
+
+            return funcRs;
+        }
+
+        public FunctionResult CreateNotSave(List<TEntity> entityLs)
+        {
+            var funcRs = new FunctionResult();
+            if (entityLs == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            try
+            {
+                _context.Set<TEntity>().AddRange(entityLs);
+                //this.SaveChanges();
+                funcRs.ResultSuccess("新增成功");
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultFailure(ex.Message);
+            }
+            return funcRs;
         }
 
         /// <summary>
@@ -105,6 +189,10 @@ namespace PSI.Core.Repositorys
 
             this._context.Entry(entity).State = EntityState.Modified;
         }
+        public void SaveChanges()
+        {
+            this._context.SaveChanges();
+        }
 
 
 
@@ -135,6 +223,8 @@ namespace PSI.Core.Repositorys
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+      
 
         // private bool _disposedValue;
         //protected virtual void Dispose(bool disposing)

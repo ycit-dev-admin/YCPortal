@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using PSI.Core.Entities;
@@ -29,6 +31,23 @@ namespace PSI.Core.Infrastructure.DBContext
             //modelBuilder.ApplyConfiguration(new ProductItemsConfiguration());
             //modelBuilder.ApplyConfiguration(new CustomerInfosConfiguration());
         }
+
+        // 疑似取代.net framework 的DbEntityValidationException用法  https://entityframeworkcore.com/knowledge-base/46430619/-net-core-2---ef-core-error-handling-save-changes
+        public override int SaveChanges()   
+        {
+            var entities = from e in ChangeTracker.Entries()
+                           where e.State == EntityState.Added
+                               || e.State == EntityState.Modified
+                           select e.Entity;
+            foreach (var entity in entities)
+            {
+                var validationContext = new ValidationContext(entity);
+                Validator.ValidateObject(entity, validationContext);
+            }
+
+            return base.SaveChanges();
+        }
+
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{

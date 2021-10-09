@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PSI.Areas.SysConfig.Models
 {
-    public class VM_Customer_Info
+    public class VM_Create_CustomerInfo
     {
+        // Post
+        public string[] PostCarNo { get; set; }
+
         // Page
-        public string P_Contract { get; set; }
-        public string P_Car { get; set; }
-        public List<SelectListItem> PsiTypeItems { set; get; }
+        public string PageContract { get; set; }
+        public List<SelectListItem> PagePsiTypeItems { set; get; }
 
         // Entity
         public string CompanyName { get; set; }

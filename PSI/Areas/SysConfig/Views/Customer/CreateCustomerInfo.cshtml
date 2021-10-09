@@ -1,43 +1,42 @@
-﻿@model VM_Customer_Info
+﻿@model VM_Create_CustomerInfo
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/formhelper/formhelper.min.css" />
 }
 
-<form asp-area="SysConfig" asp-controller="Customer" asp-action="CreateCustomerInfo" method="post" autocomplete="off">
+<form id="creaet-customer-form" asp-area="SysConfig" asp-controller="Customer" asp-action="CreateCustomerInfo" method="post" autocomplete="off">
     <div class="form-row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-8">
             <label for="CompanyName">公司名稱</label>
             <input asp-for="CompanyName" type="text" class="form-control" placeholder="必填欄位">
+            @*<span asp-validation-for="CompanyName" class="text-danger"></span>*@
         </div>
         <div class="form-group col-md-4">
             <label for="TaxId">統一編號</label>
-            <input asp-for="TaxId" type="text" class="form-control" id="inputPassword4">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="CustomerName">客戶名稱</label>
-            <input asp-for="CustomerName" type="text" class="form-control" placeholder="必填欄位">
+            <input asp-for="TaxId" type="text" class="form-control">
         </div>
     </div>
     <div class="form-row">
+        <div class="form-group col-md-8">
+            <label for="CustomerName">客戶名稱</label>
+            <input asp-for="CustomerName" type="text" class="form-control" placeholder="必填欄位">
+            @*<span asp-validation-for="CustomerName" class="text-danger"></span>*@
+
+        </div>
         <div class="form-group col-md-4">
             <label for="PsiType">進出貨歸屬</label>
-            <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs6 form-control" style="width: 100%;" data-placeholder="選擇品項">
+            <select asp-for="PsiType" asp-items="@Model.PagePsiTypeItems" class="select2bs4" style="width: 100%;">
+                <option></option>
             </select>
-        </div>
-        <div class="form-group col-md-8">
-            <label for="Title">職稱</label>
-            <input asp-for="Title" type="text" class="form-control">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-2">
             <label for="inputZip">車牌維護</label>
             <div class="input-group">
-                <input id="haha" type="text" class="form-control" placeholder="車牌號碼">
-                <button class="btn btn-outline-secondary" type="button" id="testBut">新增車牌</button>
+                <input id="carno" type="text" class="form-control" placeholder="車牌號碼">
+                <button class="btn btn-outline-secondary" type="button" id="add-carno">新增車牌</button>
             </div>
             <h6 id="carno-message">無相關車牌</h6>
         </div>
@@ -48,45 +47,39 @@
             </ul>
         </div>
     </div>
-    <div class="form-row">
-        <div class="form-group col-sm-6">
-            <ul id="evenProductLs">
-            </ul>
-        </div>
-        <div class="form-group col-sm-6">
-            <ul id="oddProductLs">
-            </ul>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-2">
-            <div class="input-group">
-                <label for="inputZip">合約維護</label>
-                <i class="fas fa-plus-circle" style="color:blue;cursor:pointer"> </i>
-            </div>
-            <h6 id="total"><span>無相關合約</span></h6>
-            <ul>
-                <li>合約1</li>
-                <li>合約2</li>
-                <li>合約3</li>
-            </ul>
+    @*<div class="form-row">
+            <div class="form-group col-md-2">
+                <div class="input-group">
+                    <label for="inputZip">合約維護</label>
+                    <i class="fas fa-plus-circle" style="color:blue;cursor:pointer"> </i>
+                </div>
+                <h6 id="total"><span>無相關合約</span></h6>
+                <ul>
+                    <li>合約1</li>
+                    <li>合約2</li>
+                    <li>合約3</li>
+                </ul>
 
-        </div>
-    </div>
+            </div>
+        </div>*@
     <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
             <label for="inputZip">聯絡方式</label>
-            <input type="text" class="form-control" id="inputZip">
+            <input asp-for="ContentInfo" type="text" class="form-control">
         </div>
-        <div class="form-group col-md-9">
+        <div class="form-group col-md-4">
+            <label for="Title">職稱</label>
+            <input asp-for="Title" type="text" class="form-control">
+        </div>
+        <div class="form-group col-md-4">
             <label for="inputZip">地址</label>
-            <input type="text" class="form-control" id="inputZip">
+            <input asp-for="Address" type="text" class="form-control">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="inputState">備註</label>
-            <input type="text" class="form-control">
+            <input asp-for="Remark" type="text" class="form-control">
         </div>
     </div>
 
@@ -95,25 +88,82 @@
 
 
 @section modals{
-    @await Html.PartialAsync("CustomerInfo", new List<VM_Customer_Info>())
+    @*@await Html.PartialAsync("CustomerInfo", new List<VM_Customer_Info>())*@
 }
 
 @*@await Html.PartialAsync("~/Views/HOME/_CreatePurchaseDocPartial.cshtml")*@  <!-- 效能較差  但語法較單純 -->
 @*@{await Html.RenderPartialAsync("CustomerInfo", new List<VM_Customer_Info>());}*@ <!-- 效能較好  但語法較複雜 一定要有{}  -->
 @*<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
     <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script src="/formhelper/formhelper.bundle.min.js"></script>*@
 
 @section scripts{
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = '@(TempData["pageMsg"])';
+            alert(message);
+        </script>
+    }
+
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script src="~/psi/create-customer-info.js"></script>
+    <script src="~/lib/admin-lte/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jquery-validation/additional-methods.min.js"></script>  <!--擴充更多的表單檢核方法-->
     <script>
         $(function () {
             let pClass = new PageJsClass();
-            $("#testBut").on("click", function () {
-                pClass.CarNoList.AppendToList($('#haha').val());
+
+            $("#add-carno").on("click", function () {
+                pClass.CarNoList.AppendToList($('#carno').val());
                 pClass.CarNoList.ShowCarNoList();
+                $('#carno').val("")  // 清空輸入框
             });
+
+            // Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4',
+                placeholder: "請選擇項目"
+            })
+
+
+
+
+            // Form Validation
+            $('#creaet-customer-form').validate({
+                submitHandler: function (form) {
+                    alert("Form successful submitted!");
+                    form.submit();
+                },
+                rules: {
+                    CompanyName: {
+                        required: true
+                    },
+                    CustomerName: {
+                        required: true
+                    }
+                },
+                messages: {
+                    CompanyName: {
+                        required: "該欄位為必填!!"
+                    },
+                    CustomerName: {
+                        required: "該欄位為必填!!"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
         })
     </script>
 }

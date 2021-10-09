@@ -56,7 +56,7 @@
                 <h6 id="total"><span>無選擇項目</span></h6>
                 <input asp-for="SelectPurchaseDetailInfos" type="hidden" />
                 <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>
-                <select id="user-select-proditem" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" data-placeholder="選擇品項" style="width: 100%;">
+                <select id="user-select-proditem" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
                     @*<option value='11'>工一</option>
                     <option value='12'>工二</option>
                     <option value='13'>廢鐵</option>
@@ -227,7 +227,8 @@
         });
         // Select2 Elements
         $('.select2bs4').select2({
-            theme: 'bootstrap4'
+            theme: 'bootstrap4',
+            placeholder: "請選擇品項"
         })
         // Select2 Elements
         $('.select2bs5').select2({

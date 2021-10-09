@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PSI.Core.Entities;
+using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,6 @@ namespace PSI.Core.Interfaces.UnitOfWork
         /// Saves the change.
         /// </summary>
         /// <returns></returns>
-        int SaveChange();
+        FunctionResult SaveChange();
     }
 }

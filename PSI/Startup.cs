@@ -1,3 +1,4 @@
+using System;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using FormHelper;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PSI.Areas.SysConfig.Models;
 using PSI.Core.Entities;
 using PSI.Core.Infrastructure.DBContext;
 using PSI.Core.Interfaces.Repository;
@@ -52,6 +54,7 @@ namespace PSI
             services.AddRazorPages();  // For Dotnet core identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IValidator<VM_PurchaseWeightNote>, VM_PurchaseWeightNoteValidator>();
+            services.AddTransient<IValidator<VM_Create_CustomerInfo>, VM_Create_CustomerInfoValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<IPsiService, PsiService>();
@@ -63,6 +66,8 @@ namespace PSI
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile
             services.AddScoped<DbContext, MyContext>();
             services.AddDbContext<MyContext>(options =>
             {

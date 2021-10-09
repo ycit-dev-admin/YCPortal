@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using PSI.Core.Helpers;
 
 namespace PSI.Core.Interfaces.Repository
 {
@@ -12,7 +13,15 @@ namespace PSI.Core.Interfaces.Repository
         /// 新增
         /// </summary>
         /// <param name="entity">實體</param>
-        void Add(TEntity entity);
+        FunctionResult Create(TEntity entity);
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="entity">實體</param>
+        FunctionResult Create(List<TEntity> entityLs);
+        FunctionResult CreateNotSave(TEntity entity);
+        FunctionResult CreateNotSave(List<TEntity> entityLs);
 
         /// <summary>
         /// 取得全部

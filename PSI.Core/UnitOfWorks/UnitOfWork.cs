@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PSI.Core.Entities;
+using PSI.Core.Helpers;
 using PSI.Core.Infrastructure.DBContext;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
@@ -64,9 +65,21 @@ namespace PSI.Core.UnitOfWorks
         /// SaveChange
         /// </summary>
         /// <returns></returns>
-        public int SaveChange()
+        public FunctionResult SaveChange()
         {
-            return this.Context.SaveChanges();
+            var funcRs = new FunctionResult();
+
+            try
+            {
+                this.Context.SaveChanges();
+                funcRs.ResultSuccess("Commit success.");
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultFailure(ex.Message);
+            }
+
+            return funcRs;
         }
 
         /// <summary>
