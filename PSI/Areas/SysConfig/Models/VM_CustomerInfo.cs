@@ -12,6 +12,7 @@ namespace PSI.Areas.SysConfig.Models
         // Page
         public string PageContract { get; set; }
         public List<SelectListItem> PagePsiTypeItems { set; get; }
+        public string PsiTypeName { get; set; }
 
         // Entity
         public string CompanyName { get; set; }

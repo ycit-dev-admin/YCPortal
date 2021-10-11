@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using PSI.Core.Entities.Identity;
 using Microsoft.AspNetCore.Authorization;
+using PSI.Core.Enums;
+using PSI.Infrastructure.Extensions;
 
 namespace PSI.Areas.SysConfig.Controllers
 {
@@ -44,6 +46,24 @@ namespace PSI.Areas.SysConfig.Controllers
 
             var customerInfoLs = _customerService.GetCustomerInfos();
             var vmCreateCustomerInfoLs = _mapper.Map<List<VM_CustomerInfo>>(customerInfoLs);
+
+            var psiTypeLs = typeof(PSIEnum.PSIType).GetAllFieldInfo();
+
+
+            var haha = psiTypeLs.FirstOrDefault(aa => aa.Name == "");
+
+            var haha2 = ((PSIEnum.PSIType)0).GetDescription();
+
+
+            vmCreateCustomerInfoLs = vmCreateCustomerInfoLs.Select(item =>
+            {
+                item.PsiTypeName = int.TryParse(item.PsiType, out var cInt) ?
+                                   ((PSIEnum.PSIType)cInt).GetDescription() :
+                                   "無設定";
+                return item;
+            }).ToList();
+
+
             var pageModel = new VM_Custome_OnlineInfo
             {
                 VM_Create_CustomerInfoLs = vmCreateCustomerInfoLs
