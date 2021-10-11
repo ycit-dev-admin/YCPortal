@@ -53,7 +53,7 @@ class CarNoList {
 
     public AppendToList(carNo: string) {
         if (carNo && !this.CarNoList.includes(carNo)) {
-            this.CarNoList.push(carNo);
+            this.CarNoList.push(carNo.toUpperCase());
         }
     }
     public ShowCarNoMessage(msg: string) {

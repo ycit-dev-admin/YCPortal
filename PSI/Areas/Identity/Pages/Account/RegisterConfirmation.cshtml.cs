@@ -1,21 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using PSI.Core.Entities.Identity;
 
 namespace PSI.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<AppUser> userManager, IEmailSender sender)
         {
             _userManager = userManager;
             _sender = sender;
@@ -33,12 +34,17 @@ namespace PSI.Areas.Identity.Pages.Account
             {
                 return RedirectToPage("/Index");
             }
+            //var isDuplicateEmail = await _userManager.Users.AnyAsync(aa => aa.Email == email);
+
+            //if (isDuplicateEmail)
+            //    return NotFound($"已經有重複的Email 在資料庫中:'{email}'.");
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 return NotFound($"Unable to load user with email '{email}'.");
             }
+
 
             Email = email;
             // Once you add a real email sender, you should remove this code that lets you confirm the account

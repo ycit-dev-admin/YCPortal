@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PSI.Areas.SysConfig.Models;
 using PSI.Core.Entities;
+using PSI.Core.Entities.Identity;
 using PSI.Core.Infrastructure.DBContext;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
@@ -77,8 +78,20 @@ namespace PSI
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<IdentityContext>();
+            services.AddDefaultIdentity<AppUser>(options =>
+            {
+                // Password settings              
+                options.Password.RequiredLength = 6;     //密碼至少要6個字元長
+                options.Password.RequireNonAlphanumeric = false;  //不需要符號字元
+                options.Password.RequireUppercase = false;         //要有大寫英文字母
+                options.Password.RequireLowercase = false;        //不一定要有小寫英文字母
+
+
+                options.SignIn.RequireConfirmedAccount = true;
+
+                // Email settings
+                options.User.RequireUniqueEmail = true;  //Email不能重複
+            }).AddEntityFrameworkStores<IdentityContext>();
 
         }
 

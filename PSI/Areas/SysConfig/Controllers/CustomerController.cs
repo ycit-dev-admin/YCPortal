@@ -9,6 +9,8 @@ using PSI.Core.Entities;
 using PSI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using PSI.Core.Entities.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PSI.Areas.SysConfig.Controllers
 {
@@ -17,23 +19,22 @@ namespace PSI.Areas.SysConfig.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICustomerService _customerService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         public CustomerController(IMapper mapper,
                                   ICustomerService customerService,
-                                  UserManager<IdentityUser> userManager)
+                                  UserManager<AppUser> userManager)
         {
             _userManager = userManager;
             _mapper = mapper;
             _customerService = customerService;
         }
         [HttpGet]
-        public async Task<IActionResult> OnlineInfoAsync()
+        [Authorize()]
+        public IActionResult OnlineInfo()
         {
-            var currentUser = this.User;
-            bool isAdmin = currentUser.IsInRole("Admin");
-
-            var abc = User.Identity.Name;
-            var user = await _userManager.GetUserAsync(User);
+            //var currentUser = this.User;
+            //bool isAdmin = currentUser.IsInRole("Admin");           
+            //var userInfo = await _userManager.GetUserAsync(User);
 
 
             //var abc = new UserManager<User>();
@@ -57,6 +58,7 @@ namespace PSI.Areas.SysConfig.Controllers
         }
 
         [HttpGet]
+        [Authorize()]
         public IActionResult CreateCustomerInfo()
         {
             var pageModel = new VM_Create_CustomerInfo();
@@ -67,6 +69,7 @@ namespace PSI.Areas.SysConfig.Controllers
         }
 
         [HttpPost]
+        [Authorize()]
         public IActionResult CreateCustomerInfo(VM_Create_CustomerInfo pageModel)
         {
             if (ModelState.IsValid)
@@ -80,7 +83,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 // create curstomInfo and customerCarLs push into service 
                 var createRs = _customerService.CreateCustomerInfo(cutomerInfo, customerCarLs);
                 if (createRs.Success)
-                    return RedirectToAction("CustomerInfo");
+                    return RedirectToAction("OnlineInfo");
 
                 TempData["pageMsg"] = createRs.ActionMessage;
             }
