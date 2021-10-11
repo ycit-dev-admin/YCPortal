@@ -14,7 +14,7 @@ namespace PSI.Areas.SysConfig.Models
         // Entity
 
         // Page
-        public List<VM_Create_CustomerInfo> VM_Create_CustomerInfoLs { get; set; }
+        public List<VM_CustomerInfo> VM_Create_CustomerInfoLs { get; set; }
 
     }
 }

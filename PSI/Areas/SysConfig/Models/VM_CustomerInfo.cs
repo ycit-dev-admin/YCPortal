@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PSI.Areas.SysConfig.Models
 {
-    public class VM_Create_CustomerInfo
+    public class VM_CustomerInfo
     {
         // Post
         public string[] PostCarNo { get; set; }

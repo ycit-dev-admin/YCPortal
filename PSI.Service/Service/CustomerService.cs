@@ -108,9 +108,9 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-        public async Task<IQueryable<CustomerInfo>> GetCustomerInfosAsync()
+        public IQueryable<CustomerInfo> GetCustomerInfos()
         {
-            var curUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+            // var curUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
             return _customerInfoRepository.GetAllAsync()
                                           .Result
                                           .AsQueryable();

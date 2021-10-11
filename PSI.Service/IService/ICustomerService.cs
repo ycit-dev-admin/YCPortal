@@ -12,7 +12,7 @@ namespace PSI.Service.IService
     {
         FunctionResult CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars);
 
-        Task<IQueryable<CustomerInfo>> GetCustomerInfosAsync();
+        IQueryable<CustomerInfo> GetCustomerInfos();
         IEnumerable<CustomerInfo> GetCustomerInfosByPsiType(string psiType);
         IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(long customerId);
         IEnumerable<CustomerContract> GetEffectiveCustomerContracts();

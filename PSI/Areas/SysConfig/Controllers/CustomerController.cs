@@ -42,8 +42,8 @@ namespace PSI.Areas.SysConfig.Controllers
             //var name = abc.GetUserName(User); // Get user id:
 
 
-            var customerInfoLs = _customerService.GetCustomerInfosAsync().Result;
-            var vmCreateCustomerInfoLs = _mapper.Map<List<VM_Create_CustomerInfo>>(customerInfoLs);
+            var customerInfoLs = _customerService.GetCustomerInfos();
+            var vmCreateCustomerInfoLs = _mapper.Map<List<VM_CustomerInfo>>(customerInfoLs);
             var pageModel = new VM_Custome_OnlineInfo
             {
                 VM_Create_CustomerInfoLs = vmCreateCustomerInfoLs
@@ -61,7 +61,7 @@ namespace PSI.Areas.SysConfig.Controllers
         [Authorize()]
         public IActionResult CreateCustomerInfo()
         {
-            var pageModel = new VM_Create_CustomerInfo();
+            var pageModel = new VM_CustomerInfo();
             pageModel.SetPsiTypeItems();
             //var qq = _mapper.Map<CustomerInfo>(pageModel);
 
@@ -70,7 +70,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
         [HttpPost]
         [Authorize()]
-        public IActionResult CreateCustomerInfo(VM_Create_CustomerInfo pageModel)
+        public IActionResult CreateCustomerInfo(VM_CustomerInfo pageModel)
         {
             if (ModelState.IsValid)
             {

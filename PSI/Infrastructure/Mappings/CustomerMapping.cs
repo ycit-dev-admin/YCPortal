@@ -17,7 +17,7 @@ namespace PSI.Infrastructure.Mappings
             //    .ReverseMap();
 
             // ...其他的對映內容 (使用 CreateMap<> 建立下一組)
-            CreateMap<VM_Create_CustomerInfo, CustomerInfo>().ReverseMap();
+            CreateMap<VM_CustomerInfo, CustomerInfo>().ReverseMap();
             CreateMap<AppUser, IdentityUser>().ReverseMap();
             //CreateMap<string, CustomerCar>()
             //         .ForMember(d => d.CarName, s => s.MapFrom(o => o))

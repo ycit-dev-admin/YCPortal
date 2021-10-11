@@ -9,7 +9,7 @@ namespace PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model
 {
     public static class VM_Create_CustomerInfoExtension
     {
-        public static VM_Create_CustomerInfo SetPsiTypeItems(this VM_Create_CustomerInfo vmCustomerInfo, string selectedValue = "")
+        public static VM_CustomerInfo SetPsiTypeItems(this VM_CustomerInfo vmCustomerInfo, string selectedValue = "")
         {
             vmCustomerInfo.PagePsiTypeItems = typeof(PSIEnum.PSIType).GetAllFieldInfo().Select(field => new SelectListItem
             {
