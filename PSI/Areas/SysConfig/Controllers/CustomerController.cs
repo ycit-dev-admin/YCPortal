@@ -7,23 +7,52 @@ using PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model;
 using PSI.Areas.SysConfig.Models;
 using PSI.Core.Entities;
 using PSI.Service.IService;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace PSI.Areas.SysConfig.Controllers
 {
     [Area("SysConfig")]
     public class CustomerController : Controller
     {
-        private IMapper _mapper;
-        private ICustomerService _customerService;
-        public CustomerController(IMapper mapper, ICustomerService customerService)
+        private readonly IMapper _mapper;
+        private readonly ICustomerService _customerService;
+        private readonly UserManager<IdentityUser> _userManager;
+        public CustomerController(IMapper mapper,
+                                  ICustomerService customerService,
+                                  UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
             _mapper = mapper;
             _customerService = customerService;
         }
         [HttpGet]
-        public IActionResult CustomerInfo()
+        public async Task<IActionResult> OnlineInfoAsync()
         {
-            var pageModel = new List<VM_Create_CustomerInfo>();
+            var currentUser = this.User;
+            bool isAdmin = currentUser.IsInRole("Admin");
+
+            var abc = User.Identity.Name;
+            var user = await _userManager.GetUserAsync(User);
+
+
+            //var abc = new UserManager<User>();
+            //var id = abc.GetUserId(User); // Get user id:
+            //var name = abc.GetUserName(User); // Get user id:
+
+
+            var customerInfoLs = _customerService.GetCustomerInfosAsync().Result;
+            var vmCreateCustomerInfoLs = _mapper.Map<List<VM_Create_CustomerInfo>>(customerInfoLs);
+            var pageModel = new VM_Custome_OnlineInfo
+            {
+                VM_Create_CustomerInfoLs = vmCreateCustomerInfoLs
+            };
+
+
+
+
+
+
             return View(pageModel);
         }
 

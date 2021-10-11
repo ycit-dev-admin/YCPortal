@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using PSI.Core.Entities;
 using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
@@ -11,13 +14,19 @@ namespace PSI.Service.Service
 {
     public class CustomerService : ICustomerService
     {
+        private IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IUnitOfWork _unitOfwork;
         private readonly IGenericRepository<CustomerInfo> _customerInfoRepository;
         private readonly IGenericRepository<CustomerContract> _customerContractRepository;
         private readonly IGenericRepository<CustomerCar> _customerCarRepository;
 
-        public CustomerService(IUnitOfWork unitOfWork)
+        public CustomerService(IUnitOfWork unitOfWork,
+                               IHttpContextAccessor httpContextAccessor,
+                               UserManager<IdentityUser> userManager)
         {
+            _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
             _unitOfwork = unitOfWork;
             _customerInfoRepository = _unitOfwork.CustomerInfoRepository;
             _customerContractRepository = _unitOfwork.CustomerContractRepository;
@@ -90,6 +99,14 @@ namespace PSI.Service.Service
                 funcRs.ResultFailure("無客戶資料可新增!!");
             }
             return funcRs;
+        }
+
+        public async Task<IQueryable<CustomerInfo>> GetCustomerInfosAsync()
+        {
+            var curUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
+            return _customerInfoRepository.GetAllAsync()
+                                          .Result
+                                          .AsQueryable();
         }
     }
 }

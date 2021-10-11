@@ -101,7 +101,7 @@
     @if (TempData["pageMsg"] != null)
     {
         <script type="text/javascript">
-            let message = '@(TempData["pageMsg"])';
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
             alert(message);
         </script>
     }
@@ -113,6 +113,14 @@
     <script>
         $(function () {
             let pClass = new PageJsClass();
+
+            let carNoLs = @Html.Raw(Json.Serialize(ViewData.ModelState[nameof(Model.PostCarNo)]?.AttemptedValue.Split(',')));
+            if (carNoLs)
+            {
+                carNoLs.forEach(carNo =>
+                    pClass.CarNoList.AppendToList(carNo));
+                pClass.CarNoList.ShowCarNoList();
+            }
 
             $("#add-carno").on("click", function () {
                 pClass.CarNoList.AppendToList($('#carno').val());

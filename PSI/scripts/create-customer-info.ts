@@ -52,7 +52,7 @@ class CarNoList {
     }
 
     public AppendToList(carNo: string) {
-        if (!this.CarNoList.includes(carNo)) {
+        if (carNo && !this.CarNoList.includes(carNo)) {
             this.CarNoList.push(carNo);
         }
     }

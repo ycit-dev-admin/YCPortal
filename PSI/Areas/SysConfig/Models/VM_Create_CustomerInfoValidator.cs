@@ -8,8 +8,8 @@ namespace PSI.Models.PurchaseWeightNote
         public VM_Create_CustomerInfoValidator()
         {
 
-            RuleFor(x => x.CompanyName).NotNull().WithMessage("為必填欄位123");
-            RuleFor(x => x.CustomerName).NotNull().WithMessage("為必填欄位234");
+            RuleFor(x => x.CompanyName).NotNull().WithMessage("為必填欄位");
+            RuleFor(x => x.CustomerName).NotNull().WithMessage("為必填欄位");
 
             RuleSet("Skip", () =>
             {
