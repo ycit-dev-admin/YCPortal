@@ -10,12 +10,17 @@ namespace PSI.Service.IService
 {
     public interface ICustomerService
     {
+        // Customer Info
         FunctionResult CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars);
-
+        CustomerInfo GetCustomerInfo(long id);
         IQueryable<CustomerInfo> GetCustomerInfos();
-        IEnumerable<CustomerInfo> GetCustomerInfosByPsiType(string psiType);
+        IQueryable<CustomerInfo> GetPurchaseCustomerInfo();
+
+        // Customer Contract
         IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(long customerId);
         IEnumerable<CustomerContract> GetEffectiveCustomerContracts();
-        IEnumerable<CustomerCar> GetCustomerCarByCustomerId(long customerId);
+
+        // Customer Car
+        IQueryable<CustomerCar> GetCustomerCarBy(long customerId);
     }
 }

@@ -21,6 +21,7 @@ namespace PSI.Service.Service
         private readonly IGenericRepository<CustomerInfo> _customerInfoRepository;
         private readonly IGenericRepository<CustomerContract> _customerContractRepository;
         private readonly IGenericRepository<CustomerCar> _customerCarRepository;
+        private readonly IGenericRepository<CodeTable> _codeTableRepository;
 
         public CustomerService(IUnitOfWork unitOfWork,
                                IHttpContextAccessor httpContextAccessor,
@@ -32,15 +33,16 @@ namespace PSI.Service.Service
             _customerInfoRepository = _unitOfwork.CustomerInfoRepository;
             _customerContractRepository = _unitOfwork.CustomerContractRepository;
             _customerCarRepository = _unitOfwork.CustomerCarRepository;
+            _codeTableRepository = _unitOfwork.CodeTableRepository;
         }
 
-
-        public IEnumerable<CustomerInfo> GetCustomerInfosByPsiType(string psiType)
+        public IQueryable<CustomerInfo> GetPurchaseCustomerInfo()
         {
-            var queryRs = _customerInfoRepository.GetAllAsync().Result
-                                            .Where(aa => aa.PsiType == psiType &&
-                                                         aa.IsEffective == "1");
-            return queryRs;
+            var purchaseTypes = new string[] { "1", "3" };
+
+            return _customerInfoRepository.GetAllAsync().Result.
+                   Where(aa => aa.IsEffective == "1" &&
+                   purchaseTypes.Contains(aa.PsiType)).AsQueryable();
         }
         public IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(long customerId)
         {
@@ -49,12 +51,11 @@ namespace PSI.Service.Service
                                                             aa.IsEffective == "1");
             return queryRs;
         }
-        public IEnumerable<CustomerCar> GetCustomerCarByCustomerId(long customerId)
+        public IQueryable<CustomerCar> GetCustomerCarBy(long customerId)
         {
-            var queryRs = _customerCarRepository.GetAllAsync().Result
-                                                .Where(aa => aa.CustomerId == customerId &&
-                                                             aa.IsEffective == "1");
-            return queryRs;
+            return _customerCarRepository.GetAllAsync().Result.
+                   Where(aa => aa.CustomerId == customerId &&
+                               aa.IsEffective == "1").AsQueryable();
         }
 
         public IEnumerable<CustomerContract> GetEffectiveCustomerContracts()
@@ -89,6 +90,7 @@ namespace PSI.Service.Service
                 {
                     customerCars = customerCars.Select(aa =>
                     {
+                        aa.IsEffective = "1";
                         aa.CreateEmpNo = curUserInfo.NickName;
                         aa.CreateTime = DateTime.Now;
                         aa.UpdateEmpNo = curUserInfo.NickName;
@@ -114,6 +116,11 @@ namespace PSI.Service.Service
             return _customerInfoRepository.GetAllAsync()
                                           .Result
                                           .AsQueryable();
+        }
+
+        public CustomerInfo GetCustomerInfo(long id)
+        {
+            return _customerInfoRepository.GetAsync(aa => aa.Id == id).Result;
         }
     }
 }

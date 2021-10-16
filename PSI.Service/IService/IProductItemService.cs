@@ -9,7 +9,6 @@ namespace PSI.Service.IService
 {
     public interface IProductItemService
     {
-        IEnumerable<ProductItem> GetProductItemsByPsiType(string psiType);
         IEnumerable<ProductItem> GetPurchaseProductItems();
     }
 }
