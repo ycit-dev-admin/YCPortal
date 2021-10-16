@@ -1,11 +1,9 @@
 using System;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using FormHelper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,8 +48,7 @@ namespace PSI
             //});
 
             services.AddControllersWithViews() // 似乎是可以讓該專案使用Controller的相關功能 如驗證 及 View帶有Razor Page開發風格
-                    .AddFluentValidation(s => s.RunDefaultMvcValidationAfterFluentValidationExecutes = false)
-                    .AddFormHelper();
+                    .AddFluentValidation(s => s.RunDefaultMvcValidationAfterFluentValidationExecutes = false); //.AddFormHelper();
             services.AddRazorPages();  // For Dotnet core identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IValidator<VM_PurchaseWeightNote>, VM_PurchaseWeightNoteValidator>();
@@ -64,6 +61,7 @@ namespace PSI
             services.AddScoped<IGenericRepository<CustomerCar>, GenericRepository<CustomerCar>>();
             services.AddScoped<IGenericRepository<CustomerContract>, GenericRepository<CustomerContract>>();
             services.AddScoped<IGenericRepository<ProductItem>, GenericRepository<ProductItem>>();
+            services.AddScoped<IGenericRepository<CodeTable>, GenericRepository<CodeTable>>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -105,7 +103,7 @@ namespace PSI
             app.UseDefaultFiles();  // 可以指定預設頁面 可自己去搜尋MSDN的資訊了解細節用法
             //app.UsePathBase(Configuration["pathBase"] ?? "/psi");
             app.UseStaticFiles();  //主要是要讓專案可以讀wwwrot內的靜態檔案
-            app.UseFormHelper();
+            //app.UseFormHelper();  // 一個結合javascript 和 FluentVailation的套件
             app.UseRouting();
 
             // For Dotnet core identity

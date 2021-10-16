@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Collections.Generic;
 
 namespace PSI.Areas.SysConfig.Models
 {
@@ -14,7 +12,7 @@ namespace PSI.Areas.SysConfig.Models
         // Entity
 
         // Page
-        public List<VM_CustomerInfo> VM_Create_CustomerInfoLs { get; set; }
+        public List<VM_CustomerInfo> VM_CustomerInfoLs { get; set; }
 
     }
 }

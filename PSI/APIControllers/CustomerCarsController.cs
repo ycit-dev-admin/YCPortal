@@ -26,19 +26,24 @@ namespace PSI.APIControllers
 
 
         // GET: api/<CustomerContractController>
+        //[HttpGet]
+        //public IEnumerable<CustomerCar> Get()
+        //{
+        //    return _customerService.GetCustomerCarBy(1);
+        //    //return new string[] { "value1", "value2" };
+        //}
         [HttpGet]
-        public IEnumerable<CustomerCar> Get()
+        public IQueryable<CustomerCar> Get(long customerId)
         {
-            return _customerService.GetCustomerCarByCustomerId(1);
-            //return new string[] { "value1", "value2" };
+            return _customerService.GetCustomerCarBy(customerId);
         }
 
         // GET api/<CustomerContractController>/5
-        [HttpGet("{id}")]
-        public IEnumerable<CustomerContract> Get(long id)
-        {
-            return _customerService.GetCustomerContractsByCustomerId(id);
-        }
+        //[HttpGet("{id}")]
+        //public IEnumerable<CustomerContract> Getabc(long id)
+        //{
+        //    return _customerService.GetCustomerContractsByCustomerId(id);
+        //}
 
         // POST api/<CustomerContractController>
         [HttpPost]

@@ -11,47 +11,40 @@
 <table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>公司名稱</th>
-            <th>統一編號</th>
-            <th>客戶名稱</th>
-            <th>職稱</th>
-            <th>進出貨系統歸屬</th>
+            <th>客戶</th>
+            <th>客戶簡稱</th>
             <th>對應車牌</th>
-            <th>合約項目</th>
-            <th>備註</th>
+            <th>是否有合約</th>
             <th>最後更新時間</th>
             <th>最後操作人員</th>
+            <th>功能操作</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.VM_Create_CustomerInfoLs)
+        @foreach (var item in Model.VM_CustomerInfoLs)
         {
             <tr>
                 <td>@item.CompanyName</td>
-                <td>@item.TaxId</td>
                 <td>@item.CustomerName</td>
-                <td>@item.Title</td>
-                <td>@item.PsiTypeName</td>
                 <td>@item.PostCarNo</td>
-                <td>@item.PageContract</td>
-                <td>@item.Remark</td>
+                <td>@item.HasContract</td>
                 <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
                 <td>@item.UpdateEmpNo</td>
+                <td>
+                    <button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>
+                </td>
             </tr>
         }
     </tbody>
     <tfoot>
         <tr>
-            <th>公司名稱</th>
-            <th>統一編號</th>
-            <th>客戶名稱</th>
-            <th>職稱</th>
-            <th>進出貨系統歸屬</th>
+            <th>客戶</th>
+            <th>客戶簡稱</th>
             <th>對應車牌</th>
-            <th>合約項目</th>
-            <th>備註</th>
+            <th>是否有合約</th>
             <th>最後更新時間</th>
             <th>最後操作人員</th>
+            <th>功能操作</th>
         </tr>
     </tfoot>
 </table>
@@ -76,6 +69,13 @@
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+            $("#example1").on("click", "button[name='q-detail']", function () {
+                let snVal = $(this).val();
+                window.location.href = "/sysconfig/customer/editcustomerinfo?sn=" + snVal;
+            });
+
         });
     </script>
 }

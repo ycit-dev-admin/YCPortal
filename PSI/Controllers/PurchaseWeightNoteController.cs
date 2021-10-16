@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using FormHelper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
 using PSI.Models.PurchaseWeightNote;
 using PSI.Service.IService;
+using PSI.Infrastructure.Extensions.VM_Model;
 
 namespace PSI.Controllers
 {
@@ -16,6 +16,7 @@ namespace PSI.Controllers
         private readonly IPsiService _psiService;
         private readonly ICustomerService _customerService;
         private readonly IProductItemService _productItemService;
+
         //private readonly IValidator<VM_PurchaseWeightNote> _haha;
 
 
@@ -44,51 +45,19 @@ namespace PSI.Controllers
         public IActionResult Create()
         {
             ViewData["Title"] = "進貨磅單建立";
-            string host = _httpContextAccessor.HttpContext.Request.Host.Value;
-            var customerInfoItems = _customerService.GetCustomerInfosByPsiType("1").Select(aa => new SelectListItem
-            {
-                Text = aa.CustomerName,
-                Value = aa.Id.ToString()
-            });
-            var productItemItems = _productItemService.GetPurchaseProductItems().Select(aa => new SelectListItem
-            {
-                Text = aa.ProductName,
-                Value = aa.Id.ToString()
-            });
+            // string host = _httpContextAccessor.HttpContext.Request.Host.Value;  //能夠取得Host Domain Name
 
 
-            var vmPurchaseWeightNote = new VM_PurchaseWeightNote
-            {
-                CustomerInfoItems = customerInfoItems.ToList(),
-                ProductItemItems = productItemItems.ToList()
 
-            };
+
+
+            var vmPurchaseWeightNote = new VM_PurchaseWeightNote();
+            vmPurchaseWeightNote.SetCustomerInfoItems(_customerService);
+            vmPurchaseWeightNote.SetProductItems(_productItemService);
+
             return View(vmPurchaseWeightNote);
         }
-
-        [HttpGet]
-        public IActionResult CurMonthList()
-        {
-            var curMonthPWeightNotes = _psiService.GetAllPurchaseWeightNotes();
-            var vmModel = curMonthPWeightNotes.Select(aa => new VM_PurchaseWeightNote
-            {
-                CarNoName = aa.CarNo,
-                TradeWeight = aa.TradeWeight,
-                UnitPrice = aa.UnitPrice.ToString(),
-                ActualPrice = aa.ActualPrice,
-                DefectiveWeight = aa.DefectiveWeight.ToString(),
-                PayType = aa.PayType,
-                CreateEmpNo = aa.CreateEmpNo,
-                Remark = aa.Remark,
-                EffectiveTime = aa.EffectiveTime
-            }).ToList();
-
-
-            ViewData["Title"] = "當月磅單查詢";
-            return View(vmModel);
-        }
-
-        [HttpPost, FormValidator]
+        [HttpPost]
         public IActionResult Create(VM_PurchaseWeightNote purchaseWeightNote)
         {
 
@@ -100,8 +69,8 @@ namespace PSI.Controllers
 
             if (!ModelState.IsValid)
             { // re-render the view when validation failed.
-                // return View(purchaseWeightNote);
-                return FormResult.CreateWarningResult("'Abc' is already exist in the database.");
+              // return View(purchaseWeightNote);
+
             }
 
 
@@ -127,9 +96,34 @@ namespace PSI.Controllers
                 EffectiveTime = DateTime.Now,
             };
 
-            return _psiService.CreatePurchaseWeightNote(purchaseWeightNote2) ?
-                               FormResult.CreateSuccessResult("建立成功", Url.Action("CurMonthList", "PurchaseWeightNote")) :
-                               FormResult.CreateErrorResult("錯誤發生");
+            return (IActionResult)purchaseWeightNote2;
+            //return _psiService.CreatePurchaseWeightNote(purchaseWeightNote2) ?
+            //                   FormResult.CreateSuccessResult("建立成功", Url.Action("CurMonthList", "PurchaseWeightNote")) :
+            //                   FormResult.CreateErrorResult("錯誤發生");
         }
+
+        [HttpGet]
+        public IActionResult CurMonthList()
+        {
+            var curMonthPWeightNotes = _psiService.GetAllPurchaseWeightNotes();
+            var vmModel = curMonthPWeightNotes.Select(aa => new VM_PurchaseWeightNote
+            {
+                CarNoName = aa.CarNo,
+                TradeWeight = aa.TradeWeight,
+                UnitPrice = aa.UnitPrice.ToString(),
+                ActualPrice = aa.ActualPrice,
+                DefectiveWeight = aa.DefectiveWeight.ToString(),
+                PayType = aa.PayType,
+                CreateEmpNo = aa.CreateEmpNo,
+                Remark = aa.Remark,
+                EffectiveTime = aa.EffectiveTime
+            }).ToList();
+
+
+            ViewData["Title"] = "當月磅單查詢";
+            return View(vmModel);
+        }
+
+
     }
 }

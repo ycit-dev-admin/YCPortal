@@ -1,4 +1,65 @@
-﻿class PurchaseDetailInfo {
+﻿class PageClass {
+    //CustomerId: JQuery<HTMLSelectElement>;
+    //CustomerName: JQuery<HTMLInputElement>;
+    BaseUrl: string = "";
+
+    constructor(baseUrl: string) {
+        this.BaseUrl = baseUrl;
+        //this.CustomerId = $("#CustomerId");
+        //this.CustomerName = $("#CustomerName");
+    }
+    public ShowCustomerName(customerId: JQuery<HTMLSelectElement>,
+        customerName: JQuery<HTMLInputElement>) {
+
+        let optionObj = customerId.find(':selected');
+        customerName.val("");
+        if (optionObj.val() === "0") {
+            customerName.removeAttr('disabled');
+        } else {
+            customerName.attr('disabled', 'disabled');
+            customerName.val(optionObj.text());
+        }
+    }
+    public SetCarNoItems(customerId: JQuery<HTMLSelectElement>,
+        carNoId: JQuery<HTMLSelectElement>) {
+
+        const optionObj = customerId.find(':selected');
+
+        //const data = { foo: 1, bar: 2 };
+        //const haha = `https://api.parse.com/1/users?foo=${encodeURIComponent(data.foo)}&bar=${encodeURIComponent(data.bar)}`;
+        const getUrl = `${this.BaseUrl}/api/CustomerCars?customerId=${encodeURIComponent(optionObj.val().toString())}`;
+
+        // 取得車牌內容 透過API        
+        fetch(getUrl)
+            .then((response) => {
+                console.log(response)
+                return response.json()
+                //return response.text()
+            }).then((myJson) => {
+                // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
+                // contractFromList.remove();
+                carNoId.html('');
+                let defaultOption = new Option("0.新車牌", "0", false, false);
+                carNoId.append(defaultOption);
+                myJson.forEach(function (item) {
+                    let newOption = new Option(item.carName, item.id, false, false);
+                    carNoId.append(newOption);
+                    //.trigger('change');
+                    //let test = document.createElement("option") as HTMLOptionElement;
+                    //test.value = user.id;
+                    //test.text = user.contractName;
+                    //console.log(test);
+                    //contractFromList.append(test);
+                });
+
+                carNoId.val(null)
+            })
+    }
+};
+
+
+
+class PurchaseDetailInfo {
     Value: string;
     Name: string;
     Percent: number;
@@ -8,15 +69,6 @@
 }
 
 $('#CustomerId').on('change', function () {
-    const curCustomerIdObj = $(this).find(':selected');
-
-    $('#CustomerName').val("");
-    if (curCustomerIdObj.val() === "0") {
-        $('#CustomerName').removeAttr('disabled');
-    } else {
-        $('#CustomerName').attr('disabled', 'disabled');
-        $('#CustomerName').val(curCustomerIdObj.text());
-    }
 
     // 變更簽約單的Select內容 透過API
     fetch(`${window.location.origin}/api/CustomerContracts`)
@@ -31,7 +83,7 @@ $('#CustomerId').on('change', function () {
             myJson.forEach(function (item) {
                 let newOption = new Option(item.contractName, item.id, false, false);
                 $('#ContractFrom').append(newOption);
-                    //.trigger('change');
+                //.trigger('change');
                 //let test = document.createElement("option") as HTMLOptionElement;
                 //test.value = user.id;
                 //test.text = user.contractName;
@@ -42,29 +94,7 @@ $('#CustomerId').on('change', function () {
             $('#ContractFrom').val(null)
         })
 
-    // 取得車牌內容 透過API        
-    fetch(`${window.location.origin}/api/CustomerCars`)
-        .then((response) => {
-            console.log(response)
-            return response.json()
-            //return response.text()
-        }).then((myJson) => {
-            // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
-            // contractFromList.remove();
-            $("#CarNoId").html('');
-            myJson.forEach(function (item) {
-                let newOption = new Option(item.carName, item.id, false, false);
-                $('#CarNoId').append(newOption);
-                //.trigger('change');
-                //let test = document.createElement("option") as HTMLOptionElement;
-                //test.value = user.id;
-                //test.text = user.contractName;
-                //console.log(test);
-                //contractFromList.append(test);
-            });
 
-            $('#CarNoId').val(null)
-        })
 });
 
 $('#CarNoId').on('change', function () {

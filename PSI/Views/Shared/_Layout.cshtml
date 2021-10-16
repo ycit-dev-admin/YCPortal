@@ -147,10 +147,7 @@
                 </nav>
             </div>
         </aside>
-        <script src="~/lib/admin-lte/plugins/jquery/jquery.min.js"></script>
-        <script src="~/lib/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="~/lib/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-        <script src="~/lib/admin-lte/dist/js/adminlte.min.js"></script>
+
         <div class="content-wrapper px-4 py-2">
 
             <div class="content-header">
@@ -170,6 +167,10 @@
         </footer>
     </div>
 
+    <script src="~/lib/admin-lte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/lib/admin-lte/dist/js/adminlte.min.js"></script>
     <script>
         var toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
         var currentTheme = localStorage.getItem('theme');
@@ -211,7 +212,23 @@
         }
 
         toggleSwitch.addEventListener('change', switchTheme, false);
+
     </script>
+    <script>
+
+        window.curPageUrl = @(Html.Raw(Json.Serialize(Url.Action(null, null, null, this.Context.Request.Scheme))));  //可取得 當下頁面的url
+        window.baseApiUrl = @(Html.Raw(Json.Serialize($@"{this.Context.Request.Scheme}://{this.Context.Request.Host.Value}")));  // API的BaseUrl
+
+
+        @*console.log();
+        console.log(@Html.Raw(Json.Serialize(this.Context.Request.Path.Value)));
+
+        window.applicationBaseUrl = @Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(
+            new Uri(new Uri(this.Context.Request.Host.Value),
+            Url.Content("~/")).ToString(), true));*@
+
+    </script>
+
     @RenderSection("scripts", required: false)  @*For DotNet Mvc & core Identity*@
 </body>
 </html>

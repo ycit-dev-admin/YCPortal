@@ -3,249 +3,284 @@
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/formhelper/formhelper.min.css" />
-
+    <style>
+        .the-fieldset {
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+        }
+        /*legend.scheduler-border {
+            border-style: none;
+            border-width: 0;
+            font-size: 1.2em !important;
+            line-height: 20px;
+            margin-bottom: 0;
+            width: auto;
+            padding: 0 10px;
+            border: 1px solid #e0e0e0;
+        }*/
+    </style>
+    <style>
+        legend.scheduler-border {
+            font-size: 1.5em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width: auto;
+            padding: 0 10px;
+            border-bottom: none;
+        }
+    </style>
 }
 
-<form asp-formhelper="true" asp-controller="PurchaseWeightNote" asp-action="Create" method="post" autocomplete="off">
-    <div class="form-row">
-        <!-- text input -->
-        <div class="form-group col-sm-3">
-            <label>磅單時間</label>
-            <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
-                <input asp-for="FullWeightTime" type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime" />
-                <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+
+<form asp-controller="PurchaseWeightNote" asp-action="Create" method="post" autocomplete="off">
+    <div class="row">
+        <fieldset class="col-sm-12 the-fieldset">
+            <legend class="scheduler-border">進貨客戶資訊</legend>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">磅單時間</label>
+                        <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
+                            <input asp-for="FullWeightTime" type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime" />
+                            <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        <!--<span asp-validation-for="FullWeightTime" class="text-danger"></span>-->
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">進貨對象</label>
+                        <select asp-for="CustomerId" asp-items="@Model.CustomerInfoItems" class="select2bs5" style="width: 100%;">
+                            <option></option>
+                            <option value="0">0.新客戶</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">客戶名稱</label>
+                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" disabled="disabled">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">客戶車牌</label>
+                        <select asp-for="CarNoId" class="select2bs6" style="width: 100%;">
+                            <option></option>
+                            <option value="0">0.新車牌</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">車牌名稱</label>
+                        <input asp-for="CarNoName" class="form-control" type="text" placeholder="新車牌才需要填寫" disabled="disabled">
+                    </div>
                 </div>
             </div>
-            <span asp-validation-for="FullWeightTime" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-3">
-            <label>進貨對象</label>
-            <select asp-for="CustomerId" asp-items="@Model.CustomerInfoItems" class="select2bs5" style="width: 100%;">
-                <option></option>
-                <option value="0">0.新客戶</option>
-            </select>
-            <span asp-validation-for="CustomerId" class="text-danger"></span>
-        </div>
-        <div class="form-group col-sm-3">
-            <label>客戶名稱</label>
-            <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" disabled="disabled">
-            <span asp-validation-for="CustomerName" class="text-danger"></span>
-        </div>
-        <div class="form-group col-sm-3">
-            <label>客戶車牌</label>
-            <select asp-for="CarNoId" class="select2bs6" style="width: 100%;">
-                <option></option>
-                <option value="0">0.新車牌</option>
-            </select>
-            <span asp-validation-for="CarNoId" class="text-danger"></span>
-        </div>
-        <div class="form-group col-sm-3">
-            <label>車牌名稱</label>
-            <input asp-for="CarNoName" class="form-control" type="text" placeholder="新車牌才需要填寫" disabled="disabled">
-            <span asp-validation-for="CarNoName" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-12">
+        </fieldset>
+        <!-- fieldset -->
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">進貨資訊</legend>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">進廠重量</label>
+                        <input asp-for="FullWeight" class="form-control" type="text" placeholder="進廠重量">
+                        <span asp-validation-for="FullWeight" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">扣重</label>
+                        <input asp-for="DefectiveWeight" class="form-control" type="text" placeholder="扣重">
+                        <span asp-validation-for="DefectiveWeight" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">單價</label>
+                        <input asp-for="UnitPrice" class="form-control" type="text" placeholder="單價">
+                        <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <h6 id="total"><span>無選擇項目</span></h6>
+                        <input asp-for="SelectPurchaseDetailInfos" type="hidden" />
+                        <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>
+                        <select id="user-select-proditem" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
+                            @*<option value='11'>工一</option>
+                                <option value='12'>工二</option>
+                                <option value='13'>廢鐵</option>
+                                <option value='14'>垃圾</option>*@
+                            @*
+                                <option value='{"name":"工4","value":"14"}'>垃圾</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <ul id="evenProductLs">
+                            </ul>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <ul id="oddProductLs">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">合約資訊</legend>
             <div class="form-group">
-                <label>進貨品項</label>
-                <h6 id="total"><span>無選擇項目</span></h6>
-                <input asp-for="SelectPurchaseDetailInfos" type="hidden" />
-                <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>
-                <select id="user-select-proditem" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
-                    @*<option value='11'>工一</option>
-                    <option value='12'>工二</option>
-                    <option value='13'>廢鐵</option>
-                    <option value='14'>垃圾</option>*@
-                    @*
-                        <option value='{"name":"工4","value":"14"}'>垃圾</option>*@
-                </select>
+
             </div>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-6">
-            <ul id="evenProductLs">
-            </ul>
-        </div>
-        <div class="form-group col-sm-6">
-            <ul id="oddProductLs">
-            </ul>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-sm-4">
-            <label>進廠重量</label>
-            <input asp-for="FullWeight" class="form-control" type="text" placeholder="進廠重量">
-            <span asp-validation-for="FullWeight" class="text-danger"></span>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>扣重</label>
-            <input asp-for="DefectiveWeight" class="form-control" type="text" placeholder="扣重">
-            <span asp-validation-for="DefectiveWeight" class="text-danger"></span>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>單價</label>
-            <input asp-for="UnitPrice" class="form-control" type="text" placeholder="單價">
-            <span asp-validation-for="UnitPrice" class="text-danger"></span>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-4">
-            <label>合約認列</label>
-            <select asp-for="ContractFrom" class="select2bs6" style="width: 100%;">
-                <option></option>
-                <option value='11'>0.無</option>
-                <option value='12'>阿桃A約qq</option>
-                <option value='13'>阿桃B約cc</option>
-                <option value='14'>紅紅C約dd</option>
-            </select>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>合約資訊</label>
-            <label>合約名稱</label>
-            <label>合約重量</label>
-            <label>已認列重量</label>
-            <label>合約單價</label>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>預計認列重量</label>
-            <input  class="form-control" type="text" placeholder="有認列合約才需要填寫" disabled="disabled">
-        </div>        
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-4">
-            <label>是否含稅</label>
-            <br>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input asp-for="IsHasText" type="radio" class="form-check-input ishas_tex" value="1" id="IsHasText_1">是
-                </label>
+        </fieldset>
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">金額計算</legend>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">是否含稅</label>
+                        <br />
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="IsHasText" type="radio" class="form-check-input ishas_tex" value="1" id="IsHasText_1">是
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="IsHasText" type="radio" class="form-check-input ishas_tex" value="0" id="IsHasText_2" checked>否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>磅秤類型</label>
+                        <br>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" checked>大磅
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input">小磅
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">運費單價</label>
+                        <input asp-for="TraficUnitPrice" class="form-control" type="text" placeholder="運費單價">
+                        <span asp-validation-for="TraficUnitPrice" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">磅費</label>
+                        <input asp-for="WeightFee" class="form-control" type="text" placeholder="磅費">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">計價金額 = (進廠重量 - 扣重) * 單價 * 稅率</label>
+                        <div id="show_weight_price"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label">運費 = 進廠重量 * 運費單價</label>
+                        <div id="show_trafic_price"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label style="color:blue">總金額 = (磅費 + 計價金額 + 運費)</label>
+                        <h1 style="color:red" id="show_final_price"></h1>
+                    </div>
+                </div>
             </div>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input asp-for="IsHasText" type="radio" class="form-check-input ishas_tex" value="0" id="IsHasText_2" checked>否
-                </label>
+
+        </fieldset>
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">備註</legend>
+            <div class="form-group col-12">
+                @*<label class="form-control-label" for="reasonforvisit">備註</label>*@
+                <textarea asp-for="Remark" class="form-control" rows="3"></textarea>
             </div>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>磅秤類型</label>
-            <br>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" checked>大磅
-                </label>
-            </div>
-            <div class="form-check-inline">
-                <label class="form-check-label">
-                    <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input">小磅
-                </label>
-            </div>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>運費單價</label>
-            <input asp-for="TraficUnitPrice" class="form-control" type="text" placeholder="運費單價">
-            <span asp-validation-for="TraficUnitPrice" class="text-danger"></span>
-        </div>
+        </fieldset>
+
+
+        <!-- form-group -->
     </div>
-    <div class="form-row">
-        <div class="form-group col-sm-4">
-            <label>磅費</label>
-            <input asp-for="WeightFee" class="form-control" type="text" placeholder="磅費">
-            <span asp-validation-for="WeightFee" class="text-danger"></span>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>計價金額 = (進廠重量 - 扣重) * 單價 * 稅率</label>
-            <div id="show_weight_price"></div>
-        </div>
-        <div class="form-group col-sm-4">
-            <label>運費 = 進廠重量 * 運費單價</label>
-            <div id="show_trafic_price"></div>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-3">
-            <label style="color:blue">總金額 = (磅費 + 計價金額 + 運費)</label>
-            <div id="show_final_price"></div>
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-sm-12">
-            <label>備註</label>
-            <input class="form-control" type="text" placeholder="備註">
-        </div>
-    </div>
-
-
-
-
-
-    <button type="submit" class="btn btn-primary">建立</button>
+    <button class="btn btn-primary" type="submit">Submit</button>
 </form>
 
 
-<!--<form asp-formhelper="true" asp-controller="PurchaseWeightNote" asp-action="Create" method="post">
-    <fieldset>
-        <div class="form-group" asp-for="@Url.Action("Create","PurchaseWeightNote")">
-            <label asp-for="CarNo"></label>
-            <input class="form-control" placeholder="Username" asp-for="CarNo" autofocus>
-            <span asp-validation-for="CarNo" class="text-danger"></span>
-        </div>
-        <div class="form-group">-->
-@*<button class="btn btn-primary" name="button" value="login">Test </button>*@
-<!--<button type="submit" class="btn btn-primary">確定3</button>
-        </div>
-    </fieldset>
-</form>-->
+
+@section scripts{
+    <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/psi/create-purchase-doc.js"></script>
+
+    @*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
+        感覺是 透過ajax去做post的時候需要處裡 token的問題 要把token加在header 可參考黑大的文章*@
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>*@
+
+    <script>
+        $(function () {
+            /*Initialize Elements*/
+            // Datetimepicker
+            $('#reservationdatetime').datetimepicker({
+                defaultDate: moment(),
+                locale: 'zh-tw',
+                icons: { time: 'far fa-clock' }
+            });
+            // Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4',
+                placeholder: "請選擇品項"
+            })
+            // Select2 Elements
+            $('.select2bs5').select2({
+                theme: 'bootstrap4',
+                placeholder: "請選擇"
+            })
+            // Select2 Elements
+            $('.select2bs6').select2({
+                theme: 'bootstrap4',
+                placeholder: "請選擇"
+            })
 
 
-<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
-<script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
-<script src="~/psi/create-purchase-doc.js"></script>
-<script src="/formhelper/formhelper.bundle.min.js"></script>
+            // Page Event Ini           
 
-@*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
-    感覺是 透過ajax去做post的時候需要處裡 token的問題 要把token加在header 可參考黑大的文章*@
+            let pageClass = new PageClass(window.baseApiUrl);
+            IniPageEvent();
 
-@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>*@
-
-<script>
-    $(function () {
-        /*Initialize Elements*/
-        // Datetimepicker
-        $('#reservationdatetime').datetimepicker({
-            defaultDate: moment(),
-            locale: 'zh-tw',
-            icons: { time: 'far fa-clock' }
-        });
-        // Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4',
-            placeholder: "請選擇品項"
+            $('#CustomerId').on('change', function () {
+                pageClass.ShowCustomerName($("#CustomerId"), $("#CustomerName"));
+                pageClass.SetCarNoItems($("#CustomerId"), $("#CarNoId"));
+            });
         })
-        // Select2 Elements
-        $('.select2bs5').select2({
-            theme: 'bootstrap4',
-            placeholder: "請選擇"
-        })
-        // Select2 Elements
-        $('.select2bs6').select2({
-            theme: 'bootstrap4',
-            placeholder: "請選擇"
-        })
+    </script>
+}
 
-
-        // Page Event Ini
-        IniPageEvent();
-    })
-</script>
 
 
 

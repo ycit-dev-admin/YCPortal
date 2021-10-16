@@ -1,0 +1,215 @@
+﻿@model VM_CustomerInfo
+@{
+    <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .the-fieldset {
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+        }
+        /*legend.scheduler-border {
+            border-style: none;
+            border-width: 0;
+            font-size: 1.2em !important;
+            line-height: 20px;
+            margin-bottom: 0;
+            width: auto;
+            padding: 0 10px;
+            border: 1px solid #e0e0e0;
+        }*/
+    </style>
+    <style>
+        legend.scheduler-border {
+            font-size: 1.5em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width: auto;
+            padding: 0 10px;
+            border-bottom: none;
+        }
+    </style>
+}
+
+<form asp-area="SysConfig" asp-controller="Customer" asp-action="EditCustomerInfo" method="post" autocomplete="off">
+    <div class="row">
+        <fieldset class="col-sm-12 the-fieldset">
+            <legend class="scheduler-border">客戶資訊</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">客戶全稱</label>
+                        <input asp-for="CompanyName" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">統一編號</label>
+                        <input asp-for="TaxId" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">客戶簡稱</label>
+                        <input asp-for="CustomerName" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">進出貨歸屬</label>
+                        <select asp-for="PsiType" asp-items="@Model.PagePsiTypeItems" class="select2bs4" style="width: 100%;">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- form-group -->
+            @*<div class="form-group col-sm-6">
+                    <label class="form-control-label" for="owneremail">統一編號</label>
+                    <input aria-describedby="emailHelp" class="form-control" id="owneremail" placeholder="Enter email" type="email">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="form-control-label" for="owneremail">客戶簡稱</label>
+                    <input aria-describedby="emailHelp" class="form-control" id="owneremail" placeholder="Enter email" type="email">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="form-control-label" for="owneremail">進出貨歸屬</label>
+                    <input aria-describedby="emailHelp" class="form-control" id="owneremail" placeholder="Enter email" type="email">
+                </div>*@
+            <!-- form-group -->
+        </fieldset>
+        <!-- fieldset -->
+
+        <fieldset class="form-group col-sm-6 the-fieldset">
+            <legend class="scheduler-border">車牌資訊</legend>
+            <div class="form-group">
+                <h6 id="carno-message">無相關車牌</h6>
+                <ul id="selected-carno">
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset class="form-group col-sm-6 the-fieldset">
+            <legend class="scheduler-border">合約資訊</legend>
+            <div class="form-group">
+
+            </div>
+        </fieldset>
+        <!-- fieldset -->
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">備註</legend>
+            <div class="form-group col-12">
+                @*<label class="form-control-label" for="reasonforvisit">備註</label>*@
+                <textarea asp-for="Remark" class="form-control" rows="3"></textarea>
+            </div>
+        </fieldset>
+
+
+        <!-- form-group -->
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+
+@section modals{
+    @*@await Html.PartialAsync("CustomerInfo", new List<VM_Customer_Info>())*@
+}
+
+@*@await Html.PartialAsync("~/Views/HOME/_CreatePurchaseDocPartial.cshtml")*@  <!-- 效能較差  但語法較單純 -->
+@*@{await Html.RenderPartialAsync("CustomerInfo", new List<VM_Customer_Info>());}*@ <!-- 效能較好  但語法較複雜 一定要有{}  -->
+@*<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/formhelper/formhelper.bundle.min.js"></script>*@
+
+@section scripts{
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
+
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/psi/create-customer-info.js"></script>
+    <script src="~/lib/admin-lte/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jquery-validation/additional-methods.min.js"></script>  <!--擴充更多的表單檢核方法-->
+    <script>
+        $(function () {
+            // Page Ini
+            let pClass = new PageJsClass();
+
+            let carNoLs = @Html.Raw(Json.Serialize(Model.PostCarNo));
+            if (carNoLs)
+            {
+                carNoLs.forEach(carNo =>
+                    pClass.CarNoList.AppendToList(carNo));
+                pClass.CarNoList.ShowCarNoList();
+            }
+
+
+                pClass.CarNoList.AppendToList($('#carno').val());
+                pClass.CarNoList.ShowCarNoList();
+                $('#carno').val("")  // 清空輸入框
+
+
+
+
+            // Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4',
+                placeholder: "請選擇項目"
+            })
+
+
+
+
+            // Form Validation
+            $('#creaet-customer-form').validate({
+                submitHandler: function (form) {
+                    alert("Form successful submitted!");
+                    form.submit();
+                },
+                rules: {
+                    CompanyName: {
+                        required: true
+                    },
+                    CustomerName: {
+                        required: true
+                    }
+                },
+                messages: {
+                    CompanyName: {
+                        required: "該欄位為必填!!"
+                    },
+                    CustomerName: {
+                        required: "該欄位為必填!!"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+        })
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+

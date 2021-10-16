@@ -1,18 +1,14 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model;
 using PSI.Areas.SysConfig.Models;
 using PSI.Core.Entities;
-using PSI.Service.IService;
-using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 using PSI.Core.Entities.Identity;
-using Microsoft.AspNetCore.Authorization;
-using PSI.Core.Enums;
-using PSI.Infrastructure.Extensions;
+using PSI.Service.IService;
 
 namespace PSI.Areas.SysConfig.Controllers
 {
@@ -45,28 +41,14 @@ namespace PSI.Areas.SysConfig.Controllers
 
 
             var customerInfoLs = _customerService.GetCustomerInfos();
-            var vmCreateCustomerInfoLs = _mapper.Map<List<VM_CustomerInfo>>(customerInfoLs);
-
-            var psiTypeLs = typeof(PSIEnum.PSIType).GetAllFieldInfo();
+            var vmCustomerInfoLs = _mapper.Map<List<VM_CustomerInfo>>(customerInfoLs);
 
 
-            var haha = psiTypeLs.FirstOrDefault(aa => aa.Name == "");
-
-            var haha2 = ((PSIEnum.PSIType)0).GetDescription();
-
-
-            vmCreateCustomerInfoLs = vmCreateCustomerInfoLs.Select(item =>
-            {
-                item.PsiTypeName = int.TryParse(item.PsiType, out var cInt) ?
-                                   ((PSIEnum.PSIType)cInt).GetDescription() :
-                                   "無設定";
-                return item;
-            }).ToList();
 
 
             var pageModel = new VM_Custome_OnlineInfo
             {
-                VM_Create_CustomerInfoLs = vmCreateCustomerInfoLs
+                VM_CustomerInfoLs = vmCustomerInfoLs
             };
 
 
@@ -113,6 +95,30 @@ namespace PSI.Areas.SysConfig.Controllers
             }
 
             pageModel.SetPsiTypeItems(pageModel.PsiType);
+
+            return View(pageModel);
+        }
+
+        [HttpGet]
+        [Authorize()]
+        public IActionResult EditCustomerInfo(long sn)
+        {
+            //var psiTypeLs = typeof(PSIEnum.PSIType).GetAllFieldInfo();
+            //var haha = psiTypeLs.FirstOrDefault(aa => aa.Name == "");
+            //var haha2 = ((PSIEnum.PSIType)0).GetDescription();
+            //vmCreateCustomerInfoLs = vmCreateCustomerInfoLs.Select(item =>            {
+
+            //    return item;
+            //}).ToList();
+            //item.PsiTypeName = int.TryParse(item.PsiType, out var cInt) ?
+            //                     ((PSIEnum.PSIType)cInt).GetDescription() :
+            //                     "無設定";
+            var customerInfo = _customerService.GetCustomerInfo(sn);
+            var carNoLs = _customerService.GetCustomerCarBy(sn).Select(aa => aa.CarName);
+            var pageModel = _mapper.Map<VM_CustomerInfo>(customerInfo);
+            pageModel.PostCarNo = carNoLs.ToArray();
+            pageModel.SetPsiTypeItems();
+
 
             return View(pageModel);
         }
