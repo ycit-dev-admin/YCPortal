@@ -21,6 +21,7 @@ namespace PSI.Core.UnitOfWorks
         public IGenericRepository<CustomerContract> CustomerContractRepository { get; private set; }
         public IGenericRepository<CustomerCar> CustomerCarRepository { get; private set; }
         public IGenericRepository<ProductItem> ProductItemRepository { get; private set; }
+        public IGenericRepository<CodeTable> CodeTableRepository { get; private set; }
 
 
         /// <summary>
@@ -34,7 +35,10 @@ namespace PSI.Core.UnitOfWorks
             IGenericRepository<CustomerInfo> customerInfoRepository,
             IGenericRepository<CustomerContract> customerContractRepository,
             IGenericRepository<CustomerCar> customerCarRepository,
-            IGenericRepository<ProductItem> productItemRepository)
+            IGenericRepository<ProductItem> productItemRepository,
+            IGenericRepository<CodeTable> codeTableRepository)
+
+
 
         {
             this.Context = context;
@@ -43,6 +47,7 @@ namespace PSI.Core.UnitOfWorks
             this.CustomerContractRepository = customerContractRepository;
             this.CustomerCarRepository = customerCarRepository;
             this.ProductItemRepository = productItemRepository;
+            this.CodeTableRepository = codeTableRepository;
         }
 
 

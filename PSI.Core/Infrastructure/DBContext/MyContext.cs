@@ -20,6 +20,7 @@ namespace PSI.Core.Infrastructure.DBContext
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<CustomerContract> CustomerContracts { get; set; }
         public DbSet<CustomerCar> CustomerCars { get; set; }
+        public DbSet<CodeTable> CodeTables { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,12 +29,13 @@ namespace PSI.Core.Infrastructure.DBContext
             // modelBuilder.Entity<PurchaseWeightNote>().ToTable("abc");  // 相依在 Microsoft.EntityFrameworkCore.Relational
 
             modelBuilder.ApplyConfiguration(new CustomerInfosConfiguration());
+            modelBuilder.ApplyConfiguration(new CodeTableConfiguration());
             //modelBuilder.ApplyConfiguration(new ProductItemsConfiguration());
             //modelBuilder.ApplyConfiguration(new CustomerInfosConfiguration());
         }
 
         // 疑似取代.net framework 的DbEntityValidationException用法  https://entityframeworkcore.com/knowledge-base/46430619/-net-core-2---ef-core-error-handling-save-changes
-        public override int SaveChanges()   
+        public override int SaveChanges()
         {
             var entities = from e in ChangeTracker.Entries()
                            where e.State == EntityState.Added
