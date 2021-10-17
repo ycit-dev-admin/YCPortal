@@ -1,59 +1,116 @@
 ﻿class PageClass {
-    //CustomerId: JQuery<HTMLSelectElement>;
-    //CustomerName: JQuery<HTMLInputElement>;
-    BaseUrl: string = "";
+    //Page Field
+    FieldCustomerId: JQuery<HTMLSelectElement> = $("#CustomerId");
+    FieldCustomerName: JQuery<HTMLInputElement> = $("#CustomerName");
+    FieldCarNoId: JQuery<HTMLSelectElement> = $("#CarNoId");
+    FieldCarNoName: JQuery<HTMLInputElement> = $("#CarNoName");
 
-    constructor(baseUrl: string) {
+
+    BaseUrl: string;
+    constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
         //this.CustomerId = $("#CustomerId");
         //this.CustomerName = $("#CustomerName");
     }
-    public ShowCustomerName(customerId: JQuery<HTMLSelectElement>,
-        customerName: JQuery<HTMLInputElement>) {
-
-        let optionObj = customerId.find(':selected');
-        customerName.val("");
+    public IniPageEvent(
+        fullWeight: HTMLInputElement,
+        defectiveWeight: HTMLInputElement,
+        unitPrice: HTMLInputElement,
+        traficUnitPrice: HTMLInputElement,
+        weightFee: HTMLInputElement,
+        ishasTexList: HTMLElement[]
+    ) {
+        // Page Event Listioner
+        //(document.getElementById("FullWeight") as HTMLInputElement).addEventListener('keydown', CaculateAllFee);
+        fullWeight.addEventListener('keyup', CaculateAllFee);
+        defectiveWeight.addEventListener('keyup', CaculateAllFee);
+        unitPrice.addEventListener('keyup', CaculateAllFee);
+        traficUnitPrice.addEventListener('keyup', CaculateAllFee);
+        weightFee.addEventListener('keyup', CaculateAllFee);
+        ishasTexList.forEach((item) => item.addEventListener('change', CaculateAllFee));
+    };
+    public ShowCustomerName() {
+        let optionObj = this.FieldCustomerId.find(':selected');
+        this.FieldCustomerName.val("");
         if (optionObj.val() === "0") {
-            customerName.removeAttr('disabled');
+            this.FieldCustomerName.removeAttr('disabled');
         } else {
-            customerName.attr('disabled', 'disabled');
-            customerName.val(optionObj.text());
+            this.FieldCustomerName.attr('disabled', 'disabled');
+            this.FieldCustomerName.val(optionObj.text());
         }
     }
-    public SetCarNoItems(customerId: JQuery<HTMLSelectElement>,
-        carNoId: JQuery<HTMLSelectElement>) {
+    public SetCarNoItems(): JQuery.jqXHR {
 
-        const optionObj = customerId.find(':selected');
+
+        const optionObj = this.FieldCustomerId.find(':selected');
 
         //const data = { foo: 1, bar: 2 };
         //const haha = `https://api.parse.com/1/users?foo=${encodeURIComponent(data.foo)}&bar=${encodeURIComponent(data.bar)}`;
         const getUrl = `${this.BaseUrl}/api/CustomerCars?customerId=${encodeURIComponent(optionObj.val().toString())}`;
+        const getUrl2 = `${this.BaseUrl}/api/CustomerCars`;
 
-        // 取得車牌內容 透過API        
-        fetch(getUrl)
-            .then((response) => {
-                console.log(response)
-                return response.json()
-                //return response.text()
-            }).then((myJson) => {
-                // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
-                // contractFromList.remove();
-                carNoId.html('');
-                let defaultOption = new Option("0.新車牌", "0", false, false);
-                carNoId.append(defaultOption);
-                myJson.forEach(function (item) {
-                    let newOption = new Option(item.carName, item.id, false, false);
-                    carNoId.append(newOption);
-                    //.trigger('change');
-                    //let test = document.createElement("option") as HTMLOptionElement;
-                    //test.value = user.id;
-                    //test.text = user.contractName;
-                    //console.log(test);
-                    //contractFromList.append(test);
-                });
 
-                carNoId.val(null)
-            })
+        console.log("wow_1")
+        let thisObj = this;
+        return $.get(getUrl2, { customerId: encodeURIComponent(optionObj.val().toString()) }).done(function (data) {
+            // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
+            // contractFromList.remove();
+            console.log("wow_2")
+            thisObj.FieldCarNoId.html('');
+            let defaultOption = new Option("0.新車牌", "0", false, false);
+            thisObj.FieldCarNoId.append(defaultOption);
+            data.forEach(function (item) {
+                let newOption = new Option(item.carName, item.id, false, false);
+                thisObj.FieldCarNoId.append(newOption);
+                //.trigger('change');
+                //let test = document.createElement("option") as HTMLOptionElement;
+                //test.value = user.id;
+                //test.text = user.contractName;
+                //console.log(test);
+                //contractFromList.append(test);
+            });
+        });
+
+
+        // 取得車牌內容 透過API 
+        //fetch(getUrl)
+        //    .then((response) => {
+        //        console.log(response)
+        //        return response.json()
+        //        //return response.text()
+        //    }).then((myJson) => {
+        //        // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
+        //        // contractFromList.remove();
+        //        carNoId.html('');
+        //        let defaultOption = new Option("0.新車牌", "0", false, false);
+        //        carNoId.append(defaultOption);
+        //        myJson.forEach(function (item) {
+        //            let newOption = new Option(item.carName, item.id, false, false);
+        //            carNoId.append(newOption);
+        //            //.trigger('change');
+        //            //let test = document.createElement("option") as HTMLOptionElement;
+        //            //test.value = user.id;
+        //            //test.text = user.contractName;
+        //            //console.log(test);
+        //            //contractFromList.append(test);
+        //        });
+
+        //        carNoId.val(null)
+        //    })
+
+
+
+    }
+
+    public ShowCarNoName() {
+        let carNoIdObj = this.FieldCarNoId.find(':selected');
+        this.FieldCarNoName.val("");
+        if (carNoIdObj.val() === "0") {
+            this.FieldCarNoName.removeAttr('disabled');
+        } else {
+            this.FieldCarNoName.attr('disabled', 'disabled');
+            this.FieldCarNoName.val(carNoIdObj.text());
+        }
     }
 };
 
@@ -97,17 +154,18 @@ $('#CustomerId').on('change', function () {
 
 });
 
-$('#CarNoId').on('change', function () {
-    const thisSelectObj = $(this).find(':selected');
+//$('#CarNoId').on('change', function () {
+//    const thisSelectObj = $(this).find(':selected');
 
-    $('#CarNoName').val("");
-    if (thisSelectObj.val() === "0") {
-        $('#CarNoName').removeAttr('disabled');
-    } else {
-        $('#CarNoName').attr('disabled', 'disabled');
-        $('#CarNoName').val(thisSelectObj.text());
-    }
-});
+//    $('#CarNoName').val("");
+//    if (thisSelectObj.val() === "0") {
+//        $('#CarNoName').removeAttr('disabled');
+//    } else {
+//        $('#CarNoName').attr('disabled', 'disabled');
+//        $('#CarNoName').val(thisSelectObj.text());
+//    }
+//});
+
 $('#user-select-proditem').on('change', function () {
 
     /*$('li[name="abc"]').remove();*/
@@ -407,14 +465,7 @@ function CaculateAllFee() {
     (document.getElementById("show_final_price") as HTMLDivElement).textContent = !finalPrice || finalPrice < 0 ? "0" : finalPrice.toString();
 }
 
-function IniPageEvent() {
-    // Page Event Listioner
-    //(document.getElementById("FullWeight") as HTMLInputElement).addEventListener('keydown', CaculateAllFee);
-    (document.getElementById("FullWeight") as HTMLInputElement).addEventListener('keyup', CaculateAllFee);
-    (document.getElementById("DefectiveWeight") as HTMLInputElement).addEventListener('keyup', CaculateAllFee);
-    (document.getElementById("UnitPrice") as HTMLInputElement).addEventListener('keyup', CaculateAllFee);
-    document.querySelectorAll(".ishas_tex").forEach((item) => item.addEventListener('change', CaculateAllFee));
-    (document.getElementById("TraficUnitPrice") as HTMLInputElement).addEventListener('keyup', CaculateAllFee);
-    (document.getElementById("WeightFee") as HTMLInputElement).addEventListener('keyup', CaculateAllFee);
-}
+
+
+
 
