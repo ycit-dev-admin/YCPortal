@@ -33,9 +33,14 @@ namespace PSI.APIControllers
         //    //return new string[] { "value1", "value2" };
         //}
         [HttpGet]
-        public IQueryable<CustomerCar> Get(long customerId)
+        public IActionResult Get(long customerId)
         {
-            return _customerService.GetCustomerCarBy(customerId);
+            var apiRs = _customerService.GetCustomerCarBy(customerId).Select(aa => new
+            {
+                CarName = aa.CarName,
+                Id = aa.Id
+            });
+            return Ok(apiRs);
         }
 
         // GET api/<CustomerContractController>/5
