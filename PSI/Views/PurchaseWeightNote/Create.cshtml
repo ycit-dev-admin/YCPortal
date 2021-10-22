@@ -32,7 +32,7 @@
 }
 
 
-<form asp-controller="PurchaseWeightNote" asp-action="Create" method="post" autocomplete="off">
+<form id="creaet-form" asp-controller="PurchaseWeightNote" asp-action="Create" method="post" autocomplete="off">
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
             <legend class="scheduler-border">進貨客戶資訊</legend>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-sm-9">
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">進貨對象</label>
                         <select asp-for="CustomerId" asp-items="@Model.CustomerInfoItems" class="select2bs5" style="width: 100%;">
@@ -60,13 +60,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">客戶名稱</label>
-                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" disabled="disabled">
+                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="CarNoId">客戶車牌</label>
                         <select asp-for="CarNoId" class="select2bs6" style="width: 100%;">
@@ -78,7 +78,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="CarNoName">車牌名稱</label>
-                        <input asp-for="CarNoName" class="form-control" type="text" placeholder="新車牌才需要填寫" disabled="disabled">
+                        <input asp-for="CarNo" class="form-control" type="text" placeholder="新車牌才需要填寫" readonly>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label class="form-control-label">進廠重量</label>
+                        <label class="form-control-label">進廠重量(重車重-空車重)</label>
                         <input asp-for="FullWeight" class="form-control" type="text" placeholder="進廠重量">
                         <span asp-validation-for="FullWeight" class="text-danger"></span>
                     </div>
@@ -154,12 +154,12 @@
                         <br />
                         <div class="form-check-inline">
                             <label class="form-check-label">
-                                <input asp-for="IsHasText" type="radio" class="form-check-input ishas_tex" value="1" id="IsHasText_1">是
+                                <input asp-for="HasTax" type="radio" class="form-check-input ishas_tex" value="1" id="IsHasText_1">是
                             </label>
                         </div>
                         <div class="form-check-inline">
                             <label class="form-check-label">
-                                <input asp-for="IsHasText" type="radio" class="form-check-input ishas_tex" value="0" id="IsHasText_2" checked>否
+                                <input asp-for="HasTax" type="radio" class="form-check-input ishas_tex" value="0" id="IsHasText_2" checked>否
                             </label>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="form-control-label">磅費</label>
-                        <input asp-for="WeightFee" class="form-control" type="text" placeholder="磅費">
+                        <input asp-for="ThirdWeightFee" class="form-control" type="text" placeholder="磅費">
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -207,8 +207,9 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label style="color:blue">總金額 = (磅費 + 計價金額 + 運費)</label>
+                        <label style="color:blue">實付金額 = (磅費 + 計價金額 + 運費)</label>
                         <h1 style="color:red" id="show_final_price"></h1>
+                        <input asp-for="ActualPrice" type="hidden" />
                     </div>
                 </div>
             </div>
@@ -272,21 +273,14 @@
 
             // Initialize
             let pageClass = new PageClass(window.baseApiUrl);
-            pageClass.IniPageEvent(
-                $("#FullWeight").get(0),
-                $("#DefectiveWeight").get(0),
-                $("#UnitPrice").get(0),
-                $("#TraficUnitPrice").get(0),
-                $("#WeightFee").get(0),
-                $(".ishas_tex").get()
-            )
+            pageClass.IniPageEvent();
 
             // 進貨對象
             $('#CustomerId').on('change', function () {
                 pageClass.ShowCustomerName();
                 let funcRs = pageClass.SetCarNoItems();
                 $.when(funcRs).then(function (result1) {
-                    pageClass.FieldCarNoId.val(null)
+                    $("#CarNoId").val(null)
                     pageClass.ShowCarNoName();
                 });
 
@@ -295,6 +289,109 @@
             // 客戶車牌
             $('#CarNoId').on('change', function () {
                 pageClass.ShowCarNoName();
+            });
+
+            // 進貨品項
+            $('#user-select-proditem').on('change', function () {
+                ShowList();
+                RefreshProdItemPercent();
+                ShowTotalInfo();
+                SetBindingValue();
+
+                /*$('li[name="abc"]').remove();*/
+                //$('#evenProductLs li').remove();
+                // $('#oddnProductLs li').remove();
+                //$.each($('.select2bs4').find(':selected'), function (index, value) {
+                //    // $('#testLs').append('<li>' + $(this).val() + "_" + $(this).text() + '<i class="fas fa-minus-circle"></i><i class="fas fa-plus-circle"></i></li>');
+                //    AppendToShowList($(this));
+                //    /*var val = $.parseJSON(value);*/
+                //})
+                //console.log($('.select2bs4:checked'));
+                //alert($(".select2bs4:checked").val());
+            });
+
+
+
+            // Form Validation
+            $("#creaet-form").validate({
+                submitHandler: function (form) {
+                    alert("Form successful submitted!");
+                    form.submit();
+                },
+                ignore: [], // 要檢查Hidden欄位要加這個
+                rules: {
+                    FullWeightTime: "required",
+                    CustomerId: "required",
+                    SelectPurchaseDetailInfos: "required",
+                    ScaleNo: "required",
+                    IsHasText: "required",
+                    CarNoId: "required",
+                    CustomerName: {
+                        required: function (element) {
+                            return $("#CustomerId").val() === "0";
+                        }
+                    },
+                    CarNoName: {
+                        required: function (element) {
+                            return $("#CarNoId").val() === "0";
+                        }
+                    },
+                    FullWeight: {
+                        required: true,
+                        pattern: /^\+?[1-9][0-9]*$/  // 大於0的正整數
+                    },
+                    DefectiveWeight: {
+                        required: true,
+                        pattern: /0|^\+?[1-9][0-9]*$/  // 大於或等於0的正整數
+                    },
+                    UnitPrice: {
+                        required: true,
+                        pattern: /^([1-9][0-9]*(\.[0-9]{1,2})?|0\.(?!0+$)[0-9]{1,2})$/  // 格式不符，需為大於0整數 且 最多2位小數!!
+                    },
+                    TraficUnitPrice: {
+                        required: true,
+                        pattern: /^([1-9][0-9]*(\.[0-9]{1,2})?|0\.(?!0+$)[0-9]{1,2})$/  // 格式不符，需為大於0整數 且 最多2位小數!!
+                    },
+                    WeightFee: {
+                        required: true,
+                        pattern: /0|^\+?[1-9][0-9]*$/  // 大於或等於0的正整數
+                    },
+                    ActualPrice: {
+                        required: true,
+                        pattern: /^\+?[1-9][0-9]*$/  // 大於0的正整數
+                    }
+                },
+                messages: {
+                    FullWeight: {
+                        pattern: "必須為大於0的正整數"
+                    },
+                    DefectiveWeight: {
+                        pattern: "必須為大於或等於0的正整數"
+                    },
+                    UnitPrice: {
+                        pattern: "必須為大於0整數 且 最多2位小數"
+                    },
+                    TraficUnitPrice: {
+                        pattern: "必須為大於0整數 且 最多2位小數"
+                    },
+                    WeightFee: {
+                        pattern: "必須為大於或等於0的正整數"
+                    },
+                    ActualPrice: {
+                        pattern: "實付金額必須為大於0"
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
             });
         })
     </script>

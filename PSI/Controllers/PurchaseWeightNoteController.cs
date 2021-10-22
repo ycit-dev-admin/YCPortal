@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
+using PSI.Infrastructure.Extensions.VM_Model;
 using PSI.Models.PurchaseWeightNote;
 using PSI.Service.IService;
-using PSI.Infrastructure.Extensions.VM_Model;
 
 namespace PSI.Controllers
 {
@@ -16,15 +17,16 @@ namespace PSI.Controllers
         private readonly IPsiService _psiService;
         private readonly ICustomerService _customerService;
         private readonly IProductItemService _productItemService;
+        private readonly IMapper _mapper;
 
-        //private readonly IValidator<VM_PurchaseWeightNote> _haha;
 
-
-        public PurchaseWeightNoteController(IPsiService psiService,
+        public PurchaseWeightNoteController(IMapper mapper,
+                                            IPsiService psiService,
                                             ICustomerService customerService,
                                             IProductItemService productItemService,
                                             IHttpContextAccessor httpContextAccessor)
         {
+            _mapper = mapper;
             _psiService = psiService;
             _customerService = customerService;
             _productItemService = productItemService;
@@ -58,8 +60,31 @@ namespace PSI.Controllers
             return View(vmPurchaseWeightNote);
         }
         [HttpPost]
-        public IActionResult Create(VM_PurchaseWeightNote purchaseWeightNote)
+        public IActionResult Create(VM_PurchaseWeightNote vmPurchaseWeightNote)
         {
+            if (ModelState.IsValid)
+            {
+                // 磅單
+                var purchaseWeightNote = _mapper.Map<PurchaseWeightNote>(vmPurchaseWeightNote);
+
+
+                // 車牌
+
+                // 品項
+
+                // 合約
+
+                // 進貨磅單
+
+                // 磅單也許要區分廠區
+
+
+            }
+
+
+
+            return View(vmPurchaseWeightNote);
+
 
             //var validator = new VM_PurchaseWeightNoteValidator();
             //var validRs = validator.Validate(purchaseWeightNote, options => options.IncludeRuleSets("Create"));
@@ -67,36 +92,13 @@ namespace PSI.Controllers
             //var hihi = new VM_PurchaseWeightNote();
             //vr book = JsonSerializer.Deserialize<List<TestABC>>(purchaseWeightNote.Wowgogo);
 
-            if (!ModelState.IsValid)
-            { // re-render the view when validation failed.
-              // return View(purchaseWeightNote);
-
-            }
 
 
 
-            var purchaseWeightNote2 = new PurchaseWeightNote
-            {
-                CarNo = purchaseWeightNote.CarNoName,
-                FullWeight = double.Parse(purchaseWeightNote.FullWeight),
-                FullWeightTime = purchaseWeightNote.FullWeightTime.Value,
-                DefectiveWeight = double.Parse(purchaseWeightNote.DefectiveWeight),
-                ExcavatorOpTime = DateTime.Now,
-                CarWeight = double.Parse(purchaseWeightNote.FullWeight),
-                CarWeightTime = DateTime.Now,
-                TradeWeight = double.Parse(purchaseWeightNote.DefectiveWeight),
-                FinalDefectiveWeight = double.Parse(purchaseWeightNote.FullWeight),
-                UnitPrice = 1,
-                WantPrice = 2,
-                HasTax = true,
-                ActualPrice = 90,
-                ThirdWeightFee = 3,
-                TraficFee = 5,
-                CustomerId = 1,
-                EffectiveTime = DateTime.Now,
-            };
 
-            return (IActionResult)purchaseWeightNote2;
+
+
+            // return (IActionResult)purchaseWeightNote2;
             //return _psiService.CreatePurchaseWeightNote(purchaseWeightNote2) ?
             //                   FormResult.CreateSuccessResult("建立成功", Url.Action("CurMonthList", "PurchaseWeightNote")) :
             //                   FormResult.CreateErrorResult("錯誤發生");
@@ -106,18 +108,21 @@ namespace PSI.Controllers
         public IActionResult CurMonthList()
         {
             var curMonthPWeightNotes = _psiService.GetAllPurchaseWeightNotes();
-            var vmModel = curMonthPWeightNotes.Select(aa => new VM_PurchaseWeightNote
-            {
-                CarNoName = aa.CarNo,
-                TradeWeight = aa.TradeWeight,
-                UnitPrice = aa.UnitPrice.ToString(),
-                ActualPrice = aa.ActualPrice,
-                DefectiveWeight = aa.DefectiveWeight.ToString(),
-                PayType = aa.PayType,
-                CreateEmpNo = aa.CreateEmpNo,
-                Remark = aa.Remark,
-                EffectiveTime = aa.EffectiveTime
-            }).ToList();
+
+            var vmModel = _mapper.Map<List<VM_PurchaseWeightNote>>(curMonthPWeightNotes);
+
+            //var vmModel2 = curMonthPWeightNotes.Select(aa => new VM_PurchaseWeightNote
+            //{
+            //    CarNoName = aa.CarNo,
+            //    TradeWeight = aa.TradeWeight,
+            //    UnitPrice = aa.UnitPrice.ToString(),
+            //    ActualPrice = aa.ActualPrice,
+            //    DefectiveWeight = aa.DefectiveWeight.ToString(),
+            //    PayType = aa.PayType,
+            //    CreateEmpNo = aa.CreateEmpNo,
+            //    Remark = aa.Remark,
+            //    EffectiveTime = aa.EffectiveTime
+            //}).ToList();
 
 
             ViewData["Title"] = "當月磅單查詢";
