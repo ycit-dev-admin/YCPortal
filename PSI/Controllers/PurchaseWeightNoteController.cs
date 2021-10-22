@@ -61,6 +61,16 @@ namespace PSI.Controllers
         public IActionResult Create(VM_PurchaseWeightNote purchaseWeightNote)
         {
 
+            // 車牌
+
+            // 品項
+
+            // 合約
+
+            // 進貨磅單
+
+            // 磅單也許要區分廠區
+
             //var validator = new VM_PurchaseWeightNoteValidator();
             //var validRs = validator.Validate(purchaseWeightNote, options => options.IncludeRuleSets("Create"));
 

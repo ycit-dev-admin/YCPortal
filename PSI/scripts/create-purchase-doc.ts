@@ -1,67 +1,75 @@
 ﻿class PageClass {
-    //Page Field
-    FieldCustomerId: JQuery<HTMLSelectElement> = $("#CustomerId");
-    FieldCustomerName: JQuery<HTMLInputElement> = $("#CustomerName");
-    FieldCarNoId: JQuery<HTMLSelectElement> = $("#CarNoId");
-    FieldCarNoName: JQuery<HTMLInputElement> = $("#CarNoName");
+    // Global
+
+    // Ready Post
+
+
 
 
     BaseUrl: string;
     constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
-        //this.CustomerId = $("#CustomerId");
-        //this.CustomerName = $("#CustomerName");
     }
-    public IniPageEvent(
-        fullWeight: HTMLInputElement,
-        defectiveWeight: HTMLInputElement,
-        unitPrice: HTMLInputElement,
-        traficUnitPrice: HTMLInputElement,
-        weightFee: HTMLInputElement,
-        ishasTexList: HTMLElement[]
-    ) {
-        // Page Event Listioner
-        //(document.getElementById("FullWeight") as HTMLInputElement).addEventListener('keydown', CaculateAllFee);
-        fullWeight.addEventListener('keyup', CaculateAllFee);
-        defectiveWeight.addEventListener('keyup', CaculateAllFee);
-        unitPrice.addEventListener('keyup', CaculateAllFee);
-        traficUnitPrice.addEventListener('keyup', CaculateAllFee);
-        weightFee.addEventListener('keyup', CaculateAllFee);
-        ishasTexList.forEach((item) => item.addEventListener('change', CaculateAllFee));
+
+
+    public IniPageEvent() {
+        // Page Field
+        let fullWeight = $("#FullWeight").get(0);
+        let defectiveWeight = $("#DefectiveWeight").get(0);
+        let unitPrice = $("#UnitPrice").get(0);
+        let traficUnitPrice = $("#TraficUnitPrice").get(0);
+        let weightFee = $("#WeightFee").get(0);
+        let ishasTexList = $(".ishas_tex").get();
+
+        // Logic        
+        fullWeight.addEventListener('keyup', this.CaculateAllFee);
+        defectiveWeight.addEventListener('keyup', this.CaculateAllFee);
+        unitPrice.addEventListener('keyup', this.CaculateAllFee);
+        traficUnitPrice.addEventListener('keyup', this.CaculateAllFee);
+        weightFee.addEventListener('keyup', this.CaculateAllFee);
+        ishasTexList.forEach((item) => item.addEventListener('change', this.CaculateAllFee));
     };
+
     public ShowCustomerName() {
-        let optionObj = this.FieldCustomerId.find(':selected');
-        this.FieldCustomerName.val("");
+        // Page Field
+        let customerId = $("#CustomerId");
+        let customerName = $("#CustomerName");
+
+        // Vars
+        let optionObj = customerId.find(':selected');
+
+        // Logic
+        customerName.val("");
         if (optionObj.val() === "0") {
-            this.FieldCustomerName.removeAttr('disabled');
+            customerName.removeAttr("readonly");
         } else {
-            this.FieldCustomerName.attr('disabled', 'disabled');
-            this.FieldCustomerName.val(optionObj.text());
+            customerName.attr("readonly", "readonly");
+            customerName.val(optionObj.text());
         }
     }
+
     public SetCarNoItems(): JQuery.jqXHR {
+        // Page Field
+        let customerId = $("#CustomerId");
+        let carNoId = $("#CarNoId");
 
-
-        const optionObj = this.FieldCustomerId.find(':selected');
-
-        //const data = { foo: 1, bar: 2 };
-        //const haha = `https://api.parse.com/1/users?foo=${encodeURIComponent(data.foo)}&bar=${encodeURIComponent(data.bar)}`;
-        const getUrl = `${this.BaseUrl}/api/CustomerCars?customerId=${encodeURIComponent(optionObj.val().toString())}`;
+        // Vars               
+        const optionObj = customerId.find(':selected');
         const getUrl2 = `${this.BaseUrl}/api/CustomerCars`;
+        //const getUrl = `${this.BaseUrl}/api/CustomerCars?customerId=${encodeURIComponent(optionObj.val().toString())}`;
 
+        // Logic
 
-        console.log("wow_1")
-        let thisObj = this;
         return $.get(getUrl2, { customerId: encodeURIComponent(optionObj.val().toString()) }).done(function (data) {
             // let contractFromList = document.getElementById("ContractFrom") as HTMLSelectElement;
             // contractFromList.remove();
             console.log("wow_2")
-            thisObj.FieldCarNoId.html('');
+            carNoId.html('');
             let defaultOption = new Option("0.新車牌", "0", false, false);
-            thisObj.FieldCarNoId.append(defaultOption);
+            carNoId.append(defaultOption);
             data.forEach(function (item) {
                 let newOption = new Option(item.carName, item.id, false, false);
-                thisObj.FieldCarNoId.append(newOption);
+                carNoId.append(newOption);
                 //.trigger('change');
                 //let test = document.createElement("option") as HTMLOptionElement;
                 //test.value = user.id;
@@ -103,14 +111,45 @@
     }
 
     public ShowCarNoName() {
-        let carNoIdObj = this.FieldCarNoId.find(':selected');
-        this.FieldCarNoName.val("");
+        // Page Field
+        let carNoId = $("#CarNoId");
+        let carName = $("#CarNoName");
+
+        // Logic 
+        let carNoIdObj = carNoId.find(':selected');
+        carName.val("");
         if (carNoIdObj.val() === "0") {
-            this.FieldCarNoName.removeAttr('disabled');
+            carName.removeAttr("readonly");
         } else {
-            this.FieldCarNoName.attr('disabled', 'disabled');
-            this.FieldCarNoName.val(carNoIdObj.text());
+            carName.attr("readonly", "readonly");
+            carName.val(carNoIdObj.text());
         }
+    }
+
+    public CaculateAllFee() {
+
+        //let haha = new FormData();
+        let fullWeight = (document.getElementById("FullWeight") as HTMLInputElement).value // 進場重量
+        let defectiveWeight = (document.getElementById("DefectiveWeight") as HTMLInputElement).value // 扣重
+        let unitPrice = (document.getElementById("UnitPrice") as HTMLInputElement).value // 單價
+        let isHasTex = $('.ishas_tex:checked').val() === "1" ? 1.05 : 1;  // 是否含稅 (radio button 沒有 name attribute 所以用)
+        let traficUnitPrice = (document.getElementById("TraficUnitPrice") as HTMLInputElement).value // 運費單價
+        let weightFee = (document.getElementById("WeightFee") as HTMLInputElement).value
+
+        // 計價金額 = (進廠重量 - 扣重) * 單價 * 稅率
+        //let weightFee = (+fullWeight - (+defectiveWeight));
+        let weightPrice = (+fullWeight - (+defectiveWeight)) * (+unitPrice) * isHasTex;
+        (document.getElementById("show_weight_price") as HTMLDivElement).textContent = !weightPrice || weightPrice < 0 ? "0" : weightPrice.toString();
+
+        // 運費 = 進廠重量 * 運費單價
+        let traficPrice = (+fullWeight) * (+traficUnitPrice);
+        (document.getElementById("show_trafic_price") as HTMLDivElement).textContent = !traficPrice || traficPrice < 0 ? "0" : traficPrice.toString();
+
+        // 總金額 = (磅費 + 計價金額 + 運費)
+        let finalPrice = (+weightFee) + weightPrice + traficPrice;
+        (document.getElementById("show_final_price") as HTMLDivElement).textContent = !finalPrice || finalPrice < 0 ? "0" : Math.round(finalPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");        
+        $("#ActualPrice").val(Math.round(finalPrice));
+
     }
 };
 
@@ -154,46 +193,8 @@ $('#CustomerId').on('change', function () {
 
 });
 
-//$('#CarNoId').on('change', function () {
-//    const thisSelectObj = $(this).find(':selected');
-
-//    $('#CarNoName').val("");
-//    if (thisSelectObj.val() === "0") {
-//        $('#CarNoName').removeAttr('disabled');
-//    } else {
-//        $('#CarNoName').attr('disabled', 'disabled');
-//        $('#CarNoName').val(thisSelectObj.text());
-//    }
-//});
-
-$('#user-select-proditem').on('change', function () {
-
-    /*$('li[name="abc"]').remove();*/
-
-    //$('#evenProductLs li').remove();
-    // $('#oddnProductLs li').remove();
 
 
-
-    ShowList();
-    RefreshProdItemPercent();
-    ShowTotalInfo();
-    SetBindingValue();
-
-
-
-
-    //$.each($('.select2bs4').find(':selected'), function (index, value) {
-
-
-
-    //    // $('#testLs').append('<li>' + $(this).val() + "_" + $(this).text() + '<i class="fas fa-minus-circle"></i><i class="fas fa-plus-circle"></i></li>');
-    //    AppendToShowList($(this));
-    //    /*var val = $.parseJSON(value);*/
-    //})
-    //console.log($('.select2bs4:checked'));
-    //alert($(".select2bs4:checked").val());
-});
 
 function AppendToShowList(prodItem: HTMLSelectElement) {
     const allShowList = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray());
@@ -255,7 +256,6 @@ function AppendToShowList(prodItem: HTMLSelectElement) {
     // return number * number;
 };
 function ShowList() {
-    // 
     //let userSelect = ($('.select2bs4').find(':selected').get() as HTMLSelectElement[]);
     // User畫面所選
     let userSelect = $('.select2bs4').find(':selected').toArray() as HTMLSelectElement[];
@@ -301,11 +301,6 @@ function ShowList() {
     //    }
     //    );
     //}
-
-
-
-
-
 
 
     //const iMinusTag = document.createElement("i");
@@ -441,29 +436,7 @@ function SetBindingValue() {
     }
 
 }
-function CaculateAllFee() {
 
-    //let haha = new FormData();
-    let fullWeight = (document.getElementById("FullWeight") as HTMLInputElement).value // 進場重量
-    let defectiveWeight = (document.getElementById("DefectiveWeight") as HTMLInputElement).value // 扣重
-    let unitPrice = (document.getElementById("UnitPrice") as HTMLInputElement).value // 單價
-    let isHasTex = $('.ishas_tex:checked').val() === "1" ? 1.05 : 1;  // 是否含稅 (radio button 沒有 name attribute 所以用)
-    let traficUnitPrice = (document.getElementById("TraficUnitPrice") as HTMLInputElement).value // 運費單價
-    let weightFee = (document.getElementById("WeightFee") as HTMLInputElement).value
-
-    // 計價金額 = (進廠重量 - 扣重) * 單價 * 稅率
-    //let weightFee = (+fullWeight - (+defectiveWeight));
-    let weightPrice = (+fullWeight - (+defectiveWeight)) * (+unitPrice) * isHasTex;
-    (document.getElementById("show_weight_price") as HTMLDivElement).textContent = !weightPrice || weightPrice < 0 ? "0" : weightPrice.toString();
-
-    // 運費 = 進廠重量 * 運費單價
-    let traficPrice = (+fullWeight) * (+traficUnitPrice);
-    (document.getElementById("show_trafic_price") as HTMLDivElement).textContent = !traficPrice || traficPrice < 0 ? "0" : traficPrice.toString();
-
-    // 總金額 = (磅費 + 計價金額 + 運費)
-    let finalPrice = (+weightFee) + weightPrice + traficPrice;
-    (document.getElementById("show_final_price") as HTMLDivElement).textContent = !finalPrice || finalPrice < 0 ? "0" : finalPrice.toString();
-}
 
 
 
