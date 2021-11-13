@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20211024021439_adj Purcahse Fied required")]
+    partial class adjPurcahseFiedrequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,39 +235,6 @@ namespace PSI.Core.Migrations
                     b.ToTable("ProductItems");
                 });
 
-            modelBuilder.Entity("PSI.Core.Entities.PurchaseIngredient", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CreateEmpNo")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ItemName")
-                        .HasColumnType("text");
-
-                    b.Property<double>("ItemPercent")
-                        .HasColumnType("double precision");
-
-                    b.Property<long>("PurchaseWeighNoteId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("UpdateEmpNo")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PurchaseIngredients");
-                });
-
             modelBuilder.Entity("PSI.Core.Entities.PurchaseWeightNote", b =>
                 {
                     b.Property<long>("Id")
@@ -303,9 +272,6 @@ namespace PSI.Core.Migrations
                     b.Property<double>("DefectiveWeight")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("DocNo")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("EffectiveTime")
                         .HasColumnType("timestamp without time zone");
 
@@ -330,14 +296,14 @@ namespace PSI.Core.Migrations
                     b.Property<bool>("HasTax")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Ingredient")
+                        .HasColumnType("text");
+
                     b.Property<string>("InputType")
                         .HasColumnType("text");
 
                     b.Property<string>("NoteStatus")
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("PayTime")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PayType")
                         .HasColumnType("text");
@@ -375,19 +341,6 @@ namespace PSI.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PurchaseWeightNotes");
-                });
-
-            modelBuilder.Entity("PSI.Core.Entities.SeqTypeConfig", b =>
-                {
-                    b.Property<string>("SeqType")
-                        .HasColumnType("text");
-
-                    b.Property<long>("SeqNo")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("SeqType");
-
-                    b.ToTable("SeqTypeConfigs");
                 });
 #pragma warning restore 612, 618
         }

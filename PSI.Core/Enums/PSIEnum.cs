@@ -10,11 +10,11 @@ namespace PSI.Core.Enums
         public enum PSIType
         {
             [Description("進貨")]
-            Purchase = 0,
+            Purchase = 1,
             [Description("出貨")]
-            Sale = 1,
+            Sale = 2,
             [Description("進出貨")]
-            Both = 2
+            Both = 5
         }
     }
 }

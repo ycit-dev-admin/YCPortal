@@ -20,6 +20,8 @@ namespace PSI.Core.Interfaces.UnitOfWork
         IGenericRepository<CustomerCar> CustomerCarRepository { get; }
         IGenericRepository<ProductItem> ProductItemRepository { get; }
         IGenericRepository<CodeTable> CodeTableRepository { get; }
+        IGenericRepository<PurchaseIngredient> PurchaseIngredientRepository { get; }
+        IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; }
 
         /// <summary>
         /// DB Context

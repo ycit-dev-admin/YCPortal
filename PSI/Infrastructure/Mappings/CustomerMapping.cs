@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using PSI.Areas.SysConfig.Models;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
-using PSI.Models.PurchaseWeightNote;
+using PSI.Models.PageModels;
+using PSI.Models.VEModels;
 
 namespace PSI.Infrastructure.Mappings
 {
@@ -20,7 +21,12 @@ namespace PSI.Infrastructure.Mappings
             // ...其他的對映內容 (使用 CreateMap<> 建立下一組)
             CreateMap<VM_CustomerInfo, CustomerInfo>().ReverseMap();
             CreateMap<AppUser, IdentityUser>().ReverseMap();
-            CreateMap<VM_PurchaseWeightNote, PurchaseWeightNote>().ReverseMap();
+            CreateMap<VE_PurchaseWeightNote, PurchaseWeightNote>().ReverseMap();
+            CreateMap<VE_PurchaseIngredient, PurchaseIngredient>()
+                .ForMember(d => d.ItemName, s => s.MapFrom(ss => ss.Name))
+                .ForMember(d => d.ItemPercent, s => s.MapFrom(ss => ss.Percent))
+                .ReverseMap();
+
             //         .ForMember(d => d.CarName, s => s.MapFrom(o => o))
             //         .ReverseMap();
         }

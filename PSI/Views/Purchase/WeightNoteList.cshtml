@@ -1,0 +1,148 @@
+﻿@model Page_Purchase_WeightNoteList
+@{
+    <!-- DataTables -->
+    <link href="~/lib/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+}
+<div class="row">
+    <div class="col-sm-2">
+        <div class="form-group">
+            <div class="input-group date" id="start_time" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#start_time" />
+                <div class="input-group-append" data-target="#start_time" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-group">
+            <div class="input-group date" id="end_time" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#end_time" />
+                <div class="input-group-append" data-target="#end_time" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="@Url.Action("CreateWeightNote","Purchase")" style="float:left;margin-right:20px;" class="btn btn-primary">建立進貨磅單</a>
+@*<a class="btn btn-success" style="float:left;margin-right:20px;" href="https://codepen.io/collection/XKgNLN/" target="_blank">Other examples on Codepen</a>*@
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>磅單時間</th>
+            <th>單號</th>
+            <th>進貨對象</th>
+            <th>進貨商品</th>
+            <th>進場重量</th>
+            <th>扣重</th>
+            <th>計價重量</th>
+            <th>單價</th>
+            <th>支出金額</th>
+            <th>付款方式</th>
+            <th>付款日</th>
+            <th>功能操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VE_PurchaseWeightNoteLs)
+        {
+            <tr>
+                <td>@item.CreateTime?.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                <td>@item.DocNo</td>
+                <td>@item.CustomerName</td>
+                <td>開Table保存</td>
+                <td>@item.FullWeight.ToString("#,0")</td>
+                <td>@item.DefectiveWeight.ToString("#,0")</td>
+                <td>@((item.FullWeight- item.DefectiveWeight).ToString("#,0"))</td>
+                <td>@item.UnitPrice</td>
+                <td>@item.ActualPrice.ToString("#,0")</td>
+                <td>@item.PayType</td>
+                <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+    @*<tfoot>
+            <tr>
+                <th>磅單時間</th>
+                <th>進貨對象</th>
+                <th>進貨商品</th>
+                <th>進場重量</th>
+                <th>扣重</th>
+                <th>計價重量</th>
+                <th>單價</th>
+                <th>支出金額</th>
+                <th>付款方式</th>
+                <th>付款日</th>
+                <th>功能操作</th>
+            </tr>
+        </tfoot>*@
+</table>
+@section scripts{
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/admin-lte/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jszip/jszip.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script>
+        $(function () {
+
+            var sDate = moment(); // Initial moment object
+
+            // Create the new date
+            var iniDate = new Date().setDate(1);
+            var sDate = moment(iniDate);
+
+
+            // Inject it into the initial moment object
+            //sDate.set(iniDate.toObject());
+
+
+
+            $('#start_time').datetimepicker({
+                locale: 'zh-tw',
+                defaultDate: sDate,
+                format: 'L',
+                icons: { time: 'far fa-clock' }
+            });
+
+            $('#end_time').datetimepicker({
+                locale: 'zh-tw',
+                defaultDate: sDate.add(1, 'M'),
+                format: 'L',
+                icons: { time: 'far fa-clock' }
+            });
+
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print"]
+                /*"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]*/
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+

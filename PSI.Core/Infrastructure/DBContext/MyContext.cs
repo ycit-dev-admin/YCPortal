@@ -21,6 +21,8 @@ namespace PSI.Core.Infrastructure.DBContext
         public DbSet<CustomerContract> CustomerContracts { get; set; }
         public DbSet<CustomerCar> CustomerCars { get; set; }
         public DbSet<CodeTable> CodeTables { get; set; }
+        public DbSet<PurchaseIngredient> PurchaseIngredients { get; set; }
+        public DbSet<SeqTypeConfig> SeqTypeConfigs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

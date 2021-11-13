@@ -51,9 +51,13 @@ namespace PSI.Core.Repositorys
                 this.SaveChanges();
                 funcRs.ResultSuccess("新增成功");
             }
+            //catch (DbUpdateException dbEx)
+            //{
+            //    funcRs.ResultFailure(dbEx.Message);
+            //}
             catch (Exception ex)
             {
-                funcRs.ResultFailure(ex.Message);
+                funcRs.ResultFailure(ex.InnerException.Message);
             }
 
 
@@ -224,7 +228,7 @@ namespace PSI.Core.Repositorys
             GC.SuppressFinalize(this);
         }
 
-      
+
 
         // private bool _disposedValue;
         //protected virtual void Dispose(bool disposing)

@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\PurchaseWeightNote\CreateV1.cshtml" />
+    <Content Remove="Views\Purchase\CreateV1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\SysConfig\Data\" />
     <Folder Include="Files\Images\Logo\" />
     <Folder Include="Files\Images\" />
+    <Folder Include="Infrastructure\Extensions\VM_Model\" />
     <Folder Include="Views\templated\NewFolder\" />
-    <Folder Include="Models\Home\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\lib\admin-lte\.vscode\" />

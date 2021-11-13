@@ -5,6 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20211025160138_add Ingredient Table.cs" />
+    <Compile Remove="Migrations\20211025160138_add Ingredient Table.Designer.cs" />
+    <Compile Remove="Migrations\20211025160829_add Ingredient Table.cs" />
+    <Compile Remove="Migrations\20211025160829_add Ingredient Table.Designer.cs" />
+    <Compile Remove="Migrations\20211025160907_add Ingredient Table.cs" />
+    <Compile Remove="Migrations\20211025160907_add Ingredient Table.Designer.cs" />
+    <Compile Remove="Migrations\20211025161125_add Ingredient Table.cs" />
+    <Compile Remove="Migrations\20211025161125_add Ingredient Table.Designer.cs" />
+    <Compile Remove="Migrations\20211025161537_add Ingredient Table.cs" />
+    <Compile Remove="Migrations\20211025161537_add Ingredient Table.Designer.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.Designer.cs" />
   </ItemGroup>

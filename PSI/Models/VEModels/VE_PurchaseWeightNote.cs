@@ -2,27 +2,32 @@
 using System;
 using System.Collections.Generic;
 
-namespace PSI.Models.PurchaseWeightNote
+namespace PSI.Models.VEModels
 {
-    public class VM_PurchaseWeightNote
+    public class VE_PurchaseWeightNote
     {
         // Post
 
         // Entities
+        public string Id { get; set; }
+        public string DocNo { get; set; }
         public string CarNo { get; set; }
         public double FullWeight { get; set; }
-        public DateTime? FullWeightTime { get; set; }
+        public string FullWeightTime { get; set; }
         public double DefectiveWeight { get; set; }
         public string UnitPrice { get; set; }
         public bool HasTax { get; set; }
         public decimal ActualPrice { get; set; }
         public string ThirdWeightFee { get; set; }  // 磅費
+        public string PayType { get; set; }
+        public DateTime? PayTime { get; set; }
+        public string CreateEmpNo { get; set; }
+        public DateTime? CreateTime { get; set; }
+
 
         //-----------------------------------
         public double TradeWeight { get; set; }
 
-        public string PayType { get; set; }
-        public string CreateEmpNo { get; set; }
         public string Remark { get; set; }
         public DateTime EffectiveTime { get; set; }
         //
@@ -33,7 +38,7 @@ namespace PSI.Models.PurchaseWeightNote
         public string ExcavatorOpEmpNo { get; set; }
         public long? CustomerId { get; set; }
         public string CustomerName { get; set; }  // 當下客戶名     
-        public string SelectPurchaseDetailInfos { get; set; }
+        //public string SelectPurchaseDetailInfos { get; set; }
 
         public string TraficUnitPrice { get; set; }
 
@@ -45,14 +50,9 @@ namespace PSI.Models.PurchaseWeightNote
 
         // Page
         public List<SelectListItem> CustomerInfoItems { set; get; }
+        public List<SelectListItem> PsiTypeItems { set; get; }
         public List<SelectListItem> ProductItemItems { set; get; }
 
     }
 
-    public class PurchaseDetailInfo
-    {
-        public string Value { get; set; }
-        public string Name { get; set; }
-        public int? Percent { get; set; }
-    }
 }

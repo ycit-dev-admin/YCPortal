@@ -16,7 +16,9 @@ using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Repositorys;
 using PSI.Core.UnitOfWorks;
+using PSI.Models.PageModels;
 using PSI.Models.PurchaseWeightNote;
+using PSI.Models.VEModels;
 using PSI.Service.IService;
 using PSI.Service.Service;
 
@@ -51,7 +53,7 @@ namespace PSI
                     .AddFluentValidation(s => s.RunDefaultMvcValidationAfterFluentValidationExecutes = false); //.AddFormHelper();
             services.AddRazorPages();  // For Dotnet core identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IValidator<VM_PurchaseWeightNote>, VM_PurchaseWeightNoteValidator>();
+            services.AddTransient<IValidator<VE_PurchaseWeightNote>, VE_PurchaseWeightNoteValidator>();
             services.AddTransient<IValidator<VM_CustomerInfo>, VM_Create_CustomerInfoValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
@@ -62,6 +64,8 @@ namespace PSI
             services.AddScoped<IGenericRepository<CustomerContract>, GenericRepository<CustomerContract>>();
             services.AddScoped<IGenericRepository<ProductItem>, GenericRepository<ProductItem>>();
             services.AddScoped<IGenericRepository<CodeTable>, GenericRepository<CodeTable>>();
+            services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();
+            services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20211025161616_add Ingredient Table")]
+    partial class addIngredientTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,9 +305,6 @@ namespace PSI.Core.Migrations
                     b.Property<double>("DefectiveWeight")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("DocNo")
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("EffectiveTime")
                         .HasColumnType("timestamp without time zone");
 
@@ -375,19 +374,6 @@ namespace PSI.Core.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PurchaseWeightNotes");
-                });
-
-            modelBuilder.Entity("PSI.Core.Entities.SeqTypeConfig", b =>
-                {
-                    b.Property<string>("SeqType")
-                        .HasColumnType("text");
-
-                    b.Property<long>("SeqNo")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("SeqType");
-
-                    b.ToTable("SeqTypeConfigs");
                 });
 #pragma warning restore 612, 618
         }

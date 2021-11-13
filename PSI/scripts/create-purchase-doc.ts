@@ -18,8 +18,8 @@
         let defectiveWeight = $("#DefectiveWeight").get(0);
         let unitPrice = $("#UnitPrice").get(0);
         let traficUnitPrice = $("#TraficUnitPrice").get(0);
-        let weightFee = $("#WeightFee").get(0);
-        let ishasTexList = $(".ishas_tex").get();
+        let weightFee = $("#ThirdWeightFee").get(0);
+        let ishasTaxList = $(".ishas_tax").get();
 
         // Logic        
         fullWeight.addEventListener('keyup', this.CaculateAllFee);
@@ -27,7 +27,7 @@
         unitPrice.addEventListener('keyup', this.CaculateAllFee);
         traficUnitPrice.addEventListener('keyup', this.CaculateAllFee);
         weightFee.addEventListener('keyup', this.CaculateAllFee);
-        ishasTexList.forEach((item) => item.addEventListener('change', this.CaculateAllFee));
+        ishasTaxList.forEach((item) => item.addEventListener('change', this.CaculateAllFee));
     };
 
     public ShowCustomerName() {
@@ -113,7 +113,7 @@
     public ShowCarNoName() {
         // Page Field
         let carNoId = $("#CarNoId");
-        let carName = $("#CarNoName");
+        let carName = $("#CarNo");
 
         // Logic 
         let carNoIdObj = carNoId.find(':selected');
@@ -127,19 +127,18 @@
     }
 
     public CaculateAllFee() {
-
         //let haha = new FormData();
         let fullWeight = (document.getElementById("FullWeight") as HTMLInputElement).value // 進場重量
         let defectiveWeight = (document.getElementById("DefectiveWeight") as HTMLInputElement).value // 扣重
         let unitPrice = (document.getElementById("UnitPrice") as HTMLInputElement).value // 單價
-        let isHasTex = $('.ishas_tex:checked').val() === "1" ? 1.05 : 1;  // 是否含稅 (radio button 沒有 name attribute 所以用)
+        let isHasTax = $('.ishas_tax:checked').val() === "True" ? 1.05 : 1;  // 是否含稅 (radio button 沒有 name attribute 所以用)
         let traficUnitPrice = (document.getElementById("TraficUnitPrice") as HTMLInputElement).value // 運費單價
-        let weightFee = (document.getElementById("WeightFee") as HTMLInputElement).value
+        let weightFee = (document.getElementById("ThirdWeightFee") as HTMLInputElement).value
 
         // 計價金額 = (進廠重量 - 扣重) * 單價 * 稅率
         //let weightFee = (+fullWeight - (+defectiveWeight));
-        let weightPrice = (+fullWeight - (+defectiveWeight)) * (+unitPrice) * isHasTex;
-        (document.getElementById("show_weight_price") as HTMLDivElement).textContent = !weightPrice || weightPrice < 0 ? "0" : weightPrice.toString();
+        let weightPrice = (+fullWeight - (+defectiveWeight)) * (+unitPrice) * isHasTax;
+        (document.getElementById("show_weight_price") as HTMLDivElement).textContent = !weightPrice || weightPrice < 0 ? "0" : weightPrice.toFixed(2).toString();
 
         // 運費 = 進廠重量 * 運費單價
         let traficPrice = (+fullWeight) * (+traficUnitPrice);
@@ -147,7 +146,7 @@
 
         // 總金額 = (磅費 + 計價金額 + 運費)
         let finalPrice = (+weightFee) + weightPrice + traficPrice;
-        (document.getElementById("show_final_price") as HTMLDivElement).textContent = !finalPrice || finalPrice < 0 ? "0" : Math.round(finalPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");        
+        (document.getElementById("show_final_price") as HTMLDivElement).textContent = !finalPrice || finalPrice < 0 ? "0" : Math.round(finalPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         $("#ActualPrice").val(Math.round(finalPrice));
 
     }

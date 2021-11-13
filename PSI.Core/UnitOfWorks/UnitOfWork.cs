@@ -22,6 +22,9 @@ namespace PSI.Core.UnitOfWorks
         public IGenericRepository<CustomerCar> CustomerCarRepository { get; private set; }
         public IGenericRepository<ProductItem> ProductItemRepository { get; private set; }
         public IGenericRepository<CodeTable> CodeTableRepository { get; private set; }
+        public IGenericRepository<PurchaseIngredient> PurchaseIngredientRepository { get; private set; }
+        public IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; private set; }
+
 
 
         /// <summary>
@@ -36,7 +39,9 @@ namespace PSI.Core.UnitOfWorks
             IGenericRepository<CustomerContract> customerContractRepository,
             IGenericRepository<CustomerCar> customerCarRepository,
             IGenericRepository<ProductItem> productItemRepository,
-            IGenericRepository<CodeTable> codeTableRepository)
+            IGenericRepository<CodeTable> codeTableRepository,
+            IGenericRepository<PurchaseIngredient> purchaseIngredientRepository,
+            IGenericRepository<SeqTypeConfig> seqTypeConfigRepository)
 
 
 
@@ -48,6 +53,8 @@ namespace PSI.Core.UnitOfWorks
             this.CustomerCarRepository = customerCarRepository;
             this.ProductItemRepository = productItemRepository;
             this.CodeTableRepository = codeTableRepository;
+            this.PurchaseIngredientRepository = purchaseIngredientRepository;
+            this.SeqTypeConfigRepository = seqTypeConfigRepository;
         }
 
 
