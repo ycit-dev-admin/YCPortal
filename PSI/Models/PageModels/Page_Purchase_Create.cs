@@ -13,20 +13,21 @@ namespace PSI.Models.PageModels
         // Entities
         public VE_PurchaseWeightNote VE_PurchaseWeightNote { get; set; }
 
+        public List<VE_PurchaseIngredient> VE_PurchaseIngredientLs { get; set; }
 
         //public List<PurchaseDetailInfo> PurchaseDetailInfos { get; set; }
 
         // Page
         public List<SelectListItem> CustomerInfoItems { set; get; }
-        public List<SelectListItem> PsiTypeItems { set; get; }
+        public List<SelectListItem> PayTypeItems { set; get; }
         public List<SelectListItem> ProductItemItems { set; get; }
 
     }
 
-    public class VE_PurchaseIngredient
-    {
-        public string Value { get; set; }
-        public string Name { get; set; }
-        public int? Percent { get; set; }
-    }
+    //public class VE_PurchaseIngredient
+    //{
+    //    public string Value { get; set; }
+    //    public string Name { get; set; }
+    //    public int? Percent { get; set; }
+    //}
 }

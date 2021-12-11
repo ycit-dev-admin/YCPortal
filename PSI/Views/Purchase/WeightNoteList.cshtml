@@ -36,7 +36,7 @@
             <th>磅單時間</th>
             <th>單號</th>
             <th>進貨對象</th>
-            <th>進貨商品</th>
+            <th>進貨認列</th>
             <th>進場重量</th>
             <th>扣重</th>
             <th>計價重量</th>
@@ -54,13 +54,13 @@
                 <td>@item.CreateTime?.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>@item.DocNo</td>
                 <td>@item.CustomerName</td>
-                <td>開Table保存</td>
+                <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeighNoteId == item.Id).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault().ItemName</td>
                 <td>@item.FullWeight.ToString("#,0")</td>
                 <td>@item.DefectiveWeight.ToString("#,0")</td>
                 <td>@((item.FullWeight- item.DefectiveWeight).ToString("#,0"))</td>
                 <td>@item.UnitPrice</td>
                 <td>@item.ActualPrice.ToString("#,0")</td>
-                <td>@item.PayType</td>
+                <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.PayType)?.Text</td>
                 <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
                 <td>
                     <button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>

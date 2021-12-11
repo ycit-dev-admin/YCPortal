@@ -9,7 +9,7 @@ namespace PSI.Models.VEModels
         // Post
 
         // Entities
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string DocNo { get; set; }
         public string CarNo { get; set; }
         public double FullWeight { get; set; }
@@ -46,12 +46,7 @@ namespace PSI.Models.VEModels
         public string ContractFrom { get; set; }
         public string CarNoId { get; set; }
 
-        //public List<PurchaseDetailInfo> PurchaseDetailInfos { get; set; }
 
-        // Page
-        public List<SelectListItem> CustomerInfoItems { set; get; }
-        public List<SelectListItem> PsiTypeItems { set; get; }
-        public List<SelectListItem> ProductItemItems { set; get; }
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PSI.Core.Entities;
 using PSI.Models.VEModels;
 
 namespace PSI.Models.PageModels
@@ -13,8 +14,9 @@ namespace PSI.Models.PageModels
 
         // Page
         public List<SelectListItem> CustomerInfoItems { set; get; }
-        public List<SelectListItem> PsiTypeItems { set; get; }
+        public List<SelectListItem> PayTypeItems { set; get; }
         public List<SelectListItem> ProductItemItems { set; get; }
+        public List<PurchaseIngredient> PIngredientLs { set; get; }
 
     }
 }

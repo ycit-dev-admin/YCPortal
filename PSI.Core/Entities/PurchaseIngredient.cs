@@ -7,6 +7,7 @@ namespace PSI.Core.Entities
     public class PurchaseIngredient : Entity
     {
         public long PurchaseWeighNoteId { get; set; }
+        public long ProductId { get; set; }
         public string ItemName { get; set; }
         //public string Title { get; set; }
         public double ItemPercent { get; set; }

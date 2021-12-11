@@ -50,6 +50,15 @@ namespace PSI.Infrastructure.Helpers
         }
         public List<SelectListItem> PageGetPsiTypeItems(IPsiService psiService)
         {
+            return psiService.GetPsiTypeItems()
+                .Select(aa => new SelectListItem
+                {
+                    Text = aa.CodeText,
+                    Value = aa.CodeValue
+                }).ToList();
+        }
+        public List<SelectListItem> PageGetPayTypeItems(IPsiService psiService)
+        {
             return psiService.GetPayTypeItems()
                 .Select(aa => new SelectListItem
                 {

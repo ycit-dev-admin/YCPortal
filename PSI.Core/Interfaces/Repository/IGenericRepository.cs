@@ -20,8 +20,8 @@ namespace PSI.Core.Interfaces.Repository
         /// </summary>
         /// <param name="entity">實體</param>
         FunctionResult Create(List<TEntity> entityLs);
-        FunctionResult CreateNotSave(TEntity entity);
-        FunctionResult CreateNotSave(List<TEntity> entityLs);
+        void CreateNotSave(TEntity entity);
+        void CreateNotSave(List<TEntity> entityLs);
 
         /// <summary>
         /// 取得全部

@@ -22,13 +22,7 @@ namespace PSI.Infrastructure.Mappings
             CreateMap<VM_CustomerInfo, CustomerInfo>().ReverseMap();
             CreateMap<AppUser, IdentityUser>().ReverseMap();
             CreateMap<VE_PurchaseWeightNote, PurchaseWeightNote>().ReverseMap();
-            CreateMap<VE_PurchaseIngredient, PurchaseIngredient>()
-                .ForMember(d => d.ItemName, s => s.MapFrom(ss => ss.Name))
-                .ForMember(d => d.ItemPercent, s => s.MapFrom(ss => ss.Percent))
-                .ReverseMap();
 
-            //         .ForMember(d => d.CarName, s => s.MapFrom(o => o))
-            //         .ReverseMap();
         }
     }
 }

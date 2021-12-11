@@ -38,7 +38,7 @@ namespace PSI.Core.Repositorys
         /// <exception cref="ArgumentNullException">entity</exception>
         public FunctionResult Create(TEntity entity)
         {
-            var funcRs = new FunctionResult();
+            var funcRs = new FunctionResult(this);
 
             if (entity == null)
             {
@@ -90,50 +90,24 @@ namespace PSI.Core.Repositorys
             return funcRs;
         }
 
-        public FunctionResult CreateNotSave(TEntity entity)
+        public void CreateNotSave(TEntity entity)
         {
-            var funcRs = new FunctionResult();
-
             if (entity == null)
-            {
                 throw new ArgumentNullException("entity");
-            }
-
-            try
-            {
-                _context.Set<TEntity>().Add(entity);
-                //this.SaveChanges();
-                funcRs.ResultSuccess("新增成功");
-            }
-            catch (Exception ex)
-            {
-                funcRs.ResultFailure(ex.Message);
-            }
 
 
-
-            return funcRs;
+            this._context.Set<TEntity>().Add(entity);
         }
 
-        public FunctionResult CreateNotSave(List<TEntity> entityLs)
+        public void CreateNotSave(List<TEntity> entityLs)
         {
-            var funcRs = new FunctionResult();
             if (entityLs == null)
-            {
-                throw new ArgumentNullException("entity");
-            }
+                throw new ArgumentNullException("entityLs");
 
-            try
+            entityLs.ForEach(item =>
             {
-                _context.Set<TEntity>().AddRange(entityLs);
-                //this.SaveChanges();
-                funcRs.ResultSuccess("新增成功");
-            }
-            catch (Exception ex)
-            {
-                funcRs.ResultFailure(ex.Message);
-            }
-            return funcRs;
+                this._context.Set<TEntity>().Add(item);
+            });
         }
 
         /// <summary>

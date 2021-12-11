@@ -11,12 +11,20 @@ namespace PSI.Service.IService
 {
     public interface IPsiService
     {
-        FunctionResult CreatePurchaseWeightNote(PurchaseWeightNote purchaseWeightNote,
+        /* PurchaseWeightNote */
+        FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNote(PurchaseWeightNote purchaseWeightNote,
             List<PurchaseIngredient> purchaseIngredientLs,
             AppUser operUserInfo);
 
         IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes();
+        IEnumerable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime);
+
+        /* PurchaseWeightNote */
+        IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<long> weightNoteSnLs);
+
+        /* CodeTable */
         IQueryable<CodeTable> GetPayTypeItems();
+        IQueryable<CodeTable> GetPsiTypeItems();
         string GetDocNo(string facSite, int psiType);
     }
 }

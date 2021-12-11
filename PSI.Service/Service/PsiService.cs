@@ -34,53 +34,56 @@ namespace PSI.Service.Service
         }
 
 
-        public FunctionResult CreatePurchaseWeightNote(
+        public FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNote(
             PurchaseWeightNote purchaseWeightNote,
             List<PurchaseIngredient> purchaseIngredientLs,
             AppUser operUserInfo)
         {
-            var funcRs = new FunctionResult();
-            if (purchaseWeightNote != null)
+            /* Null檢核 */
+            var funcRs = new FunctionResult<PurchaseWeightNote>();
+            if (purchaseWeightNote == null)
             {
-                //var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
-                purchaseWeightNote.FacNo = operUserInfo.FacSite;
-                purchaseWeightNote.CreateTime = DateTime.Now;
-                purchaseWeightNote.EffectiveTime = DateTime.Now;
-                purchaseWeightNote.UpdateTime = DateTime.Now;
-                purchaseWeightNote.CreateEmpNo = operUserInfo.NickName;
-                var cRs = _purchaseWeightNoteRepository.Create(purchaseWeightNote);
-
-                if (!cRs.Success)
-                {
-                    funcRs.ResultFailure(cRs.ActionMessage);
-                    return funcRs;
-                }
-
-                // 進貨品項                
-                var purchaseIngredients = purchaseIngredientLs.Select(aa =>
-                {
-                    aa.CreateTime = DateTime.Now;
-                    aa.CreateEmpNo = operUserInfo.NickName;
-                    aa.UpdateTime = DateTime.Now;
-                    aa.UpdateEmpNo = operUserInfo.NickName;
-                    aa.PurchaseWeighNoteId = purchaseWeightNote.Id;
-                    return aa;
-                });
-
-                var piRs = _purchaseIngredientNoteRepository.Create(purchaseIngredients.ToList());
-
-                // 合約
-
-                // 車牌 (似乎不用,因為跟著磅單走)            
-
-
-
-                funcRs.ResultSuccess("新增進貨磅單成功!!");
+                funcRs.ResultFailure("新增失敗，新增磅單為空值!!");
+                return funcRs;
             }
-            else
+
+            //var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
+
+            /* 進貨磅單建立 */
+            purchaseWeightNote.FacNo = operUserInfo.FacSite;
+            purchaseWeightNote.CreateTime = DateTime.Now;
+            purchaseWeightNote.EffectiveTime = DateTime.Now;
+            purchaseWeightNote.UpdateTime = DateTime.Now;
+            purchaseWeightNote.CreateEmpNo = operUserInfo.NickName;
+            var cRs = _purchaseWeightNoteRepository.Create(purchaseWeightNote);
+            if (!cRs.Success)
             {
-                funcRs.ResultFailure("無進貨磅單可新增!!");
+                funcRs.ResultFailure(cRs.ActionMessage);
+                return funcRs;
             }
+
+            /* 進貨品項建立 */
+            purchaseIngredientLs.ForEach(aa =>
+            {
+                aa.CreateTime = DateTime.Now;
+                aa.CreateEmpNo = operUserInfo.NickName;
+                aa.UpdateTime = DateTime.Now;
+                aa.UpdateEmpNo = operUserInfo.NickName;
+                aa.PurchaseWeighNoteId = purchaseWeightNote.Id;
+            });
+            var piCreRs = _purchaseIngredientNoteRepository.Create(purchaseIngredientLs);
+            if (!piCreRs.Success)
+            {
+                funcRs.ResultFailure(piCreRs.ActionMessage);
+                return funcRs;
+            }
+
+
+            // 合約
+
+            // 車牌 (似乎不用,因為跟著磅單走)            
+            funcRs.ResultSuccess("新增進貨磅單成功!!", purchaseWeightNote);
+
             return funcRs;
         }
 
@@ -94,6 +97,24 @@ namespace PSI.Service.Service
                                                       .Where(aa => aa.EffectiveTime.Date >= curMonthDate.Date);
             return result;
         }
+        public IEnumerable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime)
+        {
+            return _purchaseWeightNoteRepository.GetAllAsync().Result
+                                                      .Where(aa => aa.EffectiveTime.Date >= sTime &&
+                                                      aa.EffectiveTime.Date <= eTime);
+        }
+
+        public IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<long> weightNoteSnLs)
+        {
+            var abc = _purchaseIngredientNoteRepository.GetAllAsync()
+                .Result
+                .Where(aa => weightNoteSnLs.Contains(aa.PurchaseWeighNoteId)).ToList();
+
+            return _purchaseIngredientNoteRepository.GetAllAsync()
+                .Result
+                .Where(aa => weightNoteSnLs.Contains(aa.PurchaseWeighNoteId)).AsQueryable();
+        }
+
 
         public string GetDocNo(string facSite, int psiType)
         {
@@ -148,6 +169,12 @@ namespace PSI.Service.Service
         {
             return _codeTableRepository.GetAllAsync().Result
                 .Where(aa => aa.CodeGroup == "PAY_TYPE").AsQueryable();
+        }
+
+        public IQueryable<CodeTable> GetPsiTypeItems()
+        {
+            return _codeTableRepository.GetAllAsync().Result
+                .Where(aa => aa.CodeGroup == "PSI_TYPE").AsQueryable();
         }
     }
 }

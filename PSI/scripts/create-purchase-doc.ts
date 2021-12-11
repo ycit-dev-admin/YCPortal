@@ -14,11 +14,11 @@
 
     public IniPageEvent() {
         // Page Field
-        let fullWeight = $("#FullWeight").get(0);
-        let defectiveWeight = $("#DefectiveWeight").get(0);
-        let unitPrice = $("#UnitPrice").get(0);
-        let traficUnitPrice = $("#TraficUnitPrice").get(0);
-        let weightFee = $("#ThirdWeightFee").get(0);
+        let fullWeight = $('#VE_PurchaseWeightNote_FullWeightTime').get(0);
+        let defectiveWeight = $('#VE_PurchaseWeightNote_DefectiveWeight').get(0);
+        let unitPrice = $('#VE_PurchaseWeightNote_UnitPrice').get(0);
+        let traficUnitPrice = $('#VE_PurchaseWeightNote_TraficUnitPrice').get(0);
+        let weightFee = $('#VE_PurchaseWeightNote_ThirdWeightFee').get(0);
         let ishasTaxList = $(".ishas_tax").get();
 
         // Logic        
@@ -32,8 +32,8 @@
 
     public ShowCustomerName() {
         // Page Field
-        let customerId = $("#CustomerId");
-        let customerName = $("#CustomerName");
+        let customerId = $('#VE_PurchaseWeightNote_CustomerId');
+        let customerName = $('#VE_PurchaseWeightNote_CustomerName');
 
         // Vars
         let optionObj = customerId.find(':selected');
@@ -50,8 +50,8 @@
 
     public SetCarNoItems(): JQuery.jqXHR {
         // Page Field
-        let customerId = $("#CustomerId");
-        let carNoId = $("#CarNoId");
+        let customerId = $('#VE_PurchaseWeightNote_CustomerId');
+        let carNoId = $('#VE_PurchaseWeightNote_CarNoId');
 
         // Vars               
         const optionObj = customerId.find(':selected');
@@ -112,8 +112,8 @@
 
     public ShowCarNoName() {
         // Page Field
-        let carNoId = $("#CarNoId");
-        let carName = $("#CarNo");
+        let carNoId = $('#VE_PurchaseWeightNote_CarNoId');
+        let carName = $('#VE_PurchaseWeightNote_CarNo');
 
         // Logic 
         let carNoIdObj = carNoId.find(':selected');
@@ -128,12 +128,12 @@
 
     public CaculateAllFee() {
         //let haha = new FormData();
-        let fullWeight = (document.getElementById("FullWeight") as HTMLInputElement).value // 進場重量
-        let defectiveWeight = (document.getElementById("DefectiveWeight") as HTMLInputElement).value // 扣重
-        let unitPrice = (document.getElementById("UnitPrice") as HTMLInputElement).value // 單價
+        let fullWeight = (document.getElementById("VE_PurchaseWeightNote_FullWeight") as HTMLInputElement).value // 進場重量
+        let defectiveWeight = (document.getElementById("VE_PurchaseWeightNote_DefectiveWeight") as HTMLInputElement).value // 扣重
+        let unitPrice = (document.getElementById("VE_PurchaseWeightNote_UnitPrice") as HTMLInputElement).value // 單價
         let isHasTax = $('.ishas_tax:checked').val() === "True" ? 1.05 : 1;  // 是否含稅 (radio button 沒有 name attribute 所以用)
-        let traficUnitPrice = (document.getElementById("TraficUnitPrice") as HTMLInputElement).value // 運費單價
-        let weightFee = (document.getElementById("ThirdWeightFee") as HTMLInputElement).value
+        let traficUnitPrice = (document.getElementById("VE_PurchaseWeightNote_TraficUnitPrice") as HTMLInputElement).value // 運費單價
+        let weightFee = (document.getElementById("VE_PurchaseWeightNote_ThirdWeightFee") as HTMLInputElement).value
 
         // 計價金額 = (進廠重量 - 扣重) * 單價 * 稅率
         //let weightFee = (+fullWeight - (+defectiveWeight));
@@ -147,9 +147,34 @@
         // 總金額 = (磅費 + 計價金額 + 運費)
         let finalPrice = (+weightFee) + weightPrice + traficPrice;
         (document.getElementById("show_final_price") as HTMLDivElement).textContent = !finalPrice || finalPrice < 0 ? "0" : Math.round(finalPrice).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        $("#ActualPrice").val(Math.round(finalPrice));
+        $('#VE_PurchaseWeightNote_ActualPrice').val(Math.round(finalPrice));
 
     }
+
+
+    //public PurchaseIngredients(Objname: string) {
+
+
+    //    let nameProperty = document.createElement("input");
+    //    nameProperty.className = "modelbind"
+    //    nameProperty.type = "hidden";
+    //    nameProperty.name = `PurchaseDetailInfo[${index}].Name`;
+    //    nameProperty.value = theLi.dataset.text
+    //    let valueProperty = document.createElement("input");
+    //    nameProperty.className = "modelbind"
+    //    valueProperty.type = "hidden";
+    //    valueProperty.name = `PurchaseDetailInfo[${index}].Value`;
+    //    valueProperty.value = theLi.dataset.value
+    //    let percentProperty = document.createElement("input");
+    //    nameProperty.className = "modelbind"
+    //    percentProperty.type = "hidden";
+    //    percentProperty.name = `PurchaseDetailInfo[${index}].Percent`;
+    //    percentProperty.value = theLi.dataset.percent
+
+    //    theLi.appendChild(nameProperty);
+    //    theLi.appendChild(valueProperty);
+    //    theLi.appendChild(percentProperty);
+    //}
 };
 
 
@@ -221,12 +246,23 @@ function AppendToShowList(prodItem: HTMLSelectElement) {
     liTag.appendChild(spanTag);
     liTag.appendChild(iPlusTag);
 
+
+    //AddHidden(liTag, index);
+
     // Action    
     const showList = allShowList.length % 2 === 0 ?
         document.getElementById("evenProductLs") :
         document.getElementById("oddProductLs");
     showList?.appendChild(liTag);
-    //AddHidden(liTag, index);
+
+    let allShowList2 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
+    allShowList2.forEach((item, index) => {
+        Array.from(item.getElementsByTagName('input')).forEach(subItem => {
+            subItem.remove();
+        });
+
+        AddHidden(item as HTMLLIElement, index);
+    });
 
     //Event
     iMinusTag.addEventListener('click', function () {
@@ -235,6 +271,14 @@ function AppendToShowList(prodItem: HTMLSelectElement) {
         RefreshProdItemPercent();
         ShowTotalInfo();
         SetBindingValue();
+        let allShowList3 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
+        allShowList3.forEach((item, index) => {
+            Array.from(item.getElementsByTagName('input')).forEach(subItem => {
+                subItem.remove();
+            });
+
+            AddHidden(item as HTMLLIElement, index);
+        });
     });
     iPlusTag.addEventListener('click', function () {
         let nowLITag = this.parentElement as HTMLLIElement
@@ -242,6 +286,14 @@ function AppendToShowList(prodItem: HTMLSelectElement) {
         RefreshProdItemPercent();
         ShowTotalInfo();
         SetBindingValue();
+        let allShowList4 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
+        allShowList4.forEach((item, index) => {
+            Array.from(item.getElementsByTagName('input')).forEach(subItem => {
+                subItem.remove();
+            });
+
+            AddHidden(item as HTMLLIElement, index);
+        });
     });
 
 
@@ -272,6 +324,12 @@ function ShowList() {
     showList.filter(litag => {
         return userSelect.map(item => item.value).indexOf(litag.dataset.value) === -1;
     }).forEach(item => item.remove());
+
+
+    //let allShowList2 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
+    //allShowList2.forEach((item, index) =>
+    //    item.removeChild()
+    //    AddHidden(item as HTMLLIElement, index))
 
 
     // 要新增的就新增V2
@@ -397,17 +455,17 @@ function AddHidden(theLi: HTMLLIElement, index: number) {
     let nameProperty = document.createElement("input");
     nameProperty.className = "modelbind"
     nameProperty.type = "hidden";
-    nameProperty.name = `PurchaseDetailInfo[${index}].Name`;
+    nameProperty.name = `VE_PurchaseIngredientLs[${index}].ItemName`;
     nameProperty.value = theLi.dataset.text
     let valueProperty = document.createElement("input");
     nameProperty.className = "modelbind"
     valueProperty.type = "hidden";
-    valueProperty.name = `PurchaseDetailInfo[${index}].Value`;
+    valueProperty.name = `VE_PurchaseIngredientLs[${index}].ProductId`;
     valueProperty.value = theLi.dataset.value
     let percentProperty = document.createElement("input");
     nameProperty.className = "modelbind"
     percentProperty.type = "hidden";
-    percentProperty.name = `PurchaseDetailInfo[${index}].Percent`;
+    percentProperty.name = `VE_PurchaseIngredientLs[${index}].ItemPercent`;
     percentProperty.value = theLi.dataset.percent
 
     theLi.appendChild(nameProperty);
