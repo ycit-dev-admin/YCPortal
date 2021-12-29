@@ -13,7 +13,7 @@ namespace PSI.Models.VEModels
         public string DocNo { get; set; }
         public string CarNo { get; set; }
         public double FullWeight { get; set; }
-        public string FullWeightTime { get; set; }
+        public DateTime FullWeightTime { get; set; }
         public double DefectiveWeight { get; set; }
         public string UnitPrice { get; set; }
         public bool HasTax { get; set; }

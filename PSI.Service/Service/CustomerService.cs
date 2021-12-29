@@ -109,6 +109,36 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
+        public FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar)
+        {
+            var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
+            var funcRs = new FunctionResult<CustomerCar>(this);
+            if (customerCar != null)
+            {
+                customerCar.CreateEmpNo = curUserInfo.NickName;
+                customerCar.CreateTime = DateTime.Now;
+                customerCar.UpdateEmpNo = curUserInfo.NickName;
+                customerCar.UpdateTime = DateTime.Now;
+                customerCar.IsEffective = "1";
+
+
+                var createRs = _customerCarRepository.Create(customerCar);
+
+                if (!createRs.Success)
+                {
+                    funcRs.ResultFailure(createRs.ActionMessage);
+                    return funcRs;
+                }
+
+                funcRs.ResultSuccess("新增客戶資料成功!!", customerCar);
+            }
+            else
+            {
+                funcRs.ResultFailure("無客戶資料可新增!!");
+            }
+            return funcRs;
+        }
+
         public IQueryable<CustomerInfo> GetCustomerInfos()
         {
             // var curUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);

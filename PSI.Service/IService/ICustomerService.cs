@@ -22,5 +22,7 @@ namespace PSI.Service.IService
 
         // Customer Car
         IQueryable<CustomerCar> GetCustomerCarBy(long customerId);
+        FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar);
+
     }
 }

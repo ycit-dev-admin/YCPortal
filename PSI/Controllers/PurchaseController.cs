@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Helpers;
@@ -62,20 +63,35 @@ namespace PSI.Controllers
 
 
 
-            var pageModel = new Page_Purchase_Create
+            var pageModel = new Page_Purchase_CreateWeightNote
+            {
+                CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
+                ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
+                PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
+            };
+            return View(pageModel);
+        }
+
+        [HttpGet]
+        [Authorize()]
+        // [RuleSetForClientSideMessages("Skip")]
+        public IActionResult EditWeightNote(string docNo)
+        {
+            ViewData["Title"] = "進貨磅單瀏覽";
+
+            var pageModel = new Page_Purchase_EditWeightNote
             {
                 CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
                 PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
             };
 
-
-
             return View(pageModel);
         }
+
         [HttpPost]
         [Authorize()]
-        public IActionResult CreateWeightNote(Page_Purchase_Create pageModel)
+        public IActionResult CreateWeightNote(Page_Purchase_CreateWeightNote pageModel)
         {
             //var validator = new VM_PurchaseWeightNoteValidator();
             //var validRs = validator.Validate(vmPurchaseWeightNote);
@@ -103,6 +119,24 @@ namespace PSI.Controllers
                 purchaseIngredientLs,
                 userInfo);
 
+            if (purchaseWeightNote.CustomerId == 0)
+            {
+                // 建立臨時客戶
+                var customerInfo = new CustomerInfo
+                {
+                    CompanyName = "TempCompany",
+                    CustomerName = pageModel.VE_PurchaseWeightNote.CustomerName
+                };
+
+                // 建立臨時車牌
+                var customerCarLs = new List<CustomerCar> {new CustomerCar {
+                    CarName = pageModel.VE_PurchaseWeightNote.CarNo
+                } };
+
+                _customerService.CreateCustomerInfo(customerInfo, customerCarLs);
+            }
+
+
 
             if (!createRs.Success)
             {
@@ -124,12 +158,12 @@ namespace PSI.Controllers
                 !DateTime.TryParse(eTime, out var pETime))
             {
                 pStatTime = DateTime.Now.AddDays(1 - DateTime.Now.Day);
-                pETime = DateTime.Now.AddMonths(1);
+                pETime = pStatTime.AddMonths(1);
             }
 
             var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime);
 
-          
+
             var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.Id).ToList());
             var pageModel = new Page_Purchase_WeightNoteList
             {

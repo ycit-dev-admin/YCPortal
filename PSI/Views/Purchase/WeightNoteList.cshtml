@@ -27,6 +27,11 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-2">
+        <div class="form-group">
+            <button class="btn btn-primary" id="data-query">資料查詢</button>
+        </div>
+    </div>
 </div>
 <a href="@Url.Action("CreateWeightNote","Purchase")" style="float:left;margin-right:20px;" class="btn btn-primary">建立進貨磅單</a>
 @*<a class="btn btn-success" style="float:left;margin-right:20px;" href="https://codepen.io/collection/XKgNLN/" target="_blank">Other examples on Codepen</a>*@
@@ -54,7 +59,7 @@
                 <td>@item.CreateTime?.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>@item.DocNo</td>
                 <td>@item.CustomerName</td>
-                <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeighNoteId == item.Id).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault().ItemName</td>
+                <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeighNoteId == item.Id).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>
                 <td>@item.FullWeight.ToString("#,0")</td>
                 <td>@item.DefectiveWeight.ToString("#,0")</td>
                 <td>@((item.FullWeight- item.DefectiveWeight).ToString("#,0"))</td>
@@ -63,7 +68,8 @@
                 <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.PayType)?.Text</td>
                 <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
                 <td>
-                    <button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>
+                    <a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>查詢</a>
+                    @*<button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>*@
                 </td>
             </tr>
         }
@@ -104,15 +110,44 @@
         $(function () {
 
             var sDate = moment(); // Initial moment object
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('sTime')) {
+                sDate = moment(urlParams.get('sTime'), 'YYYY/MM/DD')
+            } else {
+                // Create the new date
+                var iniDate = new Date().setDate(1);
+                var sDate = moment(iniDate);
 
-            // Create the new date
-            var iniDate = new Date().setDate(1);
-            var sDate = moment(iniDate);
+            }
+
+
+
+            var eDate = moment(); // Initial moment object
+            if (urlParams.get('eTime')) {
+                eDate = moment(urlParams.get('eTime'), 'YYYY/MM/DD')
+            } else {
+                var eDate = moment(new Date().setDate(1)).add(1, 'M');
+            }
+
 
 
             // Inject it into the initial moment object
             //sDate.set(iniDate.toObject());
 
+            $('#data-query').on('click', function () {
+                let sTime = $('#start_time').datetimepicker('date').format('YYYY-MM-DD HH:mm');
+                let eTime = $('#end_time').datetimepicker('date').format('YYYY-MM-DD HH:mm');
+                @*let hrefUrl = '@Url.Action("WeightNoteList", "Purchase", new { sTime = "__sTime__", eTime = "__eTime__" })';
+                alert(hrefUrl);
+                var abc = hrefUrl.replace('__eTime__', sDate);
+                abc = abc.replace('__sTime__', eDate);
+                alert(abc);*@
+                let okggogo = `/Purchase/WeightNoteList?sTime=${sTime}&eTime=${eTime}`;
+                alert(okggogo);
+
+                window.location.href = `/Purchase/WeightNoteList?sTime=${sTime}&eTime=${eTime}`;
+
+            });
 
 
             $('#start_time').datetimepicker({
@@ -124,15 +159,16 @@
 
             $('#end_time').datetimepicker({
                 locale: 'zh-tw',
-                defaultDate: sDate.add(1, 'M'),
+                defaultDate: eDate,
                 format: 'L',
                 icons: { time: 'far fa-clock' }
             });
 
             $("#example1").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["excel", "pdf", "print"]
+                "buttons": ["excel", "pdf", "print"],
                 /*"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]*/
+                "order":[[1,"desc"]]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
         });
     </script>

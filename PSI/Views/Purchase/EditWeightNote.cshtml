@@ -1,4 +1,4 @@
-﻿@model Page_Purchase_CreateWeightNote
+﻿@model Page_Purchase_EditWeightNote
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -247,13 +247,13 @@
 
         <!-- form-group -->
     </div>
-    <button class="btn btn-primary" id="qq_submit" type="button">Submit</button>
+    <button class="btn btn-primary" type="submit">Submit</button>
     <button id="testbt" class="btn btn-primary" type="button">Test</button>
     <div id="testPost">
 
     </div>
-    <div id="dialog-confirm" title="系統資訊">
-        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>確定要開單嗎?</p>
+    <div id="dialog-confirm" title="Empty the recycle bin?">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
     </div>
 </form>
 
@@ -282,29 +282,6 @@
     <script>
         $(function () {
             /*Initialize Elements*/
-            // jquery dialog
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                autoOpen: false,
-                buttons: {
-                    "送出": function () {
-                        $('#creaet-form').submit();
-                        $(this).dialog("close");
-                    },
-                    "取消": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            })
-
-            $('#qq_submit').on('click', function () {
-                $("#dialog-confirm").dialog("open");
-            })
-
-
             // Datetimepicker
             $('#reservationdatetime').datetimepicker({
                 defaultDate: moment(),

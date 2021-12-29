@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PSI.Models.PageModels
 {
-    public class Page_Purchase_Create
+    public class Page_Purchase_EditWeightNote
     {
         // Post
         public string SelectPurchaseDetailInfos { get; set; }
