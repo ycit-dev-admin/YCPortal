@@ -87,6 +87,11 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
+        public PurchaseWeightNote GetPurchaseWeightNote(string docNo)
+        {
+            var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.DocNo == docNo).Result;
+            return result;
+        }
 
         public IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes()
         {

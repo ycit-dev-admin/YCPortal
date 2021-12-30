@@ -79,8 +79,11 @@ namespace PSI.Controllers
         {
             ViewData["Title"] = "進貨磅單瀏覽";
 
+            var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
+
             var pageModel = new Page_Purchase_EditWeightNote
             {
+                VE_PurchaseWeightNote = _mapper.Map<VE_PurchaseWeightNote>(purchaseWeightNote),
                 CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
                 PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
@@ -110,7 +113,7 @@ namespace PSI.Controllers
             var userInfo = _userManager.GetUserAsync(User).Result;
             var docNo = _psiService.GetDocNo(userInfo.FacSite, (int)PSIType.Purchase);
             var purchaseWeightNote = purchaseHelper.GetPurchaseWeightNote(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
-            //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
+                                                                                                                    //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
             var vePurchaseIngredientLs = pageModel.VE_PurchaseIngredientLs;
             var purchaseIngredientLs = purchaseHelper.GetPurchaseIngredientLs(vePurchaseIngredientLs); // 進貨品項
 

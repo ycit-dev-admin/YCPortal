@@ -56,7 +56,7 @@
         @foreach (var item in Model.VE_PurchaseWeightNoteLs)
         {
             <tr>
-                <td>@item.CreateTime?.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                <td>@item.FullWeightTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>@item.DocNo</td>
                 <td>@item.CustomerName</td>
                 <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeighNoteId == item.Id).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>
@@ -68,7 +68,7 @@
                 <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.PayType)?.Text</td>
                 <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
                 <td>
-                    <a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>查詢</a>
+                    <a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>細項</a>
                     @*<button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>*@
                 </td>
             </tr>

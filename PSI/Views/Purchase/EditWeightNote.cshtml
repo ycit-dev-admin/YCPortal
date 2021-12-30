@@ -41,13 +41,9 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">磅單時間</label>
-                        <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
-                            <input asp-for="VE_PurchaseWeightNote.FullWeightTime" type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime" />
-                            <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
-                        </div>
-                        <!--<span asp-validation-for="FullWeightTime" class="text-danger"></span>-->
+                        <p>
+                            @Model.VE_PurchaseWeightNote.FullWeightTime.ToString("yyyy-MM-dd HH:mm:ss")
+                        </p>
                     </div>
                 </div>
                 <div class="col-sm-9">
@@ -309,6 +305,8 @@
                 theme: 'bootstrap4',
                 placeholder: "請選擇"
             })
+
+            $(".select2bs4").select2({ disabled: 'readonly' });
 
             /* Page Event */
             $('#testbt').on('click', function () {
