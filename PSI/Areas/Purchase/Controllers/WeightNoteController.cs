@@ -16,7 +16,8 @@ using static PSI.Core.Enums.PSIEnum;
 
 namespace PSI.Controllers
 {
-    public class PurchaseController : Controller
+    [Area("Purchase")]
+    public class WeightNoteController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPsiService _psiService;
@@ -27,7 +28,7 @@ namespace PSI.Controllers
         private readonly PurchaseHelper _purchaseHelper;
 
 
-        public PurchaseController(IMapper mapper,
+        public WeightNoteController(IMapper mapper,
                                             IPsiService psiService,
                                             ICustomerService customerService,
                                             IProductItemService productItemService,

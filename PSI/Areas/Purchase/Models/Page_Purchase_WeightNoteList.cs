@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
 using PSI.Models.VEModels;
 
-namespace PSI.Models.PageModels
+namespace PSI.Areas.Purchase.Models
 {
     public class Page_Purchase_WeightNoteList
     {

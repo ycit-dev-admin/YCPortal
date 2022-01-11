@@ -3,9 +3,9 @@ using PSI.Models.VEModels;
 using System;
 using System.Collections.Generic;
 
-namespace PSI.Models.PageModels
+namespace PSI.Areas.Purchase.Models
 {
-    public class Page_Purchase_CreateWeightNote
+    public class Page_Purchase_EditWeightNote
     {
         // Post
         public string SelectPurchaseDetailInfos { get; set; }

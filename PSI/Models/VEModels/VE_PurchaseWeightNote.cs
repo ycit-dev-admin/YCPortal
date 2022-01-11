@@ -18,6 +18,8 @@ namespace PSI.Models.VEModels
         public string UnitPrice { get; set; }
         public bool HasTax { get; set; }
         public decimal ActualPrice { get; set; }
+        public decimal WeightPrice { get; set; }  // 計價金額
+        public decimal DeliveryFee { get; set; }  // 運費
         public string ThirdWeightFee { get; set; }  // 磅費
         public string PayType { get; set; }
         public DateTime? PayTime { get; set; }
@@ -40,7 +42,7 @@ namespace PSI.Models.VEModels
         public string CustomerName { get; set; }  // 當下客戶名     
         //public string SelectPurchaseDetailInfos { get; set; }
 
-        public string TraficUnitPrice { get; set; }
+        public string TraficUnitPrice { get; set; }  // 運費單價
 
 
         public string ContractFrom { get; set; }

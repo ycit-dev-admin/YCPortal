@@ -22,12 +22,15 @@ namespace PSI.Core.Entities
         public DateTime? CarWeightTime { get; set; }
         public double? TradeWeight { get; set; }
         public double? FinalDefectiveWeight { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal? WantPrice { get; set; }
-        public decimal ActualPrice { get; set; }
-        public bool HasTax { get; set; }
+        public decimal UnitPrice { get; set; }  // 單價
+        public decimal? TraficUnitPrice { get; set; }  // 運費單價
+        public decimal? WeightPrice { get; set; }   // 計價金額
+        public decimal DeliveryFee { get; set; }  // 運費
         public decimal ThirdWeightFee { get; set; }  // 借第三方磅費
-        public string SettleType { get; set; }
+        public decimal? ActualPrice { get; set; }  // 實付金額
+
+        public bool HasTax { get; set; }
+        // public string SettleType { get; set; }
 
         public decimal? TraficFee { get; set; }   // 派車去指定地方載的運費
         public string PayType { get; set; }

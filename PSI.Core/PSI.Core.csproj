@@ -15,6 +15,12 @@
     <Compile Remove="Migrations\20211025161125_add Ingredient Table.Designer.cs" />
     <Compile Remove="Migrations\20211025161537_add Ingredient Table.cs" />
     <Compile Remove="Migrations\20211025161537_add Ingredient Table.Designer.cs" />
+    <Compile Remove="Migrations\20220110164910_220111_adjTable.cs" />
+    <Compile Remove="Migrations\20220110164910_220111_adjTable.Designer.cs" />
+    <Compile Remove="Migrations\20220111171451_adj_table_update.cs" />
+    <Compile Remove="Migrations\20220111171451_adj_table_update.Designer.cs" />
+    <Compile Remove="Migrations\20220111171628_adj_table_update.cs" />
+    <Compile Remove="Migrations\20220111171628_adj_table_update.Designer.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.Designer.cs" />
   </ItemGroup>
