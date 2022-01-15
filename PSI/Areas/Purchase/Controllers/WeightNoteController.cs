@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.Purchase.Models;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -80,7 +81,6 @@ namespace PSI.Controllers
             ViewData["Title"] = "進貨磅單瀏覽";
 
             var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
-
             var pageModel = new Page_Purchase_EditWeightNote
             {
                 VE_PurchaseWeightNote = _mapper.Map<VE_PurchaseWeightNote>(purchaseWeightNote),
@@ -109,11 +109,14 @@ namespace PSI.Controllers
             }
 
 
+
+
             var purchaseHelper = new PurchaseHelper(_mapper);
+            var pEntityHelper = new PurchaseEntityHelper(_mapper);
             var userInfo = _userManager.GetUserAsync(User).Result;
             var docNo = _psiService.GetDocNo(userInfo.FacSite, (int)PSIType.Purchase);
-            var purchaseWeightNote = purchaseHelper.GetPurchaseWeightNote(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
-                                                                                                                    //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
+            var purchaseWeightNote = pEntityHelper.GetPurchaseWeightNote_Create(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
+                                                                                                                          //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
             var vePurchaseIngredientLs = pageModel.VE_PurchaseIngredientLs;
             var purchaseIngredientLs = purchaseHelper.GetPurchaseIngredientLs(vePurchaseIngredientLs); // 進貨品項
 

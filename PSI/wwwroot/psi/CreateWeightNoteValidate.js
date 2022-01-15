@@ -1,7 +1,6 @@
 // Form Validation
 $("#creaet-form").validate({
     submitHandler: function (form) {
-        alert("123");
         form.submit();
     },
     ignore: [], // 要檢查Hidden欄位要加這個

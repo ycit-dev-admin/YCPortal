@@ -33,7 +33,7 @@
 }
 
 
-<form id="creaet-form" asp-controller="Purchase" asp-action="CreateWeightNote" method="post" autocomplete="off">
+<form id="creaet-form" asp-action="CreateWeightNote" method="post" autocomplete="off">
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
             <legend class="scheduler-border">進貨客戶資訊</legend>
@@ -41,9 +41,9 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">磅單時間</label>
-                        <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
-                            <input asp-for="VE_PurchaseWeightNote.FullWeightTime" type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime" />
-                            <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                        <div class="input-group date" id="fullWeightTime_com" data-target-input="nearest">
+                            <input asp-for="VE_PurchaseWeightNote.FullWeightTime" type="text" class="form-control datetimepicker-input" data-target="#fullWeightTime_com" />
+                            <div class="input-group-append" data-target="#fullWeightTime_com" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
@@ -225,9 +225,9 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label style="color:blue">付款日</label>
-                        <div class="input-group date" id="reservationdatetime2" data-target-input="nearest">
-                            <input asp-for="VE_PurchaseWeightNote.PayTime" type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime2" />
-                            <div class="input-group-append" data-target="#reservationdatetime2" data-toggle="datetimepicker">
+                        <div class="input-group date" id="payTime_com" data-target-input="nearest">
+                            <input asp-for="VE_PurchaseWeightNote.PayTime" type="text" class="form-control datetimepicker-input" data-target="#payTime_com" />
+                            <div class="input-group-append" data-target="#payTime_com" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
@@ -247,7 +247,7 @@
 
         <!-- form-group -->
     </div>
-    <button class="btn btn-primary" id="qq_submit" type="button">Submit</button>
+    <button class="btn btn-primary" id="form_create" type="button">建立</button>
     <button id="testbt" class="btn btn-primary" type="button">Test</button>
     <div id="testPost">
 
@@ -271,8 +271,10 @@
     <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="~/psi/create-purchase-doc.js"></script>
+    <script src="~/psi/CustomerAPI.js"></script>
+    <script src="~/psi/CreateWeightNote.js"></script>
     <script src="~/psi/CreateWeightNoteValidate.js"></script>
+
     @*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
         感覺是 透過ajax去做post的時候需要處裡 token的問題 要把token加在header 可參考黑大的文章*@
 
@@ -281,7 +283,11 @@
 
     <script>
         $(function () {
-            /*Initialize Elements*/
+            /* Initialize Elements */
+            let customerAPIObj = new CustomerAPIClass(window.baseApiUrl);
+            let pageObj = new CreateWeightNotePageClass(window.baseApiUrl);
+            pageObj.IniPageEvent();
+
             // jquery dialog
             $("#dialog-confirm").dialog({
                 resizable: false,
@@ -300,40 +306,39 @@
                 }
             })
 
-            $('#qq_submit').on('click', function () {
-                $("#dialog-confirm").dialog("open");
-            })
-
-
             // Datetimepicker
-            $('#reservationdatetime').datetimepicker({
+            $('#fullWeightTime_com').datetimepicker({
                 defaultDate: moment(),
                 locale: 'zh-tw',
                 icons: { time: 'far fa-clock' }
             });
-            $('#reservationdatetime2').datetimepicker({
+            $('#payTime_com').datetimepicker({
                 locale: 'zh-tw',
                 defaultDate: moment(),
                 format: 'L',
                 icons: { time: 'far fa-clock' }
             });
+
             // Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4',
                 placeholder: "請選擇品項"
             })
-            // Select2 Elements
             $('.select2bs5').select2({
                 theme: 'bootstrap4',
                 placeholder: "請選擇"
             })
-            // Select2 Elements
             $('.select2bs6').select2({
                 theme: 'bootstrap4',
                 placeholder: "請選擇"
             })
 
-            /* Page Event */
+
+            /* Page Events */
+            $('#form_create').on('click', function () {  // 表單建立
+                $("#dialog-confirm").dialog("open");
+            })
+
             $('#testbt').on('click', function () {
                 alert("123");
 
@@ -363,37 +368,48 @@
                     testPostDiv.append(percentProperty);
 
                 });
-
-
-
-
-
-
             });
-
-
-            // Initialize
-            let pageClass = new PageClass(window.baseApiUrl);
-            pageClass.IniPageEvent();
 
             // 進貨對象
             $('#VE_PurchaseWeightNote_CustomerId').on('change', function () {
-                pageClass.ShowCustomerName();
-                let funcRs = pageClass.SetCarNoItems();
-                $.when(funcRs).then(function (result1) {
-                    $('#VE_PurchaseWeightNote_CarNoId').val(null)
-                    pageClass.ShowCarNoName();
-                });
+                //let customerIdField = $('#VE_PurchaseWeightNote_CustomerId');
+                let customerIdField = $(this);
+                let customerNameField = $('#VE_PurchaseWeightNote_CustomerName');
+
+
+                customerNameField.val("");
+                if (customerIdField &&
+                    customerIdField.find(':selected').val() === "0") {  // 新客戶
+                    customerNameField.removeAttr("readonly");
+                    pageObj.ReSetCarNoItems($('#VE_PurchaseWeightNote_CarNoId'), []);
+                } else {
+                    customerNameField.attr("readonly", "readonly");
+                    customerNameField.val(customerIdField.find(':selected').text());
+                    let funcRs = customerAPIObj.GetCarNoItemsBy(customerIdField.find(':selected').val());
+                    $.when(funcRs).then(function (data) {
+                        pageObj.ReSetCarNoItems($('#VE_PurchaseWeightNote_CarNoId'), data);
+                    });
+                }
 
             });
 
             // 客戶車牌
             $('#VE_PurchaseWeightNote_CarNoId').on('change', function () {
-                pageClass.ShowCarNoName();
+                let carNoIdField = $(this);
+                let carNameField = $('#VE_PurchaseWeightNote_CarNo');
+
+                carNameField.val("");
+                if (carNoIdField &&
+                    carNoIdField.find(':selected').val() === "0") {
+                    carNameField.removeAttr("readonly");
+                } else {
+                    carNameField.attr("readonly", "readonly");
+                    carNameField.val(carNoIdField.find(':selected').text());
+                }
             });
 
-            // 進貨品項
-            $('#user-select-proditem').on('change', function () {
+
+            $('#user-select-proditem').on('change', function () {    // 進貨品項
                 ShowList();
                 RefreshProdItemPercent();
                 ShowTotalInfo();

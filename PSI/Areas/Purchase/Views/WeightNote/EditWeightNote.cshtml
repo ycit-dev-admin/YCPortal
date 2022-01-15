@@ -245,7 +245,7 @@
     <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="~/psi/js-purchase-editWeightNote.js"></script>
+    <script src="~/psi/EditWeightNote.js"></script>
     @*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
         感覺是 透過ajax去做post的時候需要處裡 token的問題 要把token加在header 可參考黑大的文章*@
 
@@ -278,11 +278,8 @@
             const defectiveWeight =@Html.Raw(Json.Serialize(Model.VE_PurchaseWeightNote.DefectiveWeight));
             const unitPrice =@Html.Raw(Json.Serialize(Model.VE_PurchaseWeightNote.UnitPrice));
             const hasTax =@Html.Raw(Json.Serialize(Model.VE_PurchaseWeightNote.HasTax));
-            let pageClass = new JsPurchaseEditWeightNote(window.baseApiUrl);
-            var hahaVal=pageClass.CaculatePriceFee(fullWeight, defectiveWeight, unitPrice, hasTax);
-            alert(hahaVal);
-
-
+            
+      
             @*let carNoLs = @Html.Raw(Json.Serialize(Model.VE_PurchaseWeightNote.ThirdWeightFee));
             if (carNoLs)
             {

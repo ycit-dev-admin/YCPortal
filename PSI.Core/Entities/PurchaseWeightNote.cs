@@ -30,9 +30,7 @@ namespace PSI.Core.Entities
         public decimal? ActualPrice { get; set; }  // 實付金額
 
         public bool HasTax { get; set; }
-        // public string SettleType { get; set; }
-
-        public decimal? TraficFee { get; set; }   // 派車去指定地方載的運費
+        // public string SettleType { get; set; }      
         public string PayType { get; set; }
         public DateTime? PayTime { get; set; }
 

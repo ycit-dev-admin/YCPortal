@@ -1,4 +1,4 @@
-﻿class JsPurchaseEditWeightNote {
+﻿class EditWeightNotePageClass {
     // Global
 
     // Ready Post
