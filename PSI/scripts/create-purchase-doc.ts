@@ -261,7 +261,7 @@ function AppendToShowList(prodItem: HTMLSelectElement) {
             subItem.remove();
         });
 
-        AddHidden(item as HTMLLIElement, index);
+        this.AddHidden(item as HTMLLIElement, index);
     });
 
     //Event

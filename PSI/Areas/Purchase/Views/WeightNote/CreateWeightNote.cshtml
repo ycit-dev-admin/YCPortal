@@ -249,6 +249,7 @@
     </div>
     <button class="btn btn-primary" id="form_create" type="button">建立</button>
     <button id="testbt" class="btn btn-primary" type="button">Test</button>
+    <button id="testbt2" class="btn btn-primary" type="button">Test2</button>
     <div id="testPost">
 
     </div>
@@ -409,11 +410,46 @@
             });
 
 
-            $('#user-select-proditem').on('change', function () {    // 進貨品項
-                ShowList();
-                RefreshProdItemPercent();
-                ShowTotalInfo();
-                SetBindingValue();
+            $('#testbt2').on('click', function () {
+                //--------------------------------------new
+                // User畫面所選
+                let usProdItemIds = $('#user-select-proditem').find(':selected').toArray().map(item => item.value);
+
+
+
+                var wow = pageObj.GetShowProdItemIds($('#testPost'))
+
+                console.log(wow);
+                //let userSelect = $('.select2bs4').find(':selected').toArray();
+                //let userSelect2 = $('.select2bs4').find(':selected').toArray().map(item => item.value);
+
+
+
+                // 差集
+                //要新增的就新增
+                //userSelect.filter(item => {
+                //    return showList.map(litag => litag.dataset.value).indexOf(item.value) === -1;
+                //}).forEach((item) => this.AppendToShowList(item));
+            })
+
+            // 進貨品項
+            $('#user-select-proditem').on('change', function () {
+                // new
+                // 1. 取得進貨項目
+                // let userSelect = $('.select2bs4').find(':selected').toArray() as HTMLSelectElement[];
+                //----------
+
+                // 2. 將結果增加Li tag
+                // 用Add hidden方法 抓取隱藏欄位
+
+
+
+
+                //---------------------------------old
+                pageObj.ShowList();
+                pageObj.RefreshProdItemPercent();
+                pageObj.ShowTotalInfo();
+                pageObj.SetBindingValue();
 
                 /*$('li[name="abc"]').remove();*/
                 //$('#evenProductLs li').remove();
