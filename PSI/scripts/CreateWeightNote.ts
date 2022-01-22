@@ -94,20 +94,34 @@
 
     public GetShowProdItemIds(testPostObj: JQuery<HTMLDivElement>): string[] {
 
-        let shoList = testPostObj.find('input').toArray();
-        if (shoList) {
+        const allShowList = $("#evenProductLs li").toArray().concat(
+            $("#oddProductLs li").toArray()) as HTMLLIElement[];
 
-            let abc2 = shoList.filter((item, index) => {
-                return item.name.includes("ProductId");
-            }).map(item => item.value);
+        if (allShowList) {
+            //let abc3 = allShowList.filter((item, index) => {
+            //    valueProperty.value = theLi.
+            //    return item.name.includes("ProductId");
+            //}).map(item => item.value);
 
+            let abc3 = allShowList.map(item => { return item.dataset.value })
 
-            //let abc = shoList.map((item, index) => {
-            //    return (item.name.querySelector(`input[name="VE_PurchaseIngredientLs[${index}].ProductId"`) as HTMLInputElement).value;
-            //})
-
-            return abc2;
+            return abc3
         }
+
+        //let shoList = testPostObj.find('input').toArray();
+        //if (shoList) {
+
+        //    let abc2 = shoList.filter((item, index) => {
+        //        return item.name.includes("ProductId");
+        //    }).map(item => item.value);
+
+
+        //    //let abc = shoList.map((item, index) => {
+        //    //    return (item.name.querySelector(`input[name="VE_PurchaseIngredientLs[${index}].ProductId"`) as HTMLInputElement).value;
+        //    //})
+
+        //    return abc2;
+        //}
     }
 
 
