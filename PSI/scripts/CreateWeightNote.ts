@@ -92,36 +92,12 @@
 
     }
 
-    public GetShowProdItemIds(testPostObj: JQuery<HTMLDivElement>): string[] {
+    public GetShowProdItemIds(evenProductLiTags: HTMLLIElement[], oddProductLiTags: HTMLLIElement[]): string[] {
+        // $("#oddProductLs li").toArray()
+        const allShowLiTags = evenProductLiTags.concat(oddProductLiTags);
 
-        const allShowList = $("#evenProductLs li").toArray().concat(
-            $("#oddProductLs li").toArray()) as HTMLLIElement[];
-
-        if (allShowList) {
-            //let abc3 = allShowList.filter((item, index) => {
-            //    valueProperty.value = theLi.
-            //    return item.name.includes("ProductId");
-            //}).map(item => item.value);
-
-            let abc3 = allShowList.map(item => { return item.dataset.value })
-
-            return abc3
-        }
-
-        //let shoList = testPostObj.find('input').toArray();
-        //if (shoList) {
-
-        //    let abc2 = shoList.filter((item, index) => {
-        //        return item.name.includes("ProductId");
-        //    }).map(item => item.value);
-
-
-        //    //let abc = shoList.map((item, index) => {
-        //    //    return (item.name.querySelector(`input[name="VE_PurchaseIngredientLs[${index}].ProductId"`) as HTMLInputElement).value;
-        //    //})
-
-        //    return abc2;
-        //}
+        if (allShowLiTags)
+            return allShowLiTags.map(item => { return item.dataset.value })
     }
 
 
@@ -204,7 +180,42 @@
         });
     };
 
-    public AppendToShowList2(prodItem: HTMLSelectElement) {
+    public AppendToShowList2(prodItem: HTMLOptionElement, showListNum: number) {
+        const allShowList = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray());
+
+        const iMinusTag = document.createElement("i");
+        iMinusTag.classList.add("fas");
+        iMinusTag.classList.add("fa-minus-circle");
+        iMinusTag.style.cursor = "pointer";
+        iMinusTag.style.color = "blue";
+        const iPlusTag = document.createElement("i");
+        iPlusTag.classList.add("fas");
+        iPlusTag.classList.add("fa-plus-circle");
+        iPlusTag.style.cursor = "pointer";
+        iPlusTag.style.color = "red";
+
+        const spanTag = document.createElement("span") as HTMLSpanElement;
+        const liTag = document.createElement("li") as HTMLLIElement;
+        liTag.dataset.text = prodItem.text;
+        liTag.textContent = `${prodItem.text} \u00A0\u00A0`;
+        liTag.dataset.value = prodItem.value;
+        liTag.dataset.percent = showListNum === 0 ? "90" : "10";
+        liTag.appendChild(iMinusTag);
+        liTag.appendChild(spanTag);
+        liTag.appendChild(iPlusTag);
+
+        // Action    
+        const showList = showListNum % 2 === 0 ?
+            document.getElementById("evenProductLs") :
+            document.getElementById("oddProductLs");
+        showList?.appendChild(liTag);
+
+    };
+
+    public DelProdItemOfShowList(prodItemId: string) {
+        const allShowList = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray()) as HTMLLIElement[];
+        allShowList.filter(item => item.dataset.value === prodItemId).forEach(item => item.remove());
+
     };
 
     public RefreshProdItemPercent() {
