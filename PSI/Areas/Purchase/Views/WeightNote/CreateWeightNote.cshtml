@@ -128,7 +128,7 @@
                 <div class="col-sm-12">
                     <div class="form-row">
                         <div class="form-group col-sm-6">
-                            <ul id="evenProductLs" style="color:red">
+                            <ul id="evenProductLs">
                             </ul>
                         </div>
                         <div class="form-group col-sm-6">
@@ -272,7 +272,9 @@
     <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/psi/PurchaseProdItem.js"></script>
     <script src="~/psi/CustomerAPI.js"></script>
+    <script src="~/psi/PurchaseProdItemList.js"></script>
     <script src="~/psi/CreateWeightNote.js"></script>
     <script src="~/psi/CreateWeightNote2.js"></script>
     <script src="~/psi/CreateWeightNoteValidate.js"></script>
@@ -288,6 +290,7 @@
             /* Initialize Elements */
             let customerAPIObj = new CustomerAPIClass(window.baseApiUrl);
             const pageMain = new CreateWeightNotePage_Main(window.baseApiUrl);
+            const pageMain2 = new CreateWeightNotePage_Main2(window.baseApiUrl);
             let pageObj_old = new CreateWeightNotePageClass(window.baseApiUrl);
             pageMain.IniPageEvent();
 
@@ -453,67 +456,20 @@
 
             // 進貨品項
             $('#user-select-proditem').on('change', function () {
-                // new
-
-                let usSelectedProdItemLs = $('.select2bs4').find(':selected').toArray();
-                // 所選的
-                usSelectedProdItemLs.forEach(item => {
-                    pageMain.ProdList.Append(item.value, item.text);
-                    // 要有一個刪除的方法 可以寫成重新整理
-                    // 要有一個刪除的方法
-                })
-
-                // 要刪除的
-                pageMain.ProdList.AllProdItemLs.filter(showItem => {
-                    return !(usSelectedProdItemLs.map(usItem => usItem.value).includes(showItem.dataset.value));
-                }).forEach(showItem => pageMain.ProdList.Remove(showItem.dataset.value));
-
-                // pageMain.ProdList.RefreshProdItemPercent();
-                pageMain.ProdList.Show();
-                var totalInfoMsg = pageMain.ProdList.GetTotalInfoMsg();  // 變成取得資訊就好
-
-                const totalInfo = document.getElementById("total");
-                //totalInfo.querySelectorAll("span").forEach(item => { item.remove() });
-                totalInfo.innerHTML = totalInfoMsg;
-
-                // 是否Pass
-                if (pageMain.ProdList.AllProdItemLs.length > 0)
-                    $('#IsPassPurchase').val("true");
-                else
-                    $('#IsPassPurchase').val("false");
-
-
-
-                //---------------------------------old
-                //pageObj_old.ShowList();
-                //pageObj_old.RefreshProdItemPercent();
-                //pageObj_old.ShowTotalInfo();
-                //pageObj_old.SetBindingValue();
-
-                /*$('li[name="abc"]').remove();*/
-                //$('#evenProductLs li').remove();
-                // $('#oddnProductLs li').remove();
-                //$.each($('.select2bs4').find(':selected'), function (index, value) {
-                //    // $('#testLs').append('<li>' + $(this).val() + "_" + $(this).text() + '<i class="fas fa-minus-circle"></i><i class="fas fa-plus-circle"></i></li>');
-                //    AppendToShowList($(this));
-                //    /*var val = $.parseJSON(value);*/
-                //})
-                //console.log($('.select2bs4:checked'));
-                //alert($(".select2bs4:checked").val());
+                pageMain2.USProdItem_Change();
             });
 
-            $('#creaet-form').on('click', `.${pageMain.ProdList.CalPercentClassName}`, function () {                
-                var totalInfoMsg = pageMain.ProdList.GetTotalInfoMsg();
-                const totalInfo = document.getElementById("total");
-                totalInfo.innerHTML = totalInfoMsg;
-                //thisObj.SetBindingValue();        在完成這個
-            });
+            // 增加-進貨品項百分比
+            $('#creaet-form').on('click', `.${pageMain2.PlusPercentClassName}`, function () {
+                pageMain2.PlusProdItemPercent_Click($(this).get(0))
+            })
+
+            // 減少-進貨品項百分比
+            $('#creaet-form').on('click', `.${pageMain2.MinusPercentClassName}`, function () {
+                pageMain2.MinusProdItemPercent_Click($(this).get(0))
+            })
 
 
-
-            //$('#evenProductLs').on('click', 'li', function () {
-            //    alert("wow fuck");
-            //});
 
 
 

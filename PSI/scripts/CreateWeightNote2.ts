@@ -34,36 +34,90 @@
 };
 
 class CreateWeightNotePage_Main2 {
-    // Page  Dom
-    public EvenULDom: HTMLUListElement = $('#evenProductLs').get(0) as HTMLUListElement;
-    public OddLULDom: HTMLUListElement = $('#oddProductLs').get(0) as HTMLUListElement;
-
-
     // Porperites
-    private _prodItemList: PurchaseProdItem[] = [];
+    readonly BaseUrl: string;
+    public _prodItemList: PurchaseProdItemList = new PurchaseProdItemList();
+    readonly MinusPercentClassName: string = "minus-percent"
+    readonly PlusPercentClassName: string = "plus-percent"
+
+    // Page  Dom
+    public EvenShow_JqUlDom: JQuery<HTMLUListElement> = $('#evenProductLs');
+    public OddLShow_JqUlDom: JQuery<HTMLUListElement> = $('#oddProductLs');
+    public UsProdItem_JqSelectDom: JQuery<HTMLSelectElement> = $('#user-select-proditem');
+    public TotalProdItemInfo_JqSelectDom: JQuery<HTMLHeadingElement> = $('#total');
 
 
 
 
 
-    BaseUrl: string;
     constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
     }
 
-    public ShowUSProdItems() {
-        this.EvenULDom.innerHTML = "";
-        this.OddLULDom.innerHTML = "";
-        this._prodItemList.forEach((item, index) => {
+
+    /* Action */
+    public USProdItem_Change() {
+        let usProdItemDoms = this.UsProdItem_JqSelectDom.find(':selected').toArray() as HTMLOptionElement[];
+
+        // User所選
+        usProdItemDoms.forEach(item => {
+            this._prodItemList.AppendToProdItemList(item.value, item.text);
+        })
+
+        // 要刪除的
+        this._prodItemList.Data.filter(showItem => {
+            return !(usProdItemDoms.map(usItem => usItem.value).includes(showItem.prodId));
+        }).forEach(showItem => this._prodItemList.RemoveOfProdItemList(showItem.prodId));
+
+        // pageMain.ProdList.RefreshProdItemPercent();
+        this.ShowUSProdItems();
+
+    }
+
+    public PlusProdItemPercent_Click(iTagDom: HTMLElement) {
+        let nowITag = iTagDom;
+        let nowLiTag = nowITag.parentElement as HTMLLIElement;
+
+        let nowProdItem = this._prodItemList.Data.find(item => item.prodId === nowLiTag.dataset.value);
+        if (nowProdItem) {
+            nowProdItem.percent = nowProdItem.percent + 10 > 100 ? 100 : nowProdItem.percent + 10;
+        }
+        this.ShowUSProdItems();
+    }
+
+    public MinusProdItemPercent_Click(iTagDom: HTMLElement) {
+        let nowITag = iTagDom;
+        let nowLiTag = nowITag.parentElement as HTMLLIElement;
+
+        let nowProdItem = this._prodItemList.Data.find(item => item.prodId === nowLiTag.dataset.value);
+        if (nowProdItem) {
+            nowProdItem.percent = nowProdItem.percent - 10 < 0 ? 0 : nowProdItem.percent - 10;
+        }
+        this.ShowUSProdItems();
+    }
+
+
+    /* Page Function */
+
+    private ShowUSProdItems() {
+        let evenShowUlDom = this.EvenShow_JqUlDom.get(0);
+        let oddShowUlDom = this.OddLShow_JqUlDom.get(0);
+        evenShowUlDom.innerHTML = "";
+        oddShowUlDom.innerHTML = "";
+
+
+        this._prodItemList.Data.forEach((item, index) => {
 
             const iMinusTag = document.createElement("i");
             iMinusTag.classList.add("fas");
             iMinusTag.classList.add("fa-minus-circle");
+            iMinusTag.classList.add(this.MinusPercentClassName);
             iMinusTag.style.cursor = "pointer";
             iMinusTag.style.color = "blue";
             const iPlusTag = document.createElement("i");
             iPlusTag.classList.add("fas");
             iPlusTag.classList.add("fa-plus-circle");
+            iPlusTag.classList.add(this.PlusPercentClassName);
             iPlusTag.style.cursor = "pointer";
             iPlusTag.style.color = "red";
 
@@ -78,35 +132,48 @@ class CreateWeightNotePage_Main2 {
             liTag.appendChild(spanTag);
             liTag.appendChild(iPlusTag);
 
-            index % 2 === 0 ? this.EvenULDom.appendChild(liTag) :
-                this.OddLULDom.appendChild(liTag)
+            index % 2 === 0 ? evenShowUlDom.appendChild(liTag) :
+                oddShowUlDom.appendChild(liTag)
         })
+        this.ShowProdItemSummary();
     }
 
-    public Append(prodId: string, prodText: string) {
-        const isItemExist = this._prodItemList.filter(item => item.prodId === prodId).length > 0;
-        if (!isItemExist) {
-            let prodItem = new PurchaseProdItem(prodId, prodText, this._prodItemList.length === 0 ? 90 : 10);
-            this._prodItemList.push(prodItem);
-        }
-    }
+    private ShowProdItemSummary() {
+
+        let allPercent = 0;
+        let maxItem: PurchaseProdItem;
+        this._prodItemList.Data.forEach(function (item) {
+            allPercent = + item.percent + allPercent;
+            if (!maxItem) {
+                maxItem = item;
+            } else {
+                maxItem = +maxItem.percent > +item.percent ? maxItem : item;
+            }
+        });
 
 
-};
-
-class PurchaseProdItem {
-    readonly prodId: string;
-    readonly prodText: string;
-    readonly percent: number;
-
-    constructor(prodId: string, prodText: string, percent: number) {
-        this.prodId = prodId;
-        this.prodText = prodText;
-        this.percent = percent;
-    }
+        const itemSpan = document.createElement("span");
+        itemSpan.innerHTML = `，已選${this._prodItemList.Data.length}項`;
+        const percentSpan = document.createElement("span");
+        percentSpan.innerHTML = `，比例加總:${allPercent}%`
+        if (allPercent > 100)
+            percentSpan.style.color = "red";
+        const recognitionSpan = document.createElement("span");
+        recognitionSpan.innerHTML = `認列項目 : ${maxItem?.prodText ?? "無"}`
 
 
+
+        //let summaryInfo = `${recognitionSpan.innerHTML}${itemSpan.innerHTML}${percentSpan.innerHTML}`;
+
+        this.TotalProdItemInfo_JqSelectDom.get(0).innerHTML = "";
+        this.TotalProdItemInfo_JqSelectDom.get(0).appendChild(recognitionSpan);
+        this.TotalProdItemInfo_JqSelectDom.get(0).appendChild(itemSpan);
+        this.TotalProdItemInfo_JqSelectDom.get(0).appendChild(percentSpan);
+
+
+    };
 }
+
 
 
 class CreateWeightNotePage_ProdList {
