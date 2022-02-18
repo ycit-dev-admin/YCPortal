@@ -24,6 +24,9 @@ namespace PSI.Service.IService
 
         /* PurchaseWeightNote */
         IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<long> weightNoteSnLs);
+        IQueryable<PurchaseIngredient> GetPurchaseIngredients(long weightNoteId);
+        PurchaseIngredient GetMainPurchaseIngredient(long weightNoteId);
+
 
         /* CodeTable */
         IQueryable<CodeTable> GetPayTypeItems();

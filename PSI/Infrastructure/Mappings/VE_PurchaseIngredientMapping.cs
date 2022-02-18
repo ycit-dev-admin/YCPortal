@@ -8,7 +8,7 @@ namespace PSI.Infrastructure.Mappings
     {
         public VE_PurchaseIngredientMapping()
         {
-            CreateMap<VE_PurchaseIngredient, PurchaseIngredient>().ReverseMap();
+            CreateMap<VE_PurchaseIngredient_Query, PurchaseIngredient>().ReverseMap();
         }
     }
 }

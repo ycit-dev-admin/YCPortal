@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.Purchase.Models;
+using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Infrastructure.Helpers;
@@ -80,12 +81,12 @@ namespace PSI.Controllers
 
             var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
 
-            var pageModel = new Page_Purchase_EditWeightNote
+            var pageModel = new PageWeightNoteEditWeightNote
             {
-                VE_PurchaseWeightNote = _mapper.Map<VE_PurchaseWeightNote>(purchaseWeightNote),
-                CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
-                ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
-                PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
+                //VE_PurchaseWeightNote = _mapper.Map<VE_PurchaseWeightNote>(purchaseWeightNote),
+                //CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
+                //ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
+                //PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
             };
 
             return View(pageModel);

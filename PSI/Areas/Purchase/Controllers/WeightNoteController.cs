@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.Purchase.Helpers;
-using PSI.Areas.Purchase.Models;
+using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Infrastructure.Helpers;
@@ -27,6 +27,7 @@ namespace PSI.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly PurchaseHelper _purchaseHelper;
+        private readonly PurchasePageItemHelper _pageitemHelper;
 
 
         public WeightNoteController(IMapper mapper,
@@ -43,6 +44,7 @@ namespace PSI.Controllers
             _productItemService = productItemService;
             _httpContextAccessor = httpContextAccessor;
             _purchaseHelper = new PurchaseHelper(_mapper);
+            _pageitemHelper = new PurchasePageItemHelper();
             //_haha = haha;
         }
 
@@ -62,13 +64,12 @@ namespace PSI.Controllers
             ViewData["Title"] = "進貨磅單建立";
             // string host = _httpContextAccessor.HttpContext.Request.Host.Value;  //能夠取得Host Domain Name
 
-
-
+            var itemHelper = new PurchasePageItemHelper();
             var pageModel = new Page_Purchase_CreateWeightNote
             {
-                CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
-                ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
-                PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
+                CustomerInfoItems = itemHelper.PageGetCustomerInfoItems(_customerService.GetPurchaseCustomerInfo()),
+                ProductItemItems = itemHelper.PageGetProductItems(_productItemService.GetPurchaseProductItems()),
+                PayTypeItems = itemHelper.PageGetPayTypeItems(_psiService.GetPsiTypeItems())
             };
             return View(pageModel);
         }
@@ -78,16 +79,42 @@ namespace PSI.Controllers
         // [RuleSetForClientSideMessages("Skip")]
         public IActionResult EditWeightNote(string docNo)
         {
-            ViewData["Title"] = "進貨磅單瀏覽";
+
 
             var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
-            var pageModel = new Page_Purchase_EditWeightNote
-            {
-                VE_PurchaseWeightNote = _mapper.Map<VE_PurchaseWeightNote>(purchaseWeightNote),
-                CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
-                ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
-                PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService)
-            };
+            var pageModel = _mapper.Map<PageWeightNoteEditWeightNote>(purchaseWeightNote);
+            pageModel.PayTypeName = _psiService.GetPayTypeItems()
+                .FirstOrDefault(item => item.CodeValue == purchaseWeightNote.PayType).CodeText;
+
+            var purchaseIngredients = _psiService.GetPurchaseIngredients(purchaseWeightNote.Id);
+            pageModel.IngredientInfos = purchaseIngredients.Select(item => $@"{item.ItemName}_{item.ItemPercent}%").ToArray();
+
+
+
+            pageModel.MainIngredientInfo = string.Format("{0}，共{1}項，合計{2}",
+                purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName,
+                purchaseIngredients.Count(),
+                purchaseIngredients.Sum(aa => aa.ItemPercent)
+                );
+
+            pageModel.MainIngredientInfo = $@"{purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName}，
+                                              共{  purchaseIngredients.Count()}項，
+                                              合計{ purchaseIngredients.Sum(aa => aa.ItemPercent)}%";
+
+            //ViewData["Title"] = $@"{pageModel.DocNo}進貨磅單細項 ({pageModel.DocNo}) 磅單時間 : {pageModel.FullWeightTime.ToString("yyyy-MM-dd HH:mm:ss")} ";
+            //pageModel.CustomerInfoItems = _pageitemHelper.PageGetCustomerInfoItems(_customerService.GetPurchaseCustomerInfo());
+            //pageModel.ProductItemItems = _pageitemHelper.PageGetProductItems(_productItemService.GetPurchaseProductItems());
+            //pageModel.PayTypeItems = _pageitemHelper.PageGetPayTypeItems(_psiService.GetPsiTypeItems());
+
+            // VEPurchaseWeightNoteQuery = _mapper.Map<VE_PurchaseWeightNote_Query>(purchaseWeightNote),
+
+
+            //var abc = pageModel.VEPurchaseWeightNoteQuery.DocNo;
+
+
+            //var mainIndegried = _psiService.GetMainPurchaseIngredient(purchaseWeightNote.Id);
+
+
 
             return View(pageModel);
         }
@@ -179,6 +206,8 @@ namespace PSI.Controllers
                 PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService),
                 PIngredientLs = pIngredientLs.ToList()
             };
+
+            //TryUpdateModelAsync<IEmployee>(pageModel); // 比較適合Entity 檢核
 
 
             ViewData["Title"] = "當月磅單查詢";

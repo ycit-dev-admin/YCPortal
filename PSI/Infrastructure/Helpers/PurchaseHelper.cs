@@ -23,7 +23,7 @@ namespace PSI.Infrastructure.Helpers
 
             return purchaseWeightNote;
         }
-        public List<PurchaseIngredient> GetPurchaseIngredientLs(List<VE_PurchaseIngredient> purchaseDetailInfoLs)
+        public List<PurchaseIngredient> GetPurchaseIngredientLs(List<VE_PurchaseIngredient_Query> purchaseDetailInfoLs)
         {
             return _mapper.Map<List<PurchaseIngredient>>(purchaseDetailInfoLs);
 

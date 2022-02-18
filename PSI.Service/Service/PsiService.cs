@@ -111,13 +111,24 @@ namespace PSI.Service.Service
 
         public IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<long> weightNoteSnLs)
         {
-            var abc = _purchaseIngredientNoteRepository.GetAllAsync()
-                .Result
-                .Where(aa => weightNoteSnLs.Contains(aa.PurchaseWeighNoteId)).ToList();
+            return _purchaseIngredientNoteRepository.GetAllAsync()
+                    .Result
+                    .Where(aa => weightNoteSnLs.Contains(aa.PurchaseWeighNoteId)).AsQueryable();
+        }
 
+        public IQueryable<PurchaseIngredient> GetPurchaseIngredients(long weightNoteId)
+        {
+            return _purchaseIngredientNoteRepository.GetAllAsync()
+                    .Result
+                    .Where(aa => aa.PurchaseWeighNoteId == weightNoteId).AsQueryable();
+        }
+
+        public PurchaseIngredient GetMainPurchaseIngredient(long weightNoteId)
+        {
             return _purchaseIngredientNoteRepository.GetAllAsync()
                 .Result
-                .Where(aa => weightNoteSnLs.Contains(aa.PurchaseWeighNoteId)).AsQueryable();
+                .Where(item => item.PurchaseWeighNoteId == weightNoteId)
+                .OrderByDescending(aa => aa.ItemPercent).FirstOrDefault();
         }
 
 

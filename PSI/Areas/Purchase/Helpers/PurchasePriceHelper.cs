@@ -30,7 +30,7 @@ namespace PSI.Areas.Purchase.Helpers
         {
             return thirdWeightPrice + weightNotePrice + deliveryPrice < 0 ?
                 0 :
-                thirdWeightPrice + weightNotePrice + deliveryPrice;
+                decimal.Round(thirdWeightPrice + weightNotePrice + deliveryPrice);
         }
     }
 }

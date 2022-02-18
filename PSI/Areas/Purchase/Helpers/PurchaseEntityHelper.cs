@@ -31,10 +31,10 @@ namespace PSI.Areas.Purchase.Helpers
             purchaseWeightNote.DeliveryFee = _purchasePriceHelper.GetDeliveryPrice(
                 purchaseWeightNote.FullWeight,
                 purchaseWeightNote.TraficUnitPrice.Value);
-            purchaseWeightNote.ActualPrice = decimal.Round(_purchasePriceHelper.GetActualPayPrice(
+            purchaseWeightNote.ActualPrice = _purchasePriceHelper.GetActualPayPrice(
                purchaseWeightNote.ThirdWeightFee,
                purchaseWeightNote.WeightPrice.Value,
-               purchaseWeightNote.DeliveryFee));
+               purchaseWeightNote.DeliveryFee);
 
             return purchaseWeightNote;
         }

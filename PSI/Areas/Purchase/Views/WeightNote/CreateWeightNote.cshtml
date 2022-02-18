@@ -210,7 +210,7 @@
                     <div class="form-group">
                         <label style="color:blue">實付金額 = (磅費 + 計價金額 + 運費)</label>
                         <h1 style="color:red" id="show_final_price"></h1>
-                        <input asp-for="VE_PurchaseWeightNote.ActualPrice" type="hidden" />
+                        @*<input asp-for="VE_PurchaseWeightNote.ActualPrice" type="hidden" />*@
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -248,10 +248,7 @@
         <!-- form-group -->
     </div>
     <button class="btn btn-primary" id="form_create" type="button">建立</button>
-    <button id="testbt" class="btn btn-primary" type="button">Test</button>
-    <button id="testbt2" class="btn btn-primary" type="button">Test2</button>
-    <div id="testPost">
-
+    <div id="ingredientPost">
     </div>
     <div id="dialog-confirm" title="系統資訊">
         <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>確定要開單嗎?</p>
@@ -274,9 +271,9 @@
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/psi/PurchaseProdItem.js"></script>
     <script src="~/psi/CustomerAPI.js"></script>
+    <script src="~/psi/PurchasePriceAPIClass.js"></script>
     <script src="~/psi/PurchaseProdItemList.js"></script>
     <script src="~/psi/CreateWeightNote.js"></script>
-    <script src="~/psi/CreateWeightNote2.js"></script>
     <script src="~/psi/CreateWeightNoteValidate.js"></script>
 
     @*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
@@ -288,11 +285,8 @@
     <script>
         $(function () {
             /* Initialize Elements */
-            let customerAPIObj = new CustomerAPIClass(window.baseApiUrl);
             const pageMain = new CreateWeightNotePage_Main(window.baseApiUrl);
-            const pageMain2 = new CreateWeightNotePage_Main2(window.baseApiUrl);
-            let pageObj_old = new CreateWeightNotePageClass(window.baseApiUrl);
-            pageMain.IniPageEvent();
+            // pageMain.IniPageEvent();
 
             // jquery dialog
             $("#dialog-confirm").dialog({
@@ -341,135 +335,51 @@
 
 
             /* Page Events */
-            $('#form_create').on('click', function () {  // 表單建立
+
+            // 表單建立
+            $('#form_create').on('click', function () {
                 $("#dialog-confirm").dialog("open");
             })
-
-            $('#testbt').on('click', function () {
-                alert("123");
-
-                var allLiTags = $('#evenProductLs li').toArray().concat(
-                    $('#oddProductLs li').toArray());
-
-                var testPostDiv = $('#testPost').empty();
-                allLiTags.forEach((item, index) => {
-                    let nameProperty = document.createElement("input");
-                    nameProperty.className = "modelbind"
-                    nameProperty.type = "hidden";
-                    nameProperty.name = `VE_PurchaseIngredientLs[${index}].ItemName`;
-                    nameProperty.value = item.dataset.text
-                    let valueProperty = document.createElement("input");
-                    nameProperty.className = "modelbind"
-                    valueProperty.type = "hidden";
-                    valueProperty.name = `VE_PurchaseIngredientLs[${index}].ProductId`;
-                    valueProperty.value = item.dataset.value
-                    let percentProperty = document.createElement("input");
-                    nameProperty.className = "modelbind"
-                    percentProperty.type = "hidden";
-                    percentProperty.name = `VE_PurchaseIngredientLs[${index}].ItemPercent`;
-                    percentProperty.value = item.dataset.percent
-
-                    testPostDiv.append(nameProperty);
-                    testPostDiv.append(valueProperty);
-                    testPostDiv.append(percentProperty);
-
-                });
-            });
-
             // 進貨對象
             $('#VE_PurchaseWeightNote_CustomerId').on('change', function () {
-                //let customerIdField = $('#VE_PurchaseWeightNote_CustomerId');
-                let customerIdField = $(this);
-                let customerNameField = $('#VE_PurchaseWeightNote_CustomerName');
-
-
-                customerNameField.val("");
-                if (customerIdField &&
-                    customerIdField.find(':selected').val() === "0") {  // 新客戶
-                    customerNameField.removeAttr("readonly");
-                    pageObj.ReSetCarNoItems($('#VE_PurchaseWeightNote_CarNoId'), []);
-                } else {
-                    customerNameField.attr("readonly", "readonly");
-                    customerNameField.val(customerIdField.find(':selected').text());
-                    let funcRs = customerAPIObj.GetCarNoItemsBy(customerIdField.find(':selected').val());
-                    $.when(funcRs).then(function (data) {
-                        pageObj.ReSetCarNoItems($('#VE_PurchaseWeightNote_CarNoId'), data);
-                    });
-                }
-
+                pageMain.CustomerId_Change();
             });
-
             // 客戶車牌
             $('#VE_PurchaseWeightNote_CarNoId').on('change', function () {
-                let carNoIdField = $(this);
-                let carNameField = $('#VE_PurchaseWeightNote_CarNo');
-
-                carNameField.val("");
-                if (carNoIdField &&
-                    carNoIdField.find(':selected').val() === "0") {
-                    carNameField.removeAttr("readonly");
-                } else {
-                    carNameField.attr("readonly", "readonly");
-                    carNameField.val(carNoIdField.find(':selected').text());
-                }
+                pageMain.CarNoId_Change();
             });
-
-
-            $('#testbt2').on('click', function () {
-                //--------------------------------------new
-                // User畫面所選
-                //let usProdItemIds = $('#user-select-proditem').find(':selected').toArray().map(item => item.value);
-
-                let usSelectedProdItemLs = $('.select2bs4').find(':selected').toArray();
-                // 所選的
-                usSelectedProdItemLs.forEach(item => {
-                    pageMain.ProdList.Append(item.value, item.text);
-                    // 要有一個刪除的方法 可以寫成重新整理
-                    // 要有一個刪除的方法
-                })
-
-                // 要刪除的
-                pageMain.ProdList.AllProdItemLs.filter(showItem => {
-                    return !(usSelectedProdItemLs.map(usItem => usItem.value).includes(showItem.dataset.value));
-                }).forEach(showItem => pageMain.ProdList.Remove(showItem.dataset.value));
-
-                pageMain.ProdList.RefreshProdItemPercent();
-                pageMain.ProdList.Show();
-
-                /*let pageMain = new CreateWeightNotePage_Main(window.baseApiUrl);*/
-
-
-                //var wow = pageObj.GetShowProdItemIds($('#testPost'))
-
-                //console.log(wow);
-                //let userSelect = $('.select2bs4').find(':selected').toArray();
-                //let userSelect2 = $('.select2bs4').find(':selected').toArray().map(item => item.value);
-
-
-
-                // 差集
-                //要新增的就新增
-                //userSelect.filter(item => {
-                //    return showList.map(litag => litag.dataset.value).indexOf(item.value) === -1;
-                //}).forEach((item) => this.AppendToShowList(item));
-            })
-
             // 進貨品項
             $('#user-select-proditem').on('change', function () {
-                pageMain2.USProdItem_Change();
+                pageMain.USProdItem_Change();
             });
-
             // 增加-進貨品項百分比
-            $('#creaet-form').on('click', `.${pageMain2.PlusPercentClassName}`, function () {
-                pageMain2.PlusProdItemPercent_Click($(this).get(0))
+            $('#creaet-form').on('click', `.${pageMain.PlusPercentClassName}`, function () {
+                pageMain.PlusProdItemPercent_Click($(this).get(0))
             })
-
             // 減少-進貨品項百分比
-            $('#creaet-form').on('click', `.${pageMain2.MinusPercentClassName}`, function () {
-                pageMain2.MinusProdItemPercent_Click($(this).get(0))
+            $('#creaet-form').on('click', `.${pageMain.MinusPercentClassName}`, function () {
+                pageMain.MinusProdItemPercent_Click($(this).get(0))
             })
 
-
+            // test
+            $('#VE_PurchaseWeightNote_FullWeight').on('keyup', function () {
+                pageMain.FullWeight_Keyup();
+            })
+            $('#VE_PurchaseWeightNote_DefectiveWeight').on('keyup', function () {
+                pageMain.DefectiveWeight_Keyup();
+            })
+            $('#VE_PurchaseWeightNote_UnitPrice').on('keyup', function () {
+                pageMain.UnitPrice_Keyup();
+            })
+            $('.ishas_tax').on('change', function () {
+                pageMain.HasTax_Change();
+            })
+            $('#VE_PurchaseWeightNote_TraficUnitPrice').on('keyup', function () {
+                pageMain.TraficUnitPrice_Keyup();
+            })
+            $('#VE_PurchaseWeightNote_ThirdWeightFee').on('keyup', function () {
+                pageMain.ThirdWeightFee_Keyup();
+            })
 
 
 

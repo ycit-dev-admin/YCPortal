@@ -65,7 +65,7 @@
                 <td>@item.DefectiveWeight.ToString("#,0")</td>
                 <td>@((item.FullWeight- item.DefectiveWeight).ToString("#,0"))</td>
                 <td>@item.UnitPrice</td>
-                <td>@item.ActualPrice.ToString("#,0")</td>
+                <td>@item.ActualPrice.Value.ToString("#,0")</td>
                 <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.PayType)?.Text</td>
                 <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
                 <td>

@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Models.VEModels;
-using System;
-using System.Collections.Generic;
 
-namespace PSI.Areas.Purchase.Models
+namespace PSI.Areas.Purchase.Models.PageModels
 {
     public class Page_Purchase_CreateWeightNote
     {
@@ -13,7 +12,7 @@ namespace PSI.Areas.Purchase.Models
         // Entities
         public VE_PurchaseWeightNote VE_PurchaseWeightNote { get; set; }
 
-        public List<VE_PurchaseIngredient> VE_PurchaseIngredientLs { get; set; }
+        public List<VE_PurchaseIngredient_Query> VE_PurchaseIngredientLs { get; set; }
 
         //public List<PurchaseDetailInfo> PurchaseDetailInfos { get; set; }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PSI.Models.VEModels
 {
-    public class VE_PurchaseIngredient
+    public class VE_PurchaseIngredient_Create
     {
         public long ProductId { get; set; }
         public string ItemName { get; set; }

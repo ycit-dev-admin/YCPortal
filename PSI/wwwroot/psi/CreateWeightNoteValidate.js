@@ -7,7 +7,7 @@ $("#creaet-form").validate({
     rules: {
         "VE_PurchaseWeightNote.FullWeightTime": "required",
         "VE_PurchaseWeightNote.CustomerId": "required",
-        SelectPurchaseDetailInfos: "required",
+   /*     SelectPurchaseDetailInfos: "required",*/
         "VE_PurchaseWeightNote.ScaleNo": "required",
         "VE_PurchaseWeightNote.HasTax": "required",
         "VE_PurchaseWeightNote.CarNoId": "required",
@@ -40,11 +40,11 @@ $("#creaet-form").validate({
         "VE_PurchaseWeightNote.ThirdWeightFee": {
             required: true,
             pattern: /0|^\+?[1-9][0-9]*$/  // 大於或等於0的正整數
-        },
-        "VE_PurchaseWeightNote.ActualPrice": {
-            required: true,
-            pattern: /^\+?[1-9][0-9]*$/  // 大於0的正整數
         }
+        //"VE_PurchaseWeightNote.ActualPrice": {
+        //    required: true,
+        //    pattern: /^\+?[1-9][0-9]*$/  // 大於0的正整數
+        //}
     },
     messages: {
         "VE_PurchaseWeightNote.FullWeight": {
@@ -61,10 +61,10 @@ $("#creaet-form").validate({
         },
         "VE_PurchaseWeightNote.ThirdWeightFee": {
             pattern: "必須為大於或等於0的正整數"
-        },
-        "VE_PurchaseWeightNote.ActualPrice": {
-            pattern: "實付金額必須為大於0"
         }
+        //"VE_PurchaseWeightNote.ActualPrice": {
+        //    pattern: "實付金額必須為大於0"
+        //}
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {

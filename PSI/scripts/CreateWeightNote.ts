@@ -1,344 +1,277 @@
-﻿class CreateWeightNotePageClass {
-    // Global
+﻿class CreateWeightNotePage_Main {
+    // Porperites
+    readonly BaseUrl: string;
+    public _prodItemList: PurchaseProdItemList = new PurchaseProdItemList();
+    readonly MinusPercentClassName: string = "minus-percent"
+    readonly PlusPercentClassName: string = "plus-percent"
 
-    // Ready Post
+    // Page  Dom
+    public EvenShow_JqUlDom: JQuery<HTMLUListElement> = $('#evenProductLs');
+    public OddLShow_JqUlDom: JQuery<HTMLUListElement> = $('#oddProductLs');
+    public UsProdItem_JqSelectDom: JQuery<HTMLSelectElement> = $('#user-select-proditem');
+    public TotalProdItemInfo_JqSelectDom: JQuery<HTMLHeadingElement> = $('#total');
+    public ingredientPost_JqDivDom: JQuery<HTMLDivElement> = $('#ingredientPost');
+    public CustomerId_JqSelectDom: JQuery<HTMLSelectElement> = $('#VE_PurchaseWeightNote_CustomerId');
+    public CustomerName_JqInputDom: JQuery<HTMLInputElement> = $('#VE_PurchaseWeightNote_CustomerName');
+    public CarNoId_JqSelectDom: JQuery<HTMLElement> = $('#VE_PurchaseWeightNote_CarNoId');
+    public CarName_JqInputDom: JQuery<HTMLInputElement> = $('#VE_PurchaseWeightNote_CarNo');
+    public FullWeight_Dom = $('#VE_PurchaseWeightNote_FullWeight').get(0) as HTMLInputElement;
+    public DefectiveWeight_DOM = $('#VE_PurchaseWeightNote_DefectiveWeight').get(0) as HTMLInputElement;
+    public UnitPrice_DOM = $('#VE_PurchaseWeightNote_UnitPrice').get(0) as HTMLInputElement;
+    public TraficUnitPrice_DOM = $('#VE_PurchaseWeightNote_TraficUnitPrice').get(0) as HTMLInputElement;
+    public ThirdWeightFee_DOM = $('#VE_PurchaseWeightNote_ThirdWeightFee').get(0) as HTMLInputElement;
+    public HasTaxList = $(".ishas_tax").get() as HTMLInputElement[];
+    public DisplayFinalPrice_DOM = $('#show_final_price').get(0) as HTMLHeadingElement;
+    public DisplayWeightPrice_DOM = $('#show_weight_price').get(0) as HTMLDivElement;
+    public DispalyTraficPrice_DOM = $('#show_trafic_price').get(0) as HTMLDivElement;
+    public ActualPrice_DOM = $('#VE_PurchaseWeightNote_ActualPrice').get(0) as HTMLInputElement;
+
+    // WebAPI
+    private CustomerAPI: CustomerAPIClass;
+    private PurchasePriceAPI: PurchasePriceAPIClass;
 
 
 
-
-    BaseUrl: string;
     constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
+        this.CustomerAPI = new CustomerAPIClass(this.BaseUrl);
+        this.PurchasePriceAPI = new PurchasePriceAPIClass(this.BaseUrl);
     }
 
 
-    public IniPageEvent() {
-        // Page Field
-        let fullWeight = $('#VE_PurchaseWeightNote_FullWeightTime').get(0);
-        let defectiveWeight = $('#VE_PurchaseWeightNote_DefectiveWeight').get(0);
-        let unitPrice = $('#VE_PurchaseWeightNote_UnitPrice').get(0);
-        let traficUnitPrice = $('#VE_PurchaseWeightNote_TraficUnitPrice').get(0);
-        let weightFee = $('#VE_PurchaseWeightNote_ThirdWeightFee').get(0);
-        let ishasTaxList = $(".ishas_tax").get();
+    /* Action */
+    public USProdItem_Change() {
+        let usProdItemDoms = this.UsProdItem_JqSelectDom.find(':selected').toArray() as HTMLOptionElement[];
 
-        // Logic        
-        //fullWeight.addEventListener('keyup', this.CaculateAllFee);
-        //defectiveWeight.addEventListener('keyup', this.CaculateAllFee);
-        //unitPrice.addEventListener('keyup', this.CaculateAllFee);
-        //traficUnitPrice.addEventListener('keyup', this.CaculateAllFee);
-        //weightFee.addEventListener('keyup', this.CaculateAllFee);
-        //ishasTaxList.forEach((item) => item.addEventListener('change', this.CaculateAllFee));
-    };
+        // User所選
+        usProdItemDoms.forEach(item => {
+            this._prodItemList.Append(item.value, item.text);
+        })
 
-    public ReSetCarNoItems(carNoIdObj: JQuery<HTMLElement>, dataObjLs) {
-        carNoIdObj.html('');  // 選項清空
-        let defaultOption = new Option("0.新車牌", "0", false, false);
-        carNoIdObj.append(defaultOption);
-        dataObjLs.forEach(function (item) {  // 清單項目
-            let newOption = new Option(item.carName, item.id, false, false);
-            carNoIdObj.append(newOption);
-        });
+        // 要刪除的
+        this._prodItemList.Data.filter(showItem => {
+            return !(usProdItemDoms.map(usItem => usItem.value).includes(showItem.prodId));
+        }).forEach(showItem => this._prodItemList.RemoveByProdId(showItem.prodId));
+
+        // pageMain.ProdList.RefreshProdItemPercent();
+        this.ShowUSProdItems();
+        this.BindIngredientToDom();
     }
+    public CustomerId_Change() {
+        const thisObj = this;
 
+        this.CustomerName_JqInputDom.val("");
+        this.CarName_JqInputDom.val(""); // 車牌名稱清空
 
-    public ShowList() {
-
-        // 傳入結果 根據結果檢查是否為新增不為新增的則Pass，不再保留清單的則移除
-
-
-        //let userSelect = ($('.select2bs4').find(':selected').get() as HTMLSelectElement[]);
-        // User畫面所選
-        let userSelect = $('.select2bs4').find(':selected').toArray() as HTMLSelectElement[];
-
-        // 準備要Show
-        let showList = $('#evenProductLs li').toArray().concat($('#oddProductLs li').toArray()) as HTMLLIElement[];
-
-
-
-        // 要新增的就新增
-        userSelect.filter(item => {
-            return showList.map(litag => litag.dataset.value).indexOf(item.value) === -1;
-        }).forEach((item) => this.AppendToShowList(item));
-        // 要刪除的就刪除    
-        showList.filter(litag => {
-            return userSelect.map(item => item.value).indexOf(litag.dataset.value) === -1;
-        }).forEach(item => item.remove());
-    }
-
-
-    public ShowList2(userSelectedVals: string[],
-        evenProductLiTagLs: HTMLLIElement[],
-        oddProductLiTagLs: HTMLLIElement[]) {
-
-        // 傳入結果 根據結果檢查是否為新增不為新增的則Pass，不再保留清單的則移除
-
-
-        // User畫面所選
-        let userSelect = $('.select2bs4').find(':selected').toArray();
-        let userSelect2 = ($('.select2bs4').find(':selected').toArray() as HTMLOptionElement[])
-            .map(item => item.value);
-
-
-
-        // 差集
-        // 要新增的就新增
-        //userSelect.filter(item => {
-        //    return showList.map(litag => litag.dataset.value).indexOf(item.value) === -1;
-        //}).forEach((item) => this.AppendToShowList(item));
-
-
-
-        console.log(userSelect2);
-
-    }
-
-    public GetShowProdItemIds(evenProductLiTags: HTMLLIElement[], oddProductLiTags: HTMLLIElement[]): string[] {
-        // $("#oddProductLs li").toArray()
-        const allShowLiTags = evenProductLiTags.concat(oddProductLiTags);
-
-        if (allShowLiTags)
-            return allShowLiTags.map(item => { return item.dataset.value })
-    }
-
-
-    public AppendToShowList(prodItem: HTMLSelectElement) {
-        const allShowList = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray());
-
-
-        const iMinusTag = document.createElement("i");
-        iMinusTag.classList.add("fas");
-        iMinusTag.classList.add("fa-minus-circle");
-        iMinusTag.style.cursor = "pointer";
-        iMinusTag.style.color = "blue";
-        const iPlusTag = document.createElement("i");
-        iPlusTag.classList.add("fas");
-        iPlusTag.classList.add("fa-plus-circle");
-        iPlusTag.style.cursor = "pointer";
-        iPlusTag.style.color = "red";
-        const spanTag = document.createElement("span") as HTMLSpanElement;
-
-
-        const liTag = document.createElement("li") as HTMLLIElement;
-        liTag.dataset.text = prodItem.textContent;
-        liTag.textContent = `${prodItem.textContent} \u00A0\u00A0`;
-        liTag.dataset.value = prodItem.value.toString();
-        liTag.dataset.percent = allShowList.length === 0 ? "90" : "10";
-        liTag.appendChild(iMinusTag);
-        liTag.appendChild(spanTag);
-        liTag.appendChild(iPlusTag);
-
-
-        //AddHidden(liTag, index);
-
-        // Action    
-        const showList = allShowList.length % 2 === 0 ?
-            document.getElementById("evenProductLs") :
-            document.getElementById("oddProductLs");
-        showList?.appendChild(liTag);
-
-        let allShowList2 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
-        allShowList2.forEach((item, index) => {
-            Array.from(item.getElementsByTagName('input')).forEach(subItem => {
-                subItem.remove();
+        if (this.CustomerId_JqSelectDom &&
+            this.CustomerId_JqSelectDom.find(':selected').val() === "0") {  // 新客戶
+            this.CustomerName_JqInputDom.removeAttr("readonly");
+            thisObj.ReSetCarNoItems([]);
+        } else {
+            this.CustomerName_JqInputDom.attr("readonly", "readonly");
+            this.CustomerName_JqInputDom.val(this.CustomerId_JqSelectDom.find(':selected').text());
+            let funcRs = this.CustomerAPI.GetCarNoItemsBy(this.CustomerId_JqSelectDom.find(':selected').val().toString());
+            $.when(funcRs).then(function (data) {
+                thisObj.ReSetCarNoItems(data);
             });
-
-            // AddHidden(item as HTMLLIElement, index);
-        });
-
-        //Event
-        let thisObj = this;
-        iMinusTag.addEventListener('click', function () {
-            let nowLITag = this.parentElement as HTMLLIElement;
-            thisObj.CaculatePercent(nowLITag, false);
-            thisObj.RefreshProdItemPercent();
-            thisObj.ShowTotalInfo();
-            thisObj.SetBindingValue();
-            let allShowList3 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
-            allShowList3.forEach((item, index) => {
-                Array.from(item.getElementsByTagName('input')).forEach(subItem => {
-                    subItem.remove();
-                });
-
-                thisObj.AddHidden(item as HTMLLIElement, index);
-            });
-        });
-
-        iPlusTag.addEventListener('click', function () {
-            let nowLITag = this.parentElement as HTMLLIElement
-            thisObj.CaculatePercent(nowLITag, true);
-            thisObj.RefreshProdItemPercent();
-            thisObj.ShowTotalInfo();
-            thisObj.SetBindingValue();
-            let allShowList4 = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray())
-            allShowList4.forEach((item, index) => {
-                Array.from(item.getElementsByTagName('input')).forEach(subItem => {
-                    subItem.remove();
-                });
-
-                thisObj.AddHidden(item as HTMLLIElement, index);
-            });
-        });
-    };
-
-    public AppendToShowList2(prodItem: HTMLOptionElement, showListNum: number) {
-        const allShowList = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray());
-
-        const iMinusTag = document.createElement("i");
-        iMinusTag.classList.add("fas");
-        iMinusTag.classList.add("fa-minus-circle");
-        iMinusTag.style.cursor = "pointer";
-        iMinusTag.style.color = "blue";
-        const iPlusTag = document.createElement("i");
-        iPlusTag.classList.add("fas");
-        iPlusTag.classList.add("fa-plus-circle");
-        iPlusTag.style.cursor = "pointer";
-        iPlusTag.style.color = "red";
-
-        const spanTag = document.createElement("span") as HTMLSpanElement;
-        const liTag = document.createElement("li") as HTMLLIElement;
-        liTag.dataset.text = prodItem.text;
-        liTag.textContent = `${prodItem.text} \u00A0\u00A0`;
-        liTag.dataset.value = prodItem.value;
-        liTag.dataset.percent = showListNum === 0 ? "90" : "10";
-        liTag.appendChild(iMinusTag);
-        liTag.appendChild(spanTag);
-        liTag.appendChild(iPlusTag);
-
-        // Action    
-        const showList = showListNum % 2 === 0 ?
-            document.getElementById("evenProductLs") :
-            document.getElementById("oddProductLs");
-        showList?.appendChild(liTag);
-
-    };
-
-    public DelProdItemOfShowList(prodItemId: string) {
-        const allShowList = $("#evenProductLs li").toArray().concat($("#oddProductLs li").toArray()) as HTMLLIElement[];
-        allShowList.filter(item => item.dataset.value === prodItemId).forEach(item => item.remove());
-
-    };
-
-    public RefreshProdItemPercent() {
-        let allProdItems = $('#evenProductLs li').toArray().concat(
-            $('#oddProductLs li').toArray()) as HTMLLIElement[];
-
-        allProdItems.forEach(function (item) {
-            let spanTag = item.querySelector("span");
-            spanTag.innerHTML = `\u00A0\u00A0${item.dataset.percent}%\u00A0\u00A0`
-        });
+        }
     }
 
-    public AddHidden(theLi: HTMLLIElement, index: number) {
-        // Create a hidden input element, and append it to the li:
-        let nameProperty = document.createElement("input");
-        nameProperty.className = "modelbind"
-        nameProperty.type = "hidden";
-        nameProperty.name = `VE_PurchaseIngredientLs[${index}].ItemName`;
-        nameProperty.value = theLi.dataset.text
-        let valueProperty = document.createElement("input");
-        nameProperty.className = "modelbind"
-        valueProperty.type = "hidden";
-        valueProperty.name = `VE_PurchaseIngredientLs[${index}].ProductId`;
-        valueProperty.value = theLi.dataset.value
-        let percentProperty = document.createElement("input");
-        nameProperty.className = "modelbind"
-        percentProperty.type = "hidden";
-        percentProperty.name = `VE_PurchaseIngredientLs[${index}].ItemPercent`;
-        percentProperty.value = theLi.dataset.percent
+    public CarNoId_Change() {
 
-        theLi.appendChild(nameProperty);
-        theLi.appendChild(valueProperty);
-        theLi.appendChild(percentProperty);
+        this.CarName_JqInputDom.val("");
+        if (this.CarNoId_JqSelectDom &&
+            this.CarNoId_JqSelectDom.find(':selected').val() === "0") {
+            this.CarName_JqInputDom.removeAttr("readonly");
+        } else {
+            this.CarName_JqInputDom.attr("readonly", "readonly");
+            this.CarName_JqInputDom.val(this.CarNoId_JqSelectDom.find(':selected').text());
+        }
     }
 
-    public ShowTotalInfo() {
-        let allProdItems = $('#evenProductLs li').toArray().concat(
-            $('#oddProductLs li').toArray()) as HTMLLIElement[];
 
+    public PlusProdItemPercent_Click(iTagDom: HTMLElement) {
+        let nowITag = iTagDom;
+        let nowLiTag = nowITag.parentElement as HTMLLIElement;
+
+        let nowProdItem = this._prodItemList.Data.find(item => item.prodId === nowLiTag.dataset.value);
+        if (nowProdItem) {
+            nowProdItem.percent = nowProdItem.percent + 10 > 100 ? 100 : nowProdItem.percent + 10;
+        }
+        this.ShowUSProdItems();
+        this.BindIngredientToDom();
+    }
+
+    public MinusProdItemPercent_Click(iTagDom: HTMLElement) {
+        let nowITag = iTagDom;
+        let nowLiTag = nowITag.parentElement as HTMLLIElement;
+
+        let nowProdItem = this._prodItemList.Data.find(item => item.prodId === nowLiTag.dataset.value);
+        if (nowProdItem) {
+            nowProdItem.percent = nowProdItem.percent - 10 < 0 ? 0 : nowProdItem.percent - 10;
+        }
+        this.ShowUSProdItems();
+        this.BindIngredientToDom();
+    }
+
+    public FullWeight_Keyup() {
+        this.CaculateAllFee();
+    }
+    public DefectiveWeight_Keyup() {
+        this.CaculateAllFee();
+    }
+    public UnitPrice_Keyup() {
+        this.CaculateAllFee();
+    }
+    public HasTax_Change() {
+        this.CaculateAllFee();
+    }
+    public TraficUnitPrice_Keyup() {
+        this.CaculateAllFee();
+    }
+    public ThirdWeightFee_Keyup() {
+        this.CaculateAllFee();
+    }
+
+    /* Page Function */
+
+    private ShowUSProdItems() {
+        let evenShowUlDom = this.EvenShow_JqUlDom.get(0);
+        let oddShowUlDom = this.OddLShow_JqUlDom.get(0);
+        evenShowUlDom.innerHTML = "";
+        oddShowUlDom.innerHTML = "";
+
+
+        this._prodItemList.Data.forEach((item, index) => {
+
+            const iMinusTag = document.createElement("i");
+            iMinusTag.classList.add("fas");
+            iMinusTag.classList.add("fa-minus-circle");
+            iMinusTag.classList.add(this.MinusPercentClassName);
+            iMinusTag.style.cursor = "pointer";
+            iMinusTag.style.color = "blue";
+            const iPlusTag = document.createElement("i");
+            iPlusTag.classList.add("fas");
+            iPlusTag.classList.add("fa-plus-circle");
+            iPlusTag.classList.add(this.PlusPercentClassName);
+            iPlusTag.style.cursor = "pointer";
+            iPlusTag.style.color = "red";
+
+            const spanTag = document.createElement("span") as HTMLSpanElement;
+            const liTag = document.createElement("li") as HTMLLIElement;
+            liTag.dataset.text = item.prodText;
+            liTag.textContent = `${item.prodText} \u00A0\u00A0`;
+            liTag.dataset.value = item.prodId;
+            // liTag.dataset.percent = this._prodItemList.length === 0 ? "90" : "10";
+            spanTag.innerHTML = `\u00A0\u00A0${item.percent}%\u00A0\u00A0`;
+            liTag.appendChild(iMinusTag);
+            liTag.appendChild(spanTag);
+            liTag.appendChild(iPlusTag);
+
+            index % 2 === 0 ? evenShowUlDom.appendChild(liTag) :
+                oddShowUlDom.appendChild(liTag)
+        })
+        this.ShowProdItemSummary();
+    }
+
+    private ShowProdItemSummary() {
         let allPercent = 0;
-        let maxItem: HTMLLIElement;
-        allProdItems.forEach(function (item) {
-            allPercent = + item.dataset.percent + allPercent;
+        let maxItem: PurchaseProdItem;
+        this._prodItemList.Data.forEach(function (item) {
+            allPercent = + item.percent + allPercent;
             if (!maxItem) {
                 maxItem = item;
             } else {
-                maxItem = +maxItem.dataset.percent > +item.dataset.percent ? maxItem : item;
+                maxItem = +maxItem.percent > +item.percent ? maxItem : item;
             }
         });
 
-        const totalInfo = document.getElementById("total");
-        totalInfo.querySelectorAll("span").forEach(item => { item.remove() });
 
         const itemSpan = document.createElement("span");
-        itemSpan.innerHTML = `，已選${allProdItems.length}項`;
+        itemSpan.innerHTML = `，已選${this._prodItemList.Data.length}項`;
         const percentSpan = document.createElement("span");
         percentSpan.innerHTML = `，比例加總:${allPercent}%`
         if (allPercent > 100)
             percentSpan.style.color = "red";
         const recognitionSpan = document.createElement("span");
+        recognitionSpan.innerHTML = `認列項目 : ${maxItem?.prodText ?? "無"}`
 
-        //let haha = document.querySelector('.select2bs4 :checked') as HTMLOptionElement;
-        //alert(haha.value);
 
-        //let recognitionText = ($('.select2bs4').find(':selected').toArray() as HTMLSelectElement[])
-        //    .filter(item => { return item.value === maxItem.dataset.value; })[0]?.textContent ?? "無";
-        recognitionSpan.innerHTML = `認列項目 : ${maxItem?.dataset.text ?? "無"}`
 
-        totalInfo.appendChild(recognitionSpan);
-        totalInfo.appendChild(itemSpan);
-        totalInfo.appendChild(percentSpan);
+        //let summaryInfo = `${recognitionSpan.innerHTML}${itemSpan.innerHTML}${percentSpan.innerHTML}`;
 
-        if (allProdItems.length > 0)
-            $('#IsPassPurchase').val("true");
-        else
-            $('#IsPassPurchase').val("false");
+        this.TotalProdItemInfo_JqSelectDom.get(0).innerHTML = "";
+        this.TotalProdItemInfo_JqSelectDom.get(0).appendChild(recognitionSpan);
+        this.TotalProdItemInfo_JqSelectDom.get(0).appendChild(itemSpan);
+        this.TotalProdItemInfo_JqSelectDom.get(0).appendChild(percentSpan);
+    };
+
+    private BindIngredientToDom() {
+        let postDiv = this.ingredientPost_JqDivDom.get(0);
+
+        postDiv.innerHTML = "";
+
+
+        this._prodItemList.Data.forEach((item, index) => {
+            // Create a hidden input element, and append it to the li:
+            let nameProperty = document.createElement("input");
+            nameProperty.type = "hidden";
+            nameProperty.name = `VE_PurchaseIngredientLs[${index}].ItemName`;
+            nameProperty.value = item.prodText
+            let valueProperty = document.createElement("input");
+            valueProperty.type = "hidden";
+            valueProperty.name = `VE_PurchaseIngredientLs[${index}].ProductId`;
+            valueProperty.value = item.prodId;
+            let percentProperty = document.createElement("input");
+            percentProperty.type = "hidden";
+            percentProperty.name = `VE_PurchaseIngredientLs[${index}].ItemPercent`;
+            percentProperty.value = item.percent.toString();
+
+            postDiv.append(nameProperty);
+            postDiv.append(valueProperty);
+            postDiv.append(percentProperty);
+        })
     }
 
-    public SetBindingValue() {
-
-        let allProdItems = $('#evenProductLs li').toArray().concat(
-            $('#oddProductLs li').toArray()) as HTMLLIElement[];
-
-        let purchaseDetailInfos: PurchaseDetailInfo2[] = [];
-        allProdItems.forEach(function (item) {
-            let purchaseDetailInfo = new PurchaseDetailInfo2();
-            purchaseDetailInfo.Value = item.dataset.value;
-            purchaseDetailInfo.Name = item.textContent;
-            purchaseDetailInfo.Percent = parseInt(item.dataset.percent, 10);
-            purchaseDetailInfos.push(purchaseDetailInfo);
+    private ReSetCarNoItems(dataObjLs) {
+        const thisPagObj = this;
+        thisPagObj.CarNoId_JqSelectDom.html('');  // 選項清空
+        let defaultOption = new Option("0.新車牌", "0", false, false);
+        thisPagObj.CarNoId_JqSelectDom.append(defaultOption);
+        dataObjLs.forEach(function (item) {  // 清單項目
+            let newOption = new Option(item.carName, item.id, false, false);
+            thisPagObj.CarNoId_JqSelectDom.append(newOption);
         });
-        if (purchaseDetailInfos.length === 0)
-            $('#SelectPurchaseDetailInfos').val(null);
-        else {
-            $('#SelectPurchaseDetailInfos').val(JSON.stringify(purchaseDetailInfos));
-        }
-
     }
 
-    public CaculatePercent(curProdItem: HTMLLIElement, isPlus: boolean) {
-        const curVal = curProdItem.dataset.percent;
-        let newVal: number = isPlus ? +curVal + 10 : +curVal - 10;
-        if (newVal > 100)
-            newVal = 100;
-        if (newVal < 0)
-            newVal = 0;
-        curProdItem.dataset.percent = newVal.toString();
-        //var el = document.getElementById("outside");
-        //el.addEventListener("click", modifyText, false);
-    }
-};
+    private CaculateAllFee() {
+        const thisObj = this;
 
-class PurchaseDetailInfo2 {
-    Value: string;
-    Name: string;
-    Percent: number;
+        let funcRs = this.PurchasePriceAPI.GetWeightNotePrice(
+            +this.FullWeight_Dom.value,
+            +this.DefectiveWeight_DOM.value,
+            +this.UnitPrice_DOM.value,
+            this.HasTaxList.find(item => item.checked === true).value === "True"
+        );
+        let funcRs2 = this.PurchasePriceAPI.GetDeliveryPrice(
+            +this.FullWeight_Dom.value,
+            +this.TraficUnitPrice_DOM.value
+        );
 
-    constructor() {
+        $.when(funcRs, funcRs2).then(function (data, data2) {
+            thisObj.DisplayWeightPrice_DOM.textContent = data[0];
+            thisObj.DispalyTraficPrice_DOM.textContent = data2[0];
+            let funcRs3 = thisObj.PurchasePriceAPI.GetActualPayPrice(
+                +thisObj.ThirdWeightFee_DOM.value,
+                data[0],
+                data2[0]
+            );
+
+            $.when(funcRs3).then(function (data) {
+                thisObj.DisplayFinalPrice_DOM.textContent = data;
+                // thisObj.ActualPrice_DOM.value = data; 應該把上述值 都帶回後端重新計算
+            });
+        });
     }
 }
-
-
-
-
-
 

@@ -17,7 +17,7 @@ namespace PSI.Models.VEModels
         public double DefectiveWeight { get; set; }
         public string UnitPrice { get; set; }
         public bool HasTax { get; set; }
-        public decimal ActualPrice { get; set; }
+        public decimal? ActualPrice { get; set; }
         public decimal WeightPrice { get; set; }  // 計價金額
         public decimal DeliveryFee { get; set; }  // 運費
         public string ThirdWeightFee { get; set; }  // 磅費
