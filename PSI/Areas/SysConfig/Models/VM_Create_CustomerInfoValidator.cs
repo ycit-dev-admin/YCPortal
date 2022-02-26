@@ -3,7 +3,7 @@ using PSI.Areas.SysConfig.Models;
 
 namespace PSI.Models.PurchaseWeightNote
 {
-    public class VM_Create_CustomerInfoValidator : AbstractValidator<VM_CustomerInfo>
+    public class VM_Create_CustomerInfoValidator : AbstractValidator<Show_CustomerInfo>
     {
         public VM_Create_CustomerInfoValidator()
         {

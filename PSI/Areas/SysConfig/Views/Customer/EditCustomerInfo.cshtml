@@ -1,4 +1,4 @@
-﻿@model VM_CustomerInfo
+﻿@model PageCustomerEditCustomerInfo
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -57,7 +57,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">進出貨歸屬</label>
-                        <select asp-for="PsiType" asp-items="@Model.PagePsiTypeItems" class="select2bs4" style="width: 100%;">
+                        <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
                             <option></option>
                         </select>
                     </div>
@@ -83,9 +83,22 @@
         <fieldset class="form-group col-sm-6 the-fieldset">
             <legend class="scheduler-border">車牌資訊</legend>
             <div class="form-group">
-                <h6 id="carno-message">無相關車牌</h6>
-                <ul id="selected-carno">
-                </ul>
+                @{
+                    if (Model.CustomerCarList.Count == 0)
+                    {
+                        <h6 id="carno-message">無相關車牌</h6>
+                    }
+                    else
+                    {
+                        <ul id="selected-carno">
+                            @foreach (var item in Model.CustomerCarList)
+                            {
+                                <li>@item.CarName</li>
+                            }
+                        </ul>
+                    }
+                }
+
             </div>
         </fieldset>
         <fieldset class="form-group col-sm-6 the-fieldset">
@@ -136,9 +149,9 @@
     <script>
         $(function () {
             // Page Ini
-            let pClass = new PageJsClass();
+            @*let pClass = new PageJsClass();
 
-            let carNoLs = @Html.Raw(Json.Serialize(Model.PostCarNo));
+            let carNoLs = @Html.Raw(Json.Serialize(Model.CustomerCarList.Select(aa=> aa.CarName)));
             if (carNoLs)
             {
                 carNoLs.forEach(carNo =>
@@ -149,7 +162,7 @@
 
                 pClass.CarNoList.AppendToList($('#carno').val());
                 pClass.CarNoList.ShowCarNoList();
-                $('#carno').val("")  // 清空輸入框
+                $('#carno').val("")  // 清空輸入框*@
 
 
 

@@ -80,6 +80,12 @@ namespace PSI.Controllers
         public IActionResult EditWeightNote(string docNo)
         {
 
+            //var priceHelepr = new PurchasePriceHelper();
+            //var haha = new Page_Purchase_WeightNoteList();
+            //haha.CarNo = "abc-123";
+            //var pila = priceHelepr.GetProdcutItem(haha);
+
+
 
             var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
             var pageModel = _mapper.Map<PageWeightNoteEditWeightNote>(purchaseWeightNote);
@@ -113,7 +119,7 @@ namespace PSI.Controllers
 
 
             //var mainIndegried = _psiService.GetMainPurchaseIngredient(purchaseWeightNote.Id);
-
+        
 
 
             return View(pageModel);

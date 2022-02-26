@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using PSI.Areas.Purchase.Models.IVE_Models;
+using PSI.Core.Entities;
 
 namespace PSI.Areas.Purchase.Helpers
 {
@@ -32,5 +35,6 @@ namespace PSI.Areas.Purchase.Helpers
                 0 :
                 decimal.Round(thirdWeightPrice + weightNotePrice + deliveryPrice);
         }
+      
     }
 }

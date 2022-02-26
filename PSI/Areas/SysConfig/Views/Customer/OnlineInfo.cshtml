@@ -1,4 +1,4 @@
-﻿@model VM_Custome_OnlineInfo
+﻿@model PageCustomerOnlineInfo
 @{
     <!-- DataTables -->
     <link href="~/lib/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -21,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.VM_CustomerInfoLs)
+        @foreach (var item in Model.CustomerInfoLs)
         {
             <tr>
                 <td>@item.CompanyName</td>
@@ -31,22 +31,11 @@
                 <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
                 <td>@item.UpdateEmpNo</td>
                 <td>
-                    <button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>
+                    <a asp-action="EditCustomerInfo" asp-route-sn="@item.Id" class="btn btn-primary">查詢</a>
                 </td>
             </tr>
         }
     </tbody>
-    <tfoot>
-        <tr>
-            <th>客戶</th>
-            <th>客戶簡稱</th>
-            <th>對應車牌</th>
-            <th>是否有合約</th>
-            <th>最後更新時間</th>
-            <th>最後操作人員</th>
-            <th>功能操作</th>
-        </tr>
-    </tfoot>
 </table>
 
 @section scripts{
@@ -71,10 +60,10 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 
-            $("#example1").on("click", "button[name='q-detail']", function () {
-                let snVal = $(this).val();
-                window.location.href = "/sysconfig/customer/editcustomerinfo?sn=" + snVal;
-            });
+            //$("#example1").on("click", "button[name='q-detail']", function () {
+            //    let snVal = $(this).val();
+            //    window.location.href = "/sysconfig/customer/editcustomerinfo?sn=" + snVal;
+            //});
 
         });
     </script>

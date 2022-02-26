@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using PSI.Areas.SysConfig.Models;
+using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Models.VEModels;
@@ -18,7 +18,7 @@ namespace PSI.Infrastructure.Mappings
             //    .ReverseMap();
 
             // ...其他的對映內容 (使用 CreateMap<> 建立下一組)
-            CreateMap<VM_CustomerInfo, CustomerInfo>().ReverseMap();
+            CreateMap<PageCustomerEditCustomerInfo, CustomerInfo>().ReverseMap();
             CreateMap<AppUser, IdentityUser>().ReverseMap();
             CreateMap<VE_PurchaseWeightNote, PurchaseWeightNote>().ReverseMap();
 

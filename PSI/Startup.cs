@@ -53,7 +53,7 @@ namespace PSI
             services.AddRazorPages();  // For Dotnet core identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IValidator<VE_PurchaseWeightNote>, VE_PurchaseWeightNoteValidator>();
-            services.AddTransient<IValidator<VM_CustomerInfo>, VM_Create_CustomerInfoValidator>();
+            services.AddTransient<IValidator<Show_CustomerInfo>, VM_Create_CustomerInfoValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<IPsiService, PsiService>();

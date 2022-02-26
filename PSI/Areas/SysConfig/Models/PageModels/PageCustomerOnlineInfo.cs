@@ -5,14 +5,14 @@ namespace PSI.Areas.SysConfig.Models
 
 
 
-    public class VM_Custome_OnlineInfo
+    public class PageCustomerOnlineInfo
     {
         // Post
 
         // Entity
 
         // Page
-        public List<VM_CustomerInfo> VM_CustomerInfoLs { get; set; }
+        public List<Show_CustomerInfo> CustomerInfoLs { get; set; }
 
     }
 }
