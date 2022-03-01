@@ -16,6 +16,9 @@ namespace PSI.Core.Helpers
     {
         public bool Success { get; set; }
         public string ActionMessage { get; set; }
+        public bool IsException { get; set; }
+        public string ErrorMessage { get; set; }
+        public Exception ErrorException { get; set; }
         public void ResultFailure(string failureMessage = "")
         {
             this.ActionMessage = failureMessage;
@@ -27,6 +30,7 @@ namespace PSI.Core.Helpers
             this.ActionMessage = successMessage;
             this.Success = true;
         }
+
     }
     public class FunctionResult : BaseResult
     {
@@ -39,7 +43,13 @@ namespace PSI.Core.Helpers
 
         }
 
-
+        public void ResultException(Exception ex)
+        {
+            this.IsException = true;
+            this.ErrorMessage = ex.Message;
+            this.ErrorException = ex;
+            this.Success = false;
+        }
 
     }
     public class FunctionResult<T> : BaseResult
@@ -59,6 +69,13 @@ namespace PSI.Core.Helpers
             this.ResultValue = resultValue;
             this.ActionMessage = successMessage;
             this.Success = true;
+        }
+        public void ResultException(Exception ex)
+        {
+            this.IsException = true;
+            this.ErrorMessage = ex.Message;
+            this.ErrorException = ex;
+            this.Success = false;
         }
     }
 }

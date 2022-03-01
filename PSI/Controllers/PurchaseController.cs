@@ -136,7 +136,7 @@ namespace PSI.Controllers
                     CarName = pageModel.VE_PurchaseWeightNote.CarNo
                 } };
 
-                _customerService.CreateCustomerInfo(customerInfo, customerCarLs);
+                _customerService.CreateCustomerInfo(customerInfo, customerCarLs, _userManager.GetUserAsync(User).Result);
             }
 
 

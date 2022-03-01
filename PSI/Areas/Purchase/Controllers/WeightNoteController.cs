@@ -10,6 +10,7 @@ using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Helpers;
 using PSI.Infrastructure.Helpers;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
@@ -28,6 +29,7 @@ namespace PSI.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly PurchaseHelper _purchaseHelper;
         private readonly PurchasePageItemHelper _pageitemHelper;
+        private readonly PurchaseMapperHelper _mapperHelper;
 
 
         public WeightNoteController(IMapper mapper,
@@ -45,6 +47,7 @@ namespace PSI.Controllers
             _httpContextAccessor = httpContextAccessor;
             _purchaseHelper = new PurchaseHelper(_mapper);
             _pageitemHelper = new PurchasePageItemHelper();
+            _mapperHelper = new PurchaseMapperHelper();
             //_haha = haha;
         }
 
@@ -79,50 +82,52 @@ namespace PSI.Controllers
         // [RuleSetForClientSideMessages("Skip")]
         public IActionResult EditWeightNote(string docNo)
         {
+            // Action variables
+            var errMsg = "";
 
-            //var priceHelepr = new PurchasePriceHelper();
-            //var haha = new Page_Purchase_WeightNoteList();
-            //haha.CarNo = "abc-123";
-            //var pila = priceHelepr.GetProdcutItem(haha);
+            // Step Functions 
+            #region -- GetPageModel --
+            FunctionResult<PageWeightNoteEditWeightNote> GetPageModel()
+            {
+                var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
+                var pModelMapperCfg = _mapperHelper.GetPageModelMapper<PurchaseWeightNote, PageWeightNoteEditWeightNote>();
+                var pageModel = pModelMapperCfg.Map<PageWeightNoteEditWeightNote>(purchaseWeightNote);
+
+                /* 待改善 */
+                pageModel.PayTypeName = _psiService.GetPayTypeItems()
+             .FirstOrDefault(item => item.CodeValue == purchaseWeightNote.PayType).CodeText;
+
+                var purchaseIngredients = _psiService.GetPurchaseIngredients(purchaseWeightNote.Id);
+                pageModel.IngredientInfos = purchaseIngredients.Select(item => $@"{item.ItemName}_{item.ItemPercent}%").ToArray();
 
 
 
-            var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
-            var pageModel = _mapper.Map<PageWeightNoteEditWeightNote>(purchaseWeightNote);
-            pageModel.PayTypeName = _psiService.GetPayTypeItems()
-                .FirstOrDefault(item => item.CodeValue == purchaseWeightNote.PayType).CodeText;
-
-            var purchaseIngredients = _psiService.GetPurchaseIngredients(purchaseWeightNote.Id);
-            pageModel.IngredientInfos = purchaseIngredients.Select(item => $@"{item.ItemName}_{item.ItemPercent}%").ToArray();
 
 
+                pageModel.MainIngredientInfo = string.Format("{0}，共{1}項，合計{2}",
+                    purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName,
+                    purchaseIngredients.Count(),
+                    purchaseIngredients.Sum(aa => aa.ItemPercent)
+                    );
 
-            pageModel.MainIngredientInfo = string.Format("{0}，共{1}項，合計{2}",
-                purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName,
-                purchaseIngredients.Count(),
-                purchaseIngredients.Sum(aa => aa.ItemPercent)
-                );
-
-            pageModel.MainIngredientInfo = $@"{purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName}，
+                pageModel.MainIngredientInfo = $@"{purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName}，
                                               共{  purchaseIngredients.Count()}項，
                                               合計{ purchaseIngredients.Sum(aa => aa.ItemPercent)}%";
-
-            //ViewData["Title"] = $@"{pageModel.DocNo}進貨磅單細項 ({pageModel.DocNo}) 磅單時間 : {pageModel.FullWeightTime.ToString("yyyy-MM-dd HH:mm:ss")} ";
-            //pageModel.CustomerInfoItems = _pageitemHelper.PageGetCustomerInfoItems(_customerService.GetPurchaseCustomerInfo());
-            //pageModel.ProductItemItems = _pageitemHelper.PageGetProductItems(_productItemService.GetPurchaseProductItems());
-            //pageModel.PayTypeItems = _pageitemHelper.PageGetPayTypeItems(_psiService.GetPsiTypeItems());
-
-            // VEPurchaseWeightNoteQuery = _mapper.Map<VE_PurchaseWeightNote_Query>(purchaseWeightNote),
+                /* 待改善 */
 
 
-            //var abc = pageModel.VEPurchaseWeightNoteQuery.DocNo;
+
+                var funRs = new FunctionResult<PageWeightNoteEditWeightNote>();
+                funRs.ResultSuccess("", pageModel);
+                return funRs;
+            }
+            #endregion
 
 
-            //var mainIndegried = _psiService.GetMainPurchaseIngredient(purchaseWeightNote.Id);
-        
+            // Step Result
 
+            return View(GetPageModel().ResultValue);
 
-            return View(pageModel);
         }
 
         [HttpPost]
@@ -172,7 +177,7 @@ namespace PSI.Controllers
                     CarName = pageModel.VE_PurchaseWeightNote.CarNo
                 } };
 
-                _customerService.CreateCustomerInfo(customerInfo, customerCarLs);
+                _customerService.CreateCustomerInfo(customerInfo, customerCarLs, _userManager.GetUserAsync(User).Result);
             }
 
 

@@ -46,6 +46,6 @@ namespace PSI.Core.Interfaces.Repository
         /// 更新
         /// </summary>
         /// <param name="entity">實體</param>
-        void Update(TEntity entity);
+        FunctionResult<TEntity> Update(TEntity entity);
     }
 }

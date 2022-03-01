@@ -44,43 +44,44 @@
         <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">進貨資訊</legend>
             <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">進貨對象</label>
                         <p>@Model.CustomerName</p>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">客戶車牌</label>
                         <p>@Model.CarNo</p>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">磅單時間</label>
                         <p>@Model.FullWeightTime.ToString("yyyy-MM-dd HH:mm")</p>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="form-control-label">進廠重量(重車重-空車重):</label>
-                        <p>@Model.FullWeight</p>
+                        <label>磅秤類型</label>
+                        <br>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" onclick="return false;">大磅
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input" onclick="return false;">小磅
+                            </label>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="form-control-label">扣重</label>
-                        <p>@Model.DefectiveWeight</p>
-                    </div>
+                <div class="col-sm-12">
+                    <br />
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="form-control-label">單價</label>
-                        <p>@Model.UnitPrice</p>
-                    </div>
-                </div>
-                <div class="col-sm-4">
+                <div class="col-sm-12">
                     <div class="form-group">
                         <label class="form-control-label">@($@"主要認列項目 : {Model.MainIngredientInfo}")</label>
                     </div>
@@ -111,7 +112,20 @@
         <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">金額計算</legend>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>@($@"實付金額＝ 計價金額＋運費＋磅費")</label>
+                        <p>
+                            <span style="color: red; font-size: larger">
+                                @($@"{Model.ActualPrice.ToString("C0")}")
+                            </span>
+                            <span>
+                                @($@"＝ {Model.WeightPrice.ToString("#,0.##")}＋{Model.DeliveryFee.ToString("#,0.##")}＋{Model.ThirdWeightFee.ToString("#,0.##")}")
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label">是否含稅</label>
                         <br />
@@ -127,29 +141,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label>磅秤類型</label>
-                        <br>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" onclick="return false;">大磅
-                            </label>
-                        </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input" onclick="return false;">小磅
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label>付款方式</label>
                         <p>@Model.PayTypeName</p>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label>付款日</label>
                         <p>
@@ -160,7 +158,16 @@
                 <div class="col-sm-12">
                     <br />
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>磅費</label>
+                        <p style="color:blue">@Model.ThirdWeightFee.ToString("'$' #,0.##")</p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label>@($@"計價金額＝ (進廠重量－扣重)×單價×稅率")</label>
                         <p>
@@ -173,7 +180,28 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">進廠重量(重車重-空車重):</label>
+                        <p>@Model.FullWeight</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">扣重</label>
+                        <p>@Model.DefectiveWeight</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">單價</label>
+                        <p>@Model.UnitPrice</p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label>@($@"運費＝ 進廠重量×運費單價")</label>
                         <p>
@@ -186,28 +214,17 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label>磅費</label>
-                        <p style="color:blue">@Model.ThirdWeightFee.ToString("'$' #,0.##")</p>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <br />
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>@($@"實付金額＝ 計價金額＋運費＋磅費")</label>
+                        <label>運費單價</label>
                         <p>
-                            <span style="color: red; font-size: larger">
-                                @($@"{Model.ActualPrice.ToString("C0")}")
-                            </span>
-                            <span>
-                                @($@"＝ {Model.WeightPrice.ToString("#,0.##")}＋{Model.DeliveryFee.ToString("#,0.##")}＋{Model.ThirdWeightFee.ToString("#,0.##")}")
-                            </span>
+                            @Model.TraficUnitPrice
                         </p>
                     </div>
                 </div>
+
+
+
                 @*<div class="col-sm-12">
                         <h5>@($@"● (進廠重量－扣重)×單價×稅率＝({Model.FullWeight}－{Model.DefectiveWeight})×{Model.UnitPrice}×{(Model.HasTax? 1.05:1)}＝ {Model.WeightPrice.ToString("#,0.##")} (計價金額)")</h5>
                         <h5>@($@"● 進廠重量×運費單價＝{Model.FullWeight}×{Model.TraficUnitPrice}＝ {Model.DeliveryFee.ToString("#,0.##")} (運費)") </h5>

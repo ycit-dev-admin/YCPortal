@@ -6,11 +6,17 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 {
     public class PageCustomerEditCustomerInfo
     {
-        #region Post
+        #region -- ForPost -- 
+        public string EncodeSn { get; set; }
+        public string EditCompanyName { get; set; }
+        public string EditTaxId { get; set; }
+        public string EditCustomerName { get; set; }
+        public string EditPsiType { get; set; }
+        public string EditRemark { get; set; }
 
         #endregion
 
-        #region --- ShowModel ---
+        #region --- ForShow ---
 
         public List<Show_CustomerCar> CustomerCarList { get; set; }
         public string CompanyName { get; set; }
@@ -23,7 +29,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 
         #endregion
 
-        #region --- Page ---
+        #region --- Page Only ---
 
         public List<SelectListItem> PsiTypeItems { set; get; }
 

@@ -158,15 +158,25 @@ namespace PSI.Core.Repositorys
         /// </summary>
         /// <param name="entity">實體</param>
         /// <exception cref="ArgumentNullException">entity</exception>
-        public void Update(TEntity entity)
+        public FunctionResult<TEntity> Update(TEntity entity)
         {
+            var funcRs = new FunctionResult<TEntity>(this);
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
+            try
+            {
+                this._context.Entry(entity).State = EntityState.Modified;
 
-            this._context.Entry(entity).State = EntityState.Modified;
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultException(ex);
+            }
+            return funcRs;
         }
+
         public void SaveChanges()
         {
             this._context.SaveChanges();

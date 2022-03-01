@@ -14,20 +14,14 @@ namespace PSI.Service.Service
 {
     public class CustomerService : ICustomerService
     {
-        private IHttpContextAccessor _httpContextAccessor;
-        private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfwork;
         private readonly IGenericRepository<CustomerInfo> _customerInfoRepository;
         private readonly IGenericRepository<CustomerContract> _customerContractRepository;
         private readonly IGenericRepository<CustomerCar> _customerCarRepository;
         private readonly IGenericRepository<CodeTable> _codeTableRepository;
 
-        public CustomerService(IUnitOfWork unitOfWork,
-                               IHttpContextAccessor httpContextAccessor,
-                               UserManager<AppUser> userManager)
+        public CustomerService(IUnitOfWork unitOfWork)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
             _unitOfwork = unitOfWork;
             _customerInfoRepository = _unitOfwork.CustomerInfoRepository;
             _customerContractRepository = _unitOfwork.CustomerContractRepository;
@@ -64,15 +58,14 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
-        public FunctionResult CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars)
+        public FunctionResult CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser)
         {
-            var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
             var funcRs = new FunctionResult();
-            if (customerInfo != null)
+            if (operUser != null)
             {
-                customerInfo.CreateEmpNo = curUserInfo.NickName;
+                customerInfo.CreateEmpNo = operUser.NickName;
                 customerInfo.CreateTime = DateTime.Now;
-                customerInfo.UpdateEmpNo = curUserInfo.NickName;
+                customerInfo.UpdateEmpNo = operUser.NickName;
                 customerInfo.UpdateTime = DateTime.Now;
                 customerInfo.IsContract = false;
                 customerInfo.IsEffective = "1";
@@ -90,9 +83,9 @@ namespace PSI.Service.Service
                     customerCars = customerCars.Select(aa =>
                     {
                         aa.IsEffective = "1";
-                        aa.CreateEmpNo = curUserInfo.NickName;
+                        aa.CreateEmpNo = operUser.NickName;
                         aa.CreateTime = DateTime.Now;
-                        aa.UpdateEmpNo = curUserInfo.NickName;
+                        aa.UpdateEmpNo = operUser.NickName;
                         aa.UpdateTime = DateTime.Now;
                         aa.CustomerId = customerInfo.Id;
                         return aa;
@@ -109,15 +102,50 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-        public FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar)
+        public FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser appUser)
         {
-            var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
+            var funcRs = new FunctionResult<CustomerInfo>();
+            if (customerInfo == null)
+            {
+                funcRs.ResultFailure("無更新資料傳入!!");
+                return funcRs;
+            }
+            var dbCustomerInfo = _customerInfoRepository.GetAsync(item => item.Id == customerInfo.Id).Result;
+            if (dbCustomerInfo == null)
+            {
+                funcRs.ResultFailure("查無此筆資料!!");
+                return funcRs;
+            }
+
+            // update logic
+            dbCustomerInfo.CompanyName = appUser.NickName;
+            dbCustomerInfo.TaxId = customerInfo.TaxId;
+            dbCustomerInfo.Title = customerInfo.Title;
+            dbCustomerInfo.CustomerName = customerInfo.CustomerName;
+            dbCustomerInfo.Address = customerInfo.Address;
+            dbCustomerInfo.ContentInfo = customerInfo.Address;
+            dbCustomerInfo.PsiType = customerInfo.Address;
+            dbCustomerInfo.IsEffective = "1";
+            dbCustomerInfo.IsContract = customerInfo.IsContract;
+            dbCustomerInfo.Remark = customerInfo.Remark;
+            dbCustomerInfo.CreateTime = DateTime.Now;
+            dbCustomerInfo.UpdateTime = DateTime.Now;
+
+
+            funcRs = _customerInfoRepository.Update(dbCustomerInfo);
+
+            return funcRs;
+        }
+
+        public FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser operUser)
+        {
+            // var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
             var funcRs = new FunctionResult<CustomerCar>(this);
             if (customerCar != null)
             {
-                customerCar.CreateEmpNo = curUserInfo.NickName;
+                customerCar.CreateEmpNo = operUser.NickName;
                 customerCar.CreateTime = DateTime.Now;
-                customerCar.UpdateEmpNo = curUserInfo.NickName;
+                customerCar.UpdateEmpNo = operUser.NickName;
                 customerCar.UpdateTime = DateTime.Now;
                 customerCar.IsEffective = "1";
 

@@ -24,6 +24,8 @@ namespace PSI.Areas.SysConfig.Controllers
         private readonly ICustomerService _customerService;
         private readonly IPsiService _psiService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly SysConfigMapperHelper _mapperHelper;
+
 
         public CustomerController(IMapper mapper,
                                   ICustomerService customerService,
@@ -34,6 +36,7 @@ namespace PSI.Areas.SysConfig.Controllers
             _mapper = mapper;
             _customerService = customerService;
             _psiService = psiService;
+            _mapperHelper = new SysConfigMapperHelper();
         }
         [HttpGet]
         [Authorize()]
@@ -93,7 +96,7 @@ namespace PSI.Areas.SysConfig.Controllers
                     CarName = carNo
                 }).ToList();
                 // create curstomInfo and customerCarLs push into service 
-                var createRs = _customerService.CreateCustomerInfo(cutomerInfo, customerCarLs);
+                var createRs = _customerService.CreateCustomerInfo(cutomerInfo, customerCarLs, _userManager.GetUserAsync(User).Result);
                 if (createRs.Success)
                     return RedirectToAction("OnlineInfo");
 
@@ -136,29 +139,21 @@ namespace PSI.Areas.SysConfig.Controllers
             #region -- GetPageModel --
             FunctionResult<PageCustomerEditCustomerInfo> GetPageModel()
             {
-                #region -- PageModelMapper --
-                var cfgMapper1 = new MapperConfiguration(cfg =>
-                cfg.CreateMap<CustomerInfo, PageCustomerEditCustomerInfo>()
-               .ForMember(x => x.CompanyName, y => y.MapFrom(o => o.CompanyName))
-               .ForMember(x => x.CustomerName, y => y.MapFrom(o => o.CustomerName))
-               .ForMember(x => x.TaxId, y => y.MapFrom(o => o.TaxId))
-               .ForMember(x => x.PsiType, y => y.MapFrom(o => o.PsiType))
-               .ForMember(x => x.Remark, y => y.MapFrom(o => o.Remark))).CreateMapper();
-                #endregion
+                // Make Mapper
+                var pModelCfgMapper = _mapperHelper.GetPageCustomerEditCustomerInfoMapper<CustomerInfo>();
+                var cfgMapper = _mapperHelper.GetShowCustomerCarMapper<CustomerCar>();
 
-                #region -- CustomerCarListMapper --
-                var cfgMapper2 = new MapperConfiguration(cfg =>
-                cfg.CreateMap<CustomerCar, Show_CustomerCar>()
-               .ForMember(x => x.CustomerId, y => y.MapFrom(o => o.CustomerId))
-               .ForMember(x => x.CarName, y => y.MapFrom(o => o.CarName))).CreateMapper();
-                #endregion
-
+                // Query Data
                 var customerInfo = _customerService.GetCustomerInfo(sn);
-                var pageModel = cfgMapper1.Map<PageCustomerEditCustomerInfo>(customerInfo);
-                pageModel.CustomerCarList = cfgMapper2.Map<List<Show_CustomerCar>>(_customerService.GetCustomerCarBy(sn).ToList());
+                var showCustomerCarLs = _customerService.GetCustomerCarBy(sn).ToList();
+
+                // Map to model
+                var pageModel = pModelCfgMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
+                pageModel.CustomerCarList = cfgMapper.Map<List<Show_CustomerCar>>(showCustomerCarLs);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
                     .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
 
+                // Return Result
                 var funRs = new FunctionResult<PageCustomerEditCustomerInfo>();
                 funRs.ResultSuccess("", pageModel);
                 return funRs;
@@ -175,6 +170,53 @@ namespace PSI.Areas.SysConfig.Controllers
         [Authorize()]
         public IActionResult EditCustomerInfo(PageCustomerEditCustomerInfo pageModel)
         {
+            // Action variables
+            var errMsg = "";
+
+            // Step Functions 
+            #region -- ValidPageModel --
+            FunctionResult ValidPageModel()
+            {
+                if (!ModelState.IsValid)
+                    errMsg = $"資料驗證失敗，請檢查頁面訊息!!";
+                var funRs = new FunctionResult();
+                funRs.ResultSuccess("");
+                return funRs;     // Return Result
+            }
+            #endregion
+            #region -- UpdateToDB --
+            FunctionResult<CustomerInfo> UpdateToDB(PageCustomerEditCustomerInfo pageModel)
+            {
+                var customerInfoCfgMapper = _mapperHelper.GetEntityCustomerInfo<PageCustomerEditCustomerInfo>();
+                var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
+                var funcRs = _customerService.UpdateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
+                return funcRs;     // Return Result
+            }
+            #endregion
+
+
+            // Step Result
+            if (!ValidPageModel().Success ||
+                !UpdateToDB(pageModel).Success)
+            {
+                TempData["pageMsg"] = errMsg;
+                return View(pageModel);
+            }
+
+
+            // Successed
+            return View(pageModel);
+
+
+
+
+
+            //var validator = new VE_PurchaseWeightNoteValidator();
+            //var validRs = validator.Validate(vmPurchaseWeightNote);
+
+            //var validRs = validator.Validate(vmPurchaseWeightNote, options => options.IncludeRuleSets("Create"));
+
+
             //var psiTypeLs = typeof(PSIEnum.PSIType).GetAllFieldInfo();
             //var haha = psiTypeLs.FirstOrDefault(aa => aa.Name == "");
             //var haha2 = ((PSIEnum.PSIType)0).GetDescription();
@@ -192,7 +234,7 @@ namespace PSI.Areas.SysConfig.Controllers
             //pageModel.SetPsiTypeItems();
 
 
-            return View(pageModel);
+
         }
     }
 }
