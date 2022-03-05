@@ -3,6 +3,7 @@
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
     <style>
         .the-fieldset {
             border: 2px solid #e0e0e0;
@@ -40,8 +41,7 @@
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
                             @($@"客戶全稱: {Model.CompanyName}")
-                            <span>
-                              
+                            <span id="show-edit-companyName">
                             </span>
                         </label>
                         <div class="input-group mb-3">
@@ -155,7 +155,11 @@
 
         <!-- form-group -->
     </div>
-    <button class="btn btn-primary" type="submit">Submit</button>
+    <button class="btn btn-primary" id="form_create" type="button">儲存變更</button>
+    <a asp-action="OnlineInfo" class="btn btn-secondary">返回</a>
+    <div id="dialog-confirm" title="系統資訊">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>確定要儲存變更嗎?</p>
+    </div>
 </form>
 
 
@@ -178,8 +182,10 @@
         </script>
     }
 
+    <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
+
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
-    <script src="~/psi/create-customer-info.js"></script>
+    <script asp-append-version="true" src="~/psi/create-customer-info.js"></script>
     <script src="~/lib/admin-lte/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="~/lib/admin-lte/plugins/jquery-validation/additional-methods.min.js"></script>  <!--擴充更多的表單檢核方法-->
     <script>
@@ -201,6 +207,43 @@
                 $('#carno').val("")  // 清空輸入框*@
 
 
+            // jquery dialog
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                autoOpen: false,
+                buttons: {
+                    "儲存": function () {
+                        $('#creaet-form').submit();
+                        $(this).dialog("close");
+                    },
+                    "取消": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            })
+
+
+            /* Page Events */
+
+            // 表單建立
+            $('#form_create').on('click', function () {
+                $("#dialog-confirm").dialog("open");
+            })
+
+
+
+            $('#EditCompanyName').on('keyup', function () {
+                let aa = document.getElementById("show-edit-companyName");
+                if ($(this).val().length > 0) {
+                    aa.innerHTML = `=> 變更為 : ${$(this).val()}`;
+                    aa.style.color = "red";
+                } else {
+                    aa.innerHTML = ""
+                }
+            })
 
 
             // Select2 Elements

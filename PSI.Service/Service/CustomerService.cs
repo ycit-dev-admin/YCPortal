@@ -118,18 +118,23 @@ namespace PSI.Service.Service
             }
 
             // update logic
-            dbCustomerInfo.CompanyName = appUser.NickName;
-            dbCustomerInfo.TaxId = customerInfo.TaxId;
-            dbCustomerInfo.Title = customerInfo.Title;
-            dbCustomerInfo.CustomerName = customerInfo.CustomerName;
-            dbCustomerInfo.Address = customerInfo.Address;
-            dbCustomerInfo.ContentInfo = customerInfo.Address;
-            dbCustomerInfo.PsiType = customerInfo.Address;
-            dbCustomerInfo.IsEffective = "1";
-            dbCustomerInfo.IsContract = customerInfo.IsContract;
-            dbCustomerInfo.Remark = customerInfo.Remark;
-            dbCustomerInfo.CreateTime = DateTime.Now;
+            var entityType = typeof(CustomerInfo);
+            var noNeedPropertyNames = new List<string>() {
+                nameof(CustomerInfo.Id),
+                nameof(CustomerInfo.CreateTime),
+                nameof(CustomerInfo.CreateEmpNo)
+            };
+
+            foreach (var item in entityType.GetProperties())
+            {
+                if (!noNeedPropertyNames.Contains(item.Name))
+                {
+                    var propertyItem = entityType.GetProperty(item.Name);
+                    propertyItem.SetValue(dbCustomerInfo, propertyItem.GetValue(customerInfo));
+                }
+            }
             dbCustomerInfo.UpdateTime = DateTime.Now;
+            dbCustomerInfo.UpdateEmpNo = appUser.UserName;
 
 
             funcRs = _customerInfoRepository.Update(dbCustomerInfo);

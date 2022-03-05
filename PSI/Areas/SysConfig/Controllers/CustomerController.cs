@@ -190,6 +190,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var customerInfoCfgMapper = _mapperHelper.GetEntityCustomerInfo<PageCustomerEditCustomerInfo>();
                 var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
                 var funcRs = _customerService.UpdateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
+                errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result
             }
             #endregion
