@@ -2,9 +2,6 @@
 
 namespace PSI.Areas.SysConfig.Models
 {
-
-
-
     public class PageCustomerOnlineInfo
     {
         // Post

@@ -1,4 +1,4 @@
-﻿@model VM_CustomerInfo
+﻿@model PageCustomerCreateCustomerInfo
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -9,24 +9,24 @@
     <div class="form-row">
         <div class="form-group col-md-8">
             <label for="CompanyName">客戶</label>
-            <input asp-for="CompanyName" type="text" class="form-control" placeholder="必填欄位">
+            <input asp-for="EditCompanyName" type="text" class="form-control" placeholder="必填欄位">
             @*<span asp-validation-for="CompanyName" class="text-danger"></span>*@
         </div>
         <div class="form-group col-md-4">
             <label for="TaxId">統一編號</label>
-            <input asp-for="TaxId" type="text" class="form-control">
+            <input asp-for="EditTaxId" type="text" class="form-control">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-8">
             <label for="CustomerName">客戶簡稱</label>
-            <input asp-for="CustomerName" type="text" class="form-control" placeholder="必填欄位">
+            <input asp-for="EditCustomerName" type="text" class="form-control" placeholder="必填欄位">
             @*<span asp-validation-for="CustomerName" class="text-danger"></span>*@
 
         </div>
         <div class="form-group col-md-4">
             <label for="PsiType">進出貨歸屬</label>
-            <select asp-for="PsiType" asp-items="@Model.PagePsiTypeItems" class="select2bs4" style="width: 100%;">
+            <select asp-for="EditPsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
                 <option></option>
             </select>
         </div>
@@ -65,21 +65,21 @@
     <div class="form-row">
         <div class="form-group col-md-2">
             <label for="inputZip">聯絡方式</label>
-            <input asp-for="ContentInfo" type="text" class="form-control">
+            <input asp-for="EditContentInfo" type="text" class="form-control">
         </div>
         @*<div class="form-group col-md-4">
-            <label for="Title">職稱</label>
-            <input asp-for="Title" type="text" class="form-control">
-        </div>*@
+                <label for="Title">職稱</label>
+                <input asp-for="Title" type="text" class="form-control">
+            </div>*@
         <div class="form-group col-md-10">
             <label for="inputZip">地址</label>
-            <input asp-for="Address" type="text" class="form-control">
+            <input asp-for="EditAddress" type="text" class="form-control">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="inputState">備註</label>
-            <input asp-for="Remark" type="text" class="form-control">
+            <input asp-for="EditRemark" type="text" class="form-control">
         </div>
     </div>
 
@@ -108,18 +108,18 @@
 
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script src="~/psi/create-customer-info.js"></script>
- 
+
     <script>
         $(function () {
             let pClass = new PageJsClass();
 
-            let carNoLs = @Html.Raw(Json.Serialize(ViewData.ModelState[nameof(Model.PostCarNo)]?.AttemptedValue.Split(',')));
+            @*let carNoLs = @Html.Raw(Json.Serialize(ViewData.ModelState[nameof(Model.PostCarNo)]?.AttemptedValue.Split(',')));
             if (carNoLs)
             {
                 carNoLs.forEach(carNo =>
                     pClass.CarNoList.AppendToList(carNo));
                 pClass.CarNoList.ShowCarNoList();
-            }
+            }*@
 
             $("#add-carno").on("click", function () {
                 pClass.CarNoList.AppendToList($('#carno').val());

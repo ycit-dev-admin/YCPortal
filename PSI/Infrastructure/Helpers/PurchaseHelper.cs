@@ -34,8 +34,8 @@ namespace PSI.Infrastructure.Helpers
             return customerService.GetPurchaseCustomerInfo()
                     .Select(aa => new SelectListItem
                     {
-                        Text = aa.CustomerName,
-                        Value = aa.Id.ToString()
+                        Text = aa.CUSTOMER_NAME,
+                        Value = aa.ID.ToString()
                     }).ToList();
         }
         public List<SelectListItem> PageGetProductItems(IProductItemService productItemService)
@@ -44,7 +44,7 @@ namespace PSI.Infrastructure.Helpers
                 .Select(aa => new SelectListItem
                 {
                     Text = aa.ProductName,
-                    Value = aa.Id.ToString()
+                    Value = aa.ID.ToString()
                 }).ToList();
         }
         public List<SelectListItem> PageGetPsiTypeItems(IPsiService psiService)

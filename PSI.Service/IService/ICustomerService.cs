@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -9,9 +10,10 @@ namespace PSI.Service.IService
     public interface ICustomerService
     {
         // Customer Info
-        FunctionResult CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser);
+        FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser);
         FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser appUser);
         CustomerInfo GetCustomerInfo(long id);
+        CustomerInfo GetCustomerInfo(Guid guid);
         IQueryable<CustomerInfo> GetCustomerInfos();
         IQueryable<CustomerInfo> GetPurchaseCustomerInfo();
 
@@ -21,6 +23,7 @@ namespace PSI.Service.IService
 
         // Customer Car
         IQueryable<CustomerCar> GetCustomerCarBy(long customerId);
+        IQueryable<CustomerCar> GetCustomerCarBy(Guid customerGuid);
         FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser appUser);
 
     }

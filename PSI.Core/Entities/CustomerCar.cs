@@ -6,10 +6,11 @@ namespace PSI.Core.Entities
 {
     public class CustomerCar : Entity
     {
-        public long CustomerId { get; set; }
-        public string CarName { get; set; }
-        public string IsEffective { get; set; }
-
-        public string Remark { get; set; }
+        public Guid CAR_GUID { get; set; }
+        public Guid CUSTOMER_GUID { get; set; }
+        public long CUSTOMER_ID { get; set; }
+        public string CAR_NAME { get; set; }
+        public string IS_EFFECTIVE { get; set; }
+        public string REMARK { get; set; }
     }
 }

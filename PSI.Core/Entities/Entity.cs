@@ -5,11 +5,11 @@ namespace PSI.Core.Entities
 {
     public abstract class Entity : IEntity
     {
-        public long Id { get; set; }
-        public DateTime CreateTime { get; set; }
-        public string CreateEmpNo { get; set; }
+        public long ID { get; set; }
+        public DateTime CREATE_TIME { get; set; }
+        public string CREATE_EMPNO { get; set; }
 
-        public DateTime UpdateTime { get; set; }
-        public string UpdateEmpNo { get; set; }
+        public DateTime UPDATE_TIME { get; set; }
+        public string UPDATE_EMPNO { get; set; }
     }
 }

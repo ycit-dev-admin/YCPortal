@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220306060424_adjFieldName")]
+    partial class adjFieldName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,14 +156,7 @@ namespace PSI.Core.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ADDRESS")
-                        .HasColumnType("text");
-
-                    b.Property<string>("COMPANY_NAME")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CONTENT_INFO")
+                    b.Property<string>("Address")
                         .HasColumnType("text");
 
                     b.Property<string>("CREATE_EMPNO")
@@ -173,26 +168,33 @@ namespace PSI.Core.Migrations
                     b.Property<Guid>("CUSTOMER_GUID")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CUSTOMER_NAME")
+                    b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool?>("IS_CONTRACT")
+                    b.Property<string>("ContentInfo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("IsContract")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("IS_EFECTIVE")
+                    b.Property<string>("IsEffective")
                         .HasColumnType("text");
 
-                    b.Property<string>("PSI_TYPE")
+                    b.Property<string>("PsiType")
                         .HasColumnType("text");
 
-                    b.Property<string>("REMARK")
+                    b.Property<string>("Remark")
                         .HasColumnType("text");
 
-                    b.Property<string>("TAX_ID")
+                    b.Property<string>("TaxId")
                         .HasColumnType("text");
 
-                    b.Property<string>("TITLE")
+                    b.Property<string>("Title")
                         .HasColumnType("text");
 
                     b.Property<string>("UPDATE_EMPNO")

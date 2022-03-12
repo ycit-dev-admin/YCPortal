@@ -37,8 +37,8 @@ namespace PSI.APIControllers
         {
             var apiRs = _customerService.GetCustomerCarBy(customerId).Select(aa => new
             {
-                CarName = aa.CarName,
-                Id = aa.Id
+                CarName = aa.CAR_NAME,
+                Id = aa.ID
             });
             return Ok(apiRs);
         }

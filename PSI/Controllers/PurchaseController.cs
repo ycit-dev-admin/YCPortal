@@ -127,13 +127,13 @@ namespace PSI.Controllers
                 // 建立臨時客戶
                 var customerInfo = new CustomerInfo
                 {
-                    CompanyName = "TempCompany",
-                    CustomerName = pageModel.VE_PurchaseWeightNote.CustomerName
+                    COMPANY_NAME = "TempCompany",
+                    CUSTOMER_NAME = pageModel.VE_PurchaseWeightNote.CustomerName
                 };
 
                 // 建立臨時車牌
                 var customerCarLs = new List<CustomerCar> {new CustomerCar {
-                    CarName = pageModel.VE_PurchaseWeightNote.CarNo
+                    CAR_NAME = pageModel.VE_PurchaseWeightNote.CarNo
                 } };
 
                 _customerService.CreateCustomerInfo(customerInfo, customerCarLs, _userManager.GetUserAsync(User).Result);
@@ -167,7 +167,7 @@ namespace PSI.Controllers
             var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime);
 
 
-            var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.Id).ToList());
+            var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.ID).ToList());
             var pageModel = new Page_Purchase_WeightNoteList
             {
                 VE_PurchaseWeightNoteLs = _mapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),

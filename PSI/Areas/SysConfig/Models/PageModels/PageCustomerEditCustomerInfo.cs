@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Areas.SysConfig.Models.ShowModels;
 
@@ -19,6 +20,8 @@ namespace PSI.Areas.SysConfig.Models.PageModels
         #region --- ForShow ---
 
         public List<Show_CustomerCar> CustomerCarList { get; set; }
+        public Guid CarGuid { get; set; }
+        public Guid CustomerGuid { get; set; }
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
         public string CustomerName { get; set; }

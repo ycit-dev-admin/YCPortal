@@ -34,8 +34,8 @@ namespace PSI.Service.Service
             var purchaseTypes = new string[] { "1", "3" };
 
             return _customerInfoRepository.GetAllAsync().Result.
-                   Where(aa => aa.IsEffective == "1" &&
-                   purchaseTypes.Contains(aa.PsiType)).AsQueryable();
+                   Where(aa => aa.IS_EFECTIVE == "1" &&
+                   purchaseTypes.Contains(aa.PSI_TYPE)).AsQueryable();
         }
         public IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(long customerId)
         {
@@ -47,8 +47,14 @@ namespace PSI.Service.Service
         public IQueryable<CustomerCar> GetCustomerCarBy(long customerId)
         {
             return _customerCarRepository.GetAllAsync().Result.
-                   Where(aa => aa.CustomerId == customerId &&
-                               aa.IsEffective == "1").AsQueryable();
+                   Where(aa => aa.CUSTOMER_ID == customerId &&
+                               aa.IS_EFFECTIVE == "1").AsQueryable();
+        }
+        public IQueryable<CustomerCar> GetCustomerCarBy(Guid customerGUID)
+        {
+            return _customerCarRepository.GetAllAsync().Result.
+                   Where(aa => aa.CUSTOMER_GUID == customerGUID &&
+                               aa.IS_EFFECTIVE == "1").AsQueryable();
         }
 
         public IEnumerable<CustomerContract> GetEffectiveCustomerContracts()
@@ -58,17 +64,18 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
-        public FunctionResult CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser)
+        public FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser)
         {
-            var funcRs = new FunctionResult();
+            var funcRs = new FunctionResult<CustomerInfo>();
             if (operUser != null)
             {
-                customerInfo.CreateEmpNo = operUser.NickName;
-                customerInfo.CreateTime = DateTime.Now;
-                customerInfo.UpdateEmpNo = operUser.NickName;
-                customerInfo.UpdateTime = DateTime.Now;
-                customerInfo.IsContract = false;
-                customerInfo.IsEffective = "1";
+                customerInfo.CUSTOMER_GUID = Guid.NewGuid();
+                customerInfo.CREATE_EMPNO = operUser.NickName;
+                customerInfo.CREATE_TIME = DateTime.Now;
+                customerInfo.UPDATE_EMPNO = operUser.NickName;
+                customerInfo.UPDATE_TIME = DateTime.Now;
+                customerInfo.IS_CONTRACT = false;
+                customerInfo.IS_EFECTIVE = "1";
 
                 var cCustomerInfoRs = _customerInfoRepository.Create(customerInfo);
 
@@ -82,18 +89,18 @@ namespace PSI.Service.Service
                 {
                     customerCars = customerCars.Select(aa =>
                     {
-                        aa.IsEffective = "1";
-                        aa.CreateEmpNo = operUser.NickName;
-                        aa.CreateTime = DateTime.Now;
-                        aa.UpdateEmpNo = operUser.NickName;
-                        aa.UpdateTime = DateTime.Now;
-                        aa.CustomerId = customerInfo.Id;
+                        aa.IS_EFFECTIVE = "1";
+                        aa.CREATE_EMPNO = operUser.NickName;
+                        aa.CREATE_TIME = DateTime.Now;
+                        aa.UPDATE_EMPNO = operUser.NickName;
+                        aa.UPDATE_TIME = DateTime.Now;
+                        aa.CUSTOMER_GUID = customerInfo.CUSTOMER_GUID;
                         return aa;
                     }).ToList();
                     _customerCarRepository.Create(customerCars);
                 }
 
-                funcRs.ResultSuccess("新增客戶資料成功!!");
+                funcRs.ResultSuccess("新增客戶資料成功!!", customerInfo);
             }
             else
             {
@@ -110,7 +117,7 @@ namespace PSI.Service.Service
                 funcRs.ResultFailure("無更新資料傳入!!");
                 return funcRs;
             }
-            var dbCustomerInfo = _customerInfoRepository.GetAsync(item => item.Id == customerInfo.Id).Result;
+            var dbCustomerInfo = _customerInfoRepository.GetAsync(item => item.ID == customerInfo.ID).Result;
             if (dbCustomerInfo == null)
             {
                 funcRs.ResultFailure("查無此筆資料!!");
@@ -120,9 +127,9 @@ namespace PSI.Service.Service
             // update logic
             var entityType = typeof(CustomerInfo);
             var noNeedPropertyNames = new List<string>() {
-                nameof(CustomerInfo.Id),
-                nameof(CustomerInfo.CreateTime),
-                nameof(CustomerInfo.CreateEmpNo)
+                nameof(CustomerInfo.ID),
+                nameof(CustomerInfo.CREATE_TIME),
+                nameof(CustomerInfo.CREATE_EMPNO)
             };
 
             foreach (var item in entityType.GetProperties())
@@ -133,8 +140,8 @@ namespace PSI.Service.Service
                     propertyItem.SetValue(dbCustomerInfo, propertyItem.GetValue(customerInfo));
                 }
             }
-            dbCustomerInfo.UpdateTime = DateTime.Now;
-            dbCustomerInfo.UpdateEmpNo = appUser.UserName;
+            dbCustomerInfo.UPDATE_TIME = DateTime.Now;
+            dbCustomerInfo.UPDATE_EMPNO = appUser.UserName;
 
 
             funcRs = _customerInfoRepository.Update(dbCustomerInfo);
@@ -148,11 +155,11 @@ namespace PSI.Service.Service
             var funcRs = new FunctionResult<CustomerCar>(this);
             if (customerCar != null)
             {
-                customerCar.CreateEmpNo = operUser.NickName;
-                customerCar.CreateTime = DateTime.Now;
-                customerCar.UpdateEmpNo = operUser.NickName;
-                customerCar.UpdateTime = DateTime.Now;
-                customerCar.IsEffective = "1";
+                customerCar.CREATE_EMPNO = operUser.NickName;
+                customerCar.CREATE_TIME = DateTime.Now;
+                customerCar.UPDATE_EMPNO = operUser.NickName;
+                customerCar.UPDATE_TIME = DateTime.Now;
+                customerCar.IS_EFFECTIVE = "1";
 
 
                 var createRs = _customerCarRepository.Create(customerCar);
@@ -182,7 +189,11 @@ namespace PSI.Service.Service
 
         public CustomerInfo GetCustomerInfo(long id)
         {
-            return _customerInfoRepository.GetAsync(aa => aa.Id == id).Result;
+            return _customerInfoRepository.GetAsync(aa => aa.ID == id).Result;
+        }
+        public CustomerInfo GetCustomerInfo(Guid guid)
+        {
+            return _customerInfoRepository.GetAsync(aa => aa.CUSTOMER_GUID == guid).Result;
         }
     }
 }

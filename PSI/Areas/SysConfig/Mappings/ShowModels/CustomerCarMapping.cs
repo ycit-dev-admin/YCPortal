@@ -9,9 +9,9 @@ namespace PSI.Areas.SysConfig.Mappings.ShowModels
         public ShowCustomerMapping()
         {
             CreateMap<CustomerCar, Show_CustomerCar>()
-                .ForMember(tar => tar.CustomerId, s => s.MapFrom(ss => ss.CustomerId))
-                 .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CustomerId))
-                 .ForMember(tar => tar.CustomerId, s => s.MapFrom(ss => ss.CustomerId));
+                .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
+                 .ForMember(tar => tar.CarGUID, s => s.MapFrom(ss => ss.CAR_GUID))
+                 .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME));
             //.ConstructUsing(parentDto => new PageWeightNoteEditWeightNote());
 
         }

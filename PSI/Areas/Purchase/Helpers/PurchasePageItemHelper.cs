@@ -17,8 +17,8 @@ namespace PSI.Areas.Purchase.Helpers
             return customerInfoList
                     .Select(aa => new SelectListItem
                     {
-                        Text = aa.CustomerName,
-                        Value = aa.Id.ToString()
+                        Text = aa.CUSTOMER_NAME,
+                        Value = aa.ID.ToString()
                     }).ToList();
         }
         public List<SelectListItem> PageGetProductItems(IEnumerable<ProductItem> productItemList)
@@ -27,7 +27,7 @@ namespace PSI.Areas.Purchase.Helpers
                 .Select(aa => new SelectListItem
                 {
                     Text = aa.ProductName,
-                    Value = aa.Id.ToString()
+                    Value = aa.ID.ToString()
                 }).ToList();
         }
         public List<SelectListItem> PageGetPayTypeItems(IQueryable<CodeTable> payTypeInfoList)

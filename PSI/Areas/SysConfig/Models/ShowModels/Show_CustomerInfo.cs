@@ -7,6 +7,7 @@ namespace PSI.Areas.SysConfig.Models
     public class Show_CustomerInfo
     {
         public string Id { get; set; }
+        public Guid CustomerGUID { get; set; }
         public string CompanyName { get; set; }
         public string CustomerName { get; set; }
         public string PostCarNo { get; set; }

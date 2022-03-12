@@ -31,7 +31,7 @@
                 <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
                 <td>@item.UpdateEmpNo</td>
                 <td>
-                    <a asp-action="EditCustomerInfo" asp-route-sn="@item.Id" class="btn btn-primary">查詢</a>
+                    <a asp-action="EditCustomerInfo" asp-route-unid="@item.CustomerGUID" class="btn btn-primary">查詢</a>
                 </td>
             </tr>
         }
