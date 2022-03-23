@@ -93,7 +93,8 @@ namespace PSI.Areas.SysConfig.Controllers
             var pageModel = funcMapper.Map<PageCustomer_GetCarNoInfoModel>(isNewOpen ?
                 new CustomerCar() :
                 _customerService.GetCustomerCarBy(carGUID).FirstOrDefault());
-            pageModel.ActionType = isNewOpen ? "建立" : "編輯";
+            pageModel.IsNewOpen = isNewOpen;
+            pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
 
             return PartialView("_GetCarNoInfoModel", pageModel);
         }

@@ -15,7 +15,8 @@ namespace PSI.Areas.SysConfig.Models
         public string Remark { get; set; }
 
         // Page
-        public string ActionType { get; set; }
+        public string ActionTypeName { get; set; }
+        public bool IsNewOpen { get; set; }
 
     }
 }

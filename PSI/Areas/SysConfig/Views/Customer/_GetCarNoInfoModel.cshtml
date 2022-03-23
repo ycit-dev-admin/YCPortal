@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">@($@"{Model.ActionType} - 車牌資訊")</h5>
+                <h5 class="modal-title">@($@"{Model.ActionTypeName} - 車牌資訊")</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,8 +11,27 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-4">.col-md-4</div>
-                        <div class="col-md-4 ml-auto">.col-md-4 .ml-auto</div>
+                        <div class="col-md-4">
+                            <label class="form-control-label" for="ownername">
+                                車牌名稱
+                                <span id="show-edit-companyName">
+                                </span>
+
+                            </label>
+                        </div>
+                        <div class="col-md-4">
+                            @{
+                                if (Model.IsNewOpen)
+                                {
+                                    <input asp-for="CarName" class="form-control" type="text">
+                                }
+                                else
+                                {
+                                    @Model.CarName;
+                                }
+                            }
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-3 ml-auto">.col-md-3 .ml-auto</div>
@@ -38,7 +57,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">@($@"{Model.ActionType}完成")</button>
+                <button type="button" id="testqqc" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
             </div>
         </div>
     </div>
