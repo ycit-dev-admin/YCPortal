@@ -9,7 +9,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 
 
         // For Page
-        public List<Bind_CustomerCar> CustomerCarInfoLs { get; set; }
+        public List<VE_CustomerCar> CustomerCarInfoLs { get; set; }
 
     }
 }

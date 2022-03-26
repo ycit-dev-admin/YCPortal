@@ -13,6 +13,7 @@
     <Folder Include="Areas\Purchase\Infrastructure\Mappgins\PageModelMapping\" />
     <Folder Include="Areas\Purchase\Models\ShowModels\" />
     <Folder Include="Areas\SysConfig\Data\" />
+    <Folder Include="Areas\SysConfig\Models\BindModels\" />
     <Folder Include="Files\Images\Logo\" />
     <Folder Include="Files\Images\" />
     <Folder Include="Infrastructure\Extensions\VM_Model\" />

@@ -44,14 +44,14 @@ namespace PSI.Areas.SysConfig.Controllers
 
 
             /* Local Step Functions */
-            FunctionResult<PageCustomerOnlineInfo> GetPageModel()
+            FunctionResult<PageCarNoOnlineInfo> GetPageModel()
             {
                 var cfgMapper = _mapperHelper.GetShowCustomerInfoMapper<CustomerInfo, Show_CustomerInfo>();
                 var customerInfoLs = _customerService.GetCustomerInfos();
                 var showCustomerInfoLs = cfgMapper.Map<List<Show_CustomerInfo>>(customerInfoLs);
 
-                var funRs = new FunctionResult<PageCustomerOnlineInfo>();
-                funRs.ResultSuccess("", new PageCustomerOnlineInfo
+                var funRs = new FunctionResult<PageCarNoOnlineInfo>();
+                funRs.ResultSuccess("", new PageCarNoOnlineInfo
                 {
                     CustomerInfoLs = showCustomerInfoLs
                 });

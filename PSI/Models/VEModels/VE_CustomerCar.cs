@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PSI.Areas.SysConfig.Models.BindModels
 {
-    public class Bind_CustomerCar
+    public class VE_CustomerCar
     {
         public Guid CarGUID { get; set; }
         public Guid CustomerGUID { get; set; }
