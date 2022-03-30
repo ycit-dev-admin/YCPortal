@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PSI.Areas.SysConfig.Models.BindModels;
+using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {

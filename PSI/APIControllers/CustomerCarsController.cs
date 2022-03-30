@@ -35,7 +35,7 @@ namespace PSI.APIControllers
         [HttpGet]
         public IActionResult Get(long customerId)
         {
-            var apiRs = _customerService.GetCustomerCarBy(customerId).Select(aa => new
+            var apiRs = _customerService.GetCustomerCar(customerId).Select(aa => new
             {
                 CarName = aa.CAR_NAME,
                 Id = aa.ID
@@ -66,6 +66,7 @@ namespace PSI.APIControllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+
         }
     }
 }

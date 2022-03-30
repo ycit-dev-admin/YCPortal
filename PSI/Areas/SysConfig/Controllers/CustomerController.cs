@@ -92,7 +92,7 @@ namespace PSI.Areas.SysConfig.Controllers
             var isNewOpen = carGUID == default;
             var pageModel = funcMapper.Map<PageCustomer_GetCarNoInfoModel>(isNewOpen ?
                 new CustomerCar() :
-                _customerService.GetCustomerCarBy(carGUID).FirstOrDefault());
+                _customerService.GetCustomerCar(carGUID).FirstOrDefault());
             pageModel.IsNewOpen = isNewOpen;
             pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
 
@@ -176,7 +176,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
                 // Query Data
                 var customerInfo = _customerService.GetCustomerInfo(unid);
-                var showCustomerCarLs = _customerService.GetCustomerCarBy(unid).ToList();  // 要改成用Guid
+                var showCustomerCarLs = _customerService.GetCustomerCar(unid).ToList();  // 要改成用Guid
 
                 // Map to model
                 var pageModel = pModelCfgMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);

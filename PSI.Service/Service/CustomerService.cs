@@ -44,17 +44,21 @@ namespace PSI.Service.Service
                                                             aa.IsEffective == "1");
             return queryRs;
         }
-        public IQueryable<CustomerCar> GetCustomerCarBy(long customerId)
+        public IQueryable<CustomerCar> GetCustomerCar(long customerId)
         {
             return _customerCarRepository.GetAllAsync().Result.
                    Where(aa => aa.CUSTOMER_ID == customerId &&
                                aa.IS_EFFECTIVE == "1").AsQueryable();
         }
-        public IQueryable<CustomerCar> GetCustomerCarBy(Guid customerGUID)
+        public IQueryable<CustomerCar> GetCustomerCar(Guid customerGUID)
         {
             return _customerCarRepository.GetAllAsync().Result.
                    Where(aa => aa.CUSTOMER_GUID == customerGUID &&
                                aa.IS_EFFECTIVE == "1").AsQueryable();
+        }
+        public IQueryable<CustomerCar> GetCustomerCars()
+        {
+            return _customerCarRepository.GetAllAsync().Result.AsQueryable();
         }
 
         public IEnumerable<CustomerContract> GetEffectiveCustomerContracts()

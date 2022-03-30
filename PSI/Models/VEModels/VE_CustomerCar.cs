@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace PSI.Areas.SysConfig.Models.BindModels
+namespace PSI.Models.VEModels
 {
     public class VE_CustomerCar
     {

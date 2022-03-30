@@ -6,7 +6,7 @@
     <link href="~/lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
 }
 <div>
-    <a href="@Url.Action("CreateCustomerInfo", "Customer", new { area = "SysConfig" })" class="btn btn-primary mb-3">建立客戶資訊</a>
+    <button id="add-carno" class="btn btn-info" type="button">新增車牌</button>
 </div>
 <table id="example1" class="table table-bordered table-striped">
     <thead>
@@ -37,6 +37,8 @@
     </tbody>
 </table>
 
+<div name="model-temp-carnoinfo"></div>
+
 @section scripts{
     <!-- DataTables  & Plugins -->
     <script src="~/lib/admin-lte/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -51,6 +53,8 @@
     <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
     <script>
         $(function () {
             $("#example1").DataTable({
@@ -63,6 +67,23 @@
             //    let snVal = $(this).val();
             //    window.location.href = "/sysconfig/customer/editcustomerinfo?sn=" + snVal;
             //});
+
+            $("#add-carno").on("click", curPage, function (event) {
+                let pageRs = curPage.SysConfigPageHelper.GetCarNoInfoModel("");
+                $.when(pageRs).then(function (data) {
+                    $("div[name=model-temp-carnoinfo]").html(data);
+                    var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                    modalObj.modal('show');
+
+
+                    // modalObj.find("#testqqc").on('click', '.tr-row',
+                    modalObj.find("#testqqc").on('click',
+                        function () {
+                            modalObj.modal('hide');
+                        });
+
+                });
+            });
 
         });
     </script>

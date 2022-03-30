@@ -22,8 +22,9 @@ namespace PSI.Service.IService
         IEnumerable<CustomerContract> GetEffectiveCustomerContracts();
 
         // Customer Car
-        IQueryable<CustomerCar> GetCustomerCarBy(long customerId);
-        IQueryable<CustomerCar> GetCustomerCarBy(Guid customerGuid);
+        IQueryable<CustomerCar> GetCustomerCar(long customerId);
+        IQueryable<CustomerCar> GetCustomerCar(Guid customerGuid);
+        IQueryable<CustomerCar> GetCustomerCars();
         FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser appUser);
 
     }
