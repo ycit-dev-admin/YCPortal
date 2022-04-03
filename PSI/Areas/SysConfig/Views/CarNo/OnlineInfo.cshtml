@@ -30,15 +30,14 @@
             <tr>
                 <td>@item.CarName</td>
                 <td>
-                    @(Model.CustomerInfoItems.FirstOrDefault(aa=> aa.Value==item.CustomerGUID.ToString()).Text)                   
+                    @(Model.CustomerInfoItems.FirstOrDefault(aa=> aa.Value==item.CustomerGUID.ToString()).Text)
                 </td>
                 <td>@(item.IsEffective=="1"?"Yes":"No")</td>
                 <td>No</td>
                 <td>@item.Remark</td>
-                <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
+                <td>@item.UpdateTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>
-                    <a asp-action="EditCustomerInfo" asp-route-unid="@item.CustomerGUID" class="btn btn-primary">查詢</a>
-                    <button name="query-btn" style="float:left;margin-right:20px;" class="btn btn-primary" type="button" value="@item.CarGUID">查詢2</button>
+                    <button name="query-btn" style="float:left;margin-right:20px;" class="btn btn-primary" type="button" value="@item.CarGUID">編輯</button>
                 </td>
             </tr>
         }
@@ -118,11 +117,11 @@
                     //})
 
                     // modalObj.find("#testqqc").on('click', '.tr-row',
-                    modalObj.find("#create-carno-info").on('click',
+                    modalObj.find("#carno-info-action").on('click',
                         function () {
                             // modalObj.modal('hide');
                             // modalObj.find('#CreateCarNoInfo').submit();
-                            modalObj.find('#CreateCarNoInfo').submit();
+                            modalObj.find('#carNo-info-form').submit();
                         });
 
                 });
@@ -135,15 +134,21 @@
                 $.when(pageRs).then(function (data) {
                     $("div[name=model-temp-carnoinfo]").html(data);
                     var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
-                    modalObj.modal('show');                 
+                    modalObj.modal('show');
 
+                    $.getScript("/psi/CreateCarNoInfoValidate.js"); // 載入檢核js
 
                     modalObj.find("#CustomerGUID").select2({
                         theme: 'bootstrap4',
                         placeholder: "請選擇"
                     })
-                 
 
+                    modalObj.find("#carno-info-action").on('click',
+                        function () {
+                            // modalObj.modal('hide');
+                            // modalObj.find('#CreateCarNoInfo').submit();
+                            modalObj.find('#carNo-info-form').submit();
+                        });
                 });
             });
 

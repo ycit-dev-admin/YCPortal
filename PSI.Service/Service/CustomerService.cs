@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
@@ -165,7 +166,7 @@ namespace PSI.Service.Service
                 customerCar.UPDATE_EMPNO = operUser.NickName;
                 customerCar.UPDATE_TIME = DateTime.Now;
                 customerCar.IS_EFFECTIVE = "1";
-
+                customerCar.CAR_NAME = customerCar.CAR_NAME.ToUpper();
 
                 var createRs = _customerCarRepository.Create(customerCar);
 
@@ -176,6 +177,45 @@ namespace PSI.Service.Service
                 }
 
                 funcRs.ResultSuccess("新增客戶資料成功!!", customerCar);
+            }
+            else
+            {
+                funcRs.ResultFailure("無客戶資料可新增!!");
+            }
+            return funcRs;
+        }
+
+        public FunctionResult<CustomerCar> UpdateCustomerCar(CustomerCar sourceEntity, AppUser operUser)
+        {
+            // var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
+            var funcRs = new FunctionResult<CustomerCar>(this);
+            if (sourceEntity != null)
+            {
+                sourceEntity.UPDATE_EMPNO = operUser.NickName;
+                sourceEntity.UPDATE_TIME = DateTime.Now;
+                sourceEntity.CAR_NAME = sourceEntity.CAR_NAME.ToUpper();
+
+                var dbEntity = _customerCarRepository.GetAsync(
+                    aa => aa.CAR_GUID == sourceEntity.CAR_GUID).Result;
+                var upDbEntity = typeof(CustomerCar).ToUpdateEntity(
+                    sourceEntity,
+                    dbEntity,
+                    new[] { nameof(CustomerCar.CUSTOMER_GUID),
+                            nameof(CustomerCar.CAR_NAME),
+                            nameof(CustomerCar.REMARK),
+                            nameof(CustomerCar.UPDATE_EMPNO),
+                            nameof(CustomerCar.UPDATE_TIME)});
+
+
+                var updateRs = _customerCarRepository.Update(upDbEntity);
+
+                if (!updateRs.Success)
+                {
+                    funcRs.ResultFailure(updateRs.ActionMessage);
+                    return funcRs;
+                }
+
+                funcRs.ResultSuccess("新增客戶資料成功!!", upDbEntity);
             }
             else
             {

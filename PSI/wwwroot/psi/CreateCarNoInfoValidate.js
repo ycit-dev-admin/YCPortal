@@ -1,5 +1,5 @@
 // Form Validation
-$("#CreateCarNoInfo").validate({
+$("#carNo-info-form").validate({
     submitHandler: function (form) {
         form.submit();
     },

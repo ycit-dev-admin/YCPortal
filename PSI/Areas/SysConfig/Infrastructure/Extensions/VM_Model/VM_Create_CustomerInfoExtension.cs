@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Areas.SysConfig.Models;
 using PSI.Core.Enums;
+using PSI.Core.Extensions;
 using PSI.Infrastructure.Extensions;
 
 namespace PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model

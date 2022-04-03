@@ -167,8 +167,10 @@ namespace PSI.Core.Repositorys
             }
             try
             {
-                this._context.Entry(entity).State = EntityState.Modified;
-
+                //this._context.Entry(entity).State = EntityState.Modified;
+                _context.Set<TEntity>().Update(entity);
+                this.SaveChanges();
+                funcRs.ResultSuccess("更新成功");
             }
             catch (Exception ex)
             {

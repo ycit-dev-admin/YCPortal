@@ -194,12 +194,12 @@ namespace PSI.Areas.SysConfig.Controllers
                 return funRs;     // Return Result
             }
             #endregion
-            #region -- CreateCarNoInfo --
-            FunctionResult<CustomerCar> CreateCarNoInfo(PageCreateCarNoInfo pageModel)
+            #region -- UpdateCarNoInfo --
+            FunctionResult<CustomerCar> UpdateCarNoInfo(PageCreateCarNoInfo pageModel)
             {
                 var mapperCfgOfCustomerCar = _mapperHelper.GetMapperOfCreateCarNoInfo<PageCreateCarNoInfo, CustomerCar>();
                 var customerCar = mapperCfgOfCustomerCar.Map<CustomerCar>(pageModel);
-                var funcRs = _customerService.CreateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result);
+                var funcRs = _customerService.UpdateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result);
                 funcRs.ResultSuccess("ok", customerCar);
                 errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result
@@ -209,7 +209,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Step Result
             if (!ValidPageModel().Success ||
-                !CreateCarNoInfo(pageModel).Success)
+                !UpdateCarNoInfo(pageModel).Success)
             {
                 TempData["pageMsg"] = errMsg;
                 return RedirectToAction("OnlineInfo");
@@ -218,7 +218,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Successed
             //return View(pageModel);
-            TempData["pageMsg"] = $@"車牌:{pageModel.CarName} 建立成功!!";
+            TempData["pageMsg"] = $@"車牌:{pageModel.CarName} 更新成功!!";
             return RedirectToAction("OnlineInfo");
         }
     }

@@ -10,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="CreateCarNoInfo" asp-area="SysConfig" asp-controller="CarNo" asp-action="@Model.FormActionName" method="post" autocomplete="off">
+            <form id="carNo-info-form" asp-area="SysConfig" asp-controller="CarNo" asp-action="@Model.FormActionName" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
@@ -42,17 +42,17 @@
                             </div>
                         </div>
                         @*<div class="row">
-                                <div class="col-md-3">
-                                    <label class="form-control-label" for="ownername">
-                                        選擇名稱
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
-                                    </div>
-                                </div>
-                            </div>*@
+                    <div class="col-md-3">
+                        <label class="form-control-label" for="ownername">
+                            選擇名稱
+                        </label>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
+                        </div>
+                    </div>
+                </div>*@
                         <div class="row">
                             <label class="form-control-label" for="ownername">
                                 備註:
@@ -71,7 +71,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="create-carno-info" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
+                    <button type="button" id="carno-info-action" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
+                </div>
+                <div name="hidden-fields">
+                    <input type="hidden" asp-for="CarGUID" />
                 </div>
             </form>
         </div>
