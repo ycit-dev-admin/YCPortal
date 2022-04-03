@@ -8,57 +8,61 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label class="form-control-label" for="ownername">
-                                車牌名稱
-                                <span id="show-edit-companyName">
-                                </span>
+            <form id="CreateCarNoInfo" asp-area="SysConfig" asp-controller="CarNo" asp-action="CreateCarNoInfo" method="post" autocomplete="off">
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-control-label" for="ownername">
+                                    車牌名稱
+                                    <span id="show-edit-companyName">
+                                    </span>
 
-                            </label>
-                        </div>
-                        <div class="col-md-4">
-                            @{
-                                if (Model.IsNewOpen)
-                                {
-                                    <input asp-for="CarName" class="form-control" type="text">
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                @{
+                                    if (Model.IsNewOpen)
+                                    {
+                                        <input asp-for="CarName234" class="form-control" type="text">
+                                        <span asp-validation-for="CarName234" class="text-danger"></span>
+                                    }
+                                    else
+                                    {
+                                        @Model.CarName234;
+                                    }
                                 }
-                                else
-                                {
-                                    @Model.CarName;
-                                }
-                            }
-                        </div>
+                            </div>
 
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3 ml-auto">.col-md-3 .ml-auto</div>
-                        <div class="col-md-2 ml-auto">.col-md-2 .ml-auto</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 ml-auto">.col-md-6 .ml-auto</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-9">
-                            Level 1: .col-sm-9
-                            <div class="row">
-                                <div class="col-8 col-sm-6">
-                                    Level 2: .col-8 .col-sm-6
-                                </div>
-                                <div class="col-4 col-sm-6">
-                                    Level 2: .col-4 .col-sm-6
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 ml-auto">.col-md-3 .ml-auto</div>
+                            <div class="col-md-2 ml-auto">.col-md-2 .ml-auto</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ml-auto">.col-md-6 .ml-auto</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9">
+                                Level 1: .col-sm-9
+                                <div class="row">
+                                    <div class="col-8 col-sm-6">
+                                        Level 2: .col-8 .col-sm-6
+                                    </div>
+                                    <div class="col-4 col-sm-6">
+                                        Level 2: .col-4 .col-sm-6
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" id="testqqc" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="testqqc" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
+                    <button type="submit" class="btn btn-primary">建立3</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

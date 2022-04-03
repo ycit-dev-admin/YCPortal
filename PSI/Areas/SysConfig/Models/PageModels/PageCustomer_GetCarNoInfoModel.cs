@@ -10,7 +10,7 @@ namespace PSI.Areas.SysConfig.Models
         // For Show      
         public Guid CustomerGUID { get; set; }
         public Guid CarGUID { get; set; }
-        public string CarName { get; set; }
+        public string CarName234 { get; set; }
         public string IsEffective { get; set; }
         public string Remark { get; set; }
 

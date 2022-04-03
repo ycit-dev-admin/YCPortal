@@ -13,7 +13,7 @@
 
 
     public GetCarNoInfoModel(carGUID: string): JQuery.jqXHR {
-        const pageUrl = `${this.BaseUrl}/SysConfig/Customer/_GetCarNoInfoModel`;
+        const pageUrl = `${this.BaseUrl}/SysConfig/CarNo/_GetCarNoInfoModel`;
 
         return $.get(pageUrl, { carGUID: encodeURIComponent(carGUID) });
     }

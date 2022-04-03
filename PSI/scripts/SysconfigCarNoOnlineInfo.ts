@@ -1,4 +1,4 @@
-﻿class EditCustomerInfoPage_Main {
+﻿class OnlineInfoPage {
     // Porperites
     readonly BaseUrl: string;
     readonly HasChange: boolean;
@@ -30,13 +30,12 @@
     public ActualPrice_DOM = $('#VE_PurchaseWeightNote_ActualPrice').get(0) as HTMLInputElement;
 
     // WebAPI
-    private CustomerAPI: CustomerAPIClass;
-
+    private SysConfigPageHelper: SysConfigPage;
 
 
     constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
-        this.CustomerAPI = new CustomerAPIClass(this.BaseUrl);
+        this.SysConfigPageHelper = new SysConfigPage(this.BaseUrl);
     }
 
 
@@ -96,25 +95,6 @@
 
 
 
-    public CustomerId_Change() {
-        const thisObj = this;
-
-        this.CustomerName_JqInputDom.val("");
-        this.CarName_JqInputDom.val(""); // 車牌名稱清空
-
-        if (this.CustomerId_JqSelectDom &&
-            this.CustomerId_JqSelectDom.find(':selected').val() === "0") {  // 新客戶
-            this.CustomerName_JqInputDom.removeAttr("readonly");
-            thisObj.ReSetCarNoItems([]);
-        } else {
-            this.CustomerName_JqInputDom.attr("readonly", "readonly");
-            this.CustomerName_JqInputDom.val(this.CustomerId_JqSelectDom.find(':selected').text());
-            let funcRs = this.CustomerAPI.GetCarNoItemsBy(this.CustomerId_JqSelectDom.find(':selected').val().toString());
-            $.when(funcRs).then(function (data) {
-                thisObj.ReSetCarNoItems(data);
-            });
-        }
-    }
 
     public CarNoId_Change() {
         this.CarName_JqInputDom.val("");
