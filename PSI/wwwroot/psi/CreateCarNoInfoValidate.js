@@ -5,12 +5,8 @@ $("#CreateCarNoInfo").validate({
     },
     ignore: [], // 要檢查Hidden欄位要加這個
     rules: {
-        CarName234: "required"
-    },
-    messages: {
-        CarName234: {
-            required: "GG88"
-        }
+        CarName: "required",
+        CustomerGUID: "required"
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {

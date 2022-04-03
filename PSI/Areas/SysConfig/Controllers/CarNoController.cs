@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,8 @@ using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
+using PSI.Infrastructure.Extensions;
+using PSI.Infrastructure.Helpers;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
 
@@ -21,6 +24,7 @@ namespace PSI.Areas.SysConfig.Controllers
     {
         private readonly ICustomerService _customerService;
         private readonly IPsiService _psiService;
+        private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly CarNoControllerMapper _mapperHelper;
 
@@ -42,14 +46,18 @@ namespace PSI.Areas.SysConfig.Controllers
             /* Local Step Functions */
             FunctionResult<PageCarNoOnlineInfo> GetPageModel()
             {
-                var customerCarLs = _customerService.GetCustomerCars();
                 var cfgMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, VE_CustomerCar>();
+                var customerCarLs = _customerService.GetCustomerCars();
                 var veCustomerInfoLs = cfgMapper.Map<List<VE_CustomerCar>>(customerCarLs);
+
+
 
                 var funRs = new FunctionResult<PageCarNoOnlineInfo>();
                 funRs.ResultSuccess("", new PageCarNoOnlineInfo
                 {
-                    CustomerCarInfoLs = veCustomerInfoLs
+                    CustomerCarInfoLs = veCustomerInfoLs,
+                    CustomerInfoItems = _customerService.GetPurchaseCustomerInfo()
+                                        .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID))
                 });
                 return funRs;
             }
@@ -61,28 +69,55 @@ namespace PSI.Areas.SysConfig.Controllers
         [Authorize()]
         public IActionResult _GetCarNoInfoModel(Guid carGUID = default)
         {
-            var funcMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, PageCustomer_GetCarNoInfoModel>();
 
-            var isNewOpen = carGUID == default;
-            var pageModel = funcMapper.Map<PageCustomer_GetCarNoInfoModel>(isNewOpen ?
-                new CustomerCar() :
-                _customerService.GetCustomerCar(carGUID).FirstOrDefault());
-            pageModel.IsNewOpen = isNewOpen;
-            pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
+            // Action variables
+            var errMsg = "";
 
-            return PartialView("_GetCarNoInfoModel", pageModel);
+            // Step Functions 
+            #region -- GetPageModel --
+            FunctionResult<PageCustomer_GetCarNoInfoModel> GetPageModel()
+            {
+                // Make mapper
+                var funcMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, PageCustomer_GetCarNoInfoModel>();
+
+                // Map to page model
+                var isNewOpen = carGUID == default;
+                var pageModel = funcMapper.Map<PageCustomer_GetCarNoInfoModel>(isNewOpen ?
+                    new CustomerCar() :
+                    _customerService.GetCustomerCars().FirstOrDefault(aa => aa.CAR_GUID == carGUID));
+                pageModel.IsNewOpen = isNewOpen;
+                pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
+                pageModel.FormActionName = isNewOpen ?
+                    nameof(this.CreateCarNoInfo) :
+                    nameof(this.UpdateCarNoInfo);
+                pageModel.CustomerInfoItems = _customerService.GetPurchaseCustomerInfo()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
+
+                // Return Result
+                var funRs = new FunctionResult<PageCustomer_GetCarNoInfoModel>();
+                funRs.ResultSuccess("", pageModel);
+                return funRs;
+            }
+            #endregion
+
+
+
+            // Step Result
+            if (!GetPageModel().Success)
+            {
+                TempData["pageMsg"] = errMsg;
+            }
+
+
+
+            return PartialView("_GetCarNoInfoModel",
+                GetPageModel().ResultValue);
         }
 
         [HttpPost]
         [Authorize()]
         public IActionResult CreateCarNoInfo(PageCreateCarNoInfo pageModel)
         {
-            //var validator = new VM_PurchaseWeightNoteValidator();
-            //var validRs = validator.Validate(vmPurchaseWeightNote);
-
-            //var validRs = validator.Validate(vmPurchaseWeightNote, options => options.IncludeRuleSets("Create"));
-
-
             // Action variables
             var errMsg = "";
 
@@ -90,10 +125,18 @@ namespace PSI.Areas.SysConfig.Controllers
             #region -- ValidPageModel --
             FunctionResult ValidPageModel()
             {
-                if (!ModelState.IsValid)
-                    errMsg = $"資料驗證失敗，請檢查頁面訊息!!";
                 var funRs = new FunctionResult();
+                var validator = new PageCreateCarNoInfoValidator();
+                var validRs = validator.Validate(pageModel);
+                //var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Create"));
+
                 funRs.ResultSuccess("");
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                }
+
                 return funRs;     // Return Result
             }
             #endregion
@@ -102,8 +145,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 var mapperCfgOfCustomerCar = _mapperHelper.GetMapperOfCreateCarNoInfo<PageCreateCarNoInfo, CustomerCar>();
                 var customerCar = mapperCfgOfCustomerCar.Map<CustomerCar>(pageModel);
-                // var funcRs = _customerService.UpdateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result); 
-                var funcRs = new FunctionResult<CustomerCar>();
+                var funcRs = _customerService.CreateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result);
                 funcRs.ResultSuccess("ok", customerCar);
                 errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result
@@ -122,10 +164,61 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Successed
             //return View(pageModel);
+            TempData["pageMsg"] = $@"車牌:{pageModel.CarName} 建立成功!!";
+            return RedirectToAction("OnlineInfo");
+        }
+
+        [HttpPost]
+        [Authorize()]
+        public IActionResult UpdateCarNoInfo(PageCreateCarNoInfo pageModel)
+        {
+            // Action variables
+            var errMsg = "";
+
+            // Step Functions 
+            #region -- ValidPageModel --
+            FunctionResult ValidPageModel()
+            {
+                var funRs = new FunctionResult();
+                var validator = new PageCreateCarNoInfoValidator();
+                var validRs = validator.Validate(pageModel);
+                //var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Create"));
+
+                funRs.ResultSuccess("");
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                }
+
+                return funRs;     // Return Result
+            }
+            #endregion
+            #region -- CreateCarNoInfo --
+            FunctionResult<CustomerCar> CreateCarNoInfo(PageCreateCarNoInfo pageModel)
+            {
+                var mapperCfgOfCustomerCar = _mapperHelper.GetMapperOfCreateCarNoInfo<PageCreateCarNoInfo, CustomerCar>();
+                var customerCar = mapperCfgOfCustomerCar.Map<CustomerCar>(pageModel);
+                var funcRs = _customerService.CreateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result);
+                funcRs.ResultSuccess("ok", customerCar);
+                errMsg = funcRs.ErrorMessage;
+                return funcRs;     // Return Result
+            }
+            #endregion
 
 
+            // Step Result
+            if (!ValidPageModel().Success ||
+                !CreateCarNoInfo(pageModel).Success)
+            {
+                TempData["pageMsg"] = errMsg;
+                return RedirectToAction("OnlineInfo");
+            }
 
-            TempData["pageMsg"] = $@"建立成功!!";
+
+            // Successed
+            //return View(pageModel);
+            TempData["pageMsg"] = $@"車牌:{pageModel.CarName} 建立成功!!";
             return RedirectToAction("OnlineInfo");
         }
     }

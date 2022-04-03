@@ -1,4 +1,4 @@
-﻿class SysConfigPage {
+﻿class SysConfigPageHelper {
     // Global
 
     // Ready Post

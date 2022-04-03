@@ -17,15 +17,17 @@ class EditCustomerInfoPage {
 
     // References  
     private CustomerAPI: CustomerAPIClass;
-    private SysConfigPageHelper: SysConfigPage;
+    private SysConfigPageHelper: SysConfigPageHelper;
     public testQQ: Map<string, Person> = new Map<string, Person>();
     public testQQ2: Map<string, { haha: string, cc: number }> = new Map<string, { haha: string, cc: number }>();
     public testQQ3: [{ haha: string, cc: number }] = [{}] as [{ haha: string, cc: number }];
+    public testQQ4: [{ haha: string, cc: number }] = [null];
+
 
     constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
         this.CustomerAPI = new CustomerAPIClass(this.BaseUrl);
-        this.SysConfigPageHelper = new SysConfigPage(this.BaseUrl);
+        this.SysConfigPageHelper = new SysConfigPageHelper(this.BaseUrl);
         this.testQQ.set("wow", { email: "abcd", rating: 500 });
         this.testQQ.set("wow2", { email: "abcdefg", rating: 501 });
         this.testQQ2.set("wow3", { haha: "456", cc: 999 });
@@ -34,6 +36,7 @@ class EditCustomerInfoPage {
         let abc2 = { haha: "abc7", cc: 4567 };
         this.testQQ3.push(abc);
         this.testQQ3.push(abc2);
+        this.testQQ4.push(abc2);
 
         console.log(`wow ${this.testQQ3.filter(value => Object.keys(value).length !== 0).length}`);
 

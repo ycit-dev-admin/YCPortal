@@ -159,6 +159,7 @@ namespace PSI.Service.Service
             var funcRs = new FunctionResult<CustomerCar>(this);
             if (customerCar != null)
             {
+                customerCar.CAR_GUID = Guid.NewGuid();
                 customerCar.CREATE_EMPNO = operUser.NickName;
                 customerCar.CREATE_TIME = DateTime.Now;
                 customerCar.UPDATE_EMPNO = operUser.NickName;

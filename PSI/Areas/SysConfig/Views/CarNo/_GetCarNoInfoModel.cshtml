@@ -1,4 +1,6 @@
 ﻿@model PageCustomer_GetCarNoInfoModel
+
+
 <div class="modal" tabindex="-1" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -8,59 +10,68 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="CreateCarNoInfo" asp-area="SysConfig" asp-controller="CarNo" asp-action="CreateCarNoInfo" method="post" autocomplete="off">
+            <form id="CreateCarNoInfo" asp-area="SysConfig" asp-controller="CarNo" asp-action="@Model.FormActionName" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label class="form-control-label" for="ownername">
                                     車牌名稱
-                                    <span id="show-edit-companyName">
-                                    </span>
-
                                 </label>
                             </div>
-                            <div class="col-md-4">
-                                @{
-                                    if (Model.IsNewOpen)
-                                    {
-                                        <input asp-for="CarName234" class="form-control" type="text">
-                                        <span asp-validation-for="CarName234" class="text-danger"></span>
-                                    }
-                                    else
-                                    {
-                                        @Model.CarName234;
-                                    }
-                                }
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <input asp-for="CarName" class="form-control" type="text">
+                                    <span asp-validation-for="CarName" class="text-danger"></span>
+                                </div>
                             </div>
 
                         </div>
                         <div class="row">
-                            <div class="col-md-3 ml-auto">.col-md-3 .ml-auto</div>
-                            <div class="col-md-2 ml-auto">.col-md-2 .ml-auto</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 ml-auto">.col-md-6 .ml-auto</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-9">
-                                Level 1: .col-sm-9
-                                <div class="row">
-                                    <div class="col-8 col-sm-6">
-                                        Level 2: .col-8 .col-sm-6
-                                    </div>
-                                    <div class="col-4 col-sm-6">
-                                        Level 2: .col-4 .col-sm-6
-                                    </div>
+                            <div class="col-md-3">
+                                <label class="form-control-label" for="ownername">
+                                    客戶名稱
+                                </label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <select asp-for="CustomerGUID" asp-items="@Model.CustomerInfoItems" style="width: 100%;">
+                                        <option></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
+                        @*<div class="row">
+                                <div class="col-md-3">
+                                    <label class="form-control-label" for="ownername">
+                                        選擇名稱
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <label class="form-control-label" for="ownername">
+                                備註:
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-12">
+                                @*<label class="form-control-label" for="reasonforvisit">備註</label>*@
+                                <textarea asp-for="Remark" class="form-control"></textarea>
+                            </div>
+                        </div>
+
+
+
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="testqqc" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
-                    <button type="submit" class="btn btn-primary">建立3</button>
+                    <button type="button" id="create-carno-info" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
                 </div>
             </form>
         </div>

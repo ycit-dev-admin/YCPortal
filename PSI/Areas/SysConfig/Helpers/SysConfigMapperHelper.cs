@@ -38,7 +38,7 @@ namespace PSI.Areas.Purchase.Helpers
                     cfg.CreateMap<CustomerCar, PageCustomer_GetCarNoInfoModel>()
                         .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
                         .ForMember(tar => tar.CarGUID, s => s.MapFrom(ss => ss.CAR_GUID))
-                        .ForMember(tar => tar.CarName234, s => s.MapFrom(ss => ss.CAR_NAME))
+                        .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
                         .ForMember(tar => tar.IsEffective, s => s.MapFrom(ss => ss.IS_EFFECTIVE))
                         .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
                        ).CreateMapper();
