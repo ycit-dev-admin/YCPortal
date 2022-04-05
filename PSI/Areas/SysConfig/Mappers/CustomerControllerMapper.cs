@@ -89,15 +89,15 @@ namespace PSI.Areas.SysConfig.Mappers
         {
             switch ((typeof(T1).Name, typeof(T2).Name))
             {
-                case (nameof(CustomerInfo), nameof(VE_CustomerInfo)):
-                    return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<CustomerInfo, VE_CustomerInfo>()
-                        .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
-                        .ForMember(tar => tar.CompanyName, s => s.MapFrom(ss => ss.COMPANY_NAME))
-                        .ForMember(tar => tar.CustomerName, s => s.MapFrom(ss => ss.CUSTOMER_NAME))
-                        .ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
-                        .ForMember(tar => tar.UpdateEmpNo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
-                       ).CreateMapper();
+                //case (nameof(CustomerInfo), nameof(VE_CustomerInfo)):
+                //    return new MapperConfiguration(cfg =>
+                //    cfg.CreateMap<CustomerInfo, VE_CustomerInfo>()
+                //        .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
+                //        .ForMember(tar => tar.CompanyName, s => s.MapFrom(ss => ss.COMPANY_NAME))
+                //        .ForMember(tar => tar.CustomerName, s => s.MapFrom(ss => ss.CUSTOMER_NAME))
+                //        .ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
+                //        .ForMember(tar => tar.UpdateEmpNo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
+                //       ).CreateMapper();
                 case (nameof(PageCustomerCreateCustomerInfo), nameof(CustomerInfo)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<PageCustomerCreateCustomerInfo, CustomerInfo>()

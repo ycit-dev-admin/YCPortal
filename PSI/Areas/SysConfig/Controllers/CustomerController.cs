@@ -126,9 +126,17 @@ namespace PSI.Areas.SysConfig.Controllers
             #region -- ValidPageModel --
             FunctionResult ValidPageModel()
             {
-                if (!ModelState.IsValid)
-                    errMsg = $"資料驗證失敗，請檢查頁面訊息!!";
                 var funRs = new FunctionResult();
+                var validator = new PageCustomerCreateCustomerInfoValidator();
+                var validRs = validator.Validate(pageModel);
+
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
                 funRs.ResultSuccess("");
                 return funRs;     // Return Result
             }
@@ -138,7 +146,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 var customerInfoCfgMapper = _mapperHelper.GetMapperOfCreateCustomerInfo<PageCustomerCreateCustomerInfo, CustomerInfo>();
                 var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
-                var funcRs = _customerService.CreateCustomerInfo(customerInfo, new List<CustomerCar>(), _userManager.GetUserAsync(User).Result);
+                var funcRs = _customerService.CreateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result
             }

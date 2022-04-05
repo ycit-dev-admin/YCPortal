@@ -9,6 +9,9 @@ $('#creaet-customer-form').validate({
         },
         CustomerName: {
             required: true
+        },
+        PsiType: {
+            required: true
         }
     },
     messages: {
@@ -16,6 +19,9 @@ $('#creaet-customer-form').validate({
             required: "該欄位為必填!!"
         },
         CustomerName: {
+            required: "該欄位為必填!!"
+        },
+        PsiType: {
             required: "該欄位為必填!!"
         }
     },

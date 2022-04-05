@@ -10,7 +10,7 @@ namespace PSI.Service.IService
     public interface ICustomerService
     {
         // Customer Info
-        FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser);
+        FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, AppUser operUser);
         FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser appUser);
         CustomerInfo GetCustomerInfo(long id);
         CustomerInfo GetCustomerInfo(Guid guid);

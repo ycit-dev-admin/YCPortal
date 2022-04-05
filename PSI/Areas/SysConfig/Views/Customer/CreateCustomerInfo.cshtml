@@ -7,28 +7,28 @@
 
 <form id="creaet-customer-form" asp-area="SysConfig" asp-controller="Customer" asp-action="CreateCustomerInfo" method="post" autocomplete="off">
     <div class="form-row">
-        <div class="form-group col-md-8">
-            <label for="CompanyName">客戶</label>
-            <input asp-for="CompanyName" type="text" class="form-control" placeholder="必填欄位">
-            @*<span asp-validation-for="CompanyName" class="text-danger"></span>*@
-        </div>
         <div class="form-group col-md-4">
-            <label for="TaxId">統一編號</label>
-            <input asp-for="TaxId" type="text" class="form-control">
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-8">
             <label for="CustomerName">客戶簡稱</label>
             <input asp-for="CustomerName" type="text" class="form-control" placeholder="必填欄位">
             @*<span asp-validation-for="CustomerName" class="text-danger"></span>*@
 
         </div>
+        <div class="form-group col-md-8">
+            <label for="CompanyName">公司名稱</label>
+            <input asp-for="CompanyName" type="text" class="form-control" placeholder="必填欄位">
+            @*<span asp-validation-for="CompanyName" class="text-danger"></span>*@
+        </div>
+    </div>
+    <div class="form-row">
         <div class="form-group col-md-4">
             <label for="PsiType">進出貨歸屬</label>
             <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
                 <option></option>
             </select>
+        </div>
+        <div class="form-group col-md-8">
+            <label for="TaxId">統一編號</label>
+            <input asp-for="TaxId" type="text" class="form-control">
         </div>
     </div>
     @*<div class="form-row">
@@ -140,7 +140,7 @@
 
 
 
-        
+
 
         })
     </script>

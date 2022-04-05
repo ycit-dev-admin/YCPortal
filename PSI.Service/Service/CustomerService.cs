@@ -75,7 +75,7 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
-        public FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, List<CustomerCar> customerCars, AppUser operUser)
+        public FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, AppUser operUser)
         {
             var funcRs = new FunctionResult<CustomerInfo>();
             if (operUser != null)
@@ -96,20 +96,20 @@ namespace PSI.Service.Service
                     return funcRs;
                 }
 
-                if (cCustomerInfoRs.Success && customerCars != null && customerCars.Any())
-                {
-                    customerCars = customerCars.Select(aa =>
-                    {
-                        aa.IS_EFFECTIVE = "1";
-                        aa.CREATE_EMPNO = operUser.NickName;
-                        aa.CREATE_TIME = DateTime.Now;
-                        aa.UPDATE_EMPNO = operUser.NickName;
-                        aa.UPDATE_TIME = DateTime.Now;
-                        aa.CUSTOMER_GUID = customerInfo.CUSTOMER_GUID;
-                        return aa;
-                    }).ToList();
-                    _customerCarRepository.Create(customerCars);
-                }
+                //if (cCustomerInfoRs.Success && customerCars != null && customerCars.Any())
+                //{
+                //    customerCars = customerCars.Select(aa =>
+                //    {
+                //        aa.IS_EFFECTIVE = "1";
+                //        aa.CREATE_EMPNO = operUser.NickName;
+                //        aa.CREATE_TIME = DateTime.Now;
+                //        aa.UPDATE_EMPNO = operUser.NickName;
+                //        aa.UPDATE_TIME = DateTime.Now;
+                //        aa.CUSTOMER_GUID = customerInfo.CUSTOMER_GUID;
+                //        return aa;
+                //    }).ToList();
+                //    _customerCarRepository.Create(customerCars);
+                //}
 
                 funcRs.ResultSuccess("新增客戶資料成功!!", customerInfo);
             }
