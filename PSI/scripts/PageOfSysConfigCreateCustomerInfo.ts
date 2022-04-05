@@ -1,4 +1,4 @@
-﻿class PageOfSysConfigCarNoOnlineInfo {
+﻿class PageOfSysConfigCreateCustomerInfo {
     // Porperites
     readonly BaseUrl: string;
 

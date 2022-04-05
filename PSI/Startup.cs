@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PSI.Areas.SysConfig.Models;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Infrastructure.DBContext;
@@ -16,7 +15,6 @@ using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Repositorys;
 using PSI.Core.UnitOfWorks;
-using PSI.Models.PurchaseWeightNote;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
 using PSI.Service.Service;
@@ -53,7 +51,7 @@ namespace PSI
             services.AddRazorPages();  // For Dotnet core identity
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IValidator<VE_PurchaseWeightNote>, VE_PurchaseWeightNoteValidator>();
-            services.AddTransient<IValidator<Show_CustomerInfo>, VM_Create_CustomerInfoValidator>();
+            //services.AddTransient<IValidator<Show_CustomerInfo>, VM_Create_CustomerInfoValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<IPsiService, PsiService>();

@@ -24,6 +24,8 @@ namespace PSI.Service.IService
         // Customer Car
         IQueryable<CustomerCar> GetCustomerCar(long customerId);
         IQueryable<CustomerCar> GetCustomerCar(Guid customerGuid);
+        CustomerCar GetCustomerCar(string carNo);
+
         IQueryable<CustomerCar> GetCustomerCars();
         FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser appUser);
         FunctionResult<CustomerCar> UpdateCustomerCar(CustomerCar customerCar, AppUser appUser);

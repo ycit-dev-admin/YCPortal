@@ -4,7 +4,7 @@
 };
 
 
-class EditCustomerInfoPage {
+class PageOfSysConfigEditCustomerInfo {
     // Base Porperites
     readonly BaseUrl: string;
 

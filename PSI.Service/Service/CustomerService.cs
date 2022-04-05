@@ -32,7 +32,7 @@ namespace PSI.Service.Service
 
         public IQueryable<CustomerInfo> GetPurchaseCustomerInfo()
         {
-            var purchaseTypes = new string[] { "1", "3" };
+            var purchaseTypes = new string[] { "1", "3" }; // 看能否改成相依Enums
 
             return _customerInfoRepository.GetAllAsync().Result.
                    Where(aa => aa.IS_EFECTIVE == "1" &&
@@ -56,6 +56,12 @@ namespace PSI.Service.Service
             return _customerCarRepository.GetAllAsync().Result.
                    Where(aa => aa.CUSTOMER_GUID == customerGUID &&
                                aa.IS_EFFECTIVE == "1").AsQueryable();
+        }
+        public CustomerCar GetCustomerCar(string carNo)
+        {
+            return _customerCarRepository.GetAllAsync().Result
+                   .FirstOrDefault(aa => aa.IS_EFFECTIVE == "1" &&
+                   aa.CAR_NAME == carNo);
         }
         public IQueryable<CustomerCar> GetCustomerCars()
         {

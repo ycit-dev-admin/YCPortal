@@ -46,18 +46,20 @@ namespace PSI.Areas.SysConfig.Controllers
             /* Local Step Functions */
             FunctionResult<PageCarNoOnlineInfo> GetPageModel()
             {
-                var cfgMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, VE_CustomerCar>();
+                var carMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, VE_CustomerCar>();
                 var customerCarLs = _customerService.GetCustomerCars();
-                var veCustomerInfoLs = cfgMapper.Map<List<VE_CustomerCar>>(customerCarLs);
+                var veCustomerCarLs = carMapper.Map<List<VE_CustomerCar>>(customerCarLs);
+                var customerMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerInfo, VE_CustomerInfo>();
+                var customerInfoLs = _customerService.GetPurchaseCustomerInfo();
+                var veCustomerInfoLs = customerMapper.Map<List<VE_CustomerInfo>>(customerInfoLs);
 
 
 
                 var funRs = new FunctionResult<PageCarNoOnlineInfo>();
                 funRs.ResultSuccess("", new PageCarNoOnlineInfo
                 {
-                    CustomerCarInfoLs = veCustomerInfoLs,
-                    CustomerInfoItems = _customerService.GetPurchaseCustomerInfo()
-                                        .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID))
+                    CustomerCarLs = veCustomerCarLs,
+                    CustomerInfoLs = veCustomerInfoLs
                 });
                 return funRs;
             }
@@ -78,9 +80,9 @@ namespace PSI.Areas.SysConfig.Controllers
             FunctionResult<PageCustomer_GetCarNoInfoModel> GetPageModel()
             {
                 // Make mapper
-                var funcMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, PageCustomer_GetCarNoInfoModel>();
+                var funcMapper = _mapperHelper.GetMapperOf_GetCarNoInfoModel<CustomerCar, PageCustomer_GetCarNoInfoModel>();
 
-                // Map to page model
+                // Set page model value
                 var isNewOpen = carGUID == default;
                 var pageModel = funcMapper.Map<PageCustomer_GetCarNoInfoModel>(isNewOpen ?
                     new CustomerCar() :
@@ -130,13 +132,22 @@ namespace PSI.Areas.SysConfig.Controllers
                 var validRs = validator.Validate(pageModel);
                 //var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Create"));
 
-                funRs.ResultSuccess("");
                 if (!validRs.IsValid)
                 {
                     errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
                     funRs.ResultFailure(errMsg);
+                    return funRs;
                 }
 
+                var isDuplicate = _customerService.GetCustomerCar(pageModel.CarName) != null;
+                if (isDuplicate)  // 檢核車牌有無重複
+                {
+                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.CarName} 為重複車牌名稱";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                funRs.ResultSuccess("");
                 return funRs;     // Return Result
             }
             #endregion
@@ -170,7 +181,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
         [HttpPost]
         [Authorize()]
-        public IActionResult UpdateCarNoInfo(PageCreateCarNoInfo pageModel)
+        public IActionResult UpdateCarNoInfo(PageUpdateCarNoInfo pageModel)
         {
             // Action variables
             var errMsg = "";
@@ -180,24 +191,34 @@ namespace PSI.Areas.SysConfig.Controllers
             FunctionResult ValidPageModel()
             {
                 var funRs = new FunctionResult();
-                var validator = new PageCreateCarNoInfoValidator();
+                var validator = new PageUpdateCarNoInfoValidator();
                 var validRs = validator.Validate(pageModel);
-                //var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Create"));
 
-                funRs.ResultSuccess("");
                 if (!validRs.IsValid)
                 {
                     errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
                     funRs.ResultFailure(errMsg);
                 }
 
+                var carNoInfo = _customerService.GetCustomerCar(pageModel.CarName.Trim());
+                var isDuplicate = carNoInfo != null &&
+                                  carNoInfo.CAR_GUID != pageModel.CarGUID;
+
+                if (isDuplicate)  // 檢核車牌有無重複
+                {
+                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.CarName} 為重複車牌名稱";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                funRs.ResultSuccess("");
                 return funRs;     // Return Result
             }
             #endregion
             #region -- UpdateCarNoInfo --
-            FunctionResult<CustomerCar> UpdateCarNoInfo(PageCreateCarNoInfo pageModel)
+            FunctionResult<CustomerCar> UpdateCarNoInfo(PageUpdateCarNoInfo pageModel)
             {
-                var mapperCfgOfCustomerCar = _mapperHelper.GetMapperOfCreateCarNoInfo<PageCreateCarNoInfo, CustomerCar>();
+                var mapperCfgOfCustomerCar = _mapperHelper.GetMapperOfUpdateCarNoInfo<PageUpdateCarNoInfo, CustomerCar>();
                 var customerCar = mapperCfgOfCustomerCar.Map<CustomerCar>(pageModel);
                 var funcRs = _customerService.UpdateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result);
                 funcRs.ResultSuccess("ok", customerCar);

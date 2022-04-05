@@ -5,6 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\SysConfig\Models\BindModels\**" />
+    <Content Remove="Areas\SysConfig\Models\BindModels\**" />
+    <EmbeddedResource Remove="Areas\SysConfig\Models\BindModels\**" />
+    <None Remove="Areas\SysConfig\Models\BindModels\**" />
+    <TypeScriptCompile Remove="Areas\SysConfig\Models\BindModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\SysConfig\Helpers\SysConfigMapperHelper.cs" />
+    <Compile Remove="Areas\SysConfig\Models\ShowModels\Show_CustomerInfo.cs" />
+    <Compile Remove="Areas\SysConfig\Models\VM_Create_CustomerInfoValidator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Views\Purchase\CreateV1.cshtml" />
   </ItemGroup>
 
@@ -13,7 +27,7 @@
     <Folder Include="Areas\Purchase\Infrastructure\Mappgins\PageModelMapping\" />
     <Folder Include="Areas\Purchase\Models\ShowModels\" />
     <Folder Include="Areas\SysConfig\Data\" />
-    <Folder Include="Areas\SysConfig\Models\BindModels\" />
+    <Folder Include="Areas\SysConfig\Helpers\" />
     <Folder Include="Files\Images\Logo\" />
     <Folder Include="Files\Images\" />
     <Folder Include="Infrastructure\Extensions\VM_Model\" />

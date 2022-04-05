@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models
 {
@@ -9,7 +10,8 @@ namespace PSI.Areas.SysConfig.Models
         // Entity
 
         // Page
-        public List<Show_CustomerInfo> CustomerInfoLs { get; set; }
+        public List<VE_CustomerCar> CustomerCarLs { get; set; }
+        public List<VE_CustomerInfo> CustomerInfoLs { get; set; }
 
     }
 }

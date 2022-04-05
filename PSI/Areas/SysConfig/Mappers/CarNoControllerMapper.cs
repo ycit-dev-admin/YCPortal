@@ -41,17 +41,14 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
                         .ForMember(tar => tar.IsEffective, s => s.MapFrom(ss => ss.IS_EFFECTIVE))
                         .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
+                        .ForMember(tar => tar.UpdateEmpInfo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
                         .ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
                        ).CreateMapper();
-
-                case (nameof(CustomerCar), nameof(PageCustomer_GetCarNoInfoModel)):
+                case (nameof(CustomerInfo), nameof(VE_CustomerInfo)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<CustomerCar, PageCustomer_GetCarNoInfoModel>()
+                    cfg.CreateMap<CustomerInfo, VE_CustomerInfo>()
                         .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
-                        .ForMember(tar => tar.CarGUID, s => s.MapFrom(ss => ss.CAR_GUID))
-                        .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
-                        .ForMember(tar => tar.IsEffective, s => s.MapFrom(ss => ss.IS_EFFECTIVE))
-                        .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
+                        .ForMember(tar => tar.CustomerName, s => s.MapFrom(ss => ss.CUSTOMER_NAME))
                        ).CreateMapper();
                 default:
                     return null;
@@ -81,6 +78,24 @@ namespace PSI.Areas.SysConfig.Mappers
         }
 
 
+        public IMapper GetMapperOf_GetCarNoInfoModel<T1, T2>()
+        {
+            switch (typeof(T1).Name, typeof(T2).Name)
+            {
+                case (nameof(CustomerCar), nameof(PageCustomer_GetCarNoInfoModel)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerCar, PageCustomer_GetCarNoInfoModel>()
+                        .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
+                        .ForMember(tar => tar.CarGUID, s => s.MapFrom(ss => ss.CAR_GUID))
+                        .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
+                        .ForMember(tar => tar.IsEffective, s => s.MapFrom(ss => ss.IS_EFFECTIVE))
+                        .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
+                       ).CreateMapper();
+                default:
+                    return null;
+            }
+        }
+
         public IMapper GetMapperOfCreateCarNoInfo<T1, T2>()
         {
             switch (typeof(T1).Name, typeof(T2).Name)
@@ -90,17 +105,32 @@ namespace PSI.Areas.SysConfig.Mappers
                     cfg.CreateMap<PageCreateCarNoInfo, CustomerCar>()
                         .ForMember(tar => tar.CUSTOMER_GUID, s => s.MapFrom(ss => ss.CustomerGUID))
                         .ForMember(tar => tar.CAR_GUID, s => s.MapFrom(ss => ss.CarGUID))
-                        .ForMember(tar => tar.CAR_NAME, s => s.MapFrom(ss => ss.CarName))
+                        .ForMember(tar => tar.CAR_NAME, s => s.MapFrom(ss => ss.CarName.Trim()))
                         .ForMember(tar => tar.IS_EFFECTIVE, s => s.MapFrom(ss => ss.IsEffective))
-                        .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.Remark))
+                        .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.Remark.Trim()))
                        ).CreateMapper();
                 default:
                     return null;
             }
-
-
         }
 
+        public IMapper GetMapperOfUpdateCarNoInfo<T1, T2>()
+        {
+            switch (typeof(T1).Name, typeof(T2).Name)
+            {
+                case (nameof(PageUpdateCarNoInfo), nameof(CustomerCar)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<PageUpdateCarNoInfo, CustomerCar>()
+                        .ForMember(tar => tar.CUSTOMER_GUID, s => s.MapFrom(ss => ss.CustomerGUID))
+                        .ForMember(tar => tar.CAR_GUID, s => s.MapFrom(ss => ss.CarGUID))
+                        .ForMember(tar => tar.CAR_NAME, s => s.MapFrom(ss => ss.CarName.Trim()))
+                        .ForMember(tar => tar.IS_EFFECTIVE, s => s.MapFrom(ss => ss.IsEffective))
+                        .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.Remark.Trim()))
+                       ).CreateMapper();
+                default:
+                    return null;
+            }
+        }
 
 
     }

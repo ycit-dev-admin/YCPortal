@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model;
+using PSI.Areas.SysConfig.Mappers;
 using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Areas.SysConfig.Models.ShowModels;
@@ -14,6 +15,7 @@ using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
+using PSI.Models.VEModels;
 using PSI.Service.IService;
 
 namespace PSI.Areas.SysConfig.Controllers
@@ -24,7 +26,7 @@ namespace PSI.Areas.SysConfig.Controllers
         private readonly ICustomerService _customerService;
         private readonly IPsiService _psiService;
         private readonly UserManager<AppUser> _userManager;
-        private readonly SysConfigMapperHelper _mapperHelper;
+        private readonly CustomerControllerMapper _mapperHelper;
 
 
         public CustomerController(ICustomerService customerService,
@@ -34,7 +36,7 @@ namespace PSI.Areas.SysConfig.Controllers
             _userManager = userManager;
             _customerService = customerService;
             _psiService = psiService;
-            _mapperHelper = new SysConfigMapperHelper();
+            _mapperHelper = new CustomerControllerMapper();
         }
         [HttpGet]
         [Authorize()]
@@ -52,23 +54,36 @@ namespace PSI.Areas.SysConfig.Controllers
             //    !GetPageModel().Success)
             //    TempData["pageMsg"] = errMsg;
 
-            return View(GetPageModel().ResultValue);
-
 
             /* Local Functions */
             FunctionResult<PageCustomerOnlineInfo> GetPageModel()
             {
-                var cfgMapper = _mapperHelper.GetShowCustomerInfoMapper<CustomerInfo, Show_CustomerInfo>();
+                var veCustomerInfoMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerInfo, VE_CustomerInfo>();
                 var customerInfoLs = _customerService.GetCustomerInfos();
-                var showCustomerInfoLs = cfgMapper.Map<List<Show_CustomerInfo>>(customerInfoLs);
+                var veCustomerInfoLs = veCustomerInfoMapper.Map<List<VE_CustomerInfo>>(customerInfoLs);
+
+                var veCustomerCarMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, VE_CustomerCar>();
+                var customerCarLs = _customerService.GetCustomerCars().Where(aa => aa.IS_EFFECTIVE == "1").ToList();
+                var veCustomerCarLs = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
 
                 var funRs = new FunctionResult<PageCustomerOnlineInfo>();
                 funRs.ResultSuccess("", new PageCustomerOnlineInfo
                 {
-                    CustomerInfoLs = showCustomerInfoLs
+                    CustomerInfoLs = veCustomerInfoLs,
+                    CustomerCarLs = veCustomerCarLs
                 });
                 return funRs;
             }
+
+
+            // Step Result
+            if (!GetPageModel().Success)
+            {
+                TempData["pageMsg"] = errMsg;
+            }
+
+
+            return View(GetPageModel().ResultValue);
         }
 
         [HttpGet]
@@ -121,7 +136,7 @@ namespace PSI.Areas.SysConfig.Controllers
             #region -- CreateToDB --
             FunctionResult<CustomerInfo> CreatDataToDB(PageCustomerCreateCustomerInfo pageModel)
             {
-                var customerInfoCfgMapper = _mapperHelper.GetEntityCustomerInfo<PageCustomerCreateCustomerInfo, CustomerInfo>();
+                var customerInfoCfgMapper = _mapperHelper.GetMapperOfCreateCustomerInfo<PageCustomerCreateCustomerInfo, CustomerInfo>();
                 var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
                 var funcRs = _customerService.CreateCustomerInfo(customerInfo, new List<CustomerCar>(), _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
@@ -218,8 +233,8 @@ namespace PSI.Areas.SysConfig.Controllers
             #region -- UpdateToDB --
             FunctionResult<CustomerInfo> UpdateToDB(PageCustomerEditCustomerInfo pageModel)
             {
-                var customerInfoCfgMapper = _mapperHelper.GetEntityCustomerInfo<PageCustomerEditCustomerInfo, CustomerInfo>();
-                var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
+                var customerInfoMapper = _mapperHelper.GetMapperOfCustomerEditCustomerInfo<PageCustomerEditCustomerInfo, CustomerInfo>();
+                var customerInfo = customerInfoMapper.Map<CustomerInfo>(pageModel);
                 var funcRs = _customerService.UpdateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result

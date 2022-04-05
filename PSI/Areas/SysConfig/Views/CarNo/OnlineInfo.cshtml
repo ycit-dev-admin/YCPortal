@@ -18,23 +18,23 @@
             <th>車牌名稱</th>
             <th>對應客戶</th>
             <th>是否有效</th>
-            <th>是否有合約</th>
             <th>備註</th>
+            <th>最後操作人員</th>
             <th>最後更新時間</th>
             <th>功能操作</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.CustomerCarInfoLs)
+        @foreach (var item in Model.CustomerCarLs)
         {
             <tr>
                 <td>@item.CarName</td>
                 <td>
-                    @(Model.CustomerInfoItems.FirstOrDefault(aa=> aa.Value==item.CustomerGUID.ToString()).Text)
+                    @(Model.CustomerInfoLs.FirstOrDefault(aa=> aa.CustomerGUID==item.CustomerGUID).CustomerName)
                 </td>
                 <td>@(item.IsEffective=="1"?"Yes":"No")</td>
-                <td>No</td>
                 <td>@item.Remark</td>
+                <td>@item.UpdateEmpInfo</td>
                 <td>@item.UpdateTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>
                     <button name="query-btn" style="float:left;margin-right:20px;" class="btn btn-primary" type="button" value="@item.CarGUID">編輯</button>
@@ -73,14 +73,13 @@
 
 
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
-    <script asp-append-version="true" src="~/psi/SysConfigPage.js"></script>
-    <script asp-append-version="true" src="~/psi/PageOfSysconfigCarNoOnlineInfo.js"></script>
-    <script asp-append-version="true" src="~/psi/CreateCarNoInfoValidate.js"></script>
+    <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigCarNoOnlineInfo.js"></script>
 
     <script>
         $(function () {
 
-            const curPage = new PageOfSysconfigCarNoOnlineInfo(window.baseApiUrl);
+            const curPage = new PageOfSysConfigCarNoOnlineInfo(window.baseApiUrl);
 
 
             $("#example1").DataTable({
@@ -96,7 +95,7 @@
                     var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
                     modalObj.modal('show');
 
-                    $.getScript("/psi/CreateCarNoInfoValidate.js"); // 載入檢核js
+                    $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
 
                     modalObj.find("#CustomerGUID").select2({
                         theme: 'bootstrap4',
@@ -136,7 +135,7 @@
                     var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
                     modalObj.modal('show');
 
-                    $.getScript("/psi/CreateCarNoInfoValidate.js"); // 載入檢核js
+                    $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
 
                     modalObj.find("#CustomerGUID").select2({
                         theme: 'bootstrap4',

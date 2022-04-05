@@ -2,9 +2,9 @@
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
-    public class PageCreateCarNoInfoValidator : AbstractValidator<PageCreateCarNoInfo>
+    public class PageUpdateCarNoInfoValidator : AbstractValidator<PageUpdateCarNoInfo>
     {
-        public PageCreateCarNoInfoValidator()
+        public PageUpdateCarNoInfoValidator()
         {
 
             RuleFor(x => x.CarName).NotNull().WithMessage("為必填欄位");

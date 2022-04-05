@@ -5,8 +5,7 @@ $("#carNo-info-form").validate({
     },
     ignore: [], // 要檢查Hidden欄位要加這個
     rules: {
-        CarName: "required",
-        CustomerGUID: "required"
+        CarName: "required"
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {

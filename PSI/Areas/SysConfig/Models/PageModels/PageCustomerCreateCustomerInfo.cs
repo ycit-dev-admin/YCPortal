@@ -7,14 +7,13 @@ namespace PSI.Areas.SysConfig.Models.PageModels
     public class PageCustomerCreateCustomerInfo
     {
         #region -- ForPost -- 
-        public string EditCompanyName { get; set; }
-        public string EditTaxId { get; set; }
-        public string EditCustomerName { get; set; }
-        public string EditPsiType { get; set; }
-        public string EditAddress { get; set; }
-        public string EditRemark { get; set; }
-        public string EditContentInfo { get; set; }
-
+        public string CompanyName { get; set; }
+        public string TaxId { get; set; }
+        public string CustomerName { get; set; }
+        public string PsiType { get; set; }
+        public string PhoneNo { get; set; }
+        public string Address { get; set; }
+        public string Remark { get; set; }
         #endregion
 
 

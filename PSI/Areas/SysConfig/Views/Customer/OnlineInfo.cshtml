@@ -26,8 +26,12 @@
             <tr>
                 <td>@item.CompanyName</td>
                 <td>@item.CustomerName</td>
-                <td>@item.PostCarNo</td>
-                <td>@item.HasContract</td>
+                <td>
+                    @(
+                    string.Join('，',Model.CustomerCarLs.Where(aa=> aa.CustomerGUID == item.CustomerGUID).Select(aa=> aa.CarName).ToList())
+                    )
+                </td>
+                <td>施工中...</td>
                 <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
                 <td>@item.UpdateEmpNo</td>
                 <td>
@@ -39,6 +43,14 @@
 </table>
 
 @section scripts{
+
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
     <!-- DataTables  & Plugins -->
     <script src="~/lib/admin-lte/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="~/lib/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
