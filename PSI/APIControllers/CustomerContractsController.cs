@@ -35,9 +35,9 @@ namespace PSI.APIControllers
 
         // GET api/<CustomerContractController>/5
         [HttpGet("{id}")]
-        public IEnumerable<CustomerContract> Get(long id)
+        public IEnumerable<CustomerContract> Get(Guid guid)
         {
-            return _customerService.GetCustomerContractsByCustomerId(id);
+            return _customerService.GetCustomerContractsByCustomerId(guid);
         }
 
         // POST api/<CustomerContractController>

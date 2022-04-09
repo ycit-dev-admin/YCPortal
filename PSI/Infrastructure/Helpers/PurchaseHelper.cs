@@ -43,7 +43,7 @@ namespace PSI.Infrastructure.Helpers
             return productItemService.GetPurchaseProductItems()
                 .Select(aa => new SelectListItem
                 {
-                    Text = aa.ProductName,
+                    Text = aa.PRODUCT_NAME,
                     Value = aa.ID.ToString()
                 }).ToList();
         }
