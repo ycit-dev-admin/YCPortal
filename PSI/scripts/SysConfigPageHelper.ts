@@ -12,10 +12,13 @@
     }
 
 
-    public GetCarNoInfoModel(carGUID: string): JQuery.jqXHR {
+    public GetCarNoInfoModel(carGUID: string = "", isOnlyQuery: boolean = false): JQuery.jqXHR {
         const pageUrl = `${this.BaseUrl}/SysConfig/CarNo/_GetCarNoInfoModel`;
 
-        return $.get(pageUrl, { carGUID: encodeURIComponent(carGUID) });
+        return $.get(pageUrl, {
+            carGUID: encodeURIComponent(carGUID),
+            isOnlyQuery: encodeURIComponent(isOnlyQuery)
+        });
     }
 
 

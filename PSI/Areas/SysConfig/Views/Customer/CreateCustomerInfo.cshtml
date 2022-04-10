@@ -84,6 +84,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">建立</button>
+    <a asp-action="OnlineInfo" class="btn btn-default">返回</a>
 </form>
 
 
@@ -107,7 +108,7 @@
     }
 
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
-    <script src="~/psi/create-customer-info.js"></script>
+
 
     <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
     <script asp-append-version="true" src="~/psi/PageOfSysConfigCreateCustomerInfo.js"></script>
@@ -115,7 +116,6 @@
 
     <script>
         $(function () {
-            let pClass = new PageJsClass();
 
             @*let carNoLs = @Html.Raw(Json.Serialize(ViewData.ModelState[nameof(Model.PostCarNo)]?.AttemptedValue.Split(',')));
             if (carNoLs)
@@ -125,11 +125,6 @@
                 pClass.CarNoList.ShowCarNoList();
             }*@
 
-            $("#add-carno").on("click", function () {
-                pClass.CarNoList.AppendToList($('#carno').val());
-                pClass.CarNoList.ShowCarNoList();
-                $('#carno').val("")  // 清空輸入框
-            });
 
             // Select2 Elements
             $('.select2bs4').select2({

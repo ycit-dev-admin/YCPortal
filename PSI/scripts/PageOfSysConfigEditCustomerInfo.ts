@@ -92,9 +92,8 @@ class PageOfSysConfigEditCustomerInfo {
     }
 
     public Test2Func() {
-        const modalUrl = `${this.BaseUrl}/SysConfig/Customer/_GetCarNoInfoModel`;
-
-        return $.get(modalUrl, { carGUID: encodeURIComponent("") }).done(function (data) {
+        const modalUrl = `${this.BaseUrl}/SysConfig/CarNo/_GetCarNoInfoModel`;
+        return $.get(modalUrl, { carGUID: encodeURIComponent(""), isOnlyQuery: encodeURIComponent(true) }).done(function (data) {
             $("div[name=model-temp-carnoinfo]").html(data);
             var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
             modalObj.modal('show');

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Purchase\CreateV1.cshtml" />
+    <Content Remove="wwwroot\psi\SysconfigCustomerEditCustomerInfo.js" />
   </ItemGroup>
 
   <ItemGroup>

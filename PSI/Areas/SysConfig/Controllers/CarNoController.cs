@@ -69,7 +69,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
         [HttpGet]
         [Authorize()]
-        public IActionResult _GetCarNoInfoModel(Guid carGUID = default)
+        public IActionResult _GetCarNoInfoModel(Guid carGUID = default, bool isOnlyQuery = false)
         {
 
             // Action variables
@@ -88,6 +88,7 @@ namespace PSI.Areas.SysConfig.Controllers
                     new CustomerCar() :
                     _customerService.GetCustomerCars().FirstOrDefault(aa => aa.CAR_GUID == carGUID));
                 pageModel.IsNewOpen = isNewOpen;
+                pageModel.IsOnlyQuery = isOnlyQuery;
                 pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
                 pageModel.FormActionName = isNewOpen ?
                     nameof(this.CreateCarNoInfo) :
