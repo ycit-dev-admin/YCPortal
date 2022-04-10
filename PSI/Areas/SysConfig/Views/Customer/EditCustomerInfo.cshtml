@@ -131,9 +131,9 @@
                                     @foreach (var item in Model.CustomerCarList)
                                     {
                                         <li>
-                                            <a name="EditCarNoInfo" href="#">
+                                            <button type="button" class="btn btn-default" name="EditCarNoInfo">
                                                 @item.CarName
-                                            </a>
+                                            </button>
                                         </li>
                                     }
                                 }
@@ -338,7 +338,7 @@
 
 
             // 車牌編輯
-            $('#has-carno').on('click', `a`, function () {
+            $('#has-carno').on('click', `button`, function () {
                 curPage.Test2Func();
             })
 

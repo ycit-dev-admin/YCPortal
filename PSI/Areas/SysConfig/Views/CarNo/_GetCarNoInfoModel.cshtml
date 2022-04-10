@@ -21,8 +21,17 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <input asp-for="CarName" class="form-control" type="text">
-                                    <span asp-validation-for="CarName" class="text-danger"></span>
+                                    @{
+                                        if (Model.IsOnlyQuery)
+                                        {
+                                            @Model.CarName
+                                        }
+                                        else
+                                        {
+                                            <input asp-for="CarName" class="form-control" type="text">
+                                            <span asp-validation-for="CarName" class="text-danger"></span>
+                                        }
+                                    }
                                 </div>
                             </div>
 
@@ -42,17 +51,17 @@
                             </div>
                         </div>
                         @*<div class="row">
-                    <div class="col-md-3">
-                        <label class="form-control-label" for="ownername">
-                            選擇名稱
-                        </label>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="form-group">
-                            <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
-                        </div>
-                    </div>
-                </div>*@
+                                <div class="col-md-3">
+                                    <label class="form-control-label" for="ownername">
+                                        選擇名稱
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
+                                    </div>
+                                </div>
+                            </div>*@
                         <div class="row">
                             <label class="form-control-label" for="ownername">
                                 備註:

@@ -89,7 +89,8 @@ namespace PSI.Areas.SysConfig.Controllers
                     _customerService.GetCustomerCars().FirstOrDefault(aa => aa.CAR_GUID == carGUID));
                 pageModel.IsNewOpen = isNewOpen;
                 pageModel.IsOnlyQuery = isOnlyQuery;
-                pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
+                pageModel.ActionTypeName = isOnlyQuery ? "查詢" : 
+                                           isNewOpen ? "建立" : "編輯";
                 pageModel.FormActionName = isNewOpen ?
                     nameof(this.CreateCarNoInfo) :
                     nameof(this.UpdateCarNoInfo);
