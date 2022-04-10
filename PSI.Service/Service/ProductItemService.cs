@@ -22,14 +22,14 @@ namespace PSI.Service.Service
         }
 
 
-       
+
 
         public IEnumerable<ProductItem> GetPurchaseProductItems()
         {
             var needPsiTypes = new[] { "1", "3" };
             return _productItemRepository.GetAllAsync().Result.
-                          Where(aa => needPsiTypes.Contains(aa.PsiType) &&
-                                      aa.IsEffective == "1");
+                          Where(aa => needPsiTypes.Contains(aa.PSI_TYPE) &&
+                                      aa.IS_EFFECTIVE == "1");
         }
     }
 }

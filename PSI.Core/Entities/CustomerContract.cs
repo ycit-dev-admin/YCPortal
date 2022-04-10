@@ -6,12 +6,18 @@ namespace PSI.Core.Entities
 {
     public class CustomerContract : Entity
     {
-        public long CustomerId { get; set; }        
-        public string ContractName { get; set; }
-        public double DealWeight { get; set; }
-        public double ActualWeight { get; set; }
-        public double DealUnitPrice { get; set; }
-        public string IsEffective { get; set; }  
-        public string Remark { get; set; }
+        public Guid CONTRACT_GUID { get; set; }
+        public string CONTRACT_NAME { get; set; }
+        public Guid CUSTOMER_GUID { get; set; }
+        public Guid PRODUCT_GUID { get; set; }         
+        public string CONTRACT_TYPE { get; set; }
+        public DateTime START_DATETIME { get; set; }
+        public DateTime END_DATETIME { get; set; }
+        public string EXPIRE_REASON { get; set; }
+        public double DEAL_WEIGHT { get; set; }
+        public double DEAL_UNIT_PRICE { get; set; }
+        public double ACTUAL_WEIGHT { get; set; }
+        public string IS_EFFECTIVE { get; set; }  
+        public string REMARK { get; set; }
     }
 }

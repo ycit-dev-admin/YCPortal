@@ -18,7 +18,7 @@ namespace PSI.Service.IService
         IQueryable<CustomerInfo> GetPurchaseCustomerInfo();
 
         // Customer Contract
-        IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(long customerId);
+        IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(Guid customerId);
         IEnumerable<CustomerContract> GetEffectiveCustomerContracts();
 
         // Customer Car

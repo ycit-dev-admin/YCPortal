@@ -26,7 +26,7 @@ namespace PSI.Areas.Purchase.Helpers
             return productItemList
                 .Select(aa => new SelectListItem
                 {
-                    Text = aa.ProductName,
+                    Text = aa.PRODUCT_NAME,
                     Value = aa.ID.ToString()
                 }).ToList();
         }

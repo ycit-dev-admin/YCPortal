@@ -38,11 +38,11 @@ namespace PSI.Service.Service
                    Where(aa => aa.IS_EFECTIVE == "1" &&
                    purchaseTypes.Contains(aa.PSI_TYPE)).AsQueryable();
         }
-        public IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(long customerId)
+        public IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(Guid customerId)
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => aa.CustomerId == customerId &&
-                                                            aa.IsEffective == "1");
+                                                     .Where(aa => aa.CUSTOMER_GUID == customerId &&
+                                                            aa.IS_EFFECTIVE == "1");
             return queryRs;
         }
         public IQueryable<CustomerCar> GetCustomerCar(long customerId)
@@ -71,7 +71,7 @@ namespace PSI.Service.Service
         public IEnumerable<CustomerContract> GetEffectiveCustomerContracts()
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => aa.IsEffective == "1");
+                                                     .Where(aa => aa.IS_EFFECTIVE == "1");
             return queryRs;
         }
 
