@@ -17,7 +17,7 @@ class PageOfSysConfigEditCustomerInfo {
 
     // References  
     private CustomerAPI: CustomerAPIClass;
-    private SysConfigPageHelper: SysConfigPageHelper;
+    public SysConfigPageHelper: SysConfigPageHelper;
     public testQQ: Map<string, Person> = new Map<string, Person>();
     public testQQ2: Map<string, { haha: string, cc: number }> = new Map<string, { haha: string, cc: number }>();
     public testQQ3: [{ haha: string, cc: number }] = [{}] as [{ haha: string, cc: number }];

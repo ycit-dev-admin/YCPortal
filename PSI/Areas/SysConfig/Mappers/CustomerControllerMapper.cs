@@ -54,6 +54,7 @@ namespace PSI.Areas.SysConfig.Mappers
             if (typeof(T1) == typeof(CustomerCar))
                 return new MapperConfiguration(cfg =>
                 cfg.CreateMap<CustomerCar, Show_CustomerCar>()
+               .ForMember(x => x.CarGUID, y => y.MapFrom(o => o.CAR_GUID))
                .ForMember(x => x.CustomerGUID, y => y.MapFrom(o => o.CUSTOMER_GUID))
                .ForMember(x => x.CarName, y => y.MapFrom(o => o.CAR_NAME))).CreateMapper();
             #endregion

@@ -131,7 +131,7 @@
                                     @foreach (var item in Model.CustomerCarList)
                                     {
                                         <li>
-                                            <button type="button" class="btn btn-default" name="EditCarNoInfo">
+                                            <button type="button" class="btn btn-default" name="EditCarNoInfo" value="@item.CarGUID">
                                                 @item.CarName
                                             </button>
                                         </li>
@@ -252,34 +252,11 @@
     <script asp-append-version="true" src="~/psi/CustomerAPI.js"></script>
     <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
     <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfo.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfoEvents.js"></script>
     <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfoValidate..js"></script>
 
     <script>
         $(function () {
-            /* Initialize Elements */
-            const curPage = new PageOfSysConfigEditCustomerInfo(window.baseApiUrl);
-
-
-
-
-            console.log(curPage.testQQ.has("bill")); // true
-            console.log(curPage.testQQ.has("wow2")+"!!"); // true
-
-            curPage.testQQ.forEach((person) => console.log(person));
-            curPage.testQQ2.forEach((person) => console.log(person));
-            console.log(curPage.testQQ2.get("wow3"));
-            console.log(curPage.testQQ3);
-
-            //const pageHelper = new SysConfigPage(window.baseApiUrl);
-
-            //console.log(document.getElementById('EditCustomerName').value)
-            //const pageModel = {
-            //    customerName: $('#CustomerName').val(),
-            //    carGuid: $('#CarGuid').val(),
-            //    customerGuid: $('#CustomerGuid').val()
-            //};
-            //console.log(pageModel);
-
             // Select2 Elements
             $('.select2bs4').select2({
                 theme: 'bootstrap4',
@@ -305,69 +282,11 @@
             })
 
 
-
-
-            // Page Ini
-            @*let pClass = new PageJsClass();
-
-            let carNoLs = @Html.Raw(Json.Serialize(Model.CustomerCarList.Select(aa=> aa.CarName)));
-            if (carNoLs)
-            {
-                carNoLs.forEach(carNo =>
-                    pClass.CarNoList.AppendToList(carNo));
-                pClass.CarNoList.ShowCarNoList();
-            }
-
-
-                pClass.CarNoList.AppendToList($('#carno').val());
-                pClass.CarNoList.ShowCarNoList();
-                $('#carno').val("")  // 清空輸入框*@
-
-
-
             /* Page Events */
             // 表單建立
             $('#form_create').on('click', function () {
                 $("#dialog-confirm").dialog("open");
             })
-
-
-            $('#EditCompanyName').on('keyup', function () {
-                curPage.EditCompanyName_Keyup();
-            })
-
-
-            // 車牌編輯
-            $('#has-carno').on('click', `button`, function () {
-                curPage.Test2Func();
-            })
-
-            // 新增車牌
-            //$('#add-carno').on('click', function () {
-            //    pageMain.Test3Func();
-            //})
-            //$('#add-carno').on('click',["Wayne","abc"], function (event,myName) {
-            //    alert(`WoW => ${event.data} & ${myName}`);
-            //})
-
-
-            $("#add-carno").on("click", curPage, function (event) {
-                let pageRs = curPage.SysConfigPageHelper.GetCarNoInfoModel();
-                $.when(pageRs).then(function (data) {
-                    $("div[name=model-temp-carnoinfo]").html(data);
-                    var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
-                    modalObj.modal('show');
-
-
-                    // modalObj.find("#testqqc").on('click', '.tr-row',
-                    modalObj.find("#testqqc").on('click',
-                        function () {
-                            modalObj.modal('hide');
-                        });
-
-                });
-            });
-
 
 
         })
