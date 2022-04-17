@@ -13,8 +13,33 @@ namespace PSI.Areas.SysConfig.Mappers
         {
         }
 
-        public IMapper GetPageCustomerEditCustomerInfoMapper<T1>() where T1 : CustomerInfo
+
+        public IMapper GetMapperOfEditCustomerInfo<T1, T2>()
         {
+            switch ((typeof(T1).Name, typeof(T2).Name))
+            {
+                case (nameof(CustomerInfo), nameof(PageCustomerEditCustomerInfo)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerInfo, PageCustomerEditCustomerInfo>()
+                        .ForMember(x => x.CustomerGuid, y => y.MapFrom(o => o.CUSTOMER_GUID))
+                        .ForMember(x => x.CompanyName, y => y.MapFrom(o => o.COMPANY_NAME))
+                        .ForMember(x => x.CustomerName, y => y.MapFrom(o => o.CUSTOMER_NAME))
+                        .ForMember(x => x.TaxId, y => y.MapFrom(o => o.TAX_ID))
+                        .ForMember(x => x.PsiType, y => y.MapFrom(o => o.PSI_TYPE))
+                        .ForMember(x => x.Remark, y => y.MapFrom(o => o.REMARK))
+                       ).CreateMapper();
+                case (nameof(CustomerCar), nameof(VE_CustomerCar)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerCar, VE_CustomerCar>()
+                        .ForMember(x => x.CarGUID, y => y.MapFrom(o => o.CAR_GUID))
+                        .ForMember(x => x.CustomerGUID, y => y.MapFrom(o => o.CUSTOMER_GUID))
+                        .ForMember(x => x.CarName, y => y.MapFrom(o => o.CAR_NAME))
+                       ).CreateMapper();
+                default:
+                    return null;
+            }
+
+
             #region --CustomerInfo --        
             if (typeof(T1) == typeof(CustomerInfo))
                 return new MapperConfiguration(cfg =>
@@ -48,19 +73,7 @@ namespace PSI.Areas.SysConfig.Mappers
             }
         }
 
-        public IMapper GetShowCustomerCarMapper<T1>()
-        {
-            #region --CustomerCar --        
-            if (typeof(T1) == typeof(CustomerCar))
-                return new MapperConfiguration(cfg =>
-                cfg.CreateMap<CustomerCar, Show_CustomerCar>()
-               .ForMember(x => x.CarGUID, y => y.MapFrom(o => o.CAR_GUID))
-               .ForMember(x => x.CustomerGUID, y => y.MapFrom(o => o.CUSTOMER_GUID))
-               .ForMember(x => x.CarName, y => y.MapFrom(o => o.CAR_NAME))).CreateMapper();
-            #endregion
 
-            return null;
-        }
 
         public IMapper GetMapperOfOnlineInfo<T1, T2>()
         {

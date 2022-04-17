@@ -1,9 +1,0 @@
-var PurchaseProdItem = /** @class */ (function () {
-    function PurchaseProdItem(prodId, prodText, percent) {
-        this.prodId = prodId;
-        this.prodText = prodText;
-        this.percent = percent;
-    }
-    return PurchaseProdItem;
-}());
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUHVyY2hhc2VQcm9kSXRlbS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NjcmlwdHMvUHVyY2hhc2VQcm9kSXRlbS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUtJLDBCQUFZLE1BQWMsRUFBRSxRQUFnQixFQUFFLE9BQWU7UUFDekQsSUFBSSxDQUFDLE1BQU0sR0FBRyxNQUFNLENBQUM7UUFDckIsSUFBSSxDQUFDLFFBQVEsR0FBRyxRQUFRLENBQUM7UUFDekIsSUFBSSxDQUFDLE9BQU8sR0FBRyxPQUFPLENBQUM7SUFDM0IsQ0FBQztJQUNMLHVCQUFDO0FBQUQsQ0FBQyxBQVZELElBVUMiLCJzb3VyY2VzQ29udGVudCI6WyJjbGFzcyBQdXJjaGFzZVByb2RJdGVtIHtcclxuICAgIHJlYWRvbmx5IHByb2RJZDogc3RyaW5nO1xyXG4gICAgcmVhZG9ubHkgcHJvZFRleHQ6IHN0cmluZztcclxuICAgIHB1YmxpYyBwZXJjZW50OiBudW1iZXI7XHJcblxyXG4gICAgY29uc3RydWN0b3IocHJvZElkOiBzdHJpbmcsIHByb2RUZXh0OiBzdHJpbmcsIHBlcmNlbnQ6IG51bWJlcikge1xyXG4gICAgICAgIHRoaXMucHJvZElkID0gcHJvZElkO1xyXG4gICAgICAgIHRoaXMucHJvZFRleHQgPSBwcm9kVGV4dDtcclxuICAgICAgICB0aGlzLnBlcmNlbnQgPSBwZXJjZW50O1xyXG4gICAgfVxyXG59Il19

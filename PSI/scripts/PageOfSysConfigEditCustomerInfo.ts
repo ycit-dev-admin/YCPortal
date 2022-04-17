@@ -4,16 +4,37 @@
 };
 
 
+/* Page Initialize */
+// Select2 Elements
+$('.select2bs4').select2({
+    theme: 'bootstrap4',
+    placeholder: "請選擇項目"
+})
+
+// jquery dialog
+$("#dialog-confirm").dialog({
+    resizable: false,
+    height: "auto",
+    width: 400,
+    modal: true,
+    autoOpen: false,
+    buttons: {
+        "儲存": function () {
+            $('#creaet-form').submit();
+            $(this).dialog("close");
+        },
+        "取消": function () {
+            $(this).dialog("close");
+        }
+    }
+})
+
 class PageOfSysConfigEditCustomerInfo {
     // Base Porperites
     readonly BaseUrl: string;
 
     // For Post
 
-
-    // Fields   
-    public CarGuid: string = (document.getElementById('CarGuid') as HTMLInputElement).value;
-    public CustomerGuid: string = (document.getElementById('CustomerGuid') as HTMLInputElement).value;
 
     // References  
     private CustomerAPI: CustomerAPIClass;
@@ -43,15 +64,18 @@ class PageOfSysConfigEditCustomerInfo {
     }
 
 
-    // Page Functions
+
 
 
     readonly HasChange: boolean;
 
 
     // Page  Dom
-    public EditCompanyName_Dom = document.getElementById('EditCompanyName') as HTMLInputElement;
-    public ShowEditCompanyName_Dom = document.getElementById('show-edit-companyName') as HTMLSpanElement;
+    // Field Doms   
+    public DomOfCarGuid: HTMLInputElement = document.getElementById('CarGuid') as HTMLInputElement;
+    public DomOfCustomerGuid: HTMLInputElement = document.getElementById('CustomerGuid') as HTMLInputElement;
+    public DomOfEditCompanyName = document.getElementById('EditCompanyName') as HTMLInputElement;
+    public DomOfShowEditCompanyName = document.getElementById('show-edit-companyName') as HTMLSpanElement;
 
 
     public EvenShow_JqUlDom: JQuery<HTMLUListElement> = $('#evenProductLs');
@@ -76,21 +100,7 @@ class PageOfSysConfigEditCustomerInfo {
 
 
 
-
-
-
-
-
-    /* Action */
-    public EditCompanyName_Keyup() {
-        if (this.EditCompanyName_Dom.value.length > 0) {
-            this.ShowEditCompanyName_Dom.innerHTML = `=> 變更為 : ${this.EditCompanyName_Dom.value}`;
-            this.ShowEditCompanyName_Dom.style.color = "red";
-        } else {
-            this.ShowEditCompanyName_Dom.innerHTML = ""
-        }
-    }
-
+    // Page Functions
     public Test2Func() {
         const modalUrl = `${this.BaseUrl}/SysConfig/CarNo/_GetCarNoInfoModel`;
         return $.get(modalUrl, { carGUID: encodeURIComponent(""), isOnlyQuery: encodeURIComponent(true) }).done(function (data) {
@@ -172,8 +182,6 @@ class PageOfSysConfigEditCustomerInfo {
 
 
     /* Page Function */
-
-
     private ReSetCarNoItems(dataObjLs) {
         const thisPagObj = this;
         thisPagObj.CarNoId_JqSelectDom.html('');  // 選項清空
@@ -185,5 +193,77 @@ class PageOfSysConfigEditCustomerInfo {
         });
     }
 
+
+    public PageEventInit() {
+        const curObj = this;
+
+
+
+        /* Page Events */
+        // 表單建立
+        $('#form_create').on('click', function () {
+            $("#dialog-confirm").dialog("open");
+        })
+
+
+        $('#EditCompanyName').on('keyup', function () {
+            if (curObj.DomOfEditCompanyName.value.length > 0) {
+                curObj.DomOfShowEditCompanyName.innerHTML = `=> 變更為 : ${curObj.DomOfEditCompanyName.value}`;
+                curObj.DomOfShowEditCompanyName.style.color = "red";
+            } else {
+                curObj.DomOfShowEditCompanyName.innerHTML = ""
+            }
+        })
+
+        // 車牌編輯
+        $('#has-carno').on('click', `button`, function () {
+            // curPage.Test2Func();
+            let pageRs = curObj.SysConfigPageHelper.GetCarNoInfoModel($(this).val().toString(), true);
+            $.when(pageRs).then(function (data) {
+                $("div[name=model-temp-carnoinfo]").html(data);
+                var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                modalObj.modal('show');
+
+
+                // modalObj.find("#testqqc").on('click', '.tr-row',
+                modalObj.find("#testqqc").on('click',
+                    function () {
+                        modalObj.modal('hide');
+                    });
+
+            });
+        })
+
+        // 新增車牌
+        //$('#add-carno').on('click', function () {
+        //    pageMain.Test3Func();
+        //})
+        //$('#add-carno').on('click',["Wayne","abc"], function (event,myName) {
+        //    alert(`WoW => ${event.data} & ${myName}`);
+        //})
+
+
+        $("#add-carno").on("click", function (event) {
+            let pageRs = curObj.SysConfigPageHelper.GetCarNoInfoModel();
+            $.when(pageRs).then(function (data) {
+                $("div[name=model-temp-carnoinfo]").html(data);
+                var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                modalObj.modal('show');
+
+
+                // modalObj.find("#testqqc").on('click', '.tr-row',
+                modalObj.find("#testqqc").on('click',
+                    function () {
+                        modalObj.modal('hide');
+                    });
+
+            });
+        });
+    }
+
 }
+
+
+
+
 

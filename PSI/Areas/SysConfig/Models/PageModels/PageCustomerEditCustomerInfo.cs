@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Areas.SysConfig.Models.ShowModels;
+using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
@@ -19,7 +19,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 
         #region --- ForShow ---
 
-        public List<Show_CustomerCar> CustomerCarList { get; set; }
+        public List<VE_CustomerCar> VE_CustomerCarList { get; set; }
         public Guid CarGuid { get; set; }
         public Guid CustomerGuid { get; set; }
         public string CompanyName { get; set; }

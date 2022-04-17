@@ -122,13 +122,13 @@
                     <div class="form-group">
                         <h6 id="carno-message">已關聯:</h6>
                         <ul id="has-carno">
-                            @{ if (Model.CustomerCarList.Count == 0)
+                            @{ if (Model.VE_CustomerCarList.Count == 0)
                                 {
                                     <li>無相關車牌</li>
                                 }
                                 else
                                 {
-                                    @foreach (var item in Model.CustomerCarList)
+                                    @foreach (var item in Model.VE_CustomerCarList)
                                     {
                                         <li>
                                             <button type="button" class="btn btn-default" name="EditCarNoInfo" value="@item.CarGUID">
@@ -164,13 +164,13 @@
                     <div class="form-group">
                         <h6 id="carno-message">已關聯:</h6>
                         <ul>
-                            @{ if (Model.CustomerCarList.Count == 0)
+                            @{ if (Model.VE_CustomerCarList.Count == 0)
                                 {
                                     <li>無相關合約</li>
                                 }
                                 else
                                 {
-                                    @foreach (var item in Model.CustomerCarList)
+                                    @foreach (var item in Model.VE_CustomerCarList)
                                     {
                                         <li>@item.CarName</li>
                                     }
@@ -252,42 +252,12 @@
     <script asp-append-version="true" src="~/psi/CustomerAPI.js"></script>
     <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
     <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfo.js"></script>
-    <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfoEvents.js"></script>
-    <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfoValidate..js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfoValidate.js"></script>
 
     <script>
         $(function () {
-            // Select2 Elements
-            $('.select2bs4').select2({
-                theme: 'bootstrap4',
-                placeholder: "請選擇項目"
-            })
-
-            // jquery dialog
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                autoOpen: false,
-                buttons: {
-                    "儲存": function () {
-                        $('#creaet-form').submit();
-                        $(this).dialog("close");
-                    },
-                    "取消": function () {
-                        $(this).dialog("close");
-                    }
-                }
-            })
-
-
-            /* Page Events */
-            // 表單建立
-            $('#form_create').on('click', function () {
-                $("#dialog-confirm").dialog("open");
-            })
-
+            const pageJsObj = new PageOfSysConfigEditCustomerInfo(window.baseApiUrl);
+            pageJsObj.PageEventInit();
 
         })
     </script>

@@ -191,19 +191,19 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Step Functions 
             #region -- GetPageModel --
-            FunctionResult<PageCustomerEditCustomerInfo> GetPageModel()
+            FunctionResult<PageCustomerEditCustomerInfo> GetPageModel(Guid unid)
             {
                 // Make Mapper
-                var pModelCfgMapper = _mapperHelper.GetPageCustomerEditCustomerInfoMapper<CustomerInfo>();
-                var cfgMapper = _mapperHelper.GetShowCustomerCarMapper<CustomerCar>();
+                var pModelMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerInfo, PageCustomerEditCustomerInfo>();
+                var veCustomerCarMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerCar, VE_CustomerCar>();
 
                 // Query Data
                 var customerInfo = _customerService.GetCustomerInfo(unid);
-                var showCustomerCarLs = _customerService.GetCustomerCar(unid).ToList();  // 要改成用Guid
+                var customerCarLs = _customerService.GetCustomerCar(unid).ToList();  // 要改成用Guid
 
                 // Map to model
-                var pageModel = pModelCfgMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
-                pageModel.CustomerCarList = cfgMapper.Map<List<Show_CustomerCar>>(showCustomerCarLs);
+                var pageModel = pModelMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
+                pageModel.VE_CustomerCarList = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
                     .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
 
@@ -217,7 +217,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Step Result
 
-            return View(GetPageModel().ResultValue);
+            return View(GetPageModel(unid).ResultValue);
         }
 
         [HttpPost]
