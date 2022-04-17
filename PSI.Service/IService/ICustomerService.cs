@@ -14,6 +14,8 @@ namespace PSI.Service.IService
         FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser appUser);
         CustomerInfo GetCustomerInfo(long id);
         CustomerInfo GetCustomerInfo(Guid guid);
+        CustomerInfo GetCustomerInfoByCustomerName(string customerName);
+        CustomerInfo GetCustomerInfoByCompanyName(string customerName);
         IQueryable<CustomerInfo> GetCustomerInfos();
         IQueryable<CustomerInfo> GetPurchaseCustomerInfo();
 

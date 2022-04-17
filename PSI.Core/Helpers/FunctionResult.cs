@@ -22,6 +22,7 @@ namespace PSI.Core.Helpers
         public void ResultFailure(string failureMessage = "")
         {
             this.ActionMessage = failureMessage;
+            this.ErrorMessage = failureMessage;
             this.Success = false;
 
         }

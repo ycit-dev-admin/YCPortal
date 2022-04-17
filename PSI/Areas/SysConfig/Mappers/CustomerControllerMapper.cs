@@ -23,6 +23,8 @@ namespace PSI.Areas.SysConfig.Mappers
                     cfg.CreateMap<CustomerInfo, PageCustomerEditCustomerInfo>()
                         .ForMember(x => x.CustomerGuid, y => y.MapFrom(o => o.CUSTOMER_GUID))
                         .ForMember(x => x.CompanyName, y => y.MapFrom(o => o.COMPANY_NAME))
+                        .ForMember(x => x.Address, y => y.MapFrom(o => o.ADDRESS))
+                        .ForMember(x => x.ContentInfo, y => y.MapFrom(o => o.CONTENT_INFO))
                         .ForMember(x => x.CustomerName, y => y.MapFrom(o => o.CUSTOMER_NAME))
                         .ForMember(x => x.TaxId, y => y.MapFrom(o => o.TAX_ID))
                         .ForMember(x => x.PsiType, y => y.MapFrom(o => o.PSI_TYPE))
@@ -135,11 +137,13 @@ namespace PSI.Areas.SysConfig.Mappers
                 case (nameof(PageCustomerEditCustomerInfo), nameof(CustomerInfo)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<PageCustomerEditCustomerInfo, CustomerInfo>()
-                       .ForMember(t => t.ID, s => s.MapFrom(ss => long.Parse(ss.EncodeSn)))
+                       .ForMember(t => t.CUSTOMER_GUID, s => s.MapFrom(ss => ss.CustomerGuid))
                        .ForMember(t => t.COMPANY_NAME, s => s.MapFrom(ss => ss.EditCompanyName))
                        .ForMember(t => t.TAX_ID, s => s.MapFrom(ss => ss.EditTaxId))
                        .ForMember(t => t.CUSTOMER_NAME, s => s.MapFrom(ss => ss.EditCustomerName))
                        .ForMember(t => t.PSI_TYPE, s => s.MapFrom(ss => ss.EditPsiType))
+                        .ForMember(t => t.CONTENT_INFO, s => s.MapFrom(ss => ss.EditContentInfo))
+                       .ForMember(t => t.ADDRESS, s => s.MapFrom(ss => ss.EditAddress))
                        .ForMember(t => t.REMARK, s => s.MapFrom(ss => ss.EditRemark))
                        ).CreateMapper();
                 default:

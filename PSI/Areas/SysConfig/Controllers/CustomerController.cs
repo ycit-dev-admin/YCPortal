@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -226,14 +227,45 @@ namespace PSI.Areas.SysConfig.Controllers
         {
             // Action variables
             var errMsg = "";
+            CustomerInfo resultCustomerInfo;
 
             // Step Functions 
             #region -- ValidPageModel --
             FunctionResult ValidPageModel()
             {
-                if (!ModelState.IsValid)
-                    errMsg = $"資料驗證失敗，請檢查頁面訊息!!";
+                //if (!ModelState.IsValid)
+                //    errMsg = $"資料驗證失敗，請檢查頁面訊息!!";
+                //var funRs = new FunctionResult();
+                //funRs.ResultSuccess("");
+                //return funRs;     // Return Result
+
+
+
                 var funRs = new FunctionResult();
+                var validator = new PageCustomerEditCustomerInfoValidator();
+                var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Skip"));
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                var isCustomerNameDuplicate = _customerService.GetCustomerInfoByCustomerName(pageModel.EditCustomerName) != null;
+                if (isCustomerNameDuplicate)  // 檢核客戶名稱有無重複
+                {
+                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.EditCustomerName} 為重複客戶名稱";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+                var isCompanyNameDuplicate = _customerService.GetCustomerInfoByCompanyName(pageModel.EditCompanyName) != null;
+                if (isCompanyNameDuplicate)  // 檢核客戶名稱有無重複
+                {
+                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.EditCompanyName} 為重複公司名稱";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
                 funRs.ResultSuccess("");
                 return funRs;     // Return Result
             }
@@ -245,6 +277,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var customerInfo = customerInfoMapper.Map<CustomerInfo>(pageModel);
                 var funcRs = _customerService.UpdateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
+                resultCustomerInfo = funcRs.Success ? funcRs.ResultValue : null;
                 return funcRs;     // Return Result
             }
             #endregion
@@ -255,12 +288,18 @@ namespace PSI.Areas.SysConfig.Controllers
                 !UpdateToDB(pageModel).Success)
             {
                 TempData["pageMsg"] = errMsg;
+                var veCustomerCarMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerCar, VE_CustomerCar>();
+                var customerCarLs = _customerService.GetCustomerCar(pageModel.CustomerGuid).ToList();  // 要改成用Guid
+                pageModel.VE_CustomerCarList = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
+                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                    .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
                 return View(pageModel);
             }
 
 
             // Successed
-            return View(pageModel);
+            TempData["pageMsg"] = $@"客戶:{resultCustomerInfo.CUSTOMER_NAME} 更新成功!!";
+            return RedirectToAction("OnlineInfo");
 
 
 

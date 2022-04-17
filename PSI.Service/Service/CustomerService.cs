@@ -120,7 +120,7 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-        public FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser appUser)
+        public FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser operUser)
         {
             var funcRs = new FunctionResult<CustomerInfo>();
             if (customerInfo == null)
@@ -128,7 +128,7 @@ namespace PSI.Service.Service
                 funcRs.ResultFailure("無更新資料傳入!!");
                 return funcRs;
             }
-            var dbCustomerInfo = _customerInfoRepository.GetAsync(item => item.ID == customerInfo.ID).Result;
+            var dbCustomerInfo = _customerInfoRepository.GetAsync(item => item.CUSTOMER_GUID == customerInfo.CUSTOMER_GUID).Result;
             if (dbCustomerInfo == null)
             {
                 funcRs.ResultFailure("查無此筆資料!!");
@@ -136,27 +136,22 @@ namespace PSI.Service.Service
             }
 
             // update logic
-            var entityType = typeof(CustomerInfo);
-            var noNeedPropertyNames = new List<string>() {
-                nameof(CustomerInfo.ID),
-                nameof(CustomerInfo.CREATE_TIME),
-                nameof(CustomerInfo.CREATE_EMPNO)
-            };
+            customerInfo.UPDATE_EMPNO = operUser.NickName;
+            customerInfo.UPDATE_TIME = DateTime.Now;
 
-            foreach (var item in entityType.GetProperties())
-            {
-                if (!noNeedPropertyNames.Contains(item.Name))
-                {
-                    var propertyItem = entityType.GetProperty(item.Name);
-                    propertyItem.SetValue(dbCustomerInfo, propertyItem.GetValue(customerInfo));
-                }
-            }
-            dbCustomerInfo.UPDATE_TIME = DateTime.Now;
-            dbCustomerInfo.UPDATE_EMPNO = appUser.UserName;
+            var upDbEntity = typeof(CustomerInfo).ToUpdateEntityByNoNeed(
+                customerInfo,
+                dbCustomerInfo,
+                new[] { nameof(CustomerInfo.ID),
+                        nameof(CustomerInfo.CUSTOMER_GUID),
+                        nameof(CustomerInfo.CREATE_EMPNO),
+                        nameof(CustomerInfo.CREATE_TIME),
+                        nameof(CustomerInfo.IS_EFECTIVE) });
 
 
-            funcRs = _customerInfoRepository.Update(dbCustomerInfo);
 
+            funcRs = _customerInfoRepository.Update(upDbEntity);
+            funcRs.ResultSuccess("更新客戶資料成功!!", upDbEntity);
             return funcRs;
         }
 
@@ -234,7 +229,7 @@ namespace PSI.Service.Service
         {
             // var curUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
             return _customerInfoRepository.GetAllAsync()
-                                          .Result
+                                          .Result.Where(aa => aa.IS_EFECTIVE == "1")
                                           .AsQueryable();
         }
 
@@ -245,6 +240,14 @@ namespace PSI.Service.Service
         public CustomerInfo GetCustomerInfo(Guid guid)
         {
             return _customerInfoRepository.GetAsync(aa => aa.CUSTOMER_GUID == guid).Result;
+        }
+        public CustomerInfo GetCustomerInfoByCustomerName(string customerName)
+        {
+            return _customerInfoRepository.GetAsync(aa => aa.CUSTOMER_NAME == customerName).Result;
+        }
+        public CustomerInfo GetCustomerInfoByCompanyName(string companyName)
+        {
+            return _customerInfoRepository.GetAsync(aa => aa.COMPANY_NAME == companyName).Result;
         }
     }
 }

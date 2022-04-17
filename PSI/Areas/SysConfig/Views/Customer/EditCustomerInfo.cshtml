@@ -32,7 +32,7 @@
     </style>
 }
 
-<form asp-area="SysConfig" asp-controller="Customer" asp-action="EditCustomerInfo" method="post" autocomplete="off">
+<form id="edit-customer-form" asp-area="SysConfig" asp-controller="Customer" asp-action="EditCustomerInfo" method="post" autocomplete="off">
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
             <legend class="scheduler-border">客戶資訊</legend>
@@ -54,7 +54,11 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="form-control-label" for="ownername">@($@"統一編號: {Model.TaxId}")</label>
+                        <label class="form-control-label" for="ownername">
+                            @($@"統一編號: {Model.TaxId}")
+                            <span id="show-edit-taxId">
+                            </span>
+                        </label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">變更為:</span>
@@ -65,7 +69,11 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="form-control-label" for="ownername">@($@"客戶簡稱: {Model.CustomerName}")</label>
+                        <label class="form-control-label" for="ownername">
+                            @($@"客戶簡稱: {Model.CustomerName}")
+                            <span id="show-edit-customerName">
+                            </span>
+                        </label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">變更為:</span>
@@ -79,7 +87,11 @@
                         @{
                             var psiTypeName = Model.PsiTypeItems.FirstOrDefault(item => item.Value == Model.PsiType)?.Text;
                         }
-                        <label class="form-control-label" for="ownername">@($@"進出貨歸屬: {psiTypeName}")</label>
+                        <label class="form-control-label" for="ownername">
+                            @($@"進出貨歸屬: {psiTypeName}")
+                            <span id="show-edit-psiType">
+                            </span>
+                        </label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="PsiType">變更為:</label>
@@ -87,6 +99,36 @@
                             <select asp-for="EditPsiType" asp-items="@Model.PsiTypeItems" class="select2bs4">
                                 <option></option>
                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">
+                            @($@"聯絡號碼: {Model.ContentInfo}")
+                            <span id="show-edit-contentInfo">
+                            </span>
+                        </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">變更為:</span>
+                            </div>
+                            <input asp-for="EditContentInfo" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">
+                            @($@"地址: {Model.Address}")
+                            <span id="show-edit-address">
+                            </span>
+                        </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="PsiType">變更為:</label>
+                            </div>
+                            <input asp-for="EditAddress" class="form-control" type="text">
                         </div>
                     </div>
                 </div>
@@ -212,12 +254,13 @@
     <div id="dialog-confirm" title="系統資訊">
         <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>確定要儲存變更嗎?</p>
     </div>
+    <div name="hidden-fields">
+        <input type="hidden" asp-for="CustomerGuid" />
+        <input type="hidden" asp-for="IsChanged" />
+    </div>
 </form>
 
-<div name="hidden-fields">
-    <input type="hidden" asp-for="CarGuid" />
-    <input type="hidden" asp-for="CustomerGuid" />
-</div>
+
 
 <div name="model-temp-carnoinfo"></div>
 

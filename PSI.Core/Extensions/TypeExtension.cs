@@ -21,7 +21,8 @@ namespace PSI.Core.Extensions
         {
             foreach (var propertyInfo in typeof(T).GetProperties().Where(aa => !noUpdatePropertyNames.Contains(aa.Name)))
             {
-                propertyInfo.SetValue(dbEntity, propertyInfo.GetValue(sourceEntity));
+                if (propertyInfo.GetValue(sourceEntity) != null)
+                    propertyInfo.SetValue(dbEntity, propertyInfo.GetValue(sourceEntity));
             }
             return dbEntity;
         }

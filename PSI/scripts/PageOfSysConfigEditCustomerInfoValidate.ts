@@ -1,8 +1,12 @@
 ﻿// Form Validation
-$('#creaet-customer-form').validate({
+$('#edit-customer-form').validate({
     submitHandler: function (form) {
-        alert("Form successful submitted!");
-        form.submit();
+        let isChanged = (document.getElementById("IsChanged") as HTMLInputElement).value;
+        if (isChanged) {
+            form.submit();
+        } else {
+            alert("並未有內容變更，故不進行資料變更!!")
+        }
     },
     rules: {
         CompanyName: {

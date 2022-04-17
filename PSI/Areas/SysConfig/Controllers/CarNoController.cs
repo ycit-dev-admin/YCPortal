@@ -94,7 +94,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 pageModel.FormActionName = isNewOpen ?
                     nameof(this.CreateCarNoInfo) :
                     nameof(this.UpdateCarNoInfo);
-                pageModel.CustomerInfoItems = _customerService.GetPurchaseCustomerInfo()
+                pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
 
                 // Return Result
