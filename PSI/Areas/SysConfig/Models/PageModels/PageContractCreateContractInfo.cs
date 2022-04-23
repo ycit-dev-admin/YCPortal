@@ -10,6 +10,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 
         public string CompanyName { get; set; }
         public string TaxId { get; set; }
+        public string ContractName { get; set; }
         public Guid CustomerGUID { get; set; }
         public Guid ProductGUID { get; set; }
         public DateTime StratTime { get; set; }
