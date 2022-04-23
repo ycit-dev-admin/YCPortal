@@ -1,0 +1,178 @@
+﻿@model PageContractCreateContractInfo
+@{
+    <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+}
+
+<form id="creaet-customer-form" asp-area="SysConfig" asp-controller="Contract" asp-action="CreateContractInfo" method="post" autocomplete="off">
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="form-control-label" for="ownername">磅單時間</label>
+                <div class="input-group date" id="fullWeightTime_com" data-target-input="nearest">
+                    <input asp-for="StratTime" type="text" class="form-control datetimepicker-input" data-target="#fullWeightTime_com" />
+                    <div class="input-group-append" data-target="#fullWeightTime_com" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                <!--<span asp-validation-for="FullWeightTime" class="text-danger"></span>-->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-control-label" for="ownername">結束時間</label>
+            <div class="input-group date" id="end-time-div" data-target-input="nearest">
+                <input asp-for="EndTime" type="text" class="form-control datetimepicker-input" data-target="#end-time-div" />
+                <div class="input-group-append" data-target="#end-time-div" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+            <!--<span asp-validation-for="FullWeightTime" class="text-danger"></span>-->
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="CustomerName">合約名稱</label>
+            <input asp-for="CustomerGUID" type="text" class="form-control" placeholder="必填欄位">
+            @*<span asp-validation-for="CustomerName" class="text-danger"></span>*@
+
+        </div>
+        <div class="form-group col-md-6">
+            <label for="CompanyName">合約屬性</label>
+            <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+            @*<span asp-validation-for="CompanyName" class="text-danger"></span>*@
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="PsiType">歸屬客戶</label>
+            <select asp-for="PsiType" asp-items="@Model.CustomerInfoItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group col-md-8">
+            <label for="TaxId">合約品項</label>
+            <select asp-for="ProductGUID" asp-items="@Model.ProductItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="PsiType">合約重量</label>
+            <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group col-md-8">
+            <label for="TaxId">合約單價</label>
+            <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="inputZip">合約開始時間</label>
+            <input asp-for="PhoneNo" type="text" class="form-control">
+        </div>
+        @*<div class="form-group col-md-4">
+                <label for="Title">職稱</label>
+                <input asp-for="Title" type="text" class="form-control">
+            </div>*@
+        <div class="form-group col-md-10">
+            <label for="inputZip">合約結束時間</label>
+            <input asp-for="Address" type="text" class="form-control">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="inputState">備註</label>
+            <input asp-for="Remark" type="text" class="form-control">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">建立</button>
+    <a asp-action="OnlineInfo" class="btn btn-default">返回</a>
+</form>
+
+
+@section modals{
+    @*@await Html.PartialAsync("CustomerInfo", new List<VM_Customer_Info>())*@
+}
+
+@*@await Html.PartialAsync("~/Views/HOME/_CreatePurchaseDocPartial.cshtml")*@  <!-- 效能較差  但語法較單純 -->
+@*@{await Html.RenderPartialAsync("CustomerInfo", new List<VM_Customer_Info>());}*@ <!-- 效能較好  但語法較複雜 一定要有{}  -->
+@*<script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/formhelper/formhelper.bundle.min.js"></script>*@
+
+@section scripts{
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
+    <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+
+
+    <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigCreateCustomerInfo.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigCreateCustomerInfoValidate.js"></script>
+
+    <script>
+        $(function () {
+
+            @*let carNoLs = @Html.Raw(Json.Serialize(ViewData.ModelState[nameof(Model.PostCarNo)]?.AttemptedValue.Split(',')));
+            if (carNoLs)
+            {
+                carNoLs.forEach(carNo =>
+                    pClass.CarNoList.AppendToList(carNo));
+                pClass.CarNoList.ShowCarNoList();
+            }*@
+
+
+            // Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4',
+                placeholder: "請選擇項目"
+            })
+
+
+            // Datetimepicker
+            $('#fullWeightTime_com').datetimepicker({
+                locale: 'zh-tw',
+                defaultDate: moment(),
+                icons: { time: 'far fa-clock' }
+            });
+
+            //$('#end-time-div').datetimepicker({
+            //    locale: 'zh-tw',
+            //    defaultDate: moment(),
+            //    format: 'L',
+            //    icons: { time: 'far fa-clock' }
+            //});
+
+
+
+        })
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -59,6 +59,7 @@ namespace PSI
             services.AddScoped<IGenericRepository<CustomerInfo>, GenericRepository<CustomerInfo>>();
             services.AddScoped<IGenericRepository<CustomerCar>, GenericRepository<CustomerCar>>();
             services.AddScoped<IGenericRepository<CustomerContract>, GenericRepository<CustomerContract>>();
+            services.AddScoped<IGenericRepository<CustomerContractLog>, GenericRepository<CustomerContractLog>>();
             services.AddScoped<IGenericRepository<ProductItem>, GenericRepository<ProductItem>>();
             services.AddScoped<IGenericRepository<CodeTable>, GenericRepository<CodeTable>>();
             services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();

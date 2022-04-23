@@ -68,10 +68,10 @@ namespace PSI.Service.Service
             return _customerCarRepository.GetAllAsync().Result.AsQueryable();
         }
 
-        public IEnumerable<CustomerContract> GetEffectiveCustomerContracts()
+        public IQueryable<CustomerContract> GetEffectiveCustomerContracts()
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => aa.IS_EFFECTIVE == "1");
+                                                     .Where(aa => aa.IS_EFFECTIVE == "1").AsQueryable();
             return queryRs;
         }
 

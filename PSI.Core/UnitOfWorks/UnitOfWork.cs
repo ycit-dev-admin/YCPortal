@@ -19,6 +19,7 @@ namespace PSI.Core.UnitOfWorks
         public IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; private set; }
         public IGenericRepository<CustomerInfo> CustomerInfoRepository { get; private set; }
         public IGenericRepository<CustomerContract> CustomerContractRepository { get; private set; }
+        public IGenericRepository<CustomerContractLog> CustomerContractLogRepository { get; private set; }
         public IGenericRepository<CustomerCar> CustomerCarRepository { get; private set; }
         public IGenericRepository<ProductItem> ProductItemRepository { get; private set; }
         public IGenericRepository<CodeTable> CodeTableRepository { get; private set; }
@@ -37,6 +38,7 @@ namespace PSI.Core.UnitOfWorks
             IGenericRepository<PurchaseWeightNote> purchaseWeightNoteRepository,
             IGenericRepository<CustomerInfo> customerInfoRepository,
             IGenericRepository<CustomerContract> customerContractRepository,
+            IGenericRepository<CustomerContractLog> customerContractLogRepository,
             IGenericRepository<CustomerCar> customerCarRepository,
             IGenericRepository<ProductItem> productItemRepository,
             IGenericRepository<CodeTable> codeTableRepository,
@@ -50,6 +52,7 @@ namespace PSI.Core.UnitOfWorks
             this.PurchaseWeightNoteRepository = purchaseWeightNoteRepository;
             this.CustomerInfoRepository = customerInfoRepository;
             this.CustomerContractRepository = customerContractRepository;
+            this.CustomerContractLogRepository = customerContractLogRepository;
             this.CustomerCarRepository = customerCarRepository;
             this.ProductItemRepository = productItemRepository;
             this.CodeTableRepository = codeTableRepository;

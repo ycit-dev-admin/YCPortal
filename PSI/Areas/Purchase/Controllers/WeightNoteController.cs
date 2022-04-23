@@ -11,6 +11,7 @@ using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
+using PSI.Infrastructure.Extensions;
 using PSI.Infrastructure.Helpers;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
@@ -28,7 +29,6 @@ namespace PSI.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly PurchaseHelper _purchaseHelper;
-        private readonly PurchasePageItemHelper _pageitemHelper;
         private readonly PurchaseMapperHelper _mapperHelper;
 
 
@@ -46,7 +46,6 @@ namespace PSI.Controllers
             _productItemService = productItemService;
             _httpContextAccessor = httpContextAccessor;
             _purchaseHelper = new PurchaseHelper(_mapper);
-            _pageitemHelper = new PurchasePageItemHelper();
             _mapperHelper = new PurchaseMapperHelper();
             //_haha = haha;
         }
@@ -67,12 +66,16 @@ namespace PSI.Controllers
             ViewData["Title"] = "進貨磅單建立";
             // string host = _httpContextAccessor.HttpContext.Request.Host.Value;  //能夠取得Host Domain Name
 
-            var itemHelper = new PurchasePageItemHelper();
+
             var pageModel = new Page_Purchase_CreateWeightNote
             {
-                CustomerInfoItems = itemHelper.PageGetCustomerInfoItems(_customerService.GetPurchaseCustomerInfo()),
-                ProductItemItems = itemHelper.PageGetProductItems(_productItemService.GetPurchaseProductItems()),
-                PayTypeItems = itemHelper.PageGetPayTypeItems(_psiService.GetPsiTypeItems())
+                //CustomerInfoItems = itemHelper.PageGetCustomerInfoItems(_customerService.GetPurchaseCustomerInfo()),
+                CustomerInfoItems = _customerService.GetCustomerInfos()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
+                ProductItemItems = _productItemService.GetPurchaseProductItems().ToPageSelectList(
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID)),
+                PayTypeItems = _psiService.GetPsiTypeItems().ToPageSelectList(
+                    nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue))
             };
             return View(pageModel);
         }

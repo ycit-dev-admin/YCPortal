@@ -9,6 +9,7 @@ namespace PSI.Service.IService
 {
     public interface IProductItemService
     {
-        IEnumerable<ProductItem> GetPurchaseProductItems();
+        IQueryable<ProductItem> GetPurchaseProductItems();
+        IQueryable<ProductItem> GetAllProductItems();
     }
 }

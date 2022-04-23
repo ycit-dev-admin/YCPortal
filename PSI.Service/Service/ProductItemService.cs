@@ -24,12 +24,17 @@ namespace PSI.Service.Service
 
 
 
-        public IEnumerable<ProductItem> GetPurchaseProductItems()
+        public IQueryable<ProductItem> GetPurchaseProductItems()
         {
             var needPsiTypes = new[] { "1", "3" };
             return _productItemRepository.GetAllAsync().Result.
                           Where(aa => needPsiTypes.Contains(aa.PSI_TYPE) &&
-                                      aa.IS_EFFECTIVE == "1");
+                                      aa.IS_EFFECTIVE == "1").AsQueryable();
+        }
+        public IQueryable<ProductItem> GetAllProductItems()
+        {
+            return _productItemRepository.GetAllAsync().Result.
+                          Where(aa => aa.IS_EFFECTIVE == "1").AsQueryable();
         }
     }
 }

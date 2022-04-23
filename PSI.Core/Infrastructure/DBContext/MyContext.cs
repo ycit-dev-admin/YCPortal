@@ -19,6 +19,7 @@ namespace PSI.Core.Infrastructure.DBContext
         public DbSet<CustomerInfo> CustomerInfos { get; set; }
         public DbSet<ProductItem> ProductItems { get; set; }
         public DbSet<CustomerContract> CustomerContracts { get; set; }
+        public DbSet<CustomerContractLog> CustomerContractLogs { get; set; }
         public DbSet<CustomerCar> CustomerCars { get; set; }
         public DbSet<CodeTable> CodeTables { get; set; }
         public DbSet<PurchaseIngredient> PurchaseIngredients { get; set; }

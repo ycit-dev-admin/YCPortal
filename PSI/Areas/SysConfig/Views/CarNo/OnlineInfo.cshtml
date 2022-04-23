@@ -30,7 +30,7 @@
             <tr>
                 <td>@item.CarName</td>
                 <td>
-                    @(Model.CustomerInfoLs.FirstOrDefault(aa=> aa.CustomerGUID==item.CustomerGUID).CustomerName)
+                    @(Model.CustomerInfoLs.FirstOrDefault(aa=> aa.CustomerGUID == item.CustomerGUID).CustomerName)
                 </td>
                 <td>@(item.IsEffective=="1"?"Yes":"No")</td>
                 <td>@item.Remark</td>

@@ -50,7 +50,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var customerCarLs = _customerService.GetCustomerCars();
                 var veCustomerCarLs = carMapper.Map<List<VE_CustomerCar>>(customerCarLs);
                 var customerMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerInfo, VE_CustomerInfo>();
-                var customerInfoLs = _customerService.GetPurchaseCustomerInfo();
+                var customerInfoLs = _customerService.GetCustomerInfos();
                 var veCustomerInfoLs = customerMapper.Map<List<VE_CustomerInfo>>(customerInfoLs);
 
 

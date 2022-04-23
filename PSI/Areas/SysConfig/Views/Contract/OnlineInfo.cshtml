@@ -1,0 +1,90 @@
+﻿@model PageContractOnlineInfo
+@{
+    <!-- DataTables -->
+    <link href="~/lib/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+}
+
+
+<a asp-action="CreateContractInfo" style="float:left;margin-right:20px;" class="btn btn-primary">建立合約資訊</a>
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>合約名稱</th>
+            <th>對應客戶</th>
+            <th>合約類別</th>
+            <th>合約單價</th>
+            <th>合約重量</th>
+            <th>完成重量</th>
+            <th>開始時間</th>
+            <th>結束時間</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VeCustomerContractList)
+        {
+            <tr>
+                <td>@item.ContractName</td>
+                <td>@Model.VeCustomerInfoList.FirstOrDefault(aa => aa.CustomerGUID == item.CustomerGUID).CustomerName</td>
+                <td>@item.ContractType</td>
+                <td>@item.DealUnitPrice</td>
+                <td>@item.DealWeight</td>
+                <td>@item.ActualWeight</td>
+                <td>@item.StartDatetime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.EndDatetime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a asp-action="EditCustomerInfo" asp-route-unid="@item.ContractGUID" class="btn btn-primary">查詢</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts{
+
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/admin-lte/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jszip/jszip.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+            //$("#example1").on("click", "button[name='q-detail']", function () {
+            //    let snVal = $(this).val();
+            //    window.location.href = "/sysconfig/customer/editcustomerinfo?sn=" + snVal;
+            //});
+
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
