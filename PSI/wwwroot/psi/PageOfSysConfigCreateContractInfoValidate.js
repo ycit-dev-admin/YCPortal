@@ -1,0 +1,39 @@
+// Form Validation
+$('#creaet-contract-form').validate({
+    submitHandler: function (form) {
+        form.submit();
+    },
+    rules: {
+        StratTime: "required",
+        EndTime: "required",
+        ContractName: "required",
+        PsiType: "required",
+        CustomerGUID: "required",
+        ProductGUID: "required",
+        DealWeight: "required",
+        DealUnitPrice: {
+            required: true,
+            pattern: /^([1-9][0-9]*(\.[0-9]{1,2})?|0\.(?!0+$)[0-9]{1,2})$/ // 格式不符，需為大於0整數 且 最多2位小數!!
+        }
+    },
+    messages: {
+        DealUnitPrice: {
+            pattern: "必須為大於0整數 且 最多2位小數"
+        }
+        //CustomerName: {
+        //    required: "該欄位為必填!!"
+        //}
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGFnZU9mU3lzQ29uZmlnQ3JlYXRlQ29udHJhY3RJbmZvVmFsaWRhdGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zY3JpcHRzL1BhZ2VPZlN5c0NvbmZpZ0NyZWF0ZUNvbnRyYWN0SW5mb1ZhbGlkYXRlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLGtCQUFrQjtBQUNsQixDQUFDLENBQUMsdUJBQXVCLENBQUMsQ0FBQyxRQUFRLENBQUM7SUFDaEMsYUFBYSxFQUFFLFVBQVUsSUFBSTtRQUV6QixJQUFJLENBQUMsTUFBTSxFQUFFLENBQUM7SUFFbEIsQ0FBQztJQUNELEtBQUssRUFBRTtRQUNILFNBQVMsRUFBRSxVQUFVO1FBQ3JCLE9BQU8sRUFBRSxVQUFVO1FBQ25CLFlBQVksRUFBRSxVQUFVO1FBQ3hCLE9BQU8sRUFBRSxVQUFVO1FBQ25CLFlBQVksRUFBRSxVQUFVO1FBQ3hCLFdBQVcsRUFBRSxVQUFVO1FBQ3ZCLFVBQVUsRUFBRSxVQUFVO1FBQ3RCLGFBQWEsRUFBRTtZQUNYLFFBQVEsRUFBRSxJQUFJO1lBQ2QsT0FBTyxFQUFFLHFEQUFxRCxDQUFFLDBCQUEwQjtTQUM3RjtLQUNKO0lBQ0QsUUFBUSxFQUFFO1FBQ04sYUFBYSxFQUFFO1lBQ1gsT0FBTyxFQUFFLG1CQUFtQjtTQUMvQjtRQUNELGlCQUFpQjtRQUNqQiwwQkFBMEI7UUFDMUIsR0FBRztLQUNOO0lBQ0QsWUFBWSxFQUFFLE1BQU07SUFDcEIsY0FBYyxFQUFFLFVBQVUsS0FBSyxFQUFFLE9BQU87UUFDcEMsS0FBSyxDQUFDLFFBQVEsQ0FBQyxrQkFBa0IsQ0FBQyxDQUFDO1FBQ25DLE9BQU8sQ0FBQyxPQUFPLENBQUMsYUFBYSxDQUFDLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBQ2pELENBQUM7SUFDRCxTQUFTLEVBQUUsVUFBVSxPQUFPLEVBQUUsVUFBVSxFQUFFLFVBQVU7UUFDaEQsQ0FBQyxDQUFDLE9BQU8sQ0FBQyxDQUFDLFFBQVEsQ0FBQyxZQUFZLENBQUMsQ0FBQztJQUN0QyxDQUFDO0lBQ0QsV0FBVyxFQUFFLFVBQVUsT0FBTyxFQUFFLFVBQVUsRUFBRSxVQUFVO1FBQ2xELENBQUMsQ0FBQyxPQUFPLENBQUMsQ0FBQyxXQUFXLENBQUMsWUFBWSxDQUFDLENBQUM7SUFDekMsQ0FBQztDQUNKLENBQUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8vIEZvcm0gVmFsaWRhdGlvblxyXG4kKCcjY3JlYWV0LWNvbnRyYWN0LWZvcm0nKS52YWxpZGF0ZSh7XHJcbiAgICBzdWJtaXRIYW5kbGVyOiBmdW5jdGlvbiAoZm9ybSkge1xyXG5cclxuICAgICAgICBmb3JtLnN1Ym1pdCgpO1xyXG5cclxuICAgIH0sXHJcbiAgICBydWxlczoge1xyXG4gICAgICAgIFN0cmF0VGltZTogXCJyZXF1aXJlZFwiLFxyXG4gICAgICAgIEVuZFRpbWU6IFwicmVxdWlyZWRcIixcclxuICAgICAgICBDb250cmFjdE5hbWU6IFwicmVxdWlyZWRcIixcclxuICAgICAgICBQc2lUeXBlOiBcInJlcXVpcmVkXCIsXHJcbiAgICAgICAgQ3VzdG9tZXJHVUlEOiBcInJlcXVpcmVkXCIsXHJcbiAgICAgICAgUHJvZHVjdEdVSUQ6IFwicmVxdWlyZWRcIixcclxuICAgICAgICBEZWFsV2VpZ2h0OiBcInJlcXVpcmVkXCIsXHJcbiAgICAgICAgRGVhbFVuaXRQcmljZToge1xyXG4gICAgICAgICAgICByZXF1aXJlZDogdHJ1ZSxcclxuICAgICAgICAgICAgcGF0dGVybjogL14oWzEtOV1bMC05XSooXFwuWzAtOV17MSwyfSk/fDBcXC4oPyEwKyQpWzAtOV17MSwyfSkkLyAgLy8g5qC85byP5LiN56ym77yM6ZyA54K65aSn5pa8MOaVtOaVuCDkuJQg5pyA5aSaMuS9jeWwj+aVuCEhXHJcbiAgICAgICAgfVxyXG4gICAgfSxcclxuICAgIG1lc3NhZ2VzOiB7XHJcbiAgICAgICAgRGVhbFVuaXRQcmljZToge1xyXG4gICAgICAgICAgICBwYXR0ZXJuOiBcIuW/hemgiOeCuuWkp+aWvDDmlbTmlbgg5LiUIOacgOWkmjLkvY3lsI/mlbhcIlxyXG4gICAgICAgIH1cclxuICAgICAgICAvL0N1c3RvbWVyTmFtZToge1xyXG4gICAgICAgIC8vICAgIHJlcXVpcmVkOiBcIuipsuashOS9jeeCuuW/heWhqyEhXCJcclxuICAgICAgICAvL31cclxuICAgIH0sXHJcbiAgICBlcnJvckVsZW1lbnQ6ICdzcGFuJyxcclxuICAgIGVycm9yUGxhY2VtZW50OiBmdW5jdGlvbiAoZXJyb3IsIGVsZW1lbnQpIHtcclxuICAgICAgICBlcnJvci5hZGRDbGFzcygnaW52YWxpZC1mZWVkYmFjaycpO1xyXG4gICAgICAgIGVsZW1lbnQuY2xvc2VzdCgnLmZvcm0tZ3JvdXAnKS5hcHBlbmQoZXJyb3IpO1xyXG4gICAgfSxcclxuICAgIGhpZ2hsaWdodDogZnVuY3Rpb24gKGVsZW1lbnQsIGVycm9yQ2xhc3MsIHZhbGlkQ2xhc3MpIHtcclxuICAgICAgICAkKGVsZW1lbnQpLmFkZENsYXNzKCdpcy1pbnZhbGlkJyk7XHJcbiAgICB9LFxyXG4gICAgdW5oaWdobGlnaHQ6IGZ1bmN0aW9uIChlbGVtZW50LCBlcnJvckNsYXNzLCB2YWxpZENsYXNzKSB7XHJcbiAgICAgICAgJChlbGVtZW50KS5yZW1vdmVDbGFzcygnaXMtaW52YWxpZCcpO1xyXG4gICAgfVxyXG59KTsiXX0=

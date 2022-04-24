@@ -45,6 +45,11 @@ namespace PSI.Service.Service
                                                             aa.IS_EFFECTIVE == "1");
             return queryRs;
         }
+
+        public CustomerContract GetCustomerContract(Guid unid)
+        {
+            return _customerContractRepository.GetAsync(aa => aa.CONTRACT_GUID == unid).Result;
+        }
         public IQueryable<CustomerCar> GetCustomerCar(long customerId)
         {
             return _customerCarRepository.GetAllAsync().Result.
@@ -73,6 +78,49 @@ namespace PSI.Service.Service
             var queryRs = _customerContractRepository.GetAllAsync().Result
                                                      .Where(aa => aa.IS_EFFECTIVE == "1").AsQueryable();
             return queryRs;
+        }
+        public FunctionResult<CustomerContract> CreateCustomerContract(CustomerContract customerContract, AppUser operUser)
+        {
+            var funcRs = new FunctionResult<CustomerContract>();
+            if (operUser != null)
+            {
+                customerContract.CONTRACT_GUID = Guid.NewGuid();
+                customerContract.CREATE_EMPNO = operUser.NickName;
+                customerContract.CREATE_TIME = DateTime.Now;
+                customerContract.UPDATE_EMPNO = operUser.NickName;
+                customerContract.UPDATE_TIME = DateTime.Now;
+
+
+                var creaetRs = _customerContractRepository.Create(customerContract);
+
+                if (!creaetRs.Success)
+                {
+                    funcRs.ResultFailure(creaetRs.ActionMessage);
+                    return funcRs;
+                }
+
+                //if (cCustomerInfoRs.Success && customerCars != null && customerCars.Any())
+                //{
+                //    customerCars = customerCars.Select(aa =>
+                //    {
+                //        aa.IS_EFFECTIVE = "1";
+                //        aa.CREATE_EMPNO = operUser.NickName;
+                //        aa.CREATE_TIME = DateTime.Now;
+                //        aa.UPDATE_EMPNO = operUser.NickName;
+                //        aa.UPDATE_TIME = DateTime.Now;
+                //        aa.CUSTOMER_GUID = customerInfo.CUSTOMER_GUID;
+                //        return aa;
+                //    }).ToList();
+                //    _customerCarRepository.Create(customerCars);
+                //}
+
+                funcRs.ResultSuccess("新增客戶資料成功!!", customerContract);
+            }
+            else
+            {
+                funcRs.ResultFailure("無客戶資料可新增!!");
+            }
+            return funcRs;
         }
 
         public FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, AppUser operUser)

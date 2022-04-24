@@ -90,9 +90,112 @@ namespace PSI.Areas.SysConfig.Controllers
                 CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
                 ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID)),
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID))
             };
             return View(pageModel);
+        }
+
+        [HttpPost]
+        [Authorize()]
+        public IActionResult CreateContractInfo(PageContractCreateContractInfo pageModel)
+        {
+            // Action variables
+            var errMsg = "";
+            CustomerContract resultCustomerContract;
+
+            // Step Functions 
+            #region -- ValidPageModel --
+            FunctionResult ValidPageModel()
+            {
+                var funRs = new FunctionResult();
+                var validator = new PageContractCreateContractInfoValidator();
+                var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Skip"));
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                funRs.ResultSuccess("驗證成功");
+                return funRs;     // Return Result
+            }
+            #endregion
+            #region -- UpdateToDB --
+            FunctionResult<CustomerContract> InsertToDB(PageContractCreateContractInfo pageModel)
+            {
+                var customerContractMapper = _mapperHelper.GetMapperOfCreateContractInfo<PageContractCreateContractInfo, CustomerContract>();
+                var customerContract = customerContractMapper.Map<CustomerContract>(pageModel);
+                var funcRs = _customerService.CreateCustomerContract(customerContract, _userManager.GetUserAsync(User).Result);
+                errMsg = funcRs.ErrorMessage;
+                resultCustomerContract = funcRs.Success ? funcRs.ResultValue : null;
+                return funcRs;     // Return Result
+            }
+            #endregion
+
+
+            // Step Result
+            if (!ValidPageModel().Success ||
+                !InsertToDB(pageModel).Success)
+            {
+                TempData["pageMsg"] = errMsg;
+
+
+                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                  .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue), pageModel.ContractType);
+                pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
+                pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID), pageModel.ProductGUID.ToString());
+
+                return View(pageModel);
+            }
+
+
+            // Successed
+            TempData["pageMsg"] = $@"合約:{resultCustomerContract.CONTRACT_NAME} 建立成功!!";
+            return RedirectToAction("OnlineInfo");
+
+        }
+
+
+        [HttpGet]
+        [Authorize()]
+        public IActionResult EditCustomerContract(Guid unid)
+        {
+            // Action variables
+            var errMsg = "";
+
+            // Step Functions 
+            #region -- GetPageModel --
+            FunctionResult<PageContractEditCustomerContract> GetPageModel(Guid unid)
+            {
+                // Make Mapper
+                var pModelMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContract, PageContractEditCustomerContract>();
+                
+                                // Query Data
+                var customerContract = _customerService.GetCustomerContract(unid);
+
+                // Map to model
+                var pageModel = pModelMapper.Map<PageContractEditCustomerContract>(customerContract);
+                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                  .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue), pageModel.ContractType);
+                pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
+                pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID), pageModel.ProductGUID.ToString());
+
+                // Return Result
+                var funRs = new FunctionResult<PageContractEditCustomerContract>();
+                funRs.ResultSuccess("", pageModel);
+                return funRs;
+            }
+            #endregion
+
+
+            // Step Result
+
+            return View(GetPageModel(unid).ResultValue);
         }
 
 
