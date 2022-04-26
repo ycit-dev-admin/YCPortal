@@ -16,8 +16,8 @@ namespace PSI.Core.Entities
         public string EXPIRE_REASON { get; set; }
         public double DEAL_WEIGHT { get; set; }
         public double DEAL_UNIT_PRICE { get; set; }
-        public double ACTUAL_WEIGHT { get; set; }
-        public string IS_EFFECTIVE { get; set; }  
+        // public double ACTUAL_WEIGHT { get; set; }
+        public int CONTRACT_STATUS { get; set; }
         public string REMARK { get; set; }
     }
 }

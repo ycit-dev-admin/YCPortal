@@ -35,42 +35,52 @@
 <form id="edit-customer-form" asp-area="SysConfig" asp-controller="Customer" asp-action="EditCustomerInfo" method="post" autocomplete="off">
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
-            <legend class="scheduler-border">客戶資訊</legend>
+            <legend class="scheduler-border">合約內容</legend>
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
-                            @($@"客戶全稱: {Model.ContractName}")
+                            @($@"合約起始日: {Model.StratTime.ToString("yyyy-MM-dd")}")
                             <span id="show-edit-companyName">
                             </span>
                         </label>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">變更為:</span>
+                            <div class="input-group date" id="edit-start-time" data-target-input="nearest">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">變更為:</span>
+                                </div>
+                                <input asp-for="EditStratTime" type="text" class="form-control datetimepicker-input" data-target="#edit-start-time" />
+                                <div class="input-group-append" data-target="#edit-start-time" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
                             </div>
-                            <input asp-for="ContractName" class="form-control" type="text">
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
-                            @($@"統一編號: {Model.CustomerGUID}")
+                            @($@"合約結束日: {Model.EndTime.ToString("yyyy-MM-dd")}")
                             <span id="show-edit-taxId">
                             </span>
                         </label>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">變更為:</span>
+                            <div class="input-group date" id="edit-end-time" data-target-input="nearest">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">變更為:</span>
+                                </div>
+                                <input asp-for="EditEndTime" type="text" class="form-control datetimepicker-input" data-target="#edit-end-time" />
+                                <div class="input-group-append" data-target="#edit-end-time" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
                             </div>
-                            <input asp-for="CustomerGUID" class="form-control" type="text">
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
-                            @($@"客戶簡稱: {Model.ContractType}")
+                            @($@"合約名稱: {Model.ContractName}")
                             <span id="show-edit-customerName">
                             </span>
                         </label>
@@ -78,17 +88,17 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">變更為:</span>
                             </div>
-                            <input asp-for="ContractType" class="form-control" type="text">
+                            <input asp-for="EditContractName" class="form-control" type="text">
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         @{
-                            var psiTypeName = Model.PsiTypeItems.FirstOrDefault(item => item.Value == Model.ContractType)?.Text;
+                            var contractTypeName = Model.PsiTypeItems.FirstOrDefault(item => item.Value == Model.ContractType)?.Text;
                         }
                         <label class="form-control-label" for="ownername">
-                            @($@"進出貨歸屬: {psiTypeName}")
+                            @($@"合約屬性: {contractTypeName}")
                             <span id="show-edit-psiType">
                             </span>
                         </label>
@@ -96,7 +106,7 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="PsiType">變更為:</label>
                             </div>
-                            <select asp-for="ContractType" asp-items="@Model.PsiTypeItems" class="select2bs4">
+                            <select asp-for="EditContractType" asp-items="@Model.PsiTypeItems" class="select2bs4">
                                 <option></option>
                             </select>
                         </div>
@@ -105,7 +115,10 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
-                            @($@"聯絡號碼: {Model.DealUnitPrice}")
+                            @{
+                                var customerName = Model.CustomerInfoItems.FirstOrDefault(aa => aa.Value == Model.CustomerGUID.ToString()).Text;
+                            }
+                            @($@"歸屬客戶: {customerName}")
                             <span id="show-edit-contentInfo">
                             </span>
                         </label>
@@ -113,14 +126,16 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">變更為:</span>
                             </div>
-                            <input asp-for="DealUnitPrice" class="form-control" type="text">
+                            <select asp-for="EditCustomerGUID" asp-items="@Model.CustomerInfoItems" class="select2bs4">
+                                <option></option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
-                            @($@"地址: {Model.DealWeight}")
+                            @($@"合約品項: {Model.ProductItems.FirstOrDefault(aa=> aa.Value==Model.ProductGUID.ToString()).Text}")
                             <span id="show-edit-address">
                             </span>
                         </label>
@@ -128,108 +143,46 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="PsiType">變更為:</label>
                             </div>
-                            <input asp-for="DealWeight" class="form-control" type="text">
+                            <select asp-for="EditProductGUID" asp-items="@Model.ProductItems" class="select2bs4">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">
+                            @($@"合約重量: {Model.DealWeight}")
+                            <span id="show-edit-customerName">
+                            </span>
+                        </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">變更為:</span>
+                            </div>
+                            <input asp-for="EditDealWeight" class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">
+                            @($@"合約單價: {Model.DealUnitPrice}")
+                            <span id="show-edit-psiType">
+                            </span>
+                        </label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="PsiType">變更為:</label>
+                            </div>
+                            <input asp-for="EditDealUnitPrice" class="form-control" type="text">
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- form-group -->
-            @*<div class="form-group col-sm-6">
-                    <label class="form-control-label" for="owneremail">統一編號</label>
-                    <input aria-describedby="emailHelp" class="form-control" id="owneremail" placeholder="Enter email" type="email">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="form-control-label" for="owneremail">客戶簡稱</label>
-                    <input aria-describedby="emailHelp" class="form-control" id="owneremail" placeholder="Enter email" type="email">
-                </div>
-                <div class="form-group col-sm-6">
-                    <label class="form-control-label" for="owneremail">進出貨歸屬</label>
-                    <input aria-describedby="emailHelp" class="form-control" id="owneremail" placeholder="Enter email" type="email">
-                </div>*@
-            <!-- form-group -->
-        </fieldset>
-        <!-- fieldset -->
 
-        <fieldset class="form-group col-sm-6 the-fieldset">
-            <legend class="scheduler-border">車牌資訊</legend>
-            @*<div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <button id="add-carno" class="btn btn-info" type="button">新增車牌</button>
-                        </div>
-                    </div>
-                </div>*@
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <h6 id="carno-message">已關聯:</h6>
-                        <ul id="has-carno">
-                            @{ if (Model.CustomerInfoItems.Count == 0)
-                                {
-                                    <li>無相關車牌</li>
-                                }
-                                else
-                                {
-                                    @foreach (var item in Model.CustomerInfoItems)
-                                    {
-                                        <li>
-                                            <button type="button" class="btn btn-default" name="EditCarNoInfo" value="@item.Value">
-                                                @item.Text
-                                            </button>
-                                        </li>
-                                    }
-                                }
-                            }
-                        </ul>
-                    </div>
-                </div>
-                @*<div class="col-sm-6">
-                        <div class="form-group">
-                            <h6 id="carno-message">變更為:</h6>
-                            <ul>
-                            </ul>
-                        </div>
-                    </div>*@
-            </div>
         </fieldset>
-        <fieldset class="form-group col-sm-6 the-fieldset">
-            <legend class="scheduler-border">合約資訊</legend>
-            @*<div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <button class="btn btn-info" type="button">新增合約</button>
-                        </div>
-                    </div>
-                </div>*@
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <h6 id="carno-message">已關聯:</h6>
-                        <ul>
-                            @{ if (Model.ProductItems.Count == 0)
-                                {
-                                    <li>無相關合約</li>
-                                }
-                                else
-                                {
-                                    @foreach (var item in Model.ProductItems)
-                                    {
-                                        <li>@item.Text</li>
-                                    }
-                                }
-                            }
-                        </ul>
-                    </div>
-                </div>
-                @*<div class="col-sm-6">
-                        <div class="form-group">
-                            <h6 id="carno-message">變更為:</h6>
-                            <ul id="selected-carno">
-                            </ul>
-                        </div>
-                    </div>*@
-            </div>
-        </fieldset>
+
         <!-- fieldset -->
         <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">備註</legend>
@@ -237,12 +190,11 @@
                 @*<label class="form-control-label" for="reasonforvisit">備註</label>*@
                 <textarea asp-for="Remark" class="form-control" rows="3" readonly></textarea>
             </div>
-
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">變更為:</span>
                 </div>
-                <textarea asp-for="Remark" class="form-control" aria-label="With textarea"></textarea>
+                <textarea asp-for="EditRemark" class="form-control" aria-label="With textarea"></textarea>
             </div>
         </fieldset>
 
@@ -250,6 +202,7 @@
         <!-- form-group -->
     </div>
     <button class="btn btn-primary" id="form_create" type="button">儲存變更</button>
+    <button class="btn btn-danger" id="form_create" type="button">合約失效</button>
     <a asp-action="OnlineInfo" class="btn btn-secondary">返回</a>
     <div id="dialog-confirm" title="系統資訊">
         <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>確定要儲存變更嗎?</p>
@@ -284,6 +237,8 @@
         </script>
     }
 
+    <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
 
@@ -299,6 +254,29 @@
 
     <script>
         $(function () {
+
+            // Datetimepicker
+            $('#edit-start-time').datetimepicker({
+                // defaultDate: moment(),
+                locale: 'zh-tw',
+                format: 'L',
+                icons: { time: 'far fa-clock' }
+            });
+            $('#edit-end-time').datetimepicker({
+                // defaultDate: moment(),
+                useCurrent: false,
+                locale: 'zh-tw',
+                format: 'L',
+                icons: { time: 'far fa-clock' }
+            });
+
+            $("#edit-start-time").on("change.datetimepicker", function (e) {
+                $('#edit-end-time').datetimepicker('minDate', e.date);
+            });
+            $("#edit-end-time").on("change.datetimepicker", function (e) {
+                $('#edit-start-time').datetimepicker('maxDate', e.date);
+            });
+
             const pageJsObj = new PageOfSysConfigEditCustomerInfo(window.baseApiUrl);
             pageJsObj.PageEventInit();
 

@@ -3,6 +3,7 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Areas.SysConfig.Models.ShowModels;
 using PSI.Core.Entities;
+using PSI.Core.Enums;
 using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Mappers
@@ -33,7 +34,7 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.ContractType, s => s.MapFrom(ss => ss.CONTRACT_TYPE))
                         .ForMember(tar => tar.DealUnitPrice, s => s.MapFrom(ss => ss.DEAL_UNIT_PRICE))
                         .ForMember(tar => tar.DealWeight, s => s.MapFrom(ss => ss.DEAL_WEIGHT))
-                        .ForMember(tar => tar.ActualWeight, s => s.MapFrom(ss => ss.ACTUAL_WEIGHT))
+                        // .ForMember(tar => tar.ActualWeight, s => s.MapFrom(ss => ss.ACTUAL_WEIGHT))
                         .ForMember(tar => tar.StartDatetime, s => s.MapFrom(ss => ss.START_DATETIME))
                         .ForMember(tar => tar.EndDatetime, s => s.MapFrom(ss => ss.END_DATETIME))
                        ).CreateMapper();
@@ -58,8 +59,8 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.END_DATETIME, s => s.MapFrom(ss => ss.EndTime))
                         .ForMember(tar => tar.CONTRACT_TYPE, s => s.MapFrom(ss => ss.ContractType))
                         .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.Remark))
-                        .ForMember(tar => tar.IS_EFFECTIVE, s => s.MapFrom(ss => "1"))
-                        .ForMember(tar => tar.ACTUAL_WEIGHT, s => s.MapFrom(ss => 0))
+                        .ForMember(tar => tar.CONTRACT_STATUS, s => s.MapFrom(ss => CustomerContractEnum.Status.Ongoing))
+                       // .ForMember(tar => tar.ACTUAL_WEIGHT, s => s.MapFrom(ss => 0))
                        ).CreateMapper();
                 default:
                     return null;
@@ -82,7 +83,7 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.EndTime, s => s.MapFrom(ss => ss.END_DATETIME))
                         .ForMember(tar => tar.ContractType, s => s.MapFrom(ss => ss.CONTRACT_TYPE))
                         .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
-                        .ForMember(tar => tar.ActualWeight, s => s.MapFrom(ss => ss.ACTUAL_WEIGHT))
+                       // .ForMember(tar => tar.ActualWeight, s => s.MapFrom(ss => ss.ACTUAL_WEIGHT))
                        ).CreateMapper();
                 default:
                     return null;

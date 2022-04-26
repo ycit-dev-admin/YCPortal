@@ -172,18 +172,18 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 // Make Mapper
                 var pModelMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContract, PageContractEditCustomerContract>();
-                
-                                // Query Data
+
+                // Query Data
                 var customerContract = _customerService.GetCustomerContract(unid);
 
                 // Map to model
                 var pageModel = pModelMapper.Map<PageContractEditCustomerContract>(customerContract);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
-                  .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue), pageModel.ContractType);
+                  .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
-                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID), pageModel.ProductGUID.ToString());
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID));
 
                 // Return Result
                 var funRs = new FunctionResult<PageContractEditCustomerContract>();

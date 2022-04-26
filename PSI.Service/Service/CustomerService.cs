@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Enums;
 using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
@@ -41,8 +40,7 @@ namespace PSI.Service.Service
         public IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(Guid customerId)
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => aa.CUSTOMER_GUID == customerId &&
-                                                            aa.IS_EFFECTIVE == "1");
+                                                     .Where(aa => aa.CUSTOMER_GUID == customerId);
             return queryRs;
         }
 
@@ -75,8 +73,11 @@ namespace PSI.Service.Service
 
         public IQueryable<CustomerContract> GetEffectiveCustomerContracts()
         {
+            var needStatus = new[] { CustomerContractEnum.Status.Ongoing,
+                CustomerContractEnum.Status.Completed,
+            CustomerContractEnum.Status.ForceCompleted};
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => aa.IS_EFFECTIVE == "1").AsQueryable();
+                                                     .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS)).AsQueryable();
             return queryRs;
         }
         public FunctionResult<CustomerContract> CreateCustomerContract(CustomerContract customerContract, AppUser operUser)
