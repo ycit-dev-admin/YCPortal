@@ -17,6 +17,7 @@ namespace PSI.Service.Service
         private readonly IUnitOfWork _unitOfwork;
         private readonly IGenericRepository<CustomerInfo> _customerInfoRepository;
         private readonly IGenericRepository<CustomerContract> _customerContractRepository;
+        private readonly IGenericRepository<CustomerContractLog> _customerContractLogRepository;
         private readonly IGenericRepository<CustomerCar> _customerCarRepository;
         private readonly IGenericRepository<CodeTable> _codeTableRepository;
 
@@ -25,6 +26,7 @@ namespace PSI.Service.Service
             _unitOfwork = unitOfWork;
             _customerInfoRepository = _unitOfwork.CustomerInfoRepository;
             _customerContractRepository = _unitOfwork.CustomerContractRepository;
+            _customerContractLogRepository = _unitOfwork.CustomerContractLogRepository;
             _customerCarRepository = _unitOfwork.CustomerCarRepository;
             _codeTableRepository = _unitOfwork.CodeTableRepository;
         }
@@ -78,6 +80,12 @@ namespace PSI.Service.Service
             CustomerContractEnum.Status.ForceCompleted};
             var queryRs = _customerContractRepository.GetAllAsync().Result
                                                      .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS)).AsQueryable();
+            return queryRs;
+        }
+        public IQueryable<CustomerContractLog> GetCustomerContractLogs(Guid contractUNID)
+        {
+            var queryRs = _customerContractLogRepository.GetAllAsync().Result
+                                          .Where(aa => aa.CONTRACT_UNID == contractUNID).AsQueryable();
             return queryRs;
         }
         public FunctionResult<CustomerContract> CreateCustomerContract(CustomerContract customerContract, AppUser operUser)
@@ -200,6 +208,39 @@ namespace PSI.Service.Service
 
 
             funcRs = _customerInfoRepository.Update(upDbEntity);
+            funcRs.ResultSuccess("更新客戶資料成功!!", upDbEntity);
+            return funcRs;
+        }
+
+        public FunctionResult<CustomerContract> UpdateCustomerContract(CustomerContract customerContract, AppUser operUser)
+        {
+            var funcRs = new FunctionResult<CustomerContract>();
+            if (customerContract == null)
+            {
+                funcRs.ResultFailure("無更新資料傳入!!");
+                return funcRs;
+            }
+            var dbCustomerContract = _customerContractRepository.GetAsync(item => item.CONTRACT_GUID == customerContract.CONTRACT_GUID).Result;
+            if (dbCustomerContract == null)
+            {
+                funcRs.ResultFailure("查無此筆資料!!");
+                return funcRs;
+            }
+
+            // update logic
+            dbCustomerContract.UPDATE_EMPNO = operUser.NickName;
+            dbCustomerContract.UPDATE_TIME = DateTime.Now;
+
+            var upDbEntity = typeof(CustomerContract).ToUpdateEntityByNoNeed(
+                customerContract,
+                dbCustomerContract,
+                new[] { nameof(CustomerContract.ID),
+                        nameof(CustomerContract.CREATE_EMPNO),
+                        nameof(CustomerContract.CREATE_TIME) });
+
+
+
+            funcRs = _customerContractRepository.Update(upDbEntity);
             funcRs.ResultSuccess("更新客戶資料成功!!", upDbEntity);
             return funcRs;
         }

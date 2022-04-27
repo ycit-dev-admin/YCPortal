@@ -94,7 +94,7 @@ namespace PSI.Areas.SysConfig.Controllers
             var pageModel = new PageCustomerCreateCustomerInfo
             {
                 PsiTypeItems = _psiService.GetPsiTypeItems()
-                   .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue))
+                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
             };
             return View(pageModel);
         }
@@ -206,7 +206,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var pageModel = pModelMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
                 pageModel.VE_CustomerCarList = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
-                    .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
+                    .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
 
                 // Return Result
                 var funRs = new FunctionResult<PageCustomerEditCustomerInfo>();
@@ -292,7 +292,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var customerCarLs = _customerService.GetCustomerCar(pageModel.CustomerGuid).ToList();  // 要改成用Guid
                 pageModel.VE_CustomerCarList = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
-                    .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
+                    .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
                 return View(pageModel);
             }
 

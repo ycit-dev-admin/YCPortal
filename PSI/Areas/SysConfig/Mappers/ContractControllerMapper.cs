@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Areas.SysConfig.Models.ShowModels;
@@ -83,7 +84,28 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.EndTime, s => s.MapFrom(ss => ss.END_DATETIME))
                         .ForMember(tar => tar.ContractType, s => s.MapFrom(ss => ss.CONTRACT_TYPE))
                         .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
-                       // .ForMember(tar => tar.ActualWeight, s => s.MapFrom(ss => ss.ACTUAL_WEIGHT))
+                        .ForMember(tar => tar.ContractStatus, s => s.MapFrom(ss => ss.CONTRACT_STATUS))
+                        .ForMember(tar => tar.ContractGUID, s => s.MapFrom(ss => ss.CONTRACT_GUID))
+                       ).CreateMapper();
+                case (nameof(CustomerContractLog), nameof(VE_CustomerContractLog)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerContractLog, VE_CustomerContractLog>()
+                        .ForMember(tar => tar.ContractUNID, s => s.MapFrom(ss => ss.CONTRACT_UNID))
+                        .ForMember(tar => tar.PsiDocUNID, s => s.MapFrom(ss => ss.PSI_DOC_UNID))
+                       ).CreateMapper();
+                case (nameof(PageContractEditCustomerContract), nameof(CustomerContract)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<PageContractEditCustomerContract, CustomerContract>()
+                        .ForMember(tar => tar.CONTRACT_GUID, s => s.MapFrom(ss => ss.ContractGUID))
+                        .ForMember(tar => tar.START_DATETIME, s => s.MapFrom(ss => ss.EditStratTime ?? null))
+                        .ForMember(tar => tar.END_DATETIME, s => s.MapFrom(ss => ss.EditEndTime ?? null))
+                        .ForMember(tar => tar.CONTRACT_STATUS, s => s.MapFrom(ss => ss.EditContractStatus ?? ss.ContractStatus))
+                        .ForMember(tar => tar.CUSTOMER_GUID, s => s.MapFrom(ss => ss.EditCustomerGUID == Guid.Empty ? null : ss.EditCustomerGUID))
+                        .ForMember(tar => tar.CONTRACT_NAME, s => s.MapFrom(ss => ss.EditContractName ?? null))
+                        .ForMember(tar => tar.CONTRACT_TYPE, s => s.MapFrom(ss => ss.EditContractType ?? null))
+                        .ForMember(tar => tar.PRODUCT_GUID, s => s.MapFrom(ss => ss.EditProductGUID == Guid.Empty ? null : ss.ProductGUID))
+                        .ForMember(tar => tar.DEAL_WEIGHT, s => s.MapFrom(ss => ss.EditDealWeight ?? ss.DealWeight))
+                        .ForMember(tar => tar.DEAL_UNIT_PRICE, s => s.MapFrom(ss => ss.EditDealUnitPrice ?? ss.DealUnitPrice))
                        ).CreateMapper();
                 default:
                     return null;

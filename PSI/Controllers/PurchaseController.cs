@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PSI.Areas.Purchase.Models;
 using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -122,7 +121,7 @@ namespace PSI.Controllers
                 purchaseIngredientLs,
                 userInfo);
 
-            if (purchaseWeightNote.CustomerId == 0)
+            if (purchaseWeightNote.UNID == Guid.Empty)
             {
                 // 建立臨時客戶
                 var customerInfo = new CustomerInfo
@@ -149,7 +148,7 @@ namespace PSI.Controllers
 
 
 
-            TempData["pageMsg"] = $@"單號:{createRs.ResultValue.DocNo}，建立成功!!";
+            TempData["pageMsg"] = $@"單號:{createRs.ResultValue.DOC_NO}，建立成功!!";
             return RedirectToAction("WeightNoteList");
         }
 
@@ -167,7 +166,7 @@ namespace PSI.Controllers
             var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime);
 
 
-            var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.ID).ToList());
+            var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.UNID).ToList());
             var pageModel = new Page_Purchase_WeightNoteList
             {
                 VE_PurchaseWeightNoteLs = _mapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),

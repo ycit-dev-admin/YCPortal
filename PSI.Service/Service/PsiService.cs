@@ -50,9 +50,9 @@ namespace PSI.Service.Service
             //var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
 
             /* 進貨磅單建立 */
-            purchaseWeightNote.FacNo = operUserInfo.FacSite;
+            purchaseWeightNote.FAC_NO = operUserInfo.FacSite;
             purchaseWeightNote.CREATE_TIME = DateTime.Now;
-            purchaseWeightNote.EffectiveTime = DateTime.Now;
+            purchaseWeightNote.EFFECTIVE_TIME = DateTime.Now;
             purchaseWeightNote.UPDATE_TIME = DateTime.Now;
             purchaseWeightNote.CREATE_EMPNO = operUserInfo.NickName;
             var cRs = _purchaseWeightNoteRepository.Create(purchaseWeightNote);
@@ -69,7 +69,7 @@ namespace PSI.Service.Service
                 aa.CREATE_EMPNO = operUserInfo.NickName;
                 aa.UPDATE_TIME = DateTime.Now;
                 aa.UPDATE_EMPNO = operUserInfo.NickName;
-                aa.PurchaseWeighNoteId = purchaseWeightNote.ID;
+                aa.PURCHASE_WEIGHTNOTE_UNID = purchaseWeightNote.UNID;
             });
             var piCreRs = _purchaseIngredientNoteRepository.Create(purchaseIngredientLs);
             if (!piCreRs.Success)
@@ -89,7 +89,7 @@ namespace PSI.Service.Service
 
         public PurchaseWeightNote GetPurchaseWeightNote(string docNo)
         {
-            var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.DocNo == docNo).Result;
+            var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.DOC_NO == docNo).Result;
             return result;
         }
 
@@ -99,37 +99,30 @@ namespace PSI.Service.Service
             var curMonthDate = nowTime.AddDays(1 - nowTime.Day);
             var qq = curMonthDate.Date;
             var result = _purchaseWeightNoteRepository.GetAllAsync().Result
-                                                      .Where(aa => aa.EffectiveTime.Date >= curMonthDate.Date);
+                                                      .Where(aa => aa.EFFECTIVE_TIME.Date >= curMonthDate.Date);
             return result;
         }
         public IEnumerable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime)
         {
             return _purchaseWeightNoteRepository.GetAllAsync().Result
-                                                      .Where(aa => aa.EffectiveTime.Date >= sTime &&
-                                                      aa.EffectiveTime.Date <= eTime);
+                                                      .Where(aa => aa.EFFECTIVE_TIME.Date >= sTime &&
+                                                      aa.EFFECTIVE_TIME.Date <= eTime);
         }
 
-        public IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<long> weightNoteSnLs)
+        public IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<Guid> purchaseWeighNoteUNIDs)
         {
             return _purchaseIngredientNoteRepository.GetAllAsync()
                     .Result
-                    .Where(aa => weightNoteSnLs.Contains(aa.PurchaseWeighNoteId)).AsQueryable();
+                    .Where(aa => purchaseWeighNoteUNIDs.Contains(aa.PURCHASE_WEIGHTNOTE_UNID)).AsQueryable();
         }
 
-        public IQueryable<PurchaseIngredient> GetPurchaseIngredients(long weightNoteId)
+        public IQueryable<PurchaseIngredient> GetPurchaseIngredients(Guid purchaseWeighNoteUNID)
         {
             return _purchaseIngredientNoteRepository.GetAllAsync()
                     .Result
-                    .Where(aa => aa.PurchaseWeighNoteId == weightNoteId).AsQueryable();
+                    .Where(aa => aa.PURCHASE_WEIGHTNOTE_UNID == purchaseWeighNoteUNID).AsQueryable();
         }
 
-        public PurchaseIngredient GetMainPurchaseIngredient(long weightNoteId)
-        {
-            return _purchaseIngredientNoteRepository.GetAllAsync()
-                .Result
-                .Where(item => item.PurchaseWeighNoteId == weightNoteId)
-                .OrderByDescending(aa => aa.ItemPercent).FirstOrDefault();
-        }
 
 
         public string GetDocNo(string facSite, int psiType)
@@ -154,20 +147,20 @@ namespace PSI.Service.Service
             try
             {
                 long seqNo;
-                var query = _seqTypeConfigRepository.GetAsync(aa => aa.SeqType == seqType).Result;
+                var query = _seqTypeConfigRepository.GetAsync(aa => aa.SEQ_TYPE == seqType).Result;
                 if (query == null)
                 {
                     seqNo = 1;
                     _seqTypeConfigRepository.Create(new SeqTypeConfig
                     {
-                        SeqType = seqType,
-                        SeqNo = seqNo
+                        SEQ_TYPE = seqType,
+                        SEQ_NO = seqNo
                     });
                 }
                 else
                 {
-                    seqNo = query.SeqNo + 1;
-                    query.SeqNo = seqNo;
+                    seqNo = query.SEQ_NO + 1;
+                    query.SEQ_NO = seqNo;
                     _seqTypeConfigRepository.Update(query);
                 }
 
@@ -184,13 +177,13 @@ namespace PSI.Service.Service
         public IQueryable<CodeTable> GetPayTypeItems()
         {
             return _codeTableRepository.GetAllAsync().Result
-                .Where(aa => aa.CodeGroup == "PAY_TYPE").AsQueryable();
+                .Where(aa => aa.CODE_GROUP == "PAY_TYPE").AsQueryable();
         }
 
         public IQueryable<CodeTable> GetPsiTypeItems()
         {
             return _codeTableRepository.GetAllAsync().Result
-                .Where(aa => aa.CodeGroup == "PSI_TYPE").AsQueryable();
+                .Where(aa => aa.CODE_GROUP == "PSI_TYPE").AsQueryable();
         }
     }
 }

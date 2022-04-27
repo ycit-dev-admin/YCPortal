@@ -75,7 +75,7 @@ namespace PSI.Controllers
                 ProductItemItems = _productItemService.GetPurchaseProductItems().ToPageSelectList(
                     nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID)),
                 PayTypeItems = _psiService.GetPsiTypeItems().ToPageSelectList(
-                    nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue))
+                    nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
             };
             return View(pageModel);
         }
@@ -98,24 +98,24 @@ namespace PSI.Controllers
 
                 /* 待改善 */
                 pageModel.PayTypeName = _psiService.GetPayTypeItems()
-             .FirstOrDefault(item => item.CodeValue == purchaseWeightNote.PayType).CodeText;
+             .FirstOrDefault(item => item.CODE_VALUE == purchaseWeightNote.PAY_TYPE).CODE_TEXT;
 
-                var purchaseIngredients = _psiService.GetPurchaseIngredients(purchaseWeightNote.ID);
-                pageModel.IngredientInfos = purchaseIngredients.Select(item => $@"{item.ItemName}_{item.ItemPercent}%").ToArray();
+                var purchaseIngredients = _psiService.GetPurchaseIngredients(purchaseWeightNote.UNID);
+                pageModel.IngredientInfos = purchaseIngredients.Select(item => $@"{item.ITEM_NAME}_{item.ITEM_PERCENT}%").ToArray();
 
 
 
 
 
                 pageModel.MainIngredientInfo = string.Format("{0}，共{1}項，合計{2}",
-                    purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName,
+                    purchaseIngredients.OrderByDescending(item => item.ITEM_PERCENT).FirstOrDefault().ITEM_NAME,
                     purchaseIngredients.Count(),
-                    purchaseIngredients.Sum(aa => aa.ItemPercent)
+                    purchaseIngredients.Sum(aa => aa.ITEM_PERCENT)
                     );
 
-                pageModel.MainIngredientInfo = $@"{purchaseIngredients.OrderByDescending(item => item.ItemPercent).FirstOrDefault().ItemName}，
+                pageModel.MainIngredientInfo = $@"{purchaseIngredients.OrderByDescending(item => item.ITEM_PERCENT).FirstOrDefault().ITEM_NAME}，
                                               共{  purchaseIngredients.Count()}項，
-                                              合計{ purchaseIngredients.Sum(aa => aa.ItemPercent)}%";
+                                              合計{ purchaseIngredients.Sum(aa => aa.ITEM_PERCENT)}%";
                 /* 待改善 */
 
 
@@ -166,7 +166,7 @@ namespace PSI.Controllers
                 purchaseIngredientLs,
                 userInfo);
 
-            if (purchaseWeightNote.CustomerId == 0)
+            if (purchaseWeightNote.CUSTOMER_UNID == Guid.Empty)
             {
                 // 建立臨時客戶
                 var customerInfo = new CustomerInfo
@@ -193,7 +193,7 @@ namespace PSI.Controllers
 
 
 
-            TempData["pageMsg"] = $@"單號:{createRs.ResultValue.DocNo}，建立成功!!";
+            TempData["pageMsg"] = $@"單號:{createRs.ResultValue.DOC_NO}，建立成功!!";
             return RedirectToAction("WeightNoteList");
         }
 
@@ -211,7 +211,7 @@ namespace PSI.Controllers
             var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime);
 
 
-            var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.ID).ToList());
+            var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.UNID).ToList());
             var pageModel = new Page_Purchase_WeightNoteList
             {
                 VE_PurchaseWeightNoteLs = _mapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),

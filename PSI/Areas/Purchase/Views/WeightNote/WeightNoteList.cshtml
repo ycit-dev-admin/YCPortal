@@ -60,7 +60,7 @@
                 <td>@item.FullWeightTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>@item.DocNo</td>
                 <td>@item.CustomerName</td>
-                <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeighNoteId == item.Id).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>
+                <td>@Model.PIngredientLs.Where(aa => aa.PURCHASE_WEIGHTNOTE_UNID == item.Unid).OrderByDescending(aa => aa.ITEM_PERCENT).FirstOrDefault()?.ITEM_NAME</td>
                 <td>@item.FullWeight.ToString("#,0")</td>
                 <td>@item.DefectiveWeight.ToString("#,0")</td>
                 <td>@((item.FullWeight- item.DefectiveWeight).ToString("#,0"))</td>

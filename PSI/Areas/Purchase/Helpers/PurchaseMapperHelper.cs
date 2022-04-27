@@ -22,22 +22,22 @@ namespace PSI.Areas.Purchase.Helpers
                 typeof(T2) == typeof(PageWeightNoteEditWeightNote))
                 return new MapperConfiguration(cfg =>
                    cfg.CreateMap<PurchaseWeightNote, PageWeightNoteEditWeightNote>()
-                      .ForMember(t => t.DocNo, s => s.MapFrom(o => o.DocNo))
-                      .ForMember(t => t.FullWeightTime, s => s.MapFrom(o => o.FullWeightTime))
-                      .ForMember(t => t.CustomerName, s => s.MapFrom(o => o.CustomerName))
-                      .ForMember(t => t.CarNo, s => s.MapFrom(o => o.CarNo))
-                      .ForMember(t => t.FullWeight, s => s.MapFrom(o => o.FullWeight))
-                      .ForMember(t => t.DefectiveWeight, s => s.MapFrom(o => o.DefectiveWeight))
-                      .ForMember(t => t.UnitPrice, s => s.MapFrom(o => o.UnitPrice))
-                      .ForMember(t => t.HasTax, s => s.MapFrom(o => o.HasTax))
-                      .ForMember(t => t.ScaleNo, s => s.MapFrom(o => o.ScaleNo))
-                      .ForMember(t => t.TraficUnitPrice, s => s.MapFrom(o => o.TraficUnitPrice))
-                      .ForMember(t => t.ThirdWeightFee, s => s.MapFrom(o => o.ThirdWeightFee))
-                      .ForMember(t => t.WeightPrice, s => s.MapFrom(o => o.WeightPrice))
-                      .ForMember(t => t.DeliveryFee, s => s.MapFrom(o => o.DeliveryFee))
-                      .ForMember(t => t.ActualPrice, s => s.MapFrom(o => o.ActualPrice))
-                      .ForMember(t => t.PayTime, s => s.MapFrom(o => o.PayTime))
-                      .ForMember(t => t.Remark, s => s.MapFrom(o => o.Remark))).CreateMapper();
+                      .ForMember(t => t.DocNo, s => s.MapFrom(o => o.DOC_NO))
+                      .ForMember(t => t.FullWeightTime, s => s.MapFrom(o => o.FULL_WEIGHT_TIME))
+                      .ForMember(t => t.CustomerName, s => s.MapFrom(o => o.CUSTOMER_NAME))
+                      .ForMember(t => t.CarNo, s => s.MapFrom(o => o.CAR_NO))
+                      .ForMember(t => t.FullWeight, s => s.MapFrom(o => o.FULL_WEIGHT))
+                      .ForMember(t => t.DefectiveWeight, s => s.MapFrom(o => o.DEFECTIVE_WEIGHT))
+                      .ForMember(t => t.UnitPrice, s => s.MapFrom(o => o.UNIT_PRICE))
+                      .ForMember(t => t.HasTax, s => s.MapFrom(o => o.HAS_TAX))
+                      .ForMember(t => t.ScaleNo, s => s.MapFrom(o => o.SCALE_NO))
+                      .ForMember(t => t.TraficUnitPrice, s => s.MapFrom(o => o.TRAFIC_UNIT_PRICE))
+                      .ForMember(t => t.ThirdWeightFee, s => s.MapFrom(o => o.THIRD_WEIGHT_FEE))
+                      .ForMember(t => t.WeightPrice, s => s.MapFrom(o => o.WEIGHT_PRICE))
+                      .ForMember(t => t.DeliveryFee, s => s.MapFrom(o => o.DELIVERY_FEE))
+                      .ForMember(t => t.ActualPrice, s => s.MapFrom(o => o.ACTUAL_PRICE))
+                      .ForMember(t => t.PayTime, s => s.MapFrom(o => o.PAY_TIME))
+                      .ForMember(t => t.Remark, s => s.MapFrom(o => o.REMARK))).CreateMapper();
             #endregion
 
             return null;

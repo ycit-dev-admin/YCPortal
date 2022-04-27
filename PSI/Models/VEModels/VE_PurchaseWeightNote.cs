@@ -9,7 +9,7 @@ namespace PSI.Models.VEModels
         // Post
 
         // Entities
-        public long Id { get; set; }
+        public Guid Unid { get; set; }
         public string DocNo { get; set; }
         public string CarNo { get; set; }
         public double FullWeight { get; set; }

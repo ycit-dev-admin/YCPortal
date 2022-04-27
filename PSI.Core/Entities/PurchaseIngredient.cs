@@ -6,10 +6,10 @@ namespace PSI.Core.Entities
 {
     public class PurchaseIngredient : Entity
     {
-        public long PurchaseWeighNoteId { get; set; }
-        public long ProductId { get; set; }
-        public string ItemName { get; set; }
+        public Guid PURCHASE_WEIGHTNOTE_UNID { get; set; }
+        public Guid PRODUCT_UNID { get; set; }
+        public string ITEM_NAME { get; set; }
         //public string Title { get; set; }
-        public double ItemPercent { get; set; }
+        public double ITEM_PERCENT { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220427020036_adjust about contract table")]
+    partial class adjustaboutcontracttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,27 +28,27 @@ namespace PSI.Core.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("CODE_GROUP")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CODE_TEXT")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CODE_VALUE")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("CREATE_EMPNO")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CREATE_TIME")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("IS_EFFECTIVE")
+                    b.Property<string>("CodeGroup")
                         .HasColumnType("text");
 
-                    b.Property<int?>("SORT")
+                    b.Property<string>("CodeText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CodeValue")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("IsEffective")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Sort")
                         .HasColumnType("integer");
 
                     b.Property<string>("UPDATE_EMPNO")
@@ -169,7 +171,7 @@ namespace PSI.Core.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<Guid>("CONTRACT_UNID")
+                    b.Property<Guid>("CONTRACT_GUID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CREATE_EMPNO")
@@ -181,7 +183,7 @@ namespace PSI.Core.Migrations
                     b.Property<string>("IS_EFFECTIVE")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PSI_DOC_UNID")
+                    b.Property<Guid>("PSI_DOC_GUID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("REMARK")
@@ -309,17 +311,17 @@ namespace PSI.Core.Migrations
                     b.Property<DateTime>("CREATE_TIME")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("ITEM_NAME")
+                    b.Property<string>("ItemName")
                         .HasColumnType("text");
 
-                    b.Property<double>("ITEM_PERCENT")
+                    b.Property<double>("ItemPercent")
                         .HasColumnType("double precision");
 
-                    b.Property<Guid>("PRODUCT_UNID")
-                        .HasColumnType("uuid");
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
 
-                    b.Property<Guid>("PURCHASE_WEIGHTNOTE_UNID")
-                        .HasColumnType("uuid");
+                    b.Property<long>("PurchaseWeighNoteId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UPDATE_EMPNO")
                         .HasColumnType("text");
@@ -339,17 +341,8 @@ namespace PSI.Core.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<decimal?>("ACTUAL_PRICE")
+                    b.Property<decimal?>("ActualPrice")
                         .HasColumnType("numeric");
-
-                    b.Property<string>("CAR_NO")
-                        .HasColumnType("text");
-
-                    b.Property<double?>("CAR_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<DateTime?>("CAR_WEIGHT_TIME")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CREATE_EMPNO")
                         .HasColumnType("text");
@@ -357,79 +350,82 @@ namespace PSI.Core.Migrations
                     b.Property<DateTime>("CREATE_TIME")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("CUSTOMER_NAME")
+                    b.Property<string>("CarNo")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("CUSTOMER_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DEFECTIVE_REASON")
-                        .HasColumnType("text");
-
-                    b.Property<double>("DEFECTIVE_WEIGHT")
+                    b.Property<double?>("CarWeight")
                         .HasColumnType("double precision");
 
-                    b.Property<decimal>("DELIVERY_FEE")
+                    b.Property<DateTime?>("CarWeightTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<long>("CustomerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DefectiveReason")
+                        .HasColumnType("text");
+
+                    b.Property<double>("DefectiveWeight")
+                        .HasColumnType("double precision");
+
+                    b.Property<decimal>("DeliveryFee")
                         .HasColumnType("numeric");
 
-                    b.Property<string>("DOC_NO")
+                    b.Property<string>("DocNo")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EFFECTIVE_TIME")
+                    b.Property<DateTime>("EffectiveTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("EXCAVATOR_OPERATE_EMPLOYEENO")
+                    b.Property<string>("ExcavatorOpEmpNo")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("EXCAVATOR_OPERATE_TIME")
+                    b.Property<DateTime?>("ExcavatorOpTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("FAC_NO")
+                    b.Property<string>("FacNo")
                         .HasColumnType("text");
 
-                    b.Property<double?>("FINALE_DDEFECTIVE_WEIGHT")
+                    b.Property<double?>("FinalDefectiveWeight")
                         .HasColumnType("double precision");
 
-                    b.Property<double>("FULL_WEIGHT")
+                    b.Property<double>("FullWeight")
                         .HasColumnType("double precision");
 
-                    b.Property<DateTime>("FULL_WEIGHT_TIME")
+                    b.Property<DateTime>("FullWeightTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("HAS_TAX")
+                    b.Property<bool>("HasTax")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("INPUT_TYPE")
+                    b.Property<string>("InputType")
                         .HasColumnType("text");
 
-                    b.Property<string>("NOTE_STATUS")
+                    b.Property<string>("NoteStatus")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("PAY_TIME")
+                    b.Property<DateTime?>("PayTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("PAY_TYPE")
+                    b.Property<string>("PayType")
                         .HasColumnType("text");
 
-                    b.Property<string>("REMARK")
+                    b.Property<string>("Remark")
                         .HasColumnType("text");
 
-                    b.Property<string>("SCALE_NO")
+                    b.Property<string>("ScaleNo")
                         .HasColumnType("text");
 
-                    b.Property<decimal>("THIRD_WEIGHT_FEE")
+                    b.Property<decimal>("ThirdWeightFee")
                         .HasColumnType("numeric");
 
-                    b.Property<double?>("TRADE_WEIGHT")
+                    b.Property<double?>("TradeWeight")
                         .HasColumnType("double precision");
 
-                    b.Property<decimal?>("TRAFIC_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("UNIT_PRICE")
+                    b.Property<decimal?>("TraficUnitPrice")
                         .HasColumnType("numeric");
 
                     b.Property<string>("UPDATE_EMPNO")
@@ -438,7 +434,10 @@ namespace PSI.Core.Migrations
                     b.Property<DateTime>("UPDATE_TIME")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<decimal?>("WEIGHT_PRICE")
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("WeightPrice")
                         .HasColumnType("numeric");
 
                     b.HasKey("ID");
@@ -448,30 +447,13 @@ namespace PSI.Core.Migrations
 
             modelBuilder.Entity("PSI.Core.Entities.SeqTypeConfig", b =>
                 {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CREATE_EMPNO")
+                    b.Property<string>("SeqType")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CREATE_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<long>("SEQ_NO")
+                    b.Property<long>("SeqNo")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("SEQ_TYPE")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UPDATE_EMPNO")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UPDATE_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("ID");
+                    b.HasKey("SeqType");
 
                     b.ToTable("SeqTypeConfigs");
                 });

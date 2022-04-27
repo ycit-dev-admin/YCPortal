@@ -22,19 +22,19 @@ namespace PSI.Areas.Purchase.Helpers
         public PurchaseWeightNote GetPurchaseWeightNote_Create(VE_PurchaseWeightNote vmPurchaseWeightNote, string docNo)
         {
             var purchaseWeightNote = _mapper.Map<PurchaseWeightNote>(vmPurchaseWeightNote);
-            purchaseWeightNote.DocNo = docNo;
-            purchaseWeightNote.WeightPrice = _purchasePriceHelper.GetWeightNotePrice(
-                purchaseWeightNote.FullWeight,
-                purchaseWeightNote.DefectiveWeight,
-                purchaseWeightNote.UnitPrice,
-                purchaseWeightNote.HasTax);
-            purchaseWeightNote.DeliveryFee = _purchasePriceHelper.GetDeliveryPrice(
-                purchaseWeightNote.FullWeight,
-                purchaseWeightNote.TraficUnitPrice.Value);
-            purchaseWeightNote.ActualPrice = _purchasePriceHelper.GetActualPayPrice(
-               purchaseWeightNote.ThirdWeightFee,
-               purchaseWeightNote.WeightPrice.Value,
-               purchaseWeightNote.DeliveryFee);
+            purchaseWeightNote.DOC_NO = docNo;
+            purchaseWeightNote.WEIGHT_PRICE = _purchasePriceHelper.GetWeightNotePrice(
+                purchaseWeightNote.FULL_WEIGHT,
+                purchaseWeightNote.DEFECTIVE_WEIGHT,
+                purchaseWeightNote.UNIT_PRICE,
+                purchaseWeightNote.HAS_TAX);
+            purchaseWeightNote.DELIVERY_FEE = _purchasePriceHelper.GetDeliveryPrice(
+                purchaseWeightNote.FULL_WEIGHT,
+                purchaseWeightNote.TRAFIC_UNIT_PRICE.Value);
+            purchaseWeightNote.ACTUAL_PRICE = _purchasePriceHelper.GetActualPayPrice(
+               purchaseWeightNote.THIRD_WEIGHT_FEE,
+               purchaseWeightNote.WEIGHT_PRICE.Value,
+               purchaseWeightNote.DELIVERY_FEE);
 
             return purchaseWeightNote;
         }

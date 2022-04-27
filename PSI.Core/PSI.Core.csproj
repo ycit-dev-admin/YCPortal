@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20220111171628_adj_table_update.Designer.cs" />
     <Compile Remove="Migrations\20220419170749_add customercontraclog table.cs" />
     <Compile Remove="Migrations\20220419170749_add customercontraclog table.Designer.cs" />
+    <Compile Remove="Migrations\20220427030836_adjust all table to upcase.cs" />
+    <Compile Remove="Migrations\20220427030836_adjust all table to upcase.Designer.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.Designer.cs" />
   </ItemGroup>

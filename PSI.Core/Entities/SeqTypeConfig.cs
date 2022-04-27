@@ -5,11 +5,10 @@ using System.Text;
 
 namespace PSI.Core.Entities
 {
-    public class SeqTypeConfig
+    public class SeqTypeConfig : Entity
     {
-        [Key]
-        public string SeqType { get; set; }
-        public long SeqNo { get; set; }
+        public string SEQ_TYPE { get; set; }
+        public long SEQ_NO { get; set; }
 
     }
 }

@@ -19,7 +19,7 @@ namespace PSI.Infrastructure.Helpers
         public PurchaseWeightNote GetPurchaseWeightNote(VE_PurchaseWeightNote vmPurchaseWeightNote, string docNo)
         {
             var purchaseWeightNote = _mapper.Map<PurchaseWeightNote>(vmPurchaseWeightNote);
-            purchaseWeightNote.DocNo = docNo;
+            purchaseWeightNote.DOC_NO = docNo;
 
             return purchaseWeightNote;
         }
@@ -52,8 +52,8 @@ namespace PSI.Infrastructure.Helpers
             return psiService.GetPsiTypeItems()
                 .Select(aa => new SelectListItem
                 {
-                    Text = aa.CodeText,
-                    Value = aa.CodeValue
+                    Text = aa.CODE_TEXT,
+                    Value = aa.CODE_VALUE
                 }).ToList();
         }
         public List<SelectListItem> PageGetPayTypeItems(IPsiService psiService)
@@ -61,8 +61,8 @@ namespace PSI.Infrastructure.Helpers
             return psiService.GetPayTypeItems()
                 .Select(aa => new SelectListItem
                 {
-                    Text = aa.CodeText,
-                    Value = aa.CodeValue
+                    Text = aa.CODE_TEXT,
+                    Value = aa.CODE_VALUE
                 }).ToList();
         }
 

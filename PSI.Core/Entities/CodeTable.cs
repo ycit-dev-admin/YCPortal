@@ -6,10 +6,10 @@ namespace PSI.Core.Entities
 {
     public class CodeTable : Entity
     {
-        public string CodeGroup { get; set; }
-        public string CodeValue { get; set; }
-        public string CodeText { get; set; }
-        public int? Sort { get; set; }
-        public string IsEffective { get; set; }
+        public string CODE_GROUP { get; set; }
+        public string CODE_VALUE { get; set; }
+        public string CODE_TEXT { get; set; }
+        public int? SORT { get; set; }
+        public string IS_EFFECTIVE { get; set; }
     }
 }

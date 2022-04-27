@@ -16,6 +16,7 @@ using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
+using PSI.Infrastructure.Helpers;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
 
@@ -29,6 +30,7 @@ namespace PSI.Areas.SysConfig.Controllers
         private readonly IPsiService _psiService;
         private readonly UserManager<AppUser> _userManager;
         private readonly ContractControllerMapper _mapperHelper;
+        private readonly EnumHelper _enumHelper;
 
 
         public ContractController(ICustomerService customerService,
@@ -41,6 +43,7 @@ namespace PSI.Areas.SysConfig.Controllers
             _psiService = psiService;
             _productItemService = productItemService;
             _mapperHelper = new ContractControllerMapper();
+            _enumHelper = new EnumHelper();
         }
         [HttpGet]
         [Authorize()]
@@ -86,7 +89,7 @@ namespace PSI.Areas.SysConfig.Controllers
             var pageModel = new PageContractCreateContractInfo
             {
                 PsiTypeItems = _psiService.GetPsiTypeItems()
-                   .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue)),
+                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
                 CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
                 ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
@@ -121,7 +124,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 return funRs;     // Return Result
             }
             #endregion
-            #region -- UpdateToDB --
+            #region -- InsertToDB --
             FunctionResult<CustomerContract> InsertToDB(PageContractCreateContractInfo pageModel)
             {
                 var customerContractMapper = _mapperHelper.GetMapperOfCreateContractInfo<PageContractCreateContractInfo, CustomerContract>();
@@ -142,7 +145,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
 
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
-                  .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue), pageModel.ContractType);
+                  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
@@ -172,14 +175,19 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 // Make Mapper
                 var pModelMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContract, PageContractEditCustomerContract>();
+                var veCustomerContractLogMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContractLog, VE_CustomerContractLog>();
 
                 // Query Data
                 var customerContract = _customerService.GetCustomerContract(unid);
+                var customerContractLogList = _customerService.GetCustomerContractLogs(unid);
 
                 // Map to model
+                var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 var pageModel = pModelMapper.Map<PageContractEditCustomerContract>(customerContract);
+                pageModel.ContractStatusItems = _enumHelper.GetContractStatus();
+                pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
-                  .ToPageSelectList(nameof(CodeTable.CodeText), nameof(CodeTable.CodeValue));
+                  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
@@ -198,6 +206,70 @@ namespace PSI.Areas.SysConfig.Controllers
             return View(GetPageModel(unid).ResultValue);
         }
 
+        [HttpPost]
+        [Authorize()]
+        public IActionResult EditCustomerContract(PageContractEditCustomerContract pageModel)
+        {
+            // Action variables
+            var errMsg = "";
+            CustomerContract resultCustomerContract;
 
+            // Step Functions 
+            #region -- ValidPageModel --
+            FunctionResult ValidPageModel(PageContractEditCustomerContract pageModel)
+            {
+
+                var funRs = new FunctionResult();
+                var validator = new PageContractEditCustomerContractValidator();
+                var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Skip"));
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                funRs.ResultSuccess("");
+                return funRs;     // Return Result
+            }
+            #endregion
+            #region -- UpdateToDB --
+            FunctionResult<CustomerContract> UpdateToDB(PageContractEditCustomerContract pageModel)
+            {
+                var customerContractMapper = _mapperHelper.GetMapperOfEditCustomerContract<PageContractEditCustomerContract, CustomerContract>();
+                var customerContract = customerContractMapper.Map<CustomerContract>(pageModel);
+                var funcRs = _customerService.UpdateCustomerContract(customerContract, _userManager.GetUserAsync(User).Result);
+                errMsg = funcRs.ErrorMessage;
+                resultCustomerContract = funcRs.Success ? funcRs.ResultValue : null;
+                return funcRs;     // Return Result
+            }
+            #endregion
+
+
+            // Step Result
+            if (!ValidPageModel(pageModel).Success ||
+                !UpdateToDB(pageModel).Success)
+            {
+                TempData["pageMsg"] = errMsg;
+                var veCustomerContractLogMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContractLog, VE_CustomerContractLog>();
+                var customerContractLogList = _customerService.GetCustomerContractLogs(pageModel.ContractGUID);
+                var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
+                pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
+                pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
+                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
+                pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
+                pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID), pageModel.ProductGUID.ToString());
+
+                return View(pageModel);
+            }
+
+
+            // Successed
+            TempData["pageMsg"] = $@"客戶:{resultCustomerContract.CONTRACT_NAME} 更新成功!!";
+            return RedirectToAction("OnlineInfo");
+        }
     }
 }

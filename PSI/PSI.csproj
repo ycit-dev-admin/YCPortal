@@ -13,9 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Purchase\Helpers\PurchaseDTEHelper.cs" />
     <Compile Remove="Areas\SysConfig\Helpers\SysConfigMapperHelper.cs" />
     <Compile Remove="Areas\SysConfig\Models\ShowModels\Show_CustomerInfo.cs" />
     <Compile Remove="Areas\SysConfig\Models\VM_Create_CustomerInfoValidator.cs" />
+    <Compile Remove="Models\VEModels\VE_PurchaseWeightNote_Main.cs" />
+    <Compile Remove="Models\VEModels\VE_PurchaseWeightNote_Query.cs" />
   </ItemGroup>
 
   <ItemGroup>
