@@ -21,7 +21,14 @@
         });
     }
 
+    public GetProductItemModel(prodUNID: string = "", isOnlyQuery: boolean = false): JQuery.jqXHR {
+        const pageUrl = `${this.BaseUrl}/SysConfig/Product/_GetProductItemModel`;
 
+        return $.get(pageUrl, {
+            prodUNID: encodeURIComponent(prodUNID),
+            isOnlyQuery: encodeURIComponent(isOnlyQuery)
+        });
+    }
 
 
 };

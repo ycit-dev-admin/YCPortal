@@ -11,7 +11,7 @@
 
 }
 
-<button id="add-carno" style="float:left;margin-right:20px;" class="btn btn-primary" type="button">新增車牌</button>
+<button id="add-productItem" style="float:left;margin-right:20px;" class="btn btn-primary" type="button">新增品項</button>
 <table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -74,12 +74,13 @@
 
     <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
-    <script asp-append-version="true" src="~/psi/PageOfSysConfigCarNoOnlineInfo.js"></script>
+    <script asp-append-version="true" src="~/psi/SysConfigProductOnlineInfo.js"></script>
 
     <script>
         $(function () {
 
-            const curPage = new PageOfSysConfigCarNoOnlineInfo(window.baseApiUrl);
+            const pageJsObj = new SysConfigProductOnlineInfo(window.baseApiUrl);
+            pageJsObj.PageEventInit();
 
 
             $("#example1").DataTable({
@@ -88,68 +89,8 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
 
-            $("#add-carno").on("click", curPage, function (event) {
-                let pageRs = curPage.SysConfigPageHelper.GetCarNoInfoModel("");
-                $.when(pageRs).then(function (data) {
-                    $("div[name=model-temp-carnoinfo]").html(data);
-                    var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
-                    modalObj.modal('show');
 
-                    $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
-
-                    modalObj.find("#CustomerGUID").select2({
-                        theme: 'bootstrap4',
-                        placeholder: "請選擇"
-                    })
-
-                    // 客戶車牌
-                    //modalObj.find('#CustomerGUID').on('change', function () {
-                    //    if ($(this) &&
-                    //        $(this).find(':selected').val() === "0") {
-                    //        modalObj.find('#CustomerName').removeAttr("readonly") // 新客戶
-                    //        modalObj.find('#CustomerName').val("")
-                    //    } else {
-                    //        modalObj.find('#CustomerName').attr("readonly", "readonly")
-                    //        modalObj.find('#CustomerName').val($(this).find(':selected').text());
-                    //    }
-
-                    //})
-
-                    // modalObj.find("#testqqc").on('click', '.tr-row',
-                    modalObj.find("#carno-info-action").on('click',
-                        function () {
-                            // modalObj.modal('hide');
-                            // modalObj.find('#CreateCarNoInfo').submit();
-                            modalObj.find('#carNo-info-form').submit();
-                        });
-
-                });
-            });
-
-
-
-            $('button[name="query-btn"]').on("click", curPage, function (event) {
-                let pageRs = curPage.SysConfigPageHelper.GetCarNoInfoModel($(this).val());
-                $.when(pageRs).then(function (data) {
-                    $("div[name=model-temp-carnoinfo]").html(data);
-                    var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
-                    modalObj.modal('show');
-
-                    $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
-
-                    modalObj.find("#CustomerGUID").select2({
-                        theme: 'bootstrap4',
-                        placeholder: "請選擇"
-                    })
-
-                    modalObj.find("#carno-info-action").on('click',
-                        function () {
-                            // modalObj.modal('hide');
-                            // modalObj.find('#CreateCarNoInfo').submit();
-                            modalObj.find('#carNo-info-form').submit();
-                        });
-                });
-            });
+            
 
 
 

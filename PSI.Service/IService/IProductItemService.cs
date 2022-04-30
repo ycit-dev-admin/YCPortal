@@ -1,9 +1,8 @@
-﻿using PSI.Core.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-
+using PSI.Core.Entities;
+using PSI.Core.Entities.Identity;
+using PSI.Core.Helpers;
 
 namespace PSI.Service.IService
 {
@@ -11,5 +10,8 @@ namespace PSI.Service.IService
     {
         IQueryable<ProductItem> GetPurchaseProductItems();
         IQueryable<ProductItem> GetAllProductItems();
+        ProductItem GetProductItem(Guid productUNID);
+        ProductItem GetProductItem(string productName);
+        FunctionResult<ProductItem> CreateProductItem(ProductItem productItem, AppUser operUser);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using PSI.Core.Entities;
+using PSI.Core.Entities.Identity;
+using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Service.IService;
@@ -35,6 +37,46 @@ namespace PSI.Service.Service
         {
             return _productItemRepository.GetAllAsync().Result.
                           Where(aa => aa.IS_EFFECTIVE == "1").AsQueryable();
+        }
+
+        public ProductItem GetProductItem(Guid productUNID)
+        {
+            return _productItemRepository.GetAsync(aa => aa.PRODUCT_UNID == productUNID).Result;
+        }
+        public ProductItem GetProductItem(string productName)
+        {
+            return _productItemRepository.GetAsync(aa => aa.PRODUCT_NAME == productName).Result;
+        }
+
+        public FunctionResult<ProductItem> CreateProductItem(ProductItem productItem, AppUser operUser)
+        {
+            // var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
+            var funcRs = new FunctionResult<ProductItem>(this);
+            if (productItem != null)
+            {
+                productItem.PRODUCT_UNID = Guid.NewGuid();
+                productItem.CREATE_EMPNO = operUser.NickName;
+                productItem.CREATE_TIME = DateTime.Now;
+                productItem.UPDATE_EMPNO = operUser.NickName;
+                productItem.UPDATE_TIME = DateTime.Now;
+                productItem.IS_EFFECTIVE = "1";
+                productItem.PRODUCT_NAME = productItem.PRODUCT_NAME.ToUpper();
+
+                var createRs = _productItemRepository.Create(productItem);
+
+                if (!createRs.Success)
+                {
+                    funcRs.ResultFailure(createRs.ActionMessage);
+                    return funcRs;
+                }
+
+                funcRs.ResultSuccess("新增客戶資料成功!!", productItem);
+            }
+            else
+            {
+                funcRs.ResultFailure("無客戶資料可新增!!");
+            }
+            return funcRs;
         }
     }
 }
