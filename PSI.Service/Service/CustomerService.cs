@@ -199,7 +199,7 @@ namespace PSI.Service.Service
             var upDbEntity = typeof(CustomerInfo).ToUpdateEntityByNoNeed(
                 customerInfo,
                 dbCustomerInfo,
-                new[] { nameof(CustomerInfo.ID),
+                new List<string>{ nameof(CustomerInfo.ID),
                         nameof(CustomerInfo.CUSTOMER_GUID),
                         nameof(CustomerInfo.CREATE_EMPNO),
                         nameof(CustomerInfo.CREATE_TIME),
@@ -228,15 +228,27 @@ namespace PSI.Service.Service
             }
 
             // update logic
-            dbCustomerContract.UPDATE_EMPNO = operUser.NickName;
-            dbCustomerContract.UPDATE_TIME = DateTime.Now;
+            var noUpdateFields = new[] { nameof(CustomerContract.ID),
+                        nameof(CustomerContract.CREATE_EMPNO),
+                        nameof(CustomerContract.CREATE_TIME),
+            customerContract.CUSTOMER_GUID == Guid.Empty? nameof(CustomerContract.CUSTOMER_GUID):null,
+            customerContract.PRODUCT_GUID == Guid.Empty? nameof(CustomerContract.PRODUCT_GUID):null,
+            customerContract.DEAL_WEIGHT == 0? nameof(CustomerContract.DEAL_WEIGHT):null,
+            customerContract.DEAL_UNIT_PRICE == 0? nameof(CustomerContract.DEAL_UNIT_PRICE):null,
+            customerContract.START_DATETIME == default(DateTime)?nameof(CustomerContract.START_DATETIME):null,
+            customerContract.END_DATETIME == default(DateTime)?nameof(CustomerContract.END_DATETIME):null,
+            customerContract.DEAL_UNIT_PRICE == 0? nameof(CustomerContract.DEAL_UNIT_PRICE):null,
+            customerContract.CONTRACT_STATUS == 0? nameof(CustomerContract.CONTRACT_STATUS):null
+            }.Where(aa => aa != null).ToList();
+
+
+            customerContract.UPDATE_EMPNO = operUser.NickName;
+            customerContract.UPDATE_TIME = DateTime.Now;
 
             var upDbEntity = typeof(CustomerContract).ToUpdateEntityByNoNeed(
-                customerContract,
-                dbCustomerContract,
-                new[] { nameof(CustomerContract.ID),
-                        nameof(CustomerContract.CREATE_EMPNO),
-                        nameof(CustomerContract.CREATE_TIME) });
+            customerContract,
+            dbCustomerContract,
+            noUpdateFields);
 
 
 
@@ -291,7 +303,7 @@ namespace PSI.Service.Service
                 var upDbEntity = typeof(CustomerCar).ToUpdateEntity(
                     sourceEntity,
                     dbEntity,
-                    new[] { nameof(CustomerCar.CUSTOMER_GUID),
+                    new List<string> { nameof(CustomerCar.CUSTOMER_GUID),
                             nameof(CustomerCar.CAR_NAME),
                             nameof(CustomerCar.REMARK),
                             nameof(CustomerCar.UPDATE_EMPNO),

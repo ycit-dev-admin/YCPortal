@@ -6,7 +6,7 @@ namespace PSI.Core.Entities
 {
     public class ProductItem : Entity
     {
-        public Guid PRODUCT_GUID { get; set; }
+        public Guid PRODUCT_UNID { get; set; }
         public string PRODUCT_NAME { get; set; }
         public string PSI_TYPE { get; set; }
         //public string Title { get; set; }

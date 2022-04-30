@@ -185,5 +185,11 @@ namespace PSI.Service.Service
             return _codeTableRepository.GetAllAsync().Result
                 .Where(aa => aa.CODE_GROUP == "PSI_TYPE").AsQueryable();
         }
+
+        public IQueryable<CodeTable> GetContractTypeItems()
+        {
+            return _codeTableRepository.GetAllAsync().Result
+                .Where(aa => aa.CODE_GROUP == "CONTRACT_TYPE").AsQueryable();
+        }
     }
 }

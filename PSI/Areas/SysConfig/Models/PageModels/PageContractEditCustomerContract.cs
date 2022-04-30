@@ -36,7 +36,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 
         #region --- Page Only ---
         public bool IsChanged { get; set; }
-        public List<SelectListItem> PsiTypeItems { set; get; }
+        public List<SelectListItem> ContractTypeItems { set; get; }
         public List<SelectListItem> CustomerInfoItems { set; get; }
         public List<SelectListItem> ProductItems { set; get; }
         public List<SelectListItem> ContractStatusItems { set; get; }

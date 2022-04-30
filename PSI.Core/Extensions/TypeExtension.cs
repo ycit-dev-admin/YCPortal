@@ -8,16 +8,17 @@ namespace PSI.Core.Extensions
 {
     public static class TypeExtension
     {
-        public static T ToUpdateEntity<T>(this Type source, T sourceEntity, T dbEntity, string[] onlyUpdatePropertyNames)
+        public static T ToUpdateEntity<T>(this Type source, T sourceEntity, T dbEntity, List<string> onlyUpdatePropertyNames)
         {
             foreach (var propertyInfo in typeof(T).GetProperties().Where(aa => onlyUpdatePropertyNames.Contains(aa.Name)))
             {
-                propertyInfo.SetValue(dbEntity, propertyInfo.GetValue(sourceEntity));
+                if (propertyInfo.GetValue(sourceEntity) != null)
+                    propertyInfo.SetValue(dbEntity, propertyInfo.GetValue(sourceEntity));
             }
             return dbEntity;
         }
 
-        public static T ToUpdateEntityByNoNeed<T>(this Type source, T sourceEntity, T dbEntity, string[] noUpdatePropertyNames)
+        public static T ToUpdateEntityByNoNeed<T>(this Type source, T sourceEntity, T dbEntity, List<string> noUpdatePropertyNames)
         {
             foreach (var propertyInfo in typeof(T).GetProperties().Where(aa => !noUpdatePropertyNames.Contains(aa.Name)))
             {

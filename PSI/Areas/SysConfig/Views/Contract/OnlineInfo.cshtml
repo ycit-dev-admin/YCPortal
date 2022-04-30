@@ -28,10 +28,10 @@
             <tr>
                 <td>@item.ContractName</td>
                 <td>@Model.VeCustomerInfoList.FirstOrDefault(aa => aa.CustomerGUID == item.CustomerGUID).CustomerName</td>
-                <td>@item.ContractType</td>
+                <td>@Model.ContractTypeItems.FirstOrDefault(aa => aa.Value == item.ContractType).Text</td>
                 <td>@item.DealUnitPrice</td>
                 <td>@item.DealWeight</td>
-                <td>@item.ActualWeight</td>
+                <td>施工中...</td>
                 <td>@item.StartDatetime.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@item.EndDatetime.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>

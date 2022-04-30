@@ -7,7 +7,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 {
     public class PageContractCreateContractInfo
     {
-             
+
         public string ContractName { get; set; }
         public double? DealWeight { get; set; }
         public double? DealUnitPrice { get; set; }
@@ -22,7 +22,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
 
         #region --- Page Only ---
 
-        public List<SelectListItem> PsiTypeItems { set; get; }
+        public List<SelectListItem> ContractTypeItems { set; get; }
         public List<SelectListItem> CustomerInfoItems { set; get; }
         public List<SelectListItem> ProductItems { set; get; }
 

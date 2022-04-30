@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PSI.Areas.Purchase.Helpers;
-using PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model;
 using PSI.Areas.SysConfig.Mappers;
 using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
-using PSI.Areas.SysConfig.Models.ShowModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
@@ -66,7 +61,9 @@ namespace PSI.Areas.SysConfig.Controllers
                 funRs.ResultSuccess("", new PageContractOnlineInfo
                 {
                     VeCustomerContractList = veCustomerContractLs,
-                    VeCustomerInfoList = veCustomerInfoLs
+                    VeCustomerInfoList = veCustomerInfoLs,
+                    ContractTypeItems = _psiService.GetContractTypeItems()
+                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
                 });
                 return funRs;
             }
@@ -88,12 +85,12 @@ namespace PSI.Areas.SysConfig.Controllers
         {
             var pageModel = new PageContractCreateContractInfo
             {
-                PsiTypeItems = _psiService.GetPsiTypeItems()
+                ContractTypeItems = _psiService.GetContractTypeItems()
                    .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
                 CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
                 ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID))
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID))
             };
             return View(pageModel);
         }
@@ -144,12 +141,12 @@ namespace PSI.Areas.SysConfig.Controllers
                 TempData["pageMsg"] = errMsg;
 
 
-                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID), pageModel.ProductGUID.ToString());
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID), pageModel.ProductGUID.ToString());
 
                 return View(pageModel);
             }
@@ -186,12 +183,12 @@ namespace PSI.Areas.SysConfig.Controllers
                 var pageModel = pModelMapper.Map<PageContractEditCustomerContract>(customerContract);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus();
                 pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
-                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID));
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID));
 
                 // Return Result
                 var funRs = new FunctionResult<PageContractEditCustomerContract>();
@@ -256,19 +253,19 @@ namespace PSI.Areas.SysConfig.Controllers
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
                 pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
-                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_GUID), pageModel.ProductGUID.ToString());
+                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID), pageModel.ProductGUID.ToString());
 
                 return View(pageModel);
             }
 
 
             // Successed
-            TempData["pageMsg"] = $@"客戶:{resultCustomerContract.CONTRACT_NAME} 更新成功!!";
+            TempData["pageMsg"] = $@"合約名稱:{resultCustomerContract.CONTRACT_NAME} 更新成功!!";
             return RedirectToAction("OnlineInfo");
         }
     }

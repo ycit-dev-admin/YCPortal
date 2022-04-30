@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models
@@ -10,6 +11,7 @@ namespace PSI.Areas.SysConfig.Models
         // Entity
 
         // Page
+        public List<SelectListItem> ContractTypeItems { set; get; }
         public List<VE_CustomerInfo> VeCustomerInfoList { get; set; }
         public List<VE_CustomerContract> VeCustomerContractList { get; set; }
 

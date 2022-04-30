@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PSI.Areas.Purchase.Helpers;
-using PSI.Areas.SysConfig.Infrastructure.Extensions.VM_Model;
 using PSI.Areas.SysConfig.Mappers;
 using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
-using PSI.Areas.SysConfig.Models.ShowModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;

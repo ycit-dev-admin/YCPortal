@@ -30,6 +30,7 @@ namespace PSI.Service.IService
         /* CodeTable */
         IQueryable<CodeTable> GetPayTypeItems();
         IQueryable<CodeTable> GetPsiTypeItems();
+        IQueryable<CodeTable> GetContractTypeItems();
         string GetDocNo(string facSite, int psiType);
     }
 }

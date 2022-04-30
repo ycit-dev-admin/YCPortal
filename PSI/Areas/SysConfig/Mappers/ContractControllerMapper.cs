@@ -99,13 +99,18 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.CONTRACT_GUID, s => s.MapFrom(ss => ss.ContractGUID))
                         .ForMember(tar => tar.START_DATETIME, s => s.MapFrom(ss => ss.EditStratTime ?? null))
                         .ForMember(tar => tar.END_DATETIME, s => s.MapFrom(ss => ss.EditEndTime ?? null))
-                        .ForMember(tar => tar.CONTRACT_STATUS, s => s.MapFrom(ss => ss.EditContractStatus ?? ss.ContractStatus))
-                        .ForMember(tar => tar.CUSTOMER_GUID, s => s.MapFrom(ss => ss.EditCustomerGUID == Guid.Empty ? null : ss.EditCustomerGUID))
+                        .ForMember(tar => tar.CONTRACT_STATUS, s => s.MapFrom(ss => ss.EditContractStatus ?? null))
+                        .ForMember(tar => tar.CUSTOMER_GUID, s => s.MapFrom(ss => ss.EditCustomerGUID == null
+                                                                                  ||
+                                                                                  ss.EditCustomerGUID == Guid.Empty ? null : ss.EditCustomerGUID))
                         .ForMember(tar => tar.CONTRACT_NAME, s => s.MapFrom(ss => ss.EditContractName ?? null))
                         .ForMember(tar => tar.CONTRACT_TYPE, s => s.MapFrom(ss => ss.EditContractType ?? null))
-                        .ForMember(tar => tar.PRODUCT_GUID, s => s.MapFrom(ss => ss.EditProductGUID == Guid.Empty ? null : ss.ProductGUID))
-                        .ForMember(tar => tar.DEAL_WEIGHT, s => s.MapFrom(ss => ss.EditDealWeight ?? ss.DealWeight))
-                        .ForMember(tar => tar.DEAL_UNIT_PRICE, s => s.MapFrom(ss => ss.EditDealUnitPrice ?? ss.DealUnitPrice))
+                        .ForMember(tar => tar.PRODUCT_GUID, s => s.MapFrom(ss => ss.EditProductGUID == null
+                                                                                 ||
+                                                                                 ss.EditProductGUID == Guid.Empty ? null : ss.EditProductGUID))
+                        .ForMember(tar => tar.DEAL_WEIGHT, s => s.MapFrom(ss => ss.EditDealWeight ?? null))
+                        .ForMember(tar => tar.DEAL_UNIT_PRICE, s => s.MapFrom(ss => ss.EditDealUnitPrice ?? null))
+                        .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.EditRemark ?? null))
                        ).CreateMapper();
                 default:
                     return null;

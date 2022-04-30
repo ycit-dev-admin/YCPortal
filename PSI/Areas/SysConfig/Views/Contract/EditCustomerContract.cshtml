@@ -134,7 +134,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         @{
-                            var contractTypeName = Model.PsiTypeItems.FirstOrDefault(item => item.Value == Model.ContractType)?.Text;
+                            var contractTypeName = Model.ContractTypeItems.FirstOrDefault(item => item.Value == Model.ContractType)?.Text;
                         }
                         <label class="form-control-label" for="ownername">
                             @($@"合約屬性: {contractTypeName}")
@@ -145,7 +145,7 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="PsiType">變更為:</label>
                             </div>
-                            <select asp-for="EditContractType" asp-items="@Model.PsiTypeItems" class="select2bs4">
+                            <select asp-for="EditContractType" asp-items="@Model.ContractTypeItems" class="select2bs4">
                                 <option></option>
                             </select>
                         </div>
