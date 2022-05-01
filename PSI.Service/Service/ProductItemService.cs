@@ -1,5 +1,6 @@
 ﻿using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
@@ -75,6 +76,44 @@ namespace PSI.Service.Service
             else
             {
                 funcRs.ResultFailure("無客戶資料可新增!!");
+            }
+            return funcRs;
+        }
+
+        public FunctionResult<ProductItem> UpdateProductItem(ProductItem sourceEntity, AppUser operUser)
+        {
+            // var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
+            var funcRs = new FunctionResult<ProductItem>(this);
+            if (sourceEntity != null)
+            {
+                sourceEntity.UPDATE_EMPNO = operUser.NickName;
+                sourceEntity.UPDATE_TIME = DateTime.Now;
+
+                var dbEntity = _productItemRepository.GetAsync(
+                    aa => aa.PRODUCT_UNID == sourceEntity.PRODUCT_UNID).Result;
+                var upDbEntity = typeof(ProductItem).ToUpdateEntityByNoNeed(
+                    sourceEntity,
+                    dbEntity,
+                    new List<string> { nameof(ProductItem.ID),
+                            nameof(ProductItem.PRODUCT_UNID),
+                            nameof(ProductItem.CREATE_TIME),
+                            nameof(ProductItem.CREATE_EMPNO)
+                    });
+
+
+                var updateRs = _productItemRepository.Update(upDbEntity);
+
+                if (!updateRs.Success)
+                {
+                    funcRs.ResultFailure(updateRs.ActionMessage);
+                    return funcRs;
+                }
+
+                funcRs.ResultSuccess("更新品項資料成功!!", upDbEntity);
+            }
+            else
+            {
+                funcRs.ResultFailure("無品項資料可新增!!");
             }
             return funcRs;
         }

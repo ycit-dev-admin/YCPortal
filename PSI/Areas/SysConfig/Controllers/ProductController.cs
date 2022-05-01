@@ -101,7 +101,7 @@ namespace PSI.Areas.SysConfig.Controllers
                                            isNewOpen ? "建立" : "編輯";
                 pageModel.FormActionName = isNewOpen ?
                     nameof(this.CreateProductItem) :
-                    "";
+                    nameof(this.UpdateProductItem);
                 // nameof(this.UpdateCarNoInfo);
 
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
@@ -153,10 +153,10 @@ namespace PSI.Areas.SysConfig.Controllers
                     return funRs;
                 }
 
-                var isDuplicate = _productItemService.GetProductItem(pageModel.ProductItemName) != null;
+                var isDuplicate = _productItemService.GetProductItem(pageModel.ProductName) != null;
                 if (isDuplicate)  // 檢核車牌有無重複
                 {
-                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.ProductItemName} 為重複品項名稱";
+                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.ProductName} 為重複品項名稱";
                     funRs.ResultFailure(errMsg);
                     return funRs;
                 }
@@ -189,7 +189,69 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Successed
             //return View(pageModel);
-            TempData["pageMsg"] = $@"車牌:{pageModel.ProductItemName} 建立成功!!";
+            TempData["pageMsg"] = $@"車牌:{pageModel.ProductName} 建立成功!!";
+            return RedirectToAction("OnlineInfo");
+        }
+
+
+        [HttpPost]
+        [Authorize()]
+        public IActionResult UpdateProductItem(SysConfigProductUpdateProductItem pageModel)
+        {
+            // Action variables
+            var errMsg = "";
+
+            // Step Functions 
+            #region -- ValidPageModel --
+            FunctionResult ValidPageModel(SysConfigProductUpdateProductItem pageModel)
+            {
+                var funRs = new FunctionResult();
+                var validator = new SysConfigProductUpdateProductItemValidator();
+                var validRs = validator.Validate(pageModel);
+
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                }
+
+                var isDuplicate = _productItemService.GetProductItem(pageModel.ProductName) != null;
+                if (isDuplicate)  // 檢核有無重複
+                {
+                    errMsg = $@"資料驗證失敗!! 原因:{pageModel.ProductName} 為重複品項名稱";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                funRs.ResultSuccess("");
+                return funRs;     // Return Result
+            }
+            #endregion
+            #region -- UpdateProductItem --
+            FunctionResult<ProductItem> UpdateProductItem(SysConfigProductUpdateProductItem pageModel)
+            {
+                var productItemMapper = _mapperHelper.GetMapperOfUpdateProductItem<SysConfigProductUpdateProductItem, ProductItem>();
+                var productItem = productItemMapper.Map<ProductItem>(pageModel);
+                var funcRs = _productItemService.UpdateProductItem(productItem, _userManager.GetUserAsync(User).Result);
+                funcRs.ResultSuccess("ok", productItem);
+                errMsg = funcRs.ErrorMessage;
+                return funcRs;     // Return Result
+            }
+            #endregion
+
+
+            // Step Result
+            if (!ValidPageModel(pageModel).Success ||
+                !UpdateProductItem(pageModel).Success)
+            {
+                TempData["pageMsg"] = errMsg;
+                return RedirectToAction("OnlineInfo");
+            }
+
+
+            // Successed
+            //return View(pageModel);
+            TempData["pageMsg"] = $@"車牌:{pageModel.ProductName} 更新成功!!";
             return RedirectToAction("OnlineInfo");
         }
 

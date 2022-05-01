@@ -60,7 +60,7 @@ namespace PSI.Areas.SysConfig.Mappers
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<SysConfigProductCreateProductItem, ProductItem>()
                         .ForMember(tar => tar.PRODUCT_UNID, s => s.MapFrom(ss => ss.ProductUNID))
-                        .ForMember(tar => tar.PRODUCT_NAME, s => s.MapFrom(ss => ss.ProductItemName))
+                        .ForMember(tar => tar.PRODUCT_NAME, s => s.MapFrom(ss => ss.ProductName))
                         .ForMember(tar => tar.PSI_TYPE, s => s.MapFrom(ss => ss.PsiType))
                         .ForMember(tar => tar.IS_EFFECTIVE, s => s.MapFrom(ss => ss.IsEffective))
                         .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.Remark))
@@ -70,6 +70,23 @@ namespace PSI.Areas.SysConfig.Mappers
             }
         }
 
+        public IMapper GetMapperOfUpdateProductItem<T1, T2>()
+        {
+            switch (typeof(T1).Name, typeof(T2).Name)
+            {
+                case (nameof(SysConfigProductUpdateProductItem), nameof(ProductItem)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<SysConfigProductUpdateProductItem, ProductItem>()
+                        .ForMember(tar => tar.PRODUCT_UNID, s => s.MapFrom(ss => ss.ProductUNID))
+                        .ForMember(tar => tar.PRODUCT_NAME, s => s.MapFrom(ss => ss.ProductName))
+                        .ForMember(tar => tar.PSI_TYPE, s => s.MapFrom(ss => ss.PsiType))
+                        .ForMember(tar => tar.IS_EFFECTIVE, s => s.MapFrom(ss => ss.IsEffective))
+                        .ForMember(tar => tar.REMARK, s => s.MapFrom(ss => ss.Remark))
+                       ).CreateMapper();
+                default:
+                    return null;
+            }
+        }
 
     }
 }

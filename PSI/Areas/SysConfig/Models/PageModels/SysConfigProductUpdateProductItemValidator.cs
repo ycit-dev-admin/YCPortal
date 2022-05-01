@@ -2,9 +2,9 @@
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
-    public class SysConfigProductCreateProductItemValidator : AbstractValidator<SysConfigProductCreateProductItem>
+    public class SysConfigProductUpdateProductItemValidator : AbstractValidator<SysConfigProductUpdateProductItem>
     {
-        public SysConfigProductCreateProductItemValidator()
+        public SysConfigProductUpdateProductItemValidator()
         {
 
             RuleFor(x => x.ProductName).NotNull().WithMessage("為必填欄位");

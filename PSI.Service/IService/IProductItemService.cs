@@ -13,5 +13,6 @@ namespace PSI.Service.IService
         ProductItem GetProductItem(Guid productUNID);
         ProductItem GetProductItem(string productName);
         FunctionResult<ProductItem> CreateProductItem(ProductItem productItem, AppUser operUser);
+        FunctionResult<ProductItem> UpdateProductItem(ProductItem sourceEntity, AppUser operUser);
     }
 }
