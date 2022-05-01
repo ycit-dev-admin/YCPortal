@@ -104,6 +104,9 @@ namespace PSI.Areas.SysConfig.Controllers
                     "";
                 // nameof(this.UpdateCarNoInfo);
 
+                pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
+                    .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
+
 
                 // Return Result
                 var funRs = new FunctionResult<SysConfigProduct_GetProductItemModel>();
@@ -122,7 +125,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
 
 
-            return PartialView("_GetCarNoInfoModel",
+            return PartialView("_GetProductItemModel",
                 GetPageModel(prodUNID).ResultValue);
         }
 

@@ -20,6 +20,7 @@ namespace PSI.Areas.SysConfig.Models
         public string FormActionName { get; set; }
         public bool IsNewOpen { get; set; }
         public bool IsOnlyQuery { get; set; }
+        public List<SelectListItem> PsiTypeItems { set; get; }
 
 
     }

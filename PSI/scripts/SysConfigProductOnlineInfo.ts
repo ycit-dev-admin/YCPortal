@@ -42,22 +42,22 @@ class SysConfigProductOnlineInfo {
         $(curObj.DomOfAddProductItem).on('click', function () {
             let pageRs = curObj.SysConfigPageHelper.GetProductItemModel("");
             $.when(pageRs).then(function (data) {
-                $("div[name=model-temp-carnoinfo]").html(data);
-                var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                $("div[name=model-temp-prodItem]").html(data);
+                var modalObj = $("div[name=model-temp-prodItem]").find('#myModal');
                 modalObj.modal('show');
 
-                $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
+                $.getScript("/psi/SysConfigProductOnlineInfoValidate.js"); // 載入檢核js
 
-                modalObj.find("#CustomerGUID").select2({
+                modalObj.find("#PsiType").select2({
                     theme: 'bootstrap4',
                     placeholder: "請選擇"
                 })
 
-                modalObj.find("#carno-info-action").on('click',
+                modalObj.find("#product-info-action").on('click',
                     function () {
                         // modalObj.modal('hide');
                         // modalObj.find('#CreateCarNoInfo').submit();
-                        modalObj.find('#carNo-info-form').submit();
+                        modalObj.find('#product-info-form').submit();
                     });
 
             });
@@ -66,24 +66,24 @@ class SysConfigProductOnlineInfo {
 
 
         $(curObj.DomOfQuerryBtn).on("click", function (event) {
-            let pageRs = curObj.SysConfigPageHelper.GetCarNoInfoModel($(this).val().toString());
+            let pageRs = curObj.SysConfigPageHelper.GetProductItemModel($(this).val().toString());
             $.when(pageRs).then(function (data) {
-                $("div[name=model-temp-carnoinfo]").html(data);
-                var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                $("div[name=model-temp-prodItem]").html(data);
+                var modalObj = $("div[name=model-temp-prodItem]").find('#myModal');
                 modalObj.modal('show');
 
-                $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
+                $.getScript("/psi/SysConfigProductOnlineInfoValidate.js"); // 載入檢核js
 
-                modalObj.find("#CustomerGUID").select2({
+                modalObj.find("#PsiType").select2({
                     theme: 'bootstrap4',
                     placeholder: "請選擇"
                 })
 
-                modalObj.find("#carno-info-action").on('click',
+                modalObj.find("#product-info-action").on('click',
                     function () {
                         // modalObj.modal('hide');
                         // modalObj.find('#CreateCarNoInfo').submit();
-                        modalObj.find('#carNo-info-form').submit();
+                        modalObj.find('#product-info-form').submit();
                     });
             });
         });

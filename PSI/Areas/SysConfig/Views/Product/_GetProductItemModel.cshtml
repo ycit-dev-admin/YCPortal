@@ -10,7 +10,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="carNo-info-form" asp-area="SysConfig" asp-controller="CarNo" asp-action="@Model.FormActionName" method="post" autocomplete="off">
+            <form id="product-info-form" asp-area="SysConfig" asp-controller="Product" asp-action="@Model.FormActionName" method="post" autocomplete="off">
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
@@ -44,22 +44,21 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="form-group">
-
+                                    @{
+                                        if (Model.IsOnlyQuery)
+                                        {
+                                            @Model.PsiTypeItems.FirstOrDefault(aa => aa.Value == Model.PsiType).Text
+                                        }
+                                        else
+                                        {
+                                            <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" style="width: 100%;">
+                                                <option></option>
+                                            </select>
+                                        }
+                                    }
                                 </div>
                             </div>
                         </div>
-                        @*<div class="row">
-                                <div class="col-md-3">
-                                    <label class="form-control-label" for="ownername">
-                                        選擇名稱
-                                    </label>
-                                </div>
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
-                                    </div>
-                                </div>
-                            </div>*@
                         <div class="row">
                             <label class="form-control-label" for="ownername">
                                 備註:
@@ -91,7 +90,7 @@
                     @{
                         if (!Model.IsOnlyQuery)
                         {
-                            <button type="button" id="carno-info-action" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
+                            <button type="button" id="product-info-action" class="btn btn-primary">@($@"{Model.ActionTypeName}完成")</button>
 
                         }
                     }
