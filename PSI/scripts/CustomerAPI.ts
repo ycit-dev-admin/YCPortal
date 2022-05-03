@@ -12,11 +12,11 @@
     }
 
 
-    public GetCarNoItemsBy(customerId: string): JQuery.jqXHR {
+    public GetCarNoItemsBy(customerUNID: string): JQuery.jqXHR {
         const apiUrl = `${this.BaseUrl}/api/CustomerCars`;
 
 
-        return $.get(apiUrl, { customerId: encodeURIComponent(customerId) });
+        return $.get(apiUrl, { customerUNID: encodeURIComponent(customerUNID) });
     }
 
 

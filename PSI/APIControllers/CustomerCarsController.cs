@@ -33,12 +33,12 @@ namespace PSI.APIControllers
         //    //return new string[] { "value1", "value2" };
         //}
         [HttpGet]
-        public IActionResult Get(long customerId)
+        public IActionResult Get(Guid customerUNID)
         {
-            var apiRs = _customerService.GetCustomerCar(customerId).Select(aa => new
+            var apiRs = _customerService.GetCustomerCar(customerUNID).Select(aa => new
             {
                 CarName = aa.CAR_NAME,
-                Id = aa.ID
+                CarNoUNID = aa.CAR_GUID
             });
             return Ok(apiRs);
         }
