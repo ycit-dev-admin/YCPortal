@@ -44,13 +44,14 @@ class PurchaseWeightNoteCreateWeightNote {
 
     // References  
     private CustomerAPI: CustomerAPIClass;
-    //public SysConfigPageHelper: SysConfigPageHelper;
+    private PurchasePriceAPI: PurchasePriceAPIClass;
 
 
 
     constructor(baseUrl: string = "") {
         this.BaseUrl = baseUrl;
         this.CustomerAPI = new CustomerAPIClass(this.BaseUrl);
+        this.PurchasePriceAPI = new PurchasePriceAPIClass(this.BaseUrl);
     }
 
     /* Field Doms */
@@ -65,11 +66,19 @@ class PurchaseWeightNoteCreateWeightNote {
     public DomOfOddLShow = document.getElementById('oddProductLs') as HTMLUListElement;
     public DomOfTotalProdItemInfo = document.getElementById('total') as HTMLHeadingElement;
     public DomOfIngredientPost = document.getElementById('ingredientPost') as HTMLDivElement;
-
+    public DomOfFullWeight = document.getElementById('FullWeight') as HTMLInputElement;
+    public DomOfDefectiveWeight = document.getElementById('DefectiveWeight') as HTMLInputElement;
+    public DomOfUnitPrice = document.getElementById('UnitPrice') as HTMLInputElement;
+    public DomOfHasTaxList = document.getElementsByClassName('ishas_tax') as HTMLCollectionOf<HTMLInputElement>;
+    public DomOfTraficUnitPrice = document.getElementById('TraficUnitPrice') as HTMLInputElement;
+    public DomOfThirdWeightFee = document.getElementById('ThirdWeightFee') as HTMLInputElement;
+    public DomOfDisplayFinalPrice = document.getElementById('show_final_price') as HTMLHeadingElement;
+    public DomOfDisplayWeightPrice = document.getElementById('show_weight_price') as HTMLDivElement;
+    public DomOfDispalyTraficPrice = document.getElementById('show_trafic_price') as HTMLDivElement;
 
 
     //-----old
-    public DomOfShowEditCompanyName = document.getElementById('show-edit-companyName') as HTMLSpanElement;
+    // public DomOfShowEditCompanyName = document.getElementById('show-edit-companyName') as HTMLSpanElement;
 
 
     /* Class Variable */
@@ -208,6 +217,36 @@ class PurchaseWeightNoteCreateWeightNote {
         this.BindIngredientToDom();
     }
 
+    private CaculateAllFee() {
+        const thisObj = this;      
+
+        let funcRs = this.PurchasePriceAPI.GetWeightNotePrice(
+            +this.DomOfFullWeight.value,
+            +this.DomOfDefectiveWeight.value,
+            +this.DomOfUnitPrice.value,
+            Array.from(this.DomOfHasTaxList).find(item => item.checked === true).value === "True"
+        );
+        let funcRs2 = this.PurchasePriceAPI.GetDeliveryPrice(
+            +this.DomOfFullWeight.value,
+            +this.DomOfTraficUnitPrice.value
+        );
+
+        $.when(funcRs, funcRs2).then(function (data, data2) {
+            thisObj.DomOfDisplayWeightPrice.textContent = data[0];
+            thisObj.DomOfDispalyTraficPrice.textContent = data2[0];
+            let funcRs3 = thisObj.PurchasePriceAPI.GetActualPayPrice(
+                +thisObj.DomOfThirdWeightFee.value,
+                data[0],
+                data2[0]
+            );
+
+            $.when(funcRs3).then(function (data) {
+                thisObj.DomOfDisplayFinalPrice.textContent = data;
+                // thisObj.ActualPrice_DOM.value = data; 應該把上述值 都帶回後端重新計算
+            });
+        });
+    }
+
 
 
     public PageEventInit() {
@@ -286,6 +325,27 @@ class PurchaseWeightNoteCreateWeightNote {
         $(curObj.DomOfCreateForm).on('click', `.${curObj.MinusPercentClassName}`, function () {
             curObj.MinusProdItemPercent_Click($(this).get(0))
         })
+
+        $(curObj.DomOfFullWeight).on('keyup', function () {
+            curObj.CaculateAllFee();
+        })
+        $(curObj.DomOfDefectiveWeight).on('keyup', function () {
+            curObj.CaculateAllFee();
+        })
+        $(curObj.DomOfUnitPrice).on('keyup', function () {
+            curObj.CaculateAllFee();
+        })
+        $(curObj.DomOfHasTaxList).on('change', function () {
+            curObj.CaculateAllFee();
+        })
+        $(curObj.DomOfTraficUnitPrice).on('keyup', function () {
+            curObj.CaculateAllFee();
+        })
+        $(curObj.DomOfThirdWeightFee).on('keyup', function () {
+            curObj.CaculateAllFee();
+        })
+
+
 
     }
 
