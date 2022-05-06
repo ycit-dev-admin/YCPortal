@@ -12,6 +12,7 @@ namespace PSI.Areas.Purchase.Models.PageModels
         public Guid CustomerUNID { get; set; }
         public string CustomerName { get; set; }  // 當下客戶名     
         public Guid CanNoUNID { get; set; }
+        public Guid ContractUNID { get; set; }  // 進貨合約
         public string CarNo { get; set; }  // 當下車牌
         public double? FullWeight { get; set; }
         public double? DefectiveWeight { get; set; }
@@ -32,7 +33,7 @@ namespace PSI.Areas.Purchase.Models.PageModels
         public string SelectPurchaseDetailInfos { get; set; }
 
         // Entities
-        public VE_PurchaseWeightNote VE_PurchaseWeightNote { get; set; }
+        // public VE_PurchaseWeightNote VE_PurchaseWeightNote { get; set; }
 
         public List<VE_PurchaseIngredient_Query> VE_PurchaseIngredientLs { get; set; }
 
@@ -42,6 +43,7 @@ namespace PSI.Areas.Purchase.Models.PageModels
         public List<SelectListItem> CustomerInfoItems { set; get; }
         public List<SelectListItem> PayTypeItems { set; get; }
         public List<SelectListItem> ProductItemItems { set; get; }
+        public List<SelectListItem> CustomerContractItems { set; get; }
 
     }
 

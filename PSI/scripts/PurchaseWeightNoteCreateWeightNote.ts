@@ -45,6 +45,7 @@ class PurchaseWeightNoteCreateWeightNote {
     // References  
     private CustomerAPI: CustomerAPIClass;
     private PurchasePriceAPI: PurchasePriceAPIClass;
+    private CustomerContractAPI: CustomerContractAPIClass;
 
 
 
@@ -52,6 +53,7 @@ class PurchaseWeightNoteCreateWeightNote {
         this.BaseUrl = baseUrl;
         this.CustomerAPI = new CustomerAPIClass(this.BaseUrl);
         this.PurchasePriceAPI = new PurchasePriceAPIClass(this.BaseUrl);
+        this.CustomerContractAPI = new CustomerContractAPIClass(this.BaseUrl);
     }
 
     /* Field Doms */
@@ -75,6 +77,9 @@ class PurchaseWeightNoteCreateWeightNote {
     public DomOfDisplayFinalPrice = document.getElementById('show_final_price') as HTMLHeadingElement;
     public DomOfDisplayWeightPrice = document.getElementById('show_weight_price') as HTMLDivElement;
     public DomOfDispalyTraficPrice = document.getElementById('show_trafic_price') as HTMLDivElement;
+
+    public DomOfContractUNID = document.getElementById('ContractUNID') as HTMLSelectElement;
+
 
 
     //-----old
@@ -218,7 +223,7 @@ class PurchaseWeightNoteCreateWeightNote {
     }
 
     private CaculateAllFee() {
-        const thisObj = this;      
+        const thisObj = this;
 
         let funcRs = this.PurchasePriceAPI.GetWeightNotePrice(
             +this.DomOfFullWeight.value,
@@ -345,6 +350,14 @@ class PurchaseWeightNoteCreateWeightNote {
             curObj.CaculateAllFee();
         })
 
+        $(curObj.DomOfContractUNID).on('change', function () {
+            var argUNID = $(this).val();
+
+            let funcRs = curObj.CustomerContractAPI.GetContractItemsBy(argUNID.toString());
+            $.when(funcRs).then(function (data) {
+                console.log(data);
+            });
+        })
 
 
     }

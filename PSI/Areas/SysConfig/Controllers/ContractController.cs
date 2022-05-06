@@ -21,24 +21,27 @@ namespace PSI.Areas.SysConfig.Controllers
     public class ContractController : Controller
     {
         private readonly ICustomerService _customerService;
+        private readonly ICustomerContractService _customerContractService;
         private readonly IProductItemService _productItemService;
         private readonly IPsiService _psiService;
         private readonly UserManager<AppUser> _userManager;
         private readonly ContractControllerMapper _mapperHelper;
-        private readonly EnumHelper _enumHelper;
+        private readonly PageItemFromEnumHelper _enumHelper;
 
 
         public ContractController(ICustomerService customerService,
+                                  ICustomerContractService customerContractService,
                                   IPsiService psiService,
                                   IProductItemService productItemService,
                                   UserManager<AppUser> userManager)
         {
             _userManager = userManager;
             _customerService = customerService;
+            _customerContractService = customerContractService;
             _psiService = psiService;
             _productItemService = productItemService;
             _mapperHelper = new ContractControllerMapper();
-            _enumHelper = new EnumHelper();
+            _enumHelper = new PageItemFromEnumHelper();
         }
         [HttpGet]
         [Authorize()]
@@ -50,7 +53,7 @@ namespace PSI.Areas.SysConfig.Controllers
             FunctionResult<PageContractOnlineInfo> GetPageModel()
             {
                 var veCustomerContractMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerContract, VE_CustomerContract>();
-                var customerContractLs = _customerService.GetEffectiveCustomerContracts();
+                var customerContractLs = _customerContractService.GetEffectiveCustomerContracts();
                 var veCustomerContractLs = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContractLs);
                 var veCustomerInfoMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerInfo, VE_CustomerInfo>();
                 var customerInfoLs = _customerService.GetCustomerInfos();
@@ -126,7 +129,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 var customerContractMapper = _mapperHelper.GetMapperOfCreateContractInfo<PageContractCreateContractInfo, CustomerContract>();
                 var customerContract = customerContractMapper.Map<CustomerContract>(pageModel);
-                var funcRs = _customerService.CreateCustomerContract(customerContract, _userManager.GetUserAsync(User).Result);
+                var funcRs = _customerContractService.CreateCustomerContract(customerContract, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
                 resultCustomerContract = funcRs.Success ? funcRs.ResultValue : null;
                 return funcRs;     // Return Result
@@ -175,7 +178,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var veCustomerContractLogMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContractLog, VE_CustomerContractLog>();
 
                 // Query Data
-                var customerContract = _customerService.GetCustomerContract(unid);
+                var customerContract = _customerContractService.GetCustomerContract(unid);
                 var customerContractLogList = _customerService.GetCustomerContractLogs(unid);
 
                 // Map to model
@@ -235,7 +238,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 var customerContractMapper = _mapperHelper.GetMapperOfEditCustomerContract<PageContractEditCustomerContract, CustomerContract>();
                 var customerContract = customerContractMapper.Map<CustomerContract>(pageModel);
-                var funcRs = _customerService.UpdateCustomerContract(customerContract, _userManager.GetUserAsync(User).Result);
+                var funcRs = _customerContractService.UpdateCustomerContract(customerContract, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
                 resultCustomerContract = funcRs.Success ? funcRs.ResultValue : null;
                 return funcRs;     // Return Result

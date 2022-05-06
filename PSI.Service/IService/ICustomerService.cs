@@ -19,13 +19,6 @@ namespace PSI.Service.IService
         IQueryable<CustomerInfo> GetCustomerInfos();
         IQueryable<CustomerInfo> GetPurchaseCustomerInfo();
 
-        // Customer Contract
-        IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(Guid customerId);
-        IQueryable<CustomerContract> GetEffectiveCustomerContracts();
-        FunctionResult<CustomerContract> CreateCustomerContract(CustomerContract customerContract, AppUser operUser);
-        CustomerContract GetCustomerContract(Guid unid);
-        FunctionResult<CustomerContract> UpdateCustomerContract(CustomerContract customerContract, AppUser appUser);
-
         // CustomerContractLog
         IQueryable<CustomerContractLog> GetCustomerContractLogs(Guid contractUNID);
 

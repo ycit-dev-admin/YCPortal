@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220506072729_remove contract type field")]
+    partial class removecontracttypefield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,9 +118,6 @@ namespace PSI.Core.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("CONTRACT_STATUS")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("CONTRACT_TYPE")
                         .HasColumnType("integer");
 
                     b.Property<string>("CREATE_EMPNO")

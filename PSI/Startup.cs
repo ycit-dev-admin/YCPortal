@@ -54,7 +54,7 @@ namespace PSI
             //services.AddTransient<IValidator<Show_CustomerInfo>, VM_Create_CustomerInfoValidator>();
             //services.AddTransient<PsiService>(new PsiService());
             //services.AddScoped<IPsiService, PsiService>();
-            services.AddScoped<IPsiService, PsiService>();
+
             services.AddScoped<IGenericRepository<PurchaseWeightNote>, GenericRepository<PurchaseWeightNote>>();
             services.AddScoped<IGenericRepository<CustomerInfo>, GenericRepository<CustomerInfo>>();
             services.AddScoped<IGenericRepository<CustomerCar>, GenericRepository<CustomerCar>>();
@@ -64,8 +64,11 @@ namespace PSI
             services.AddScoped<IGenericRepository<CodeTable>, GenericRepository<CodeTable>>();
             services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();
             services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
+            services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
+            services.AddScoped<ICodeTableService, CodeTableService>();
+            services.AddScoped<ICustomerContractService, CustomerContractService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile

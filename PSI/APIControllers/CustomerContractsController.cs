@@ -15,12 +15,12 @@ namespace PSI.APIControllers
     //[AllowAnonymous]  //允許匿名用戶
     public class CustomerContractsController : ControllerBase
     {
-        private readonly ICustomerService _customerService;
+        private readonly ICustomerContractService _customerContractService;
 
 
-        public CustomerContractsController(ICustomerService customerService)
+        public CustomerContractsController(ICustomerContractService customerContractService)
         {
-            _customerService = customerService;
+            _customerContractService = customerContractService;
         }
 
 
@@ -29,15 +29,15 @@ namespace PSI.APIControllers
         [HttpGet]
         public IEnumerable<CustomerContract> Get()
         {
-            return _customerService.GetEffectiveCustomerContracts();
+            return _customerContractService.GetEffectiveCustomerContracts();
             //return new string[] { "value1", "value2" };
         }
 
         // GET api/<CustomerContractController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{guid}")]
         public IEnumerable<CustomerContract> Get(Guid guid)
         {
-            return _customerService.GetCustomerContractsByCustomerId(guid);
+            return _customerContractService.GetCustomerContractsByCustomerId(guid);
         }
 
         // POST api/<CustomerContractController>

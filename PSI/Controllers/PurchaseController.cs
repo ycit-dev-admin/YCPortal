@@ -111,7 +111,8 @@ namespace PSI.Controllers
             var purchaseHelper = new PurchaseHelper(_mapper);
             var userInfo = _userManager.GetUserAsync(User).Result;
             var docNo = _psiService.GetDocNo(userInfo.FacSite, (int)PSIType.Purchase);
-            var purchaseWeightNote = purchaseHelper.GetPurchaseWeightNote(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
+            //var purchaseWeightNote = purchaseHelper.GetPurchaseWeightNote(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
+            var purchaseWeightNote = new PurchaseWeightNote();
                                                                                                                     //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
             var vePurchaseIngredientLs = pageModel.VE_PurchaseIngredientLs;
             var purchaseIngredientLs = purchaseHelper.GetPurchaseIngredientLs(vePurchaseIngredientLs); // 進貨品項
@@ -127,12 +128,12 @@ namespace PSI.Controllers
                 var customerInfo = new CustomerInfo
                 {
                     COMPANY_NAME = "TempCompany",
-                    CUSTOMER_NAME = pageModel.VE_PurchaseWeightNote.CustomerName
+                    //CUSTOMER_NAME = pageModel.VE_PurchaseWeightNote.CustomerName
                 };
 
                 // 建立臨時車牌
                 var customerCarLs = new List<CustomerCar> {new CustomerCar {
-                    CAR_NAME = pageModel.VE_PurchaseWeightNote.CarNo
+                    //CAR_NAME = pageModel.VE_PurchaseWeightNote.CarNo
                 } };
 
                 _customerService.CreateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);

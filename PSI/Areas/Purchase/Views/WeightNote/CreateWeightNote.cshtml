@@ -142,9 +142,45 @@
         </fieldset>
         <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">合約資訊</legend>
-            <div class="form-group">
-
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label">合約名稱</label>
+                    <select asp-for="ContractUNID" asp-items="@Model.CustomerContractItems" class="select2bs4" style="width: 100%;">
+                        <option></option>
+                    </select>
+                </div>
             </div>
+            <div class="col-sm-12">
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="CarNoId">合約重量</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="CarNoName">合約單價</label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="CarNoId">已完成重量</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="CarNoName">目前合約金額</label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </fieldset>
         <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">金額計算</legend>
@@ -271,6 +307,7 @@
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/psi/PurchaseProdItem.js"></script>
     <script asp-append-version="true" src="~/psi/CustomerAPI.js"></script>
+    <script asp-append-version="true" src="~/psi/CustomerContractAPI.js"></script>    
     <script src="~/psi/PurchasePriceAPIClass.js"></script>
     <script src="~/psi/PurchaseProdItemList.js"></script>
     <script asp-append-version="true" src="~/psi/PurchaseWeightNoteCreateWeightNote.js"></script>

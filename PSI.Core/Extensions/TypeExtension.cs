@@ -27,5 +27,10 @@ namespace PSI.Core.Extensions
             }
             return dbEntity;
         }
+
+        public static List<FieldInfo> GetAllFieldInfo(this Type source)
+        {
+            return source.GetFields().Where(aa => aa.Name != "value__").ToList();
+        }
     }
 }

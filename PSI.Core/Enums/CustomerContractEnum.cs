@@ -15,5 +15,12 @@ namespace PSI.Core.Enums
             [Description("強制完成")]
             ForceCompleted = 9
         }
+        public enum Types
+        {
+            [Description("進貨合約")]
+            Purchase = 0,
+            [Description("出貨合約")]
+            Sale = 1,
+        }
     }
 }

@@ -24,7 +24,9 @@ namespace PSI.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IPsiService _psiService;
+        private readonly ICodeTableService _codeTableService;
         private readonly ICustomerService _customerService;
+        private readonly ICustomerContractService _customerContractService;
         private readonly IProductItemService _productItemService;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
@@ -34,7 +36,9 @@ namespace PSI.Controllers
 
         public WeightNoteController(IMapper mapper,
                                             IPsiService psiService,
+                                            ICodeTableService codeTableService,
                                             ICustomerService customerService,
+                                            ICustomerContractService customerContractService,
                                             IProductItemService productItemService,
                                             IHttpContextAccessor httpContextAccessor,
                                             UserManager<AppUser> userManager)
@@ -42,7 +46,9 @@ namespace PSI.Controllers
             _mapper = mapper;
             _userManager = userManager;
             _psiService = psiService;
+            _codeTableService = codeTableService;
             _customerService = customerService;
+            _customerContractService = customerContractService;
             _productItemService = productItemService;
             _httpContextAccessor = httpContextAccessor;
             _purchaseHelper = new PurchaseHelper(_mapper);
@@ -74,8 +80,11 @@ namespace PSI.Controllers
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
                 ProductItemItems = _productItemService.GetPurchaseProductItems().ToPageSelectList(
                     nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID)),
-                PayTypeItems = _psiService.GetPsiTypeItems().ToPageSelectList(
-                    nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
+                PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
+                    nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
+                CustomerContractItems= _customerContractService.GetPurchaseCustomerContracts().ToPageSelectList(
+                    nameof(CustomerContract.CONTRACT_NAME),
+                    nameof(CustomerContract.CONTRACT_GUID))
             };
             return View(pageModel);
         }
@@ -156,8 +165,11 @@ namespace PSI.Controllers
             var pEntityHelper = new PurchaseEntityHelper(_mapper);
             var userInfo = _userManager.GetUserAsync(User).Result;
             var docNo = _psiService.GetDocNo(userInfo.FacSite, (int)PSIType.Purchase);
-            var purchaseWeightNote = pEntityHelper.GetPurchaseWeightNote_Create(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
-                                                                                                                          //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
+            // var purchaseWeightNote = pEntityHelper.GetPurchaseWeightNote_Create(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
+            var purchaseWeightNote = new PurchaseWeightNote();
+
+
+            //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
             var vePurchaseIngredientLs = pageModel.VE_PurchaseIngredientLs;
             var purchaseIngredientLs = purchaseHelper.GetPurchaseIngredientLs(vePurchaseIngredientLs); // 進貨品項
 
@@ -172,12 +184,12 @@ namespace PSI.Controllers
                 var customerInfo = new CustomerInfo
                 {
                     COMPANY_NAME = "TempCompany",
-                    CUSTOMER_NAME = pageModel.VE_PurchaseWeightNote.CustomerName
+                    //CUSTOMER_NAME = pageModel.VE_PurchaseWeightNote.CustomerName
                 };
 
                 // 建立臨時車牌
                 var customerCarLs = new List<CustomerCar> {new CustomerCar {
-                    CAR_NAME = pageModel.VE_PurchaseWeightNote.CarNo
+                    //CAR_NAME = pageModel.VE_PurchaseWeightNote.CarNo
                 } };
 
                 _customerService.CreateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
@@ -217,7 +229,8 @@ namespace PSI.Controllers
                 VE_PurchaseWeightNoteLs = _mapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),
                 CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
-                PayTypeItems = _purchaseHelper.PageGetPayTypeItems(_psiService),
+                PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
+                    nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
                 PIngredientLs = pIngredientLs.ToList()
             };
 
