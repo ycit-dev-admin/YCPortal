@@ -148,6 +148,11 @@ namespace PSI.Service.Service
             var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.DOC_NO == docNo).Result;
             return result;
         }
+        public PurchaseWeightNote GetPurchaseWeightNote(Guid unid)
+        {
+            var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.UNID == unid).Result;
+            return result;
+        }
 
         public IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes()
         {

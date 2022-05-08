@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -11,6 +12,7 @@ namespace PSI.Service.IService
     {
         // CustomerContractEnum
         public IQueryable<CustomerContractEnum.Types> GetPurchaseContractTypes();
+        public Dictionary<int, CustomerContractEnum.Types> GetCustomerContracTypes();
 
         // Customer Contract
         CustomerContract GetCustomerContractsByCustomerUNID(Guid customerId);

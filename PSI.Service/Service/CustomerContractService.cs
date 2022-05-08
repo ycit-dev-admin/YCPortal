@@ -48,6 +48,13 @@ namespace PSI.Service.Service
             // item.GetRawConstantValue().ToString()).AsQueryable();
         }
 
+        public Dictionary<int, CustomerContractEnum.Types> GetCustomerContracTypes()
+        {
+            return Enum.GetValues(typeof(CustomerContractEnum.Types))
+                       .Cast<CustomerContractEnum.Types>()
+                       .ToDictionary(r => (int)r, r => r);
+        }
+
         public CustomerContract GetCustomerContractsByCustomerUNID(Guid customerId)
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result

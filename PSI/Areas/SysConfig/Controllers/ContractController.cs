@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
 using PSI.Infrastructure.Helpers;
@@ -65,8 +67,11 @@ namespace PSI.Areas.SysConfig.Controllers
                 {
                     VeCustomerContractList = veCustomerContractLs,
                     VeCustomerInfoList = veCustomerInfoLs,
-                    ContractTypeItems = _psiService.GetContractTypeItems()
-                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
+                    ContractTypeItems = _customerContractService.GetCustomerContracTypes()
+                    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key")
+                    // ContractTypeItems = _psiService.GetContractTypeItems()
+                    //.ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
+
                 });
                 return funRs;
             }
@@ -256,8 +261,10 @@ namespace PSI.Areas.SysConfig.Controllers
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
                 pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
-                pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
-                  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
+                pageModel.ContractTypeItems = _customerContractService.GetCustomerContracTypes()
+                    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key", pageModel.ContractType);
+
+
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(

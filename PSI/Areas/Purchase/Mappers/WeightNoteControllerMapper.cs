@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Enums;
@@ -20,6 +21,8 @@ namespace PSI.Areas.Purchase.Mappers
             switch (typeof(T1).Name, typeof(T2).Name)
             {
                 case (nameof(WeightNoteCreateWeightNote), nameof(PurchaseWeightNote)):
+                    var purchasePriceHelper = new PurchasePriceHelper();
+
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, PurchaseWeightNote>()
                       .ForMember(t => t.FULL_WEIGHT_TIME, s => s.MapFrom(o => o.FullWeightTime))
@@ -40,6 +43,10 @@ namespace PSI.Areas.Purchase.Mappers
                       .ForMember(t => t.NOTE_STATUS, s => s.MapFrom(o => o.PayType == "1" ?
                                                                     PSIWeightNoteEnum.PWeightNotesStatus.Completed :  // 只有付現是結清
                                                                     PSIWeightNoteEnum.PWeightNotesStatus.Ongo))
+                       .ForMember(t => t.ACTUAL_PRICE, s => s.MapFrom(o =>
+                       purchasePriceHelper.GetActualPayPrice(o.ThirdWeightFee,
+                       purchasePriceHelper.GetWeightNotePrice(o.FullWeight.Value, o.DefectiveWeight.Value, decimal.Parse(o.UnitPrice), o.HasTax),
+                       purchasePriceHelper.GetDeliveryPrice(o.FullWeight.Value, decimal.Parse(o.TraficUnitPrice)))))
                       ).CreateMapper();
                 case (nameof(VE_PurchaseIngredient), nameof(PurchaseIngredient)):
                     return new MapperConfiguration(cfg =>
@@ -66,6 +73,29 @@ namespace PSI.Areas.Purchase.Mappers
                     cfg.CreateMap<WeightNoteCreateWeightNote, CustomerCar>()
                       .ForMember(t => t.CAR_NAME, s => s.MapFrom(o => o.CarNo))
                       .ForMember(t => t.IS_EFFECTIVE, s => s.MapFrom(o => "1"))
+                      ).CreateMapper();
+                default:
+                    return null;
+            }
+        }
+
+        public IMapper GetMapperOfWeightNoteList<T1, T2>()
+        {
+            switch (typeof(T1).Name, typeof(T2).Name)
+            {
+                case (nameof(PurchaseWeightNote), nameof(VE_PurchaseWeightNote)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<PurchaseWeightNote, VE_PurchaseWeightNote>()
+                      .ForMember(t => t.FullWeightTime, s => s.MapFrom(o => o.FULL_WEIGHT_TIME))
+                      .ForMember(t => t.DocNo, s => s.MapFrom(o => o.DOC_NO))
+                      .ForMember(t => t.CustomerName, s => s.MapFrom(o => o.CUSTOMER_NAME))
+                      .ForMember(t => t.Unid, s => s.MapFrom(o => o.UNID))
+                      .ForMember(t => t.FullWeight, s => s.MapFrom(o => o.FULL_WEIGHT))
+                      .ForMember(t => t.DefectiveWeight, s => s.MapFrom(o => o.DEFECTIVE_WEIGHT))
+                      .ForMember(t => t.UnitPrice, s => s.MapFrom(o => o.UNIT_PRICE))
+                      .ForMember(t => t.ActualPrice, s => s.MapFrom(o => o.ACTUAL_PRICE))
+                      .ForMember(t => t.PayType, s => s.MapFrom(o => o.PAY_TYPE))
+                      .ForMember(t => t.PayTime, s => s.MapFrom(o => o.PAY_TIME))
                       ).CreateMapper();
                 default:
                     return null;

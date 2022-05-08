@@ -27,6 +27,7 @@ namespace PSI.Service.IService
         IEnumerable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime);
         IQueryable<PurchaseWeightNote> GetPurchaseWeightNotesBy(List<Guid> weightNoteUNIDList);
         PurchaseWeightNote GetPurchaseWeightNote(string docNo);
+        PurchaseWeightNote GetPurchaseWeightNote(Guid unid);
 
 
 

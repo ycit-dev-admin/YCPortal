@@ -97,7 +97,7 @@ namespace PSI.Controllers
         [HttpGet]
         [Authorize()]
         // [RuleSetForClientSideMessages("Skip")]
-        public IActionResult EditWeightNote(string docNo)
+        public IActionResult EditWeightNote(string unid)
         {
             // Action variables
             var errMsg = "";
@@ -106,7 +106,7 @@ namespace PSI.Controllers
             #region -- GetPageModel --
             FunctionResult<PageWeightNoteEditWeightNote> GetPageModel()
             {
-                var purchaseWeightNote = _psiService.GetPurchaseWeightNote(docNo);
+                var purchaseWeightNote = _psiService.GetPurchaseWeightNote(new Guid(unid));
                 var pModelMapperCfg = _mapperHelper.GetPageModelMapper<PurchaseWeightNote, PageWeightNoteEditWeightNote>();
                 var pageModel = pModelMapperCfg.Map<PageWeightNoteEditWeightNote>(purchaseWeightNote);
 
@@ -355,9 +355,13 @@ namespace PSI.Controllers
 
 
             var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.UNID).ToList());
+
+
+            var vePurchaseWeightNoteMapper = _mapperHelper.GetMapperOfWeightNoteList<PurchaseWeightNote, VE_PurchaseWeightNote>();
+
             var pageModel = new Page_Purchase_WeightNoteList
             {
-                VE_PurchaseWeightNoteLs = _mapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),
+                VE_PurchaseWeightNoteLs = vePurchaseWeightNoteMapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),
                 CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
                 PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(

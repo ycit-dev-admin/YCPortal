@@ -350,7 +350,7 @@
         let defaultOption = new Option("0.新車牌", "0", false, false);
         JqDomOfCarNoUNID.append(defaultOption);
         dataObjLs.forEach(function (item) {  // 清單項目
-            let newOption = new Option(item.carName, item.id, false, false);
+            let newOption = new Option(item.carName, item.carNoUNID, false, false);
             JqDomOfCarNoUNID.append(newOption);
         });
     }

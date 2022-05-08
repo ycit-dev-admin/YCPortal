@@ -69,7 +69,7 @@
                 <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.PayType)?.Text</td>
                 <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
                 <td>
-                    <a asp-action="EditWeightNote" asp-route-docNo="@item.DocNo" class="btn btn-primary">細項</a>
+                    <a asp-action="EditWeightNote" asp-route-unid="@item.Unid" class="btn btn-primary">細項</a>
                     @*<a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>細項</a>*@
                     @*<a asp-controller="WeightNote" asp-action="EditWeightNote" asp-route-docNo="@item.DocNo" class="btn btn-primary">細項2</a>*@
                     @*<button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>*@
