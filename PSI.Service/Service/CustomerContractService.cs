@@ -15,6 +15,7 @@ namespace PSI.Service.Service
     public class CustomerContractService : ICustomerContractService
     {
         private readonly IUnitOfWork _unitOfwork;
+        private readonly IPsiService _psiService;
         private readonly IGenericRepository<CustomerInfo> _customerInfoRepository;
         private readonly IGenericRepository<CustomerContract> _customerContractRepository;
         private readonly IGenericRepository<CustomerContractLog> _customerContractLogRepository;
@@ -22,9 +23,11 @@ namespace PSI.Service.Service
         private readonly IGenericRepository<CodeTable> _codeTableRepository;
 
 
-        public CustomerContractService(IUnitOfWork unitOfWork)
+        public CustomerContractService(IUnitOfWork unitOfWork,
+            IPsiService psiService)
         {
             _unitOfwork = unitOfWork;
+            _psiService = psiService;
             _customerInfoRepository = _unitOfwork.CustomerInfoRepository;
             _customerContractRepository = _unitOfwork.CustomerContractRepository;
             _customerContractLogRepository = _unitOfwork.CustomerContractLogRepository;
@@ -45,10 +48,10 @@ namespace PSI.Service.Service
             // item.GetRawConstantValue().ToString()).AsQueryable();
         }
 
-        public IEnumerable<CustomerContract> GetCustomerContractsByCustomerId(Guid customerId)
+        public CustomerContract GetCustomerContractsByCustomerUNID(Guid customerId)
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => aa.CONTRACT_GUID == customerId);
+                                                     .FirstOrDefault(aa => aa.CONTRACT_GUID == customerId);
             return queryRs;
         }
 
@@ -118,6 +121,34 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
+        public FunctionResult<CustomerContractLog> CreateCustomerContractLog(CustomerContractLog customerContractLog, AppUser operUser)
+        {
+            var funcRs = new FunctionResult<CustomerContractLog>();
+            if (operUser != null)
+            {
+                customerContractLog.CREATE_EMPNO = operUser.NickName;
+                customerContractLog.CREATE_TIME = DateTime.Now;
+                customerContractLog.UPDATE_EMPNO = operUser.NickName;
+                customerContractLog.UPDATE_TIME = DateTime.Now;
+
+
+                var creaetRs = _customerContractLogRepository.Create(customerContractLog);
+
+                if (!creaetRs.Success)
+                {
+                    funcRs.ResultFailure(creaetRs.ActionMessage);
+                    return funcRs;
+                }
+
+                funcRs.ResultSuccess("新增合約紀錄資料成功!!", customerContractLog);
+            }
+            else
+            {
+                funcRs.ResultFailure("無此操作User資料!!");
+            }
+            return funcRs;
+        }
+
         public CustomerContract GetCustomerContract(Guid unid)
         {
             return _customerContractRepository.GetAsync(aa => aa.CONTRACT_GUID == unid).Result;
@@ -166,6 +197,66 @@ namespace PSI.Service.Service
             funcRs = _customerContractRepository.Update(upDbEntity);
             funcRs.ResultSuccess("更新客戶資料成功!!", upDbEntity);
             return funcRs;
+        }
+
+        public FunctionResult<CustomerContract> UpdateCustomerContractStatus(CustomerContract customerContract, CustomerContractEnum.Status contractStatus, AppUser operUser)
+        {
+            var funcRs = new FunctionResult<CustomerContract>();
+            if (customerContract == null)
+            {
+                funcRs.ResultFailure("無更新資料傳入!!");
+                return funcRs;
+            }
+            var dbCustomerContract = _customerContractRepository.GetAsync(item => item.CONTRACT_GUID == customerContract.CONTRACT_GUID).Result;
+            if (dbCustomerContract == null)
+            {
+                funcRs.ResultFailure("查無此筆資料!!");
+                return funcRs;
+            }
+
+            // update logic
+            dbCustomerContract.CONTRACT_STATUS = (int)contractStatus;
+            dbCustomerContract.UPDATE_EMPNO = operUser.NickName;
+            dbCustomerContract.UPDATE_TIME = DateTime.Now;
+
+
+
+
+
+            funcRs = _customerContractRepository.Update(dbCustomerContract);
+            funcRs.ResultSuccess("更新客戶資料成功!!", dbCustomerContract);
+            return funcRs;
+        }
+
+        public IQueryable<CustomerContractLog> GetCustomerContractLogs(Guid contractUNID)
+        {
+            var queryRs = _customerContractLogRepository.GetAllAsync().Result
+                                          .Where(aa => aa.CONTRACT_UNID == contractUNID &&
+                                                       aa.IS_EFFECTIVE == "1").AsQueryable();
+            return queryRs;
+        }
+
+        public bool IsCustomerContractCompleted(Guid contractUNID)
+        {
+            var customerContract = _customerContractRepository.GetAllAsync().Result
+                                          .FirstOrDefault(aa => aa.CONTRACT_GUID == contractUNID);
+            var contractLogRelDocUNIDs = this.GetCustomerContractLogs(contractUNID)
+                                                .Select(aa => aa.PSI_DOC_UNID).ToList();
+
+            var contractType = (CustomerContractEnum.Types)customerContract.CONTRACT_TYPE;
+            if (contractType == CustomerContractEnum.Types.Purchase)  // 進貨合約
+            {
+                var pWeightNoteList = _psiService.GetPurchaseWeightNotesBy(contractLogRelDocUNIDs);
+                var sumWeightValues = pWeightNoteList.Sum(aa => aa.FULL_WEIGHT - aa.DEFECTIVE_WEIGHT);
+
+                return sumWeightValues >= customerContract.DEAL_WEIGHT ? true : false;
+            }
+            else if (contractType == CustomerContractEnum.Types.Sale)  // 出貨合約
+            {
+                //
+            }
+
+            return false;
         }
     }
 }

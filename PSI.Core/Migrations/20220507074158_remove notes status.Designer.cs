@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220507074158_remove notes status")]
+    partial class removenotesstatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,7 +233,7 @@ namespace PSI.Core.Migrations
                     b.Property<bool?>("IS_CONTRACT")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("IS_EFFECTIVE")
+                    b.Property<string>("IS_EFECTIVE")
                         .HasColumnType("text");
 
                     b.Property<string>("PSI_TYPE")
@@ -351,9 +353,6 @@ namespace PSI.Core.Migrations
                     b.Property<DateTime?>("CAR_WEIGHT_TIME")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid?>("CONTRACT_UNID")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("CREATE_EMPNO")
                         .HasColumnType("text");
 
@@ -404,9 +403,6 @@ namespace PSI.Core.Migrations
 
                     b.Property<string>("INPUT_TYPE")
                         .HasColumnType("text");
-
-                    b.Property<int>("NOTE_STATUS")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("PAY_TIME")
                         .HasColumnType("timestamp without time zone");

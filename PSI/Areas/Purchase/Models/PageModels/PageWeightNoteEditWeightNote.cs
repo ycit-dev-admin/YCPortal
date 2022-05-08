@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Areas.Purchase.Models.IVE_Models;
-using PSI.Models.VEModels;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace PSI.Areas.Purchase.Models.PageModels
 {

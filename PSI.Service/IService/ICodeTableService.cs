@@ -14,7 +14,5 @@ namespace PSI.Service.IService
         /* CodeTable */
         IQueryable<CodeTable> GetPayTypeItems();
         IQueryable<CodeTable> GetPsiTypeItems();
-        IQueryable<CodeTable> GetContractTypeItems();
-        IQueryable<CodeTable> GetPurchaseContractTypeItems();
     }
 }

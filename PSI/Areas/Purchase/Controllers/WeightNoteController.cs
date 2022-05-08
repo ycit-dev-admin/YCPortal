@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.Purchase.Helpers;
+using PSI.Areas.Purchase.Mappers;
 using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
 using PSI.Infrastructure.Helpers;
@@ -31,7 +34,7 @@ namespace PSI.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly PurchaseHelper _purchaseHelper;
-        private readonly PurchaseMapperHelper _mapperHelper;
+        private readonly WeightNoteControllerMapper _mapperHelper;
 
 
         public WeightNoteController(IMapper mapper,
@@ -52,7 +55,7 @@ namespace PSI.Controllers
             _productItemService = productItemService;
             _httpContextAccessor = httpContextAccessor;
             _purchaseHelper = new PurchaseHelper(_mapper);
-            _mapperHelper = new PurchaseMapperHelper();
+            _mapperHelper = new WeightNoteControllerMapper();
             //_haha = haha;
         }
 
@@ -71,9 +74,11 @@ namespace PSI.Controllers
         {
             ViewData["Title"] = "進貨磅單建立";
             // string host = _httpContextAccessor.HttpContext.Request.Host.Value;  //能夠取得Host Domain Name
+            //var haha = _psiService.GetPurchaseWeightNotesStatus()
+            //    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key");
 
 
-            var pageModel = new Page_Purchase_CreateWeightNote
+            var pageModel = new WeightNoteCreateWeightNote
             {
                 //CustomerInfoItems = itemHelper.PageGetCustomerInfoItems(_customerService.GetPurchaseCustomerInfo()),
                 CustomerInfoItems = _customerService.GetCustomerInfos()
@@ -82,7 +87,7 @@ namespace PSI.Controllers
                     nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID)),
                 PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
-                CustomerContractItems= _customerContractService.GetPurchaseCustomerContracts().ToPageSelectList(
+                CustomerContractItems = _customerContractService.GetPurchaseCustomerContracts().ToPageSelectList(
                     nameof(CustomerContract.CONTRACT_NAME),
                     nameof(CustomerContract.CONTRACT_GUID))
             };
@@ -144,12 +149,137 @@ namespace PSI.Controllers
 
         [HttpPost]
         [Authorize()]
-        public IActionResult CreateWeightNote(Page_Purchase_CreateWeightNote pageModel)
+        public IActionResult CreateWeightNote(WeightNoteCreateWeightNote pageModel)
         {
+
+            // Action variables
+            var errMsg = "";
+            PurchaseWeightNote rsPurchaseWeightNote;
+
+            // Step Functions 
+            #region -- ValidPageModel --
+            FunctionResult ValidPageModel(WeightNoteCreateWeightNote pageModel)
+            {
+                var funRs = new FunctionResult();
+                var validator = new WeightNoteCreateWeightNoteValidator();
+                var validRs = validator.Validate(pageModel, options => options.IncludeRuleSets("Skip"));
+
+                if (!validRs.IsValid)
+                {
+                    errMsg = $@"資料驗證失敗，請檢查頁面訊息!! 原因:{string.Join(',', validRs.Errors)}";
+                    funRs.ResultFailure(errMsg);
+                    return funRs;
+                }
+
+                funRs.ResultSuccess("驗證成功");
+                return funRs;     // Return Result
+            }
+            #endregion
+            #region -- InsertToDB --
+            FunctionResult<PurchaseWeightNote> InsertToDB(WeightNoteCreateWeightNote pageModel)
+            {
+                var funcRs = new FunctionResult<PurchaseWeightNote>();
+
+
+                // 合約Log Entity
+                if (!string.IsNullOrEmpty(pageModel.ContractUNID))
+                {
+                    var customerContracMapper = _mapperHelper.GetMapperOfCreateWeightNote<PurchaseWeightNote, CustomerContractLog>();
+                    var customerContractLog = customerContracMapper.Map<CustomerContractLog>(funcRs.ResultValue);
+                    var createCustomerContractLogRs = _customerContractService.CreateCustomerContractLog(customerContractLog,
+                        _userManager.GetUserAsync(User).Result);
+                }
+
+
+                CustomerInfo rsCustomerInfo = null;
+                // 客戶資訊Entity 
+                if (pageModel.CustomerUNID == "0") // 臨時客戶
+                {
+                    var customerInfoMapper = _mapperHelper.GetMapperOfCreateWeightNote<WeightNoteCreateWeightNote, CustomerInfo>();
+                    var customerInfo = customerInfoMapper.Map<CustomerInfo>(pageModel);
+                    rsCustomerInfo = _customerService.CreateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result).ResultValue;
+                }
+                else
+                    rsCustomerInfo = _customerService.GetCustomerInfo(new Guid(pageModel.CustomerUNID));
+
+                // 車牌資訊 Entity
+                CustomerCar rsCustomerCar = null;
+                if (pageModel.CarNoUNID == "0") // 臨時車牌
+                {
+                    var customerCarMapper = _mapperHelper.GetMapperOfCreateWeightNote<WeightNoteCreateWeightNote, CustomerCar>();
+                    var customerCar = customerCarMapper.Map<CustomerCar>(pageModel);
+                    rsCustomerCar = _customerService.CreateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result).ResultValue;
+                }
+                else
+                    rsCustomerCar = _customerService.GetCustomerCarByUNID(new Guid(pageModel.CarNoUNID));
+
+                // Create 進貨磅單  & 進貨組成資訊產生
+                var purchaseWeightNoteMapper = _mapperHelper.GetMapperOfCreateWeightNote<WeightNoteCreateWeightNote, PurchaseWeightNote>();
+                var purchaseIngredientMapper = _mapperHelper.GetMapperOfCreateWeightNote<VE_PurchaseIngredient, PurchaseIngredient>();
+                var purchaseWeightNote = purchaseWeightNoteMapper.Map<PurchaseWeightNote>(pageModel);
+                var purchaseIngredientList = purchaseIngredientMapper.Map<List<PurchaseIngredient>>(pageModel.VE_PurchaseIngredientLs);
+
+                // Create 進貨磅單  Logic
+                funcRs = _psiService.CreatePurchaseWeightNote(purchaseWeightNote,
+                                                              purchaseIngredientList,
+                                                              _userManager.GetUserAsync(User).Result,
+                                                              _customerContractService,
+                                                              rsCustomerInfo);
+
+
+
+                rsPurchaseWeightNote = funcRs.ResultValue;
+                return funcRs;     // Return Result
+            }
+            #endregion
+
+
+            // Step Result
+            if (!ValidPageModel(pageModel).Success ||
+                !InsertToDB(pageModel).Success)
+            {
+                TempData["pageMsg"] = errMsg;
+
+
+                //pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
+                //  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
+                //pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
+                //    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
+                //pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
+                //    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID), pageModel.ProductGUID.ToString());
+
+                pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerUNID.ToString());
+                pageModel.ProductItemItems = _productItemService.GetPurchaseProductItems().ToPageSelectList(
+                   nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID));
+                pageModel.PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
+                    nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.PayType);
+                pageModel.CustomerContractItems = _customerContractService.GetPurchaseCustomerContracts().ToPageSelectList(
+                    nameof(CustomerContract.CONTRACT_NAME),
+                    nameof(CustomerContract.CONTRACT_GUID),
+                    pageModel.ContractUNID.ToString());
+
+
+                return View(pageModel);
+            }
+
+
+            // Successed
+            TempData["pageMsg"] = $@"磅單:{rsPurchaseWeightNote.DOC_NO} 建立成功!!";
+            return RedirectToAction(nameof(WeightNoteController.WeightNoteList));
+
+
+
+            //'new -------------------------------------
+
+
+
+
+
             //var validator = new VM_PurchaseWeightNoteValidator();
             //var validRs = validator.Validate(vmPurchaseWeightNote);
-
             //var validRs = validator.Validate(vmPurchaseWeightNote, options => options.IncludeRuleSets("Create"));
+
             pageModel.CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService);
             pageModel.ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService);
             if (!ModelState.IsValid)
@@ -176,7 +306,8 @@ namespace PSI.Controllers
             var createRs = _psiService.CreatePurchaseWeightNote(
                 purchaseWeightNote,
                 purchaseIngredientLs,
-                userInfo);
+                userInfo,
+                _customerContractService);
 
             if (purchaseWeightNote.CUSTOMER_UNID == Guid.Empty)
             {

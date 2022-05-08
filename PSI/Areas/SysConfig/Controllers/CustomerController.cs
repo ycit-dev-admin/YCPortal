@@ -104,7 +104,7 @@ namespace PSI.Areas.SysConfig.Controllers
             var isNewOpen = carGUID == default;
             var pageModel = funcMapper.Map<PageCustomer_GetCarNoInfoModel>(isNewOpen ?
                 new CustomerCar() :
-                _customerService.GetCustomerCar(carGUID).FirstOrDefault());
+                _customerService.GetCustomerCarByCustomerUNID(carGUID).FirstOrDefault());
             pageModel.IsNewOpen = isNewOpen;
             pageModel.ActionTypeName = isNewOpen ? "建立" : "編輯";
 
@@ -196,7 +196,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
                 // Query Data
                 var customerInfo = _customerService.GetCustomerInfo(unid);
-                var customerCarLs = _customerService.GetCustomerCar(unid).ToList();  // 要改成用Guid
+                var customerCarLs = _customerService.GetCustomerCarByCustomerUNID(unid).ToList();  // 要改成用Guid
 
                 // Map to model
                 var pageModel = pModelMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
@@ -285,7 +285,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 TempData["pageMsg"] = errMsg;
                 var veCustomerCarMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerCar, VE_CustomerCar>();
-                var customerCarLs = _customerService.GetCustomerCar(pageModel.CustomerGuid).ToList();  // 要改成用Guid
+                var customerCarLs = _customerService.GetCustomerCarByCustomerUNID(pageModel.CustomerGuid).ToList();  // 要改成用Guid
                 pageModel.VE_CustomerCarList = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
                     .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));

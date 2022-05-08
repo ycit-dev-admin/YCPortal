@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using PSI.Areas.Purchase.Models.IVE_Models;
-using PSI.Areas.Purchase.Models.PageModels;
-using PSI.Areas.SysConfig.Models.ShowModels;
-using PSI.Core.Entities;
 
 namespace PSI.Mappings.EntitiesMappging
 {

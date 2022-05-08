@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Areas.Purchase.Models.IVE_Models;
 using PSI.Core.Entities;
 using PSI.Models.VEModels;
 

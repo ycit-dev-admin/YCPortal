@@ -62,7 +62,7 @@ namespace PSI.Controllers
 
 
 
-            var pageModel = new Page_Purchase_CreateWeightNote
+            var pageModel = new WeightNoteCreateWeightNote
             {
                 CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
@@ -93,7 +93,7 @@ namespace PSI.Controllers
 
         [HttpPost]
         [Authorize()]
-        public IActionResult CreateWeightNote(Page_Purchase_CreateWeightNote pageModel)
+        public IActionResult CreateWeightNote(WeightNoteCreateWeightNote pageModel)
         {
             //var validator = new VM_PurchaseWeightNoteValidator();
             //var validRs = validator.Validate(vmPurchaseWeightNote);
@@ -113,7 +113,7 @@ namespace PSI.Controllers
             var docNo = _psiService.GetDocNo(userInfo.FacSite, (int)PSIType.Purchase);
             //var purchaseWeightNote = purchaseHelper.GetPurchaseWeightNote(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
             var purchaseWeightNote = new PurchaseWeightNote();
-                                                                                                                    //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
+            //var vePurchaseIngredientLs = JsonSerializer.Deserialize<List<VE_PurchaseIngredient>>(pageModel.SelectPurchaseDetailInfos);
             var vePurchaseIngredientLs = pageModel.VE_PurchaseIngredientLs;
             var purchaseIngredientLs = purchaseHelper.GetPurchaseIngredientLs(vePurchaseIngredientLs); // 進貨品項
 

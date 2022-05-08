@@ -35,7 +35,7 @@ namespace PSI.APIControllers
         [HttpGet]
         public IActionResult Get(Guid customerUNID)
         {
-            var apiRs = _customerService.GetCustomerCar(customerUNID).Select(aa => new
+            var apiRs = _customerService.GetCustomerCarByCustomerUNID(customerUNID).Select(aa => new
             {
                 CarName = aa.CAR_NAME,
                 CarNoUNID = aa.CAR_GUID

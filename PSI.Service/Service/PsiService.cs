@@ -1,14 +1,13 @@
-﻿using PSI.Core.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Enums;
 using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Service.IService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PSI.Service.Service
 {
@@ -21,23 +20,55 @@ namespace PSI.Service.Service
         private readonly IGenericRepository<CodeTable> _codeTableRepository;
         private readonly IGenericRepository<SeqTypeConfig> _seqTypeConfigRepository;
         private readonly IGenericRepository<PurchaseIngredient> _purchaseIngredientNoteRepository;
+        private readonly IGenericRepository<CustomerInfo> _customerInfoRepository;
+        private readonly IGenericRepository<CustomerCar> _customerCarRepository;
+        private readonly IGenericRepository<CustomerContract> _customerContractRepository;
+        private readonly IGenericRepository<CustomerContractLog> _customerContractLogRepository;
 
         public PsiService(IUnitOfWork unitOfWork)
         {
             //_httpContextAccessor = httpContextAccessor;
             //_userManager = userManager;
             _unitOfwork = unitOfWork;
-            _purchaseWeightNoteRepository = unitOfWork.PurchaseWeightNoteRepository;
-            _codeTableRepository = unitOfWork.CodeTableRepository;
-            _seqTypeConfigRepository = unitOfWork.SeqTypeConfigRepository;
-            _purchaseIngredientNoteRepository = unitOfWork.PurchaseIngredientRepository;
+            _purchaseWeightNoteRepository = _unitOfwork.PurchaseWeightNoteRepository;
+            _codeTableRepository = _unitOfwork.CodeTableRepository;
+            _seqTypeConfigRepository = _unitOfwork.SeqTypeConfigRepository;
+            _purchaseIngredientNoteRepository = _unitOfwork.PurchaseIngredientRepository;
+            _customerInfoRepository = _unitOfwork.CustomerInfoRepository;
+            _customerCarRepository = _unitOfwork.CustomerCarRepository;
+            _customerContractRepository = _unitOfwork.CustomerContractRepository;
+            _customerContractLogRepository = _unitOfwork.CustomerContractLogRepository;
         }
 
+
+        public Dictionary<int, PSIWeightNoteEnum.PWeightNotesStatus> GetPurchaseWeightNotesStatus()
+        {
+            //var abc =
+            //    Enum.GetValues(typeof(PSIWeightNoteEnum.PWeightNotesStatus)).Cast<PSIWeightNoteEnum.PWeightNotesStatus>().Select
+            //        (r => new KeyValuePair<int, string>((int)r, "")).Select(aa=> aa.;
+
+            return Enum.GetValues(typeof(PSIWeightNoteEnum.PWeightNotesStatus))
+                       .Cast<PSIWeightNoteEnum.PWeightNotesStatus>()
+                       .ToDictionary(r => (int)r, r => r);
+
+            // return new[] { PSIWeightNoteEnum.PWeightNotesStatus.Ongo };
+
+            //var(CustomerContractEnum.Status)aa.CONTRACT_STATU;
+
+            //var abc = needStatus.Select(aa =>)
+            //return typeof(CustomerContractEnum.Types).GetAllFieldInfo()
+            //    .Where(fieldInfo => CustomerContractEnum.Types).Select(item =>
+            // item.GetRawConstantValue().ToString()).AsQueryable();
+        }
 
         public FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNote(
             PurchaseWeightNote purchaseWeightNote,
             List<PurchaseIngredient> purchaseIngredientLs,
-            AppUser operUserInfo)
+            AppUser operUserInfo,
+            ICustomerContractService customerContractService,
+            CustomerInfo customerInfo = null,
+            CustomerCar customerCar = null,
+            CustomerContractLog customerContractLog = null)
         {
             /* Null檢核 */
             var funcRs = new FunctionResult<PurchaseWeightNote>();
@@ -50,6 +81,7 @@ namespace PSI.Service.Service
             //var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
 
             /* 進貨磅單建立 */
+            purchaseWeightNote.UNID = Guid.NewGuid();
             purchaseWeightNote.FAC_NO = operUserInfo.FacSite;
             purchaseWeightNote.CREATE_TIME = DateTime.Now;
             purchaseWeightNote.EFFECTIVE_TIME = DateTime.Now;
@@ -77,11 +109,35 @@ namespace PSI.Service.Service
                 funcRs.ResultFailure(piCreRs.ActionMessage);
                 return funcRs;
             }
+            /* 合約紀錄建立 */
+            if (customerContractLog != null)
+            {
+                var creRs = _customerContractLogRepository.Create(customerContractLog);
+                var isCustomerContractCompleted = !creRs.Success ?
+                    false :
+                    customerContractService.IsCustomerContractCompleted(purchaseWeightNote.CONTRACT_UNID.Value);
+
+                if (isCustomerContractCompleted) // 若合約完成了要更新合約狀態
+                {
+                    var customerContract = customerContractService.GetCustomerContract(purchaseWeightNote.CONTRACT_UNID.Value);
+                    customerContractService.UpdateCustomerContractStatus(customerContract,
+                        CustomerContractEnum.Status.Completed,
+                        operUserInfo);
+                }
+            }
 
 
-            // 合約
+            /* 臨時客戶建立 */
+            if (customerInfo != null)
+                _customerInfoRepository.CreateNotSave(customerInfo);
+            // 臨時車牌建立 (似乎不用,因為跟著磅單走)            
+            if (customerCar != null)
+                _customerCarRepository.CreateNotSave(customerCar);
 
-            // 車牌 (似乎不用,因為跟著磅單走)            
+            _unitOfwork.SaveChange();
+
+
+
             funcRs.ResultSuccess("新增進貨磅單成功!!", purchaseWeightNote);
 
             return funcRs;
@@ -107,6 +163,12 @@ namespace PSI.Service.Service
             return _purchaseWeightNoteRepository.GetAllAsync().Result
                                                       .Where(aa => aa.EFFECTIVE_TIME.Date >= sTime &&
                                                       aa.EFFECTIVE_TIME.Date <= eTime);
+        }
+        public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotesBy(List<Guid> weightNoteUNIDList)
+        {
+            return _purchaseWeightNoteRepository.GetAllAsync().Result
+                                                      .Where(aa => weightNoteUNIDList.Contains(aa.UNID))
+                                                      .AsQueryable();
         }
 
         public IQueryable<PurchaseIngredient> GetPurchaseIngredients(List<Guid> purchaseWeighNoteUNIDs)

@@ -179,7 +179,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
                 // Query Data
                 var customerContract = _customerContractService.GetCustomerContract(unid);
-                var customerContractLogList = _customerService.GetCustomerContractLogs(unid);
+                var customerContractLogList = _customerContractService.GetCustomerContractLogs(unid);
 
                 // Map to model
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
@@ -252,7 +252,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 TempData["pageMsg"] = errMsg;
                 var veCustomerContractLogMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContractLog, VE_CustomerContractLog>();
-                var customerContractLogList = _customerService.GetCustomerContractLogs(pageModel.ContractGUID);
+                var customerContractLogList = _customerContractService.GetCustomerContractLogs(pageModel.ContractGUID);
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
                 pageModel.VE_CustomerContractLogList = veCustomerContractLogList;

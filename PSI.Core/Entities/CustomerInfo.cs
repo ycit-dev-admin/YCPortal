@@ -12,7 +12,7 @@ namespace PSI.Core.Entities
         public string ADDRESS { get; set; }
         public string CONTENT_INFO { get; set; }
         public string PSI_TYPE { get; set; }  // 進出貨類型的客戶(1:進貨 2:出貨 3:Both)
-        public string IS_EFECTIVE { get; set; }
+        public string IS_EFFECTIVE { get; set; }
         public bool? IS_CONTRACT { get; set; }
         public string REMARK { get; set; }
     }

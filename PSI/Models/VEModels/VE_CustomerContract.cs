@@ -18,5 +18,10 @@ namespace PSI.Models.VEModels
         public string IsEffective { get; set; }
         public string Remark { get; set; }
 
+        // Only VE Model
+        public long? NowActualWeight { get; set; }  // 已完成金額  For API
+        public decimal? NowActualPrice { get; set; }  // 已完成金額  For API
+
+
     }
 }

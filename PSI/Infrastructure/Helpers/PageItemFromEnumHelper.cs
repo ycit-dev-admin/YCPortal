@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Enums;
 using PSI.Core.Extensions;
-using PSI.Infrastructure.Extensions;
 
 namespace PSI.Infrastructure.Helpers
 {

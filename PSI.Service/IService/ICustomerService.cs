@@ -19,12 +19,10 @@ namespace PSI.Service.IService
         IQueryable<CustomerInfo> GetCustomerInfos();
         IQueryable<CustomerInfo> GetPurchaseCustomerInfo();
 
-        // CustomerContractLog
-        IQueryable<CustomerContractLog> GetCustomerContractLogs(Guid contractUNID);
-
         // Customer Car
-        IQueryable<CustomerCar> GetCustomerCar(long customerId);
-        IQueryable<CustomerCar> GetCustomerCar(Guid customerGuid);
+        CustomerCar GetCustomerCarByUNID(Guid carNoUNID);
+
+        IQueryable<CustomerCar> GetCustomerCarByCustomerUNID(Guid customerGUID);
         CustomerCar GetCustomerCar(string carNo);
 
         IQueryable<CustomerCar> GetCustomerCars();

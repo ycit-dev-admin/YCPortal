@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSI.Core.Entities;
+using PSI.Core.Enums;
+using PSI.Core.Helpers;
+using PSI.Mappgins.APIMapping;
+using PSI.Models.VEModels;
 using PSI.Service.IService;
 using System;
 using System.Collections.Generic;
@@ -16,11 +20,17 @@ namespace PSI.APIControllers
     public class CustomerContractsController : ControllerBase
     {
         private readonly ICustomerContractService _customerContractService;
+        private readonly IPsiService _psiService;
+        private readonly API_CustomerContractsMapper _mapperHelper;
 
 
-        public CustomerContractsController(ICustomerContractService customerContractService)
+        public CustomerContractsController(ICustomerContractService customerContractService,
+            IPsiService psiService
+            )
         {
             _customerContractService = customerContractService;
+            _psiService = psiService;
+            _mapperHelper = new API_CustomerContractsMapper();
         }
 
 
@@ -35,9 +45,36 @@ namespace PSI.APIControllers
 
         // GET api/<CustomerContractController>/5
         [HttpGet("{guid}")]
-        public IEnumerable<CustomerContract> Get(Guid guid)
+        public FunctionResult<VE_CustomerContract> Get(Guid guid)
         {
-            return _customerContractService.GetCustomerContractsByCustomerId(guid);
+            var funcRs = new FunctionResult<VE_CustomerContract>();
+            var customerContract = _customerContractService.GetCustomerContractsByCustomerUNID(guid);
+            var veCustomerContractMapper = _mapperHelper.GetMapperOfGetGUID<CustomerContract, VE_CustomerContract>();
+            var veCustomerContract = veCustomerContractMapper.Map<VE_CustomerContract>(customerContract);
+
+
+            var customerContractLogs = _customerContractService.GetCustomerContractLogs(guid);
+            var contractLogRelDocUNIDs = customerContractLogs.Select(aa => aa.PSI_DOC_UNID).ToList();
+
+            var contractType = (CustomerContractEnum.Types)customerContract.CONTRACT_TYPE;
+            if (contractType == CustomerContractEnum.Types.Purchase)  // 進貨合約
+            {
+                var pWeightNoteList = _psiService.GetPurchaseWeightNotesBy(contractLogRelDocUNIDs);
+                var sumWeightValues = pWeightNoteList.Sum(aa => aa.FULL_WEIGHT - aa.DEFECTIVE_WEIGHT).ToString();
+                if (long.TryParse(sumWeightValues, out var okVal))
+                    veCustomerContract.NowActualWeight = okVal;
+
+                veCustomerContract.NowActualPrice = pWeightNoteList.Sum(aa => aa.ACTUAL_PRICE);
+                funcRs.ResultSuccess("查詢成功", veCustomerContract);
+            }
+            else if (contractType == CustomerContractEnum.Types.Sale)  // 出貨合約
+            {
+                //
+            }
+            else
+                funcRs.ResultFailure("查無此筆資訊");
+
+            return funcRs;
         }
 
         // POST api/<CustomerContractController>

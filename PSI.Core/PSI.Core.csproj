@@ -27,6 +27,8 @@
     <Compile Remove="Migrations\20220427030836_adjust all table to upcase.Designer.cs" />
     <Compile Remove="Migrations\20220506071457_adj contract table type data type.cs" />
     <Compile Remove="Migrations\20220506071457_adj contract table type data type.Designer.cs" />
+    <Compile Remove="Migrations\20220507074044_chage notes status data type.cs" />
+    <Compile Remove="Migrations\20220507074044_chage notes status data type.Designer.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.Designer.cs" />
   </ItemGroup>

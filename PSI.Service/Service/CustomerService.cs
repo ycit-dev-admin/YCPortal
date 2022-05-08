@@ -40,19 +40,17 @@ namespace PSI.Service.Service
             var purchaseTypes = new string[] { "1", "3" }; // 看能否改成相依Enums
 
             return _customerInfoRepository.GetAllAsync().Result.
-                   Where(aa => aa.IS_EFECTIVE == "1" &&
+                   Where(aa => aa.IS_EFFECTIVE == "1" &&
                    purchaseTypes.Contains(aa.PSI_TYPE)).AsQueryable();
         }
-       
 
-       
-        public IQueryable<CustomerCar> GetCustomerCar(long customerId)
+        public CustomerCar GetCustomerCarByUNID(Guid carNoUNID)
         {
             return _customerCarRepository.GetAllAsync().Result.
-                   Where(aa => aa.CUSTOMER_ID == customerId &&
-                               aa.IS_EFFECTIVE == "1").AsQueryable();
+                   FirstOrDefault(aa => aa.CAR_GUID == carNoUNID &&
+                               aa.IS_EFFECTIVE == "1");
         }
-        public IQueryable<CustomerCar> GetCustomerCar(Guid customerGUID)
+        public IQueryable<CustomerCar> GetCustomerCarByCustomerUNID(Guid customerGUID)
         {
             return _customerCarRepository.GetAllAsync().Result.
                    Where(aa => aa.CUSTOMER_GUID == customerGUID &&
@@ -69,15 +67,6 @@ namespace PSI.Service.Service
             return _customerCarRepository.GetAllAsync().Result.AsQueryable();
         }
 
-      
-       
-        public IQueryable<CustomerContractLog> GetCustomerContractLogs(Guid contractUNID)
-        {
-            var queryRs = _customerContractLogRepository.GetAllAsync().Result
-                                          .Where(aa => aa.CONTRACT_UNID == contractUNID).AsQueryable();
-            return queryRs;
-        }
-     
 
         public FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, AppUser operUser)
         {
@@ -90,7 +79,7 @@ namespace PSI.Service.Service
                 customerInfo.UPDATE_EMPNO = operUser.NickName;
                 customerInfo.UPDATE_TIME = DateTime.Now;
                 customerInfo.IS_CONTRACT = false;
-                customerInfo.IS_EFECTIVE = "1";
+                customerInfo.IS_EFFECTIVE = "1";
 
                 var cCustomerInfoRs = _customerInfoRepository.Create(customerInfo);
 
@@ -150,7 +139,7 @@ namespace PSI.Service.Service
                         nameof(CustomerInfo.CUSTOMER_GUID),
                         nameof(CustomerInfo.CREATE_EMPNO),
                         nameof(CustomerInfo.CREATE_TIME),
-                        nameof(CustomerInfo.IS_EFECTIVE) });
+                        nameof(CustomerInfo.IS_EFFECTIVE) });
 
 
 
@@ -159,7 +148,7 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-        
+
 
         public FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser operUser)
         {
@@ -235,7 +224,7 @@ namespace PSI.Service.Service
         {
             // var curUser = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User);
             return _customerInfoRepository.GetAllAsync()
-                                          .Result.Where(aa => aa.IS_EFECTIVE == "1")
+                                          .Result.Where(aa => aa.IS_EFFECTIVE == "1")
                                           .AsQueryable();
         }
 

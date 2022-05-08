@@ -10,7 +10,7 @@ namespace PSI.Core.Enums
             Ongoing = 1,
             [Description("已過期")]
             OverTime = 2,
-            [Description("合約完成")]
+            [Description("合約完成")]  // 正常完成
             Completed = 3,
             [Description("強制完成")]
             ForceCompleted = 9

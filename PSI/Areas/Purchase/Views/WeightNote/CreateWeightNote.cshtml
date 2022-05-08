@@ -1,4 +1,4 @@
-﻿@model Page_Purchase_CreateWeightNote
+﻿@model WeightNoteCreateWeightNote
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">進貨對象</label>
                         <select asp-for="CustomerUNID" asp-items="@Model.CustomerInfoItems" class="select2bs4" style="width: 100%;">
-                            <option></option>
+                            <option value=""></option>
                             <option value="0">0.新客戶</option>
                         </select>
                     </div>
@@ -70,8 +70,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label" for="CarNoId">客戶車牌</label>
-                        <select asp-for="CanNoUNID" class="select2bs4" style="width: 100%;">
-                            <option></option>
+                        <select asp-for="CarNoUNID" class="select2bs4" style="width: 100%;">
+                            <option value=""></option>
                             <option value="0">0.新車牌</option>
                         </select>
                     </div>
@@ -80,6 +80,49 @@
                     <div class="form-group">
                         <label class="form-control-label" for="CarNoName">車牌名稱</label>
                         <input asp-for="CarNo" class="form-control" type="text" placeholder="新車牌才需要填寫" readonly>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">合約資訊</legend>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="form-control-label">合約名稱</label>
+                    <select asp-for="ContractUNID" asp-items="@Model.CustomerContractItems" style="width: 100%;">
+                        <option value="">&nbsp;</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label">合約重量:</label>
+                            <span id="ShowContractWeight"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label">合約單價</label>
+                            <span id="ShowContractUnitPrice"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label">已完成重量</label>
+                            <span id="NowContractWeight"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label">目前合約金額</label>
+                            <span id="NowContractActualPrice"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,7 +158,7 @@
                         <h6 id="total"><span>無選擇項目</span></h6>
                         <input asp-for="SelectPurchaseDetailInfos" type="hidden" />
                         <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>
-                        <select id="user-select-proditem" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
+                        <select id="user-select-proditem" name="USProdList" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
                             @*<option value='11'>工一</option>
                                 <option value='12'>工二</option>
                                 <option value='13'>廢鐵</option>
@@ -140,48 +183,7 @@
             </div>
 
         </fieldset>
-        <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">合約資訊</legend>
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="form-control-label">合約名稱</label>
-                    <select asp-for="ContractUNID" asp-items="@Model.CustomerContractItems" class="select2bs4" style="width: 100%;">
-                        <option></option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label" for="CarNoId">合約重量</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label" for="CarNoName">合約單價</label>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label" for="CarNoId">已完成重量</label>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label" for="CarNoName">目前合約金額</label>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </fieldset>
         <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">金額計算</legend>
             <div class="row">
@@ -307,9 +309,9 @@
     <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/psi/PurchaseProdItem.js"></script>
     <script asp-append-version="true" src="~/psi/CustomerAPI.js"></script>
-    <script asp-append-version="true" src="~/psi/CustomerContractAPI.js"></script>    
-    <script src="~/psi/PurchasePriceAPIClass.js"></script>
-    <script src="~/psi/PurchaseProdItemList.js"></script>
+    <script asp-append-version="true" src="~/psi/CustomerContractAPI.js"></script>
+    <script asp-append-version="true" src="~/psi/PurchasePriceAPIClass.js"></script>
+    <script asp-append-version="true" src="~/psi/PurchaseProdItemList.js"></script>
     <script asp-append-version="true" src="~/psi/PurchaseWeightNoteCreateWeightNote.js"></script>
 
 
@@ -323,6 +325,7 @@
         $(function () {
             /* Initialize Elements */
             const pageMain = new PurchaseWeightNoteCreateWeightNote(window.baseApiUrl);
+            pageMain.PagePluginInit();
             pageMain.PageEventInit();
             pageMain.PageValidateInit();
 
