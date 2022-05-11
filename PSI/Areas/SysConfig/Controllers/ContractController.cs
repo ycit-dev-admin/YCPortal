@@ -70,21 +70,49 @@ namespace PSI.Areas.SysConfig.Controllers
                     .ToDictionary(aa => aa.CONTRACT_GUID, aa => (CustomerContractEnum.Types)aa.CONTRACT_TYPE);
 
 
-                Dictionary<Guid, decimal> testDic = null;
-                contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToList().ForEach(aa =>
-               {
-                   var docUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
+                // Dictionary<Guid, decimal> testDic = null;
+                // contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToList().ForEach(aa =>
+                //{
+                //    var docUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
 
 
-               });
+                //});
                 var abc = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key, aa => aa.Sum(bb =>
                 {
                     var contractType = contractTypeDic[bb.CONTRACT_UNID];
+                    // 進貨
                     if (contractType == CustomerContractEnum.Types.Purchase)
-
-
-                        var total =
+                    {
+                        var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
+                        return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
+                    }
+                    else if (contractType == CustomerContractEnum.Types.Sale)  // 出貨
+                    {
+                        var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
+                        return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
+                    }
+                    else
+                        return 0;
                 }));
+
+                var abc2 = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key, aa =>
+                {
+                    var psiDocUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
+                    var contractType = contractTypeDic[aa.Key];
+                    if (contractType == CustomerContractEnum.Types.Purchase)  // 進貨
+                    {
+                        var pWeightNoteList = _psiService.GetPurchaseWeightNotesBy(psiDocUNIDs);
+                        return pWeightNoteList.Sum(cc => cc.FULL_WEIGHT - cc.DEFECTIVE_WEIGHT);
+                    }
+                    else if (contractType == CustomerContractEnum.Types.Sale) // 出貨
+                    {
+                        //var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
+                        //return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
+                        return 0;  // 候補邏輯
+                    }
+                    else
+                        return 0;  // 未有歸屬
+                });
 
                 // var abc3 = customerInfoLs.Where(aa => abc2.Contains(aa.CUSTOMER_GUID)).ToDictionary(aa => aa.CUSTOMER_GUID, aa => aa.PSI_TYPE);
 
