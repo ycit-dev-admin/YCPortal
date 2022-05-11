@@ -1,0 +1,364 @@
+﻿@model PageWeightNoteEditWeightNote
+@{
+    <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <style>
+        .the-fieldset {
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+        }
+        /*legend.scheduler-border {
+            border-style: none;
+            border-width: 0;
+            font-size: 1.2em !important;
+            line-height: 20px;
+            margin-bottom: 0;
+            width: auto;
+            padding: 0 10px;
+            border: 1px solid #e0e0e0;
+        }*/
+    </style>
+    <style>
+        legend.scheduler-border {
+            font-size: 1.5em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width: auto;
+            padding: 0 10px;
+            border-bottom: none;
+        }
+    </style>
+}
+
+
+<form id="creaet-form" asp-controller="Purchase" asp-action="CreateWeightNote" method="post" autocomplete="off">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>@($@"進貨磅單細項 ({Model.DocNo})")</h1>
+        </div>
+    </div>
+    <div class="row">
+        <!-- fieldset -->
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">進貨資訊</legend>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">進貨對象</label>
+                        <p>@Model.CustomerName</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">客戶車牌</label>
+                        <p>@Model.CarNo</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">磅單時間</label>
+                        <p>@Model.FullWeightTime.ToString("yyyy-MM-dd HH:mm")</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>磅秤類型</label>
+                        <br>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" onclick="return false;">大磅
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input" onclick="return false;">小磅
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="form-control-label">@($@"主要認列項目 : {Model.MainIngredientInfo}")</label>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-row">
+                        <div class="form-group col-sm-6">
+                            <ul id="evenProductLs">
+                                @foreach (var item in Model.IngredientInfos.Where((item, index) => index % 2 == 0))
+                                {
+                                    <li>@item</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <ul id="oddProductLs">
+                                @foreach (var item in Model.IngredientInfos.Where((item, index) => index % 2 != 0))
+                                {
+                                    <li>@item</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">金額計算</legend>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>@($@"實付金額＝ 計價金額＋運費＋磅費")</label>
+                        <p>
+                            <span style="color: red; font-size: larger">
+                                @($@"{Model.ActualPrice.ToString("C0")}")
+                            </span>
+                            <span>
+                                @($@"＝ {Model.WeightPrice.ToString("#,0.##")}＋{Model.DeliveryFee.ToString("#,0.##")}＋{Model.ThirdWeightFee.ToString("#,0.##")}")
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">是否含稅</label>
+                        <br />
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="HasTax" type="radio" class="form-check-input ishas_tax" value="@true" id="IsHasText_1" onclick="return false;">是
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input asp-for="HasTax" type="radio" class="form-check-input ishas_tax" value="@false" id="IsHasText_2" onclick="return false;">否
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>付款方式</label>
+                        <p>@Model.PayTypeName</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>付款日</label>
+                        <p>
+                            @Model.PayTime.ToString("yyyy-MM-dd HH:mm:ss")
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>@($@"計價金額＝ (進廠重量－扣重)×單價×稅率")</label>
+                        <p>
+                            <span style="color:blue">
+                                @($@"{Model.WeightPrice.ToString("'$' #,0.##")}")
+                            </span>
+                            <span>
+                                @($@"＝ ({Model.FullWeight}－{Model.DefectiveWeight})×{Model.UnitPrice}×{(Model.HasTax ? 1.05 : 1)}")
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">進廠重量(重車重-空車重):</label>
+                        <p>@Model.FullWeight</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">扣重</label>
+                        <p>@Model.DefectiveWeight</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">單價</label>
+                        <p>@Model.UnitPrice</p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>@($@"運費＝ 進廠重量×運費單價")</label>
+                        <p>
+                            <span style="color:blue">
+                                @($@"{Model.DeliveryFee.ToString("'$' #,0.##")}")
+                            </span>
+                            <span>
+                                @($@"＝ {Model.FullWeight}×{Model.TraficUnitPrice}")
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>運費單價</label>
+                        <p>
+                            @Model.TraficUnitPrice
+                        </p>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>磅費</label>
+                        <p style="color:blue">@Model.ThirdWeightFee.ToString("'$' #,0.##")</p>
+                    </div>
+                </div>
+
+
+                @*<div class="col-sm-12">
+                        <h5>@($@"● (進廠重量－扣重)×單價×稅率＝({Model.FullWeight}－{Model.DefectiveWeight})×{Model.UnitPrice}×{(Model.HasTax? 1.05:1)}＝ {Model.WeightPrice.ToString("#,0.##")} (計價金額)")</h5>
+                        <h5>@($@"● 進廠重量×運費單價＝{Model.FullWeight}×{Model.TraficUnitPrice}＝ {Model.DeliveryFee.ToString("#,0.##")} (運費)") </h5>
+                        <h5>
+                            <span>@($@"● 計價金額＋運費＋磅費＝{Model.WeightPrice.ToString("#,0")}＋{Model.DeliveryFee.ToString("#,0")}＋{Model.ThirdWeightFee.ToString("#,0")}＝ ")</span>
+                            <span style="color:red">@($@"{Model.ActualPrice.ToString("C0")} (實付金額)")</span>
+                        </h5>
+                    </div>*@
+            </div>
+
+        </fieldset>
+        <fieldset class="form-group col-sm-12 the-fieldset">
+            <legend class="scheduler-border">備註</legend>
+            <div class="form-group col-12">
+                @*<label class="form-control-label" for="reasonforvisit">備註</label>*@
+                <p>@Model.Remark</p>
+            </div>
+        </fieldset>
+
+
+        <!-- form-group -->
+    </div>
+    <a asp-action="WeightNoteList" class="btn btn-secondary">返回</a>
+</form>
+
+
+
+@section scripts{
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
+    <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/psi/EditWeightNote.js"></script>
+    @*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
+        感覺是 透過ajax去做post的時候需要處裡 token的問題 要把token加在header 可參考黑大的文章*@
+
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>*@
+
+    <script>
+        $(function () {
+            /* Ini Page */
+            // Ini Elements
+            $('.select2bs4').select2({  // Select2 Elements
+                theme: 'bootstrap4',
+                placeholder: "請選擇品項"
+            })
+
+            $('.select2bs5').select2({  // Select2 Elements
+                theme: 'bootstrap4',
+                placeholder: "請選擇"
+            })
+
+            $('.select2bs6').select2({    // Select2 Elements
+                theme: 'bootstrap4',
+                placeholder: "請選擇"
+            })
+            $(".select2bs4").select2({ disabled: 'readonly' });
+
+            //  Ini Value
+
+            const fullWeight =@Html.Raw(Json.Serialize(Model.FullWeight));
+            const defectiveWeight =@Html.Raw(Json.Serialize(Model.DefectiveWeight));
+            const unitPrice =@Html.Raw(Json.Serialize(Model.UnitPrice));
+            const hasTax =@Html.Raw(Json.Serialize(Model.HasTax));
+
+
+            @*let carNoLs = @Html.Raw(Json.Serialize(Model.VE_PurchaseWeightNote.ThirdWeightFee));
+            if (carNoLs)
+            {
+                carNoLs.forEach(carNo =>
+                    pClass.CarNoList.AppendToList(carNo));
+                pClass.CarNoList.ShowCarNoList();
+            }*@
+
+
+            /* Page Event */
+            $('#testbt').on('click', function () {
+                alert("123");
+
+                var allLiTags = $('#evenProductLs li').toArray().concat(
+                    $('#oddProductLs li').toArray());
+
+                var testPostDiv = $('#testPost').empty();
+                allLiTags.forEach((item, index) => {
+                    let nameProperty = document.createElement("input");
+                    nameProperty.className = "modelbind"
+                    nameProperty.type = "hidden";
+                    nameProperty.name = `VE_PurchaseIngredientLs[${index}].ItemName`;
+                    nameProperty.value = item.dataset.text
+                    let valueProperty = document.createElement("input");
+                    nameProperty.className = "modelbind"
+                    valueProperty.type = "hidden";
+                    valueProperty.name = `VE_PurchaseIngredientLs[${index}].ProductId`;
+                    valueProperty.value = item.dataset.value
+                    let percentProperty = document.createElement("input");
+                    nameProperty.className = "modelbind"
+                    percentProperty.type = "hidden";
+                    percentProperty.name = `VE_PurchaseIngredientLs[${index}].ItemPercent`;
+                    percentProperty.value = item.dataset.percent
+
+                    testPostDiv.append(nameProperty);
+                    testPostDiv.append(valueProperty);
+                    testPostDiv.append(percentProperty);
+
+                });
+
+
+
+
+
+
+            });
+
+        })
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,351 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\SysConfig\Models\BindModels\**" />
+    <Content Remove="Areas\SysConfig\Models\BindModels\**" />
+    <EmbeddedResource Remove="Areas\SysConfig\Models\BindModels\**" />
+    <None Remove="Areas\SysConfig\Models\BindModels\**" />
+    <TypeScriptCompile Remove="Areas\SysConfig\Models\BindModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Purchase\Helpers\PurchaseDTEHelper.cs" />
+    <Compile Remove="Areas\Purchase\Helpers\PurchasePriceHelper.cs" />
+    <Compile Remove="Areas\SysConfig\Helpers\SysConfigMapperHelper.cs" />
+    <Compile Remove="Areas\SysConfig\Models\ShowModels\Show_CustomerInfo.cs" />
+    <Compile Remove="Areas\SysConfig\Models\VM_Create_CustomerInfoValidator.cs" />
+    <Compile Remove="Controllers\PurchaseController.cs" />
+    <Compile Remove="Infrastructure\Extensions\TypeExtension.cs" />
+    <Compile Remove="Mappgins\EntitiesMapping\CustomerCarMapping.cs" />
+    <Compile Remove="Models\VEModels\VE_PurchaseIngredient_Query.cs" />
+    <Compile Remove="Models\VEModels\VE_PurchaseWeightNote_Main.cs" />
+    <Compile Remove="Models\VEModels\VE_PurchaseWeightNote_Query.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Purchase\CreateV1.cshtml" />
+    <Content Remove="wwwroot\psi\SysconfigCustomerEditCustomerInfo.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Purchase\Data\" />
+    <Folder Include="Areas\Purchase\Infrastructure\Mappgins\PageModelMapping\" />
+    <Folder Include="Areas\Purchase\Models\ShowModels\" />
+    <Folder Include="Areas\SysConfig\Data\" />
+    <Folder Include="Areas\SysConfig\Helpers\" />
+    <Folder Include="Files\Images\Logo\" />
+    <Folder Include="Files\Images\" />
+    <Folder Include="Infrastructure\Extensions\VM_Model\" />
+    <Folder Include="Models\PageModels\" />
+    <Folder Include="Views\templated\NewFolder\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\.vscode\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\config\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\npm\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\scss\mixins\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\scss\pages\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\scss\parts\" />
+    <Folder Include="wwwroot\lib\admin-lte\build\scss\plugins\" />
+    <Folder Include="wwwroot\lib\admin-lte\dist\css\alt\" />
+    <Folder Include="wwwroot\lib\admin-lte\dist\img\credit\" />
+    <Folder Include="wwwroot\lib\admin-lte\dist\js\pages\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\charts\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\examples\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\forms\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\layout\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\mailbox\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\search\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\tables\" />
+    <Folder Include="wwwroot\lib\admin-lte\pages\UI\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap-colorpicker\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap-colorpicker\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap-slider\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap-switch\css\bootstrap2\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap-switch\css\bootstrap3\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap-switch\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap4-duallistbox\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bootstrap\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bs-custom-file-input\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bs-stepper\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\bs-stepper\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\chart.js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\comment\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\dialog\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\display\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\edit\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\fold\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\hint\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\lint\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\merge\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\mode\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\runmode\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\scroll\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\search\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\selection\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\tern\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\addon\wrap\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\keymap\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\apl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\asciiarmor\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\asn.1\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\asterisk\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\brainfuck\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\clike\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\clojure\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\cmake\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\cobol\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\coffeescript\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\commonlisp\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\crystal\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\cypher\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\dart\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\diff\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\django\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\dockerfile\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\dtd\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\dylan\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\d\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\ebnf\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\ecl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\eiffel\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\elm\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\erlang\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\factor\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\fcl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\forth\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\fortran\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\gas\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\gfm\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\gherkin\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\go\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\groovy\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\haml\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\handlebars\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\haskell-literate\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\haskell\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\haxe\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\htmlembedded\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\htmlmixed\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\http\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\idl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\javascript\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\jinja2\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\jsx\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\julia\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\livescript\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\lua\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\markdown\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\mathematica\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\mbox\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\mirc\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\mllike\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\modelica\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\mscgen\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\mumps\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\nginx\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\nsis\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\ntriples\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\octave\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\oz\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\pascal\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\pegjs\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\perl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\php\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\pig\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\powershell\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\properties\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\protobuf\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\pug\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\puppet\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\python\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\q\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\rpm\changes\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\rst\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\ruby\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\rust\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\r\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\sass\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\sas\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\scheme\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\shell\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\sieve\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\slim\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\smalltalk\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\smarty\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\solr\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\soy\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\sparql\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\spreadsheet\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\sql\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\stex\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\stylus\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\swift\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\tcl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\textile\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\tiddlywiki\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\tiki\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\toml\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\tornado\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\troff\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\ttcn-cfg\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\ttcn\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\turtle\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\twig\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\vbscript\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\vb\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\velocity\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\verilog\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\vhdl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\vue\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\wast\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\webidl\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\xml\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\xquery\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\yacas\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\yaml-frontmatter\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\yaml\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\mode\z80\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\codemirror\theme\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-autofill\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-autofill\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-bs4\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-bs4\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-buttons\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-buttons\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-colreorder\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-colreorder\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-fixedcolumns\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-fixedcolumns\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-fixedheader\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-fixedheader\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-keytable\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-keytable\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-responsive\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-responsive\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-rowgroup\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-rowgroup\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-rowreorder\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-rowreorder\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-scroller\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-scroller\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-searchbuilder\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-searchbuilder\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-searchpanes\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-searchpanes\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-select\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables-select\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\datatables\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\daterangepicker\example\amd\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\daterangepicker\example\browserify\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\daterangepicker\website\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\dropzone\min\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\ekko-lightbox\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\fastclick\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\config\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\FilterContainer\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\FilterItems\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\FilterItem\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\FilterizrOptions\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\Filterizr\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\makeLayoutPositions\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\Spinner\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\types\interfaces\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\filterizr\utils\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\flag-icon-css\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\flag-icon-css\flags\1x1\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\flag-icon-css\flags\4x3\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\flot\plugins\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\fontawesome-free\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\fontawesome-free\webfonts\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\fullcalendar\locales\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\icheck-bootstrap\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\inputmask\bindings\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\ion-rangeslider\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\ion-rangeslider\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\ion-rangeslider\less\skins\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery-knob\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery-mapael\maps\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery-mousewheel\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery-ui\external\jquery\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery-ui\images\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery-validation\localization\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jquery\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jqvmap\maps\continents\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jsgrid\demos\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jsgrid\i18n\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\jszip\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\moment\locale\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\overlayScrollbars\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\overlayScrollbars\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\black\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\blue\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\green\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\orange\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\pink\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\purple\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\red\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\silver\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\white\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pace-progress\themes\yellow\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\pdfmake\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\popper\esm\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\popper\umd\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\raphael\dev\test\svg\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\raphael\dev\test\vml\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\select2-bootstrap4-theme\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\select2\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\select2\js\i18n\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\sparklines\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\summernote\font\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\summernote\lang\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\summernote\plugin\databasic\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\summernote\plugin\hello\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\summernote\plugin\specialchars\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\sweetalert2-theme-bootstrap-4\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\sweetalert2\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\tempusdominus-bootstrap-4\css\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\tempusdominus-bootstrap-4\js\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\toastr\" />
+    <Folder Include="wwwroot\lib\admin-lte\plugins\uplot\" />
+    <Folder Include="wwwroot\lib\site-public\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\admin-lte\.cache\.eslintcache" />
+    <None Include="wwwroot\lib\admin-lte\.cache\.stylelintcache" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.15">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.2.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PSI.Core\PSI.Core.csproj" />
+    <ProjectReference Include="..\PSI.Service\PSI.Service.csproj" />
+  </ItemGroup>
+
+</Project>

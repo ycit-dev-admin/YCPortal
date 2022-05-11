@@ -1,0 +1,162 @@
+﻿@model PageContractCreateContractInfo
+@{
+    <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+}
+
+<form id="creaet-contract-form" asp-area="SysConfig" asp-controller="Contract" asp-action="CreateContractInfo" method="post" autocomplete="off">
+    <div class="form-row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="form-control-label" for="ownername">合約起始日</label>
+                <div class="input-group date" id="start-time-div" data-target-input="nearest">
+                    <input asp-for="StratTime" type="text" class="form-control datetimepicker-input" data-target="#start-time-div" />
+                    <div class="input-group-append" data-target="#start-time-div" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-control-label" for="ownername">合約結束日</label>
+            <div class="input-group date" id="end-time-div" data-target-input="nearest">
+                <input asp-for="EndTime" type="text" class="form-control datetimepicker-input" data-target="#end-time-div" />
+                <div class="input-group-append" data-target="#end-time-div" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="CustomerName">合約名稱</label>
+            <input asp-for="ContractName" type="text" class="form-control" placeholder="必填欄位">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="CompanyName">合約屬性</label>
+            <select asp-for="ContractType" asp-items="@Model.ContractTypeItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="PsiType">歸屬客戶</label>
+            <select asp-for="CustomerGUID" asp-items="@Model.CustomerInfoItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+        <div class="form-group col-md-8">
+            <label for="TaxId">合約品項</label>
+            <select asp-for="ProductGUID" asp-items="@Model.ProductItems" class="select2bs4" style="width: 100%;">
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="PsiType">合約重量</label>
+            <input asp-for="DealWeight" type="text" class="form-control" placeholder="必填欄位">
+        </div>
+        <div class="form-group col-md-8">
+            <label for="TaxId">合約單價</label>
+            <input asp-for="DealUnitPrice" type="text" class="form-control" placeholder="必填欄位">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="inputState">備註</label>
+            <div class="form-group col-12">
+                <textarea asp-for="Remark" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" id="form_create" type="button">儲存變更</button>
+    <a asp-action="OnlineInfo" class="btn btn-default">返回</a>
+
+    <div name="hidden-fields">
+        @*<input type="hidden" asp-for="CustomerGuid" />
+            <input type="hidden" asp-for="IsChanged" />*@
+        <div id="dialog-confirm" title="系統資訊">
+            <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>確定要建立此合約嗎?</p>
+        </div>
+    </div>
+</form>
+
+
+@section modals{
+    @*@await Html.PartialAsync("CustomerInfo", new List<VM_Customer_Info>())*@
+}
+
+@section scripts{
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
+    <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
+    <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+
+
+    <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigCreateContractInfo.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigCreateContractInfoValidate.js"></script>
+
+    <script>
+        $(function () {
+
+            // Datetimepicker
+            $('#start-time-div').datetimepicker({
+                defaultDate: moment(),
+                locale: 'zh-tw',
+                format: 'L',
+                icons: { time: 'far fa-clock' }
+            });
+            $('#end-time-div').datetimepicker({
+                useCurrent: false,
+                locale: 'zh-tw',
+                // defaultDate: moment(),
+                format: 'L',
+                icons: { time: 'far fa-clock' },
+                minDate: moment()
+            });
+           
+            $("#start-time-div").on("change.datetimepicker", function (e) {
+                $('#end-time-div').datetimepicker('minDate', e.date);
+            });
+            $("#end-time-div").on("change.datetimepicker", function (e) {
+                $('#start-time-div').datetimepicker('maxDate', e.date);
+            });
+
+
+
+
+            const pageJsObj = new PageOfSysConfigCreateContractInfo(window.baseApiUrl);
+            pageJsObj.PageEventInit();
+
+
+
+
+
+        })
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+

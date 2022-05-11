@@ -1,0 +1,167 @@
+﻿@model PageCarNoOnlineInfo
+@{
+    <!-- DataTables -->
+    <link href="~/lib/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+
+    <!-- Select List -->
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+
+}
+
+<button id="add-carno" style="float:left;margin-right:20px;" class="btn btn-primary" type="button">新增車牌</button>
+<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>車牌名稱</th>
+            <th>對應客戶</th>
+            <th>是否有效</th>
+            <th>備註</th>
+            <th>最後操作人員</th>
+            <th>最後更新時間</th>
+            <th>功能操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CustomerCarLs)
+        {
+            <tr>
+                <td>@item.CarName</td>
+                <td>
+                    @(Model.CustomerInfoLs.FirstOrDefault(aa=> aa.CustomerGUID == item.CustomerGUID).CustomerName)
+                </td>
+                <td>@(item.IsEffective=="1"?"Yes":"No")</td>
+                <td>@item.Remark</td>
+                <td>@item.UpdateEmpInfo</td>
+                <td>@item.UpdateTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                <td>
+                    <button name="query-btn" style="float:left;margin-right:20px;" class="btn btn-primary" type="button" value="@item.CarGUID">編輯</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div name="model-temp-carnoinfo"></div>
+
+@section scripts{
+    @if (TempData["pageMsg"] != null)
+    {
+        <script type="text/javascript">
+            let message = @Html.Raw(Json.Serialize(TempData["pageMsg"]));
+            alert(message);
+        </script>
+    }
+
+
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/admin-lte/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/jszip/jszip.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
+    <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
+    <script asp-append-version="true" src="~/psi/PageOfSysConfigCarNoOnlineInfo.js"></script>
+
+    <script>
+        $(function () {
+
+            const curPage = new PageOfSysConfigCarNoOnlineInfo(window.baseApiUrl);
+
+
+            $("#example1").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["excel", "pdf", "print"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+
+            $("#add-carno").on("click", curPage, function (event) {
+                let pageRs = curPage.SysConfigPageHelper.GetCarNoInfoModel("");
+                $.when(pageRs).then(function (data) {
+                    $("div[name=model-temp-carnoinfo]").html(data);
+                    var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                    modalObj.modal('show');
+
+                    $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
+
+                    modalObj.find("#CustomerGUID").select2({
+                        theme: 'bootstrap4',
+                        placeholder: "請選擇"
+                    })
+
+                    // 客戶車牌
+                    //modalObj.find('#CustomerGUID').on('change', function () {
+                    //    if ($(this) &&
+                    //        $(this).find(':selected').val() === "0") {
+                    //        modalObj.find('#CustomerName').removeAttr("readonly") // 新客戶
+                    //        modalObj.find('#CustomerName').val("")
+                    //    } else {
+                    //        modalObj.find('#CustomerName').attr("readonly", "readonly")
+                    //        modalObj.find('#CustomerName').val($(this).find(':selected').text());
+                    //    }
+
+                    //})
+
+                    // modalObj.find("#testqqc").on('click', '.tr-row',
+                    modalObj.find("#carno-info-action").on('click',
+                        function () {
+                            // modalObj.modal('hide');
+                            // modalObj.find('#CreateCarNoInfo').submit();
+                            modalObj.find('#carNo-info-form').submit();
+                        });
+
+                });
+            });
+
+
+
+            $('button[name="query-btn"]').on("click", curPage, function (event) {
+                let pageRs = curPage.SysConfigPageHelper.GetCarNoInfoModel($(this).val());
+                $.when(pageRs).then(function (data) {
+                    $("div[name=model-temp-carnoinfo]").html(data);
+                    var modalObj = $("div[name=model-temp-carnoinfo]").find('#myModal');
+                    modalObj.modal('show');
+
+                    $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
+
+                    modalObj.find("#CustomerGUID").select2({
+                        theme: 'bootstrap4',
+                        placeholder: "請選擇"
+                    })
+
+                    modalObj.find("#carno-info-action").on('click',
+                        function () {
+                            // modalObj.modal('hide');
+                            // modalObj.find('#CreateCarNoInfo').submit();
+                            modalObj.find('#carNo-info-form').submit();
+                        });
+                });
+            });
+
+
+
+
+        });
+    </script>
+}
+
+
+
+
+
+
+
+

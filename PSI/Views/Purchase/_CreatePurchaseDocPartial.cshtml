@@ -1,0 +1,122 @@
+﻿@model VE_PurchaseWeightNote
+<!-- The Modal -->
+<div class="modal" id="gridSystemModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">磅單建立</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <form asp-controller="PurchaseWeightNote" asp-action="Create" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input asp-for="ExcavatorOpEmpNo">
+                            <span asp-validation-for="ExcavatorOpEmpNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>開單日期</label>
+                                <div class="input-group date" id="reservationdatetime" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#reservationdatetime" />
+                                    <div class="input-group-append" data-target="#reservationdatetime" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- radio -->
+                            @*<div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radio1">
+                                    <label class="form-check-label">Radio</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radio1" checked="">
+                                    <label class="form-check-label">Radio checked</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" disabled="">
+                                    <label class="form-check-label">Radio disabled</label>
+                                </div>
+                            </div>*@
+                            <div class="form-group">
+                                <label>是否為新廠商</label>
+                                <br>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optradio">是
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optradio" checked>否
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>是否為新車牌</label>
+                                <br>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optradio">是
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="optradio" checked>否
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>進貨品項</label>
+                                <select class="select2bs4" multiple="multiple" data-placeholder="選擇品項" style="width: 100%;">
+                                    <option value='11'>工一</option>
+                                    <option value='12'>工二</option>
+                                    <option value='13'>廢鐵</option>
+                                    <option value='14'>垃圾</option>
+                                    @*
+                                    <option value='{"name":"工4","value":"14"}'>垃圾</option>*@
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h6><span id="total">已選0項</span> <span>比例加總0%</span></h6>
+                            <ul id="testLs">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    @*<button type="submit" class="btn btn-primary">確定3</button>*@
+                    <button class="btn btn-primary" type="submit">Save234</button>
+                    <button type="button" class="btn btn-primary" data-create="modal">Create</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script src="/formhelper/formhelper.bundle.min.js"></script>

@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "admin-lte": "^3.1.0",
+    "@types/jquery": "3.5.5",
+    "@types/bootstrap": "4.6.0",
+    "@types/moment": "2.11.29",
+    "@types/select2": "4.0.53",
+    "@types/jqueryui": "1.12.1",
+    "@types/jquery.validation": "1.16.7"
+  }
+}
