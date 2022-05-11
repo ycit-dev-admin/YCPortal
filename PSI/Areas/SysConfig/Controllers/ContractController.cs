@@ -64,38 +64,10 @@ namespace PSI.Areas.SysConfig.Controllers
 
                 var contractLogList = _customerContractService.GetContractLogsByContractUNIDs(customerContractLs.
                     Select(aa => aa.CONTRACT_GUID).ToList()).ToList();
-
                 var contractUNIDOfLog = contractLogList.Select(aa => aa.CONTRACT_UNID).Distinct();
                 var contractTypeDic = customerContractLs.Where(aa => contractUNIDOfLog.Contains(aa.CONTRACT_GUID))
                     .ToDictionary(aa => aa.CONTRACT_GUID, aa => (CustomerContractEnum.Types)aa.CONTRACT_TYPE);
-
-
-                // Dictionary<Guid, decimal> testDic = null;
-                // contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToList().ForEach(aa =>
-                //{
-                //    var docUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
-
-
-                //});
-                var abc = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key, aa => aa.Sum(bb =>
-                {
-                    var contractType = contractTypeDic[bb.CONTRACT_UNID];
-                    // 進貨
-                    if (contractType == CustomerContractEnum.Types.Purchase)
-                    {
-                        var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
-                        return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
-                    }
-                    else if (contractType == CustomerContractEnum.Types.Sale)  // 出貨
-                    {
-                        var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
-                        return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
-                    }
-                    else
-                        return 0;
-                }));
-
-                var abc2 = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key, aa =>
+                var completedWeightDic = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key.ToString(), aa =>
                 {
                     var psiDocUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
                     var contractType = contractTypeDic[aa.Key];
@@ -113,6 +85,33 @@ namespace PSI.Areas.SysConfig.Controllers
                     else
                         return 0;  // 未有歸屬
                 });
+
+                // Dictionary<Guid, decimal> testDic = null;
+                // contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToList().ForEach(aa =>
+                //{
+                //    var docUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
+
+
+                //});
+                //var abc = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key, aa => aa.Sum(bb =>
+                //{
+                //    var contractType = contractTypeDic[bb.CONTRACT_UNID];
+                //    // 進貨
+                //    if (contractType == CustomerContractEnum.Types.Purchase)
+                //    {
+                //        var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
+                //        return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
+                //    }
+                //    else if (contractType == CustomerContractEnum.Types.Sale)  // 出貨
+                //    {
+                //        var psiDoc = _psiService.GetPurchaseWeightNote(bb.PSI_DOC_UNID);
+                //        return psiDoc.FULL_WEIGHT - psiDoc.DEFECTIVE_WEIGHT;
+                //    }
+                //    else
+                //        return 0;
+                //}));
+
+
 
                 // var abc3 = customerInfoLs.Where(aa => abc2.Contains(aa.CUSTOMER_GUID)).ToDictionary(aa => aa.CUSTOMER_GUID, aa => aa.PSI_TYPE);
 
@@ -144,11 +143,12 @@ namespace PSI.Areas.SysConfig.Controllers
                     VeCustomerContractList = veCustomerContractLs,
                     VeCustomerInfoList = veCustomerInfoLs,
                     ContractTypeItems = _customerContractService.GetCustomerContracTypes()
-                    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key")
+                    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key"),
+                    CompletedWeightDic = completedWeightDic
                     // ContractTypeItems = _psiService.GetContractTypeItems()
                     //.ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
 
-                });
+                }); ;
                 return funRs;
             }
 
@@ -256,17 +256,23 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 // Make Mapper
                 var pModelMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContract, PageContractEditCustomerContract>();
-                var veCustomerContractLogMapper = _mapperHelper.GetMapperOfEditCustomerContract<CustomerContractLog, VE_CustomerContractLog>();
+
 
                 // Query Data
                 var customerContract = _customerContractService.GetCustomerContract(unid);
-                var customerContractLogList = _customerContractService.GetCustomerContractLogs(unid);
+                var ContractLogList = _customerContractService.GetCustomerContractLogs(unid);
+                var pWeightDocList = _psiService.GetPurchaseWeightNotesBy(ContractLogList.Select(aa => aa.PSI_DOC_UNID).ToList());
 
                 // Map to model
-                var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
+                var vePurchaseWeightNoteMapper = _mapperHelper.GetMapperOfEditCustomerContract<PurchaseWeightNote, VE_PurchaseWeightNote>();
+                var vePurchaseWeightNoteList = vePurchaseWeightNoteMapper.Map<List<VE_PurchaseWeightNote>>(pWeightDocList);
+
+
+
+
                 var pageModel = pModelMapper.Map<PageContractEditCustomerContract>(customerContract);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus();
-                pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
+                pageModel.VE_PurchaseWeightNoteList = vePurchaseWeightNoteList;
                 pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
@@ -336,7 +342,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 var customerContractLogList = _customerContractService.GetCustomerContractLogs(pageModel.ContractGUID);
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
-                pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
+                //pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
                 pageModel.ContractTypeItems = _customerContractService.GetCustomerContracTypes()
                     .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key", pageModel.ContractType);
 

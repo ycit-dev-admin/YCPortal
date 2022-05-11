@@ -94,8 +94,14 @@ namespace PSI.Areas.Purchase.Mappers
                       .ForMember(t => t.UnitPrice, s => s.MapFrom(o => o.UNIT_PRICE))
                       .ForMember(t => t.ActualPrice, s => s.MapFrom(o => o.ACTUAL_PRICE))
                       .ForMember(t => t.PayType, s => s.MapFrom(o => o.PAY_TYPE))
-                      .ForMember(t => t.PayTime, s => s.MapFrom(o => o.PAY_TIME))
-                      ).CreateMapper();
+                      .ForMember(t => t.PayTime, s => s.MapFrom(o => o.PAY_TIME))).CreateMapper();
+                case (nameof(PurchaseIngredient), nameof(VE_PurchaseIngredient)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<PurchaseIngredient, VE_PurchaseIngredient>()
+                      .ForMember(t => t.PurchaseWeightNoteUNID, s => s.MapFrom(o => o.PURCHASE_WEIGHTNOTE_UNID))
+                      .ForMember(t => t.ProductUNID, s => s.MapFrom(o => o.PRODUCT_UNID))
+                      .ForMember(t => t.ItemName, s => s.MapFrom(o => o.ITEM_NAME))
+                      .ForMember(t => t.ItemPercent, s => s.MapFrom(o => o.ITEM_PERCENT))).CreateMapper();
                 default:
                     return null;
             }

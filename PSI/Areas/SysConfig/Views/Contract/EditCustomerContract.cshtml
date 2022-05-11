@@ -218,16 +218,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.VE_CustomerContractLogList)
+                        @foreach (var item in Model.VE_PurchaseWeightNoteList)
                         {
                             <tr>
-                                <td>"abc"</td>
-                                <td>"abc"</td>
-                                <td>"abc"</td>
-                                <td>"abc"</td>
-                                <td>"abc"</td>
+                                <td>@item.DocNo</td>
+                                <td>@(item.FullWeight-item.DefectiveWeight)</td>
+                                <td>@item.UnitPrice</td>
+                                <td>@item.ActualPrice</td>
+                                <td>@item.CreateTime</td>
                                 <td>
-                                    <a asp-action="EditCustomerContract" asp-route-unid="@item.PsiDocUNID" class="btn btn-primary">查詢</a>
+                                    <a asp-area="Purchase" asp-controller="WeightNote" asp-action="EditWeightNote" asp-route-unid="@item.Unid" class="btn btn-primary">查詢</a>
                                 </td>
                             </tr>
                         }

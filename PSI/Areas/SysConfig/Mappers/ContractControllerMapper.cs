@@ -87,11 +87,16 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.ContractStatus, s => s.MapFrom(ss => ss.CONTRACT_STATUS))
                         .ForMember(tar => tar.ContractGUID, s => s.MapFrom(ss => ss.CONTRACT_GUID))
                        ).CreateMapper();
-                case (nameof(CustomerContractLog), nameof(VE_CustomerContractLog)):
+                case (nameof(PurchaseWeightNote), nameof(VE_PurchaseWeightNote)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<CustomerContractLog, VE_CustomerContractLog>()
-                        .ForMember(tar => tar.ContractUNID, s => s.MapFrom(ss => ss.CONTRACT_UNID))
-                        .ForMember(tar => tar.PsiDocUNID, s => s.MapFrom(ss => ss.PSI_DOC_UNID))
+                    cfg.CreateMap<PurchaseWeightNote, VE_PurchaseWeightNote>()
+                        .ForMember(tar => tar.Unid, s => s.MapFrom(ss => ss.UNID))
+                        .ForMember(tar => tar.DocNo, s => s.MapFrom(ss => ss.DOC_NO))
+                        .ForMember(tar => tar.FullWeight, s => s.MapFrom(ss => ss.FULL_WEIGHT))
+                        .ForMember(tar => tar.DefectiveWeight, s => s.MapFrom(ss => ss.DEFECTIVE_WEIGHT))
+                        .ForMember(tar => tar.UnitPrice, s => s.MapFrom(ss => ss.UNIT_PRICE))
+                        .ForMember(tar => tar.ActualPrice, s => s.MapFrom(ss => ss.ACTUAL_PRICE))
+                        .ForMember(tar => tar.CreateTime, s => s.MapFrom(ss => ss.CREATE_TIME))
                        ).CreateMapper();
                 case (nameof(PageContractEditCustomerContract), nameof(CustomerContract)):
                     return new MapperConfiguration(cfg =>

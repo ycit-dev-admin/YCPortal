@@ -6,5 +6,6 @@ namespace PSI.Core.Entities.Identity
     {
         public string NickName { get; set; }
         public string FacSite { get; set; }
+        //  public string EMPLOYEE_NO { get; set; }
     }
 }

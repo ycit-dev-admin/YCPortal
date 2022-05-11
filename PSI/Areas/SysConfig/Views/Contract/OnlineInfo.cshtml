@@ -31,7 +31,7 @@
                 <td>@Model.ContractTypeItems.FirstOrDefault(aa => aa.Value == item.ContractType).Text</td>
                 <td>@item.DealUnitPrice</td>
                 <td>@item.DealWeight</td>
-                <td>施工中...</td>
+                <td>@(Model.CompletedWeightDic.TryGetValue(item.ContractGUID,out var okVal)?okVal.ToString():"無資料")</td>
                 <td>@item.StartDatetime.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@item.EndDatetime.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>

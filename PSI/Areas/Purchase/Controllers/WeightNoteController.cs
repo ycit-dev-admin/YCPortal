@@ -363,7 +363,7 @@ namespace PSI.Controllers
 
             var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime);
 
-
+            var vePurchaseIngredientMapper = _mapperHelper.GetMapperOfWeightNoteList<PurchaseIngredient, VE_PurchaseIngredient>();
             var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.UNID).ToList());
 
 
@@ -376,7 +376,7 @@ namespace PSI.Controllers
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
                 PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
-                PIngredientLs = pIngredientLs.ToList()
+                PIngredientLs = vePurchaseIngredientMapper.Map<List<VE_PurchaseIngredient>>(pIngredientLs)
             };
 
             //TryUpdateModelAsync<IEmployee>(pageModel); // 比較適合Entity 檢核

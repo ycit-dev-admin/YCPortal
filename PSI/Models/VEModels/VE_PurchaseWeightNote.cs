@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace PSI.Models.VEModels
 {
@@ -9,7 +7,7 @@ namespace PSI.Models.VEModels
         // Post
 
         // Entities
-        public Guid Unid { get; set; }
+        public string Unid { get; set; }
         public string DocNo { get; set; }
         public string CarNo { get; set; }
         public double FullWeight { get; set; }

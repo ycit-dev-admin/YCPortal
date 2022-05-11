@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
+using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
     public class PageContractEditCustomerContract
     {
-        public List<VE_CustomerContractLog> VE_CustomerContractLogList { set; get; }
+        public List<VE_PurchaseWeightNote> VE_PurchaseWeightNoteList { set; get; }
 
         public DateTime StratTime { get; set; }
         public DateTime? EditStratTime { get; set; }
