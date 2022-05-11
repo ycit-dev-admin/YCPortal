@@ -1,4 +1,4 @@
-﻿@model PageCustomerOnlineInfo
+﻿@model SysConfigCustomerOnlineInfo
 @{
     <!-- DataTables -->
     <link href="~/lib/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -20,17 +20,17 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.CustomerInfoLs)
+        @foreach (var item in Model.VeCustomerInfoLs)
         {
             <tr>
                 <td>@item.CompanyName</td>
                 <td>@item.CustomerName</td>
                 <td>
                     @(
-                    string.Join('，',Model.CustomerCarLs.Where(aa=> aa.CustomerGUID == item.CustomerGUID).Select(aa=> aa.CarName).ToList())
+                    string.Join('、',Model.VeCustomerCarLs.Where(aa=> aa.CustomerGUID == item.CustomerGUID).Select(aa=> aa.CarName).ToList())
                     )
                 </td>
-                <td>施工中...</td>
+                <td>@(Model.VeCustomerContractList.Any(aa=> aa.CustomerGUID==item.CustomerGUID)?"Yes":"No")</td>
                 <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
                 <td>@item.UpdateEmpNo</td>
                 <td>

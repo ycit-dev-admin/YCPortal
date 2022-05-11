@@ -48,8 +48,8 @@ namespace PSI.APIControllers
         public FunctionResult<VE_CustomerContract> Get(Guid guid)
         {
             var funcRs = new FunctionResult<VE_CustomerContract>();
-            var customerContract = _customerContractService.GetCustomerContractsByCustomerUNID(guid);
-            var veCustomerContractMapper = _mapperHelper.GetMapperOfGetGUID<CustomerContract, VE_CustomerContract>();
+            var customerContract = _customerContractService.GetCustomerContractsByContractUNID(guid);
+            var veCustomerContractMapper = _mapperHelper.GetMapperOfGet<CustomerContract, VE_CustomerContract>();
             var veCustomerContract = veCustomerContractMapper.Map<VE_CustomerContract>(customerContract);
 
 
@@ -75,6 +75,17 @@ namespace PSI.APIControllers
                 funcRs.ResultFailure("查無此筆資訊");
 
             return funcRs;
+        }
+
+        //  [HttpGet("{guid}")]
+        // [HttpGet("{id}")]
+        [HttpGet("GetContractsByCustomerUNID/{unid}")]
+        public List<VE_CustomerContract> GetContractsByCustomerUNID(Guid unid)
+        {
+            var customerContracts = _customerContractService.GetPurchaseContractsByCustomerUNID(unid);
+            var veCustomerContractMapper = _mapperHelper.GetMapperOfGetContractsByCustomerUNID<CustomerContract, VE_CustomerContract>();
+            var veCustomerContractList = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContracts);
+            return veCustomerContractList;
         }
 
         // POST api/<CustomerContractController>

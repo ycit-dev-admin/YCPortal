@@ -17,7 +17,7 @@ namespace PSI.Areas.SysConfig.Mappers
             #region --CustomerInfo --        
             if (typeof(T1) == typeof(CustomerInfo))
                 return new MapperConfiguration(cfg =>
-                cfg.CreateMap<CustomerInfo, PageCustomerEditCustomerInfo>()
+                cfg.CreateMap<CustomerInfo, SysConfigCustomerEditCustomerInfo>()
                .ForMember(x => x.CustomerGuid, y => y.MapFrom(o => o.CUSTOMER_GUID))
                .ForMember(x => x.CompanyName, y => y.MapFrom(o => o.COMPANY_NAME))
                .ForMember(x => x.CustomerName, y => y.MapFrom(o => o.CUSTOMER_NAME))

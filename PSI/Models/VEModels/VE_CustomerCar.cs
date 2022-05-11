@@ -5,7 +5,7 @@ namespace PSI.Models.VEModels
     public class VE_CustomerCar
     {
         public Guid CarGUID { get; set; }
-        public Guid CustomerGUID { get; set; }
+        public string CustomerGUID { get; set; }
         public long CustomerID { get; set; }
         public string CarName { get; set; }
         public string IsEffective { get; set; }

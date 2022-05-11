@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
@@ -21,12 +22,12 @@ namespace PSI.Areas.Purchase.Mappers
             switch (typeof(T1).Name, typeof(T2).Name)
             {
                 case (nameof(WeightNoteCreateWeightNote), nameof(PurchaseWeightNote)):
-                    var purchasePriceHelper = new PurchasePriceHelper();
+
 
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, PurchaseWeightNote>()
                       .ForMember(t => t.FULL_WEIGHT_TIME, s => s.MapFrom(o => o.FullWeightTime))
-                      .ForMember(t => t.CUSTOMER_UNID, s => s.MapFrom(o => o.CustomerUNID))
+                      .ForMember(t => t.CUSTOMER_UNID, s => s.MapFrom(o => o.CustomerUNID == "0" ? Guid.Empty : new Guid(o.CustomerUNID)))
                       .ForMember(t => t.CONTRACT_UNID, s => s.MapFrom(o => o.ContractUNID ?? null))
                       .ForMember(t => t.CUSTOMER_NAME, s => s.MapFrom(o => o.CustomerName))
                       .ForMember(t => t.CAR_NO, s => s.MapFrom(o => o.CarNo))
@@ -40,13 +41,10 @@ namespace PSI.Areas.Purchase.Mappers
                       .ForMember(t => t.PAY_TYPE, s => s.MapFrom(o => o.PayType))
                       .ForMember(t => t.PAY_TIME, s => s.MapFrom(o => o.PayTime))
                       .ForMember(t => t.REMARK, s => s.MapFrom(o => o.Remark))
+                      .ForMember(t => t.INPUT_TYPE, s => s.MapFrom(o => "1"))
                       .ForMember(t => t.NOTE_STATUS, s => s.MapFrom(o => o.PayType == "1" ?
                                                                     PSIWeightNoteEnum.PWeightNotesStatus.Completed :  // 只有付現是結清
                                                                     PSIWeightNoteEnum.PWeightNotesStatus.Ongo))
-                       .ForMember(t => t.ACTUAL_PRICE, s => s.MapFrom(o =>
-                       purchasePriceHelper.GetActualPayPrice(o.ThirdWeightFee,
-                       purchasePriceHelper.GetWeightNotePrice(o.FullWeight.Value, o.DefectiveWeight.Value, decimal.Parse(o.UnitPrice), o.HasTax),
-                       purchasePriceHelper.GetDeliveryPrice(o.FullWeight.Value, decimal.Parse(o.TraficUnitPrice)))))
                       ).CreateMapper();
                 case (nameof(VE_PurchaseIngredient), nameof(PurchaseIngredient)):
                     return new MapperConfiguration(cfg =>
@@ -65,6 +63,7 @@ namespace PSI.Areas.Purchase.Mappers
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, CustomerInfo>()
                       .ForMember(t => t.CUSTOMER_NAME, s => s.MapFrom(o => o.CustomerName))
+                      .ForMember(t => t.COMPANY_NAME, s => s.MapFrom(o => o.CustomerName))
                       .ForMember(t => t.PSI_TYPE, s => s.MapFrom(o => PSIEnum.PSIType.Purchase))
                       .ForMember(t => t.IS_EFFECTIVE, s => s.MapFrom(o => "1"))
                       ).CreateMapper();

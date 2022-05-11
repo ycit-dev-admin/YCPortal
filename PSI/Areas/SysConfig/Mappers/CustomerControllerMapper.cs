@@ -18,9 +18,9 @@ namespace PSI.Areas.SysConfig.Mappers
         {
             switch ((typeof(T1).Name, typeof(T2).Name))
             {
-                case (nameof(CustomerInfo), nameof(PageCustomerEditCustomerInfo)):
+                case (nameof(CustomerInfo), nameof(SysConfigCustomerEditCustomerInfo)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<CustomerInfo, PageCustomerEditCustomerInfo>()
+                    cfg.CreateMap<CustomerInfo, SysConfigCustomerEditCustomerInfo>()
                         .ForMember(x => x.CustomerGuid, y => y.MapFrom(o => o.CUSTOMER_GUID))
                         .ForMember(x => x.CompanyName, y => y.MapFrom(o => o.COMPANY_NAME))
                         .ForMember(x => x.Address, y => y.MapFrom(o => o.ADDRESS))
@@ -37,6 +37,12 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(x => x.CustomerGUID, y => y.MapFrom(o => o.CUSTOMER_GUID))
                         .ForMember(x => x.CarName, y => y.MapFrom(o => o.CAR_NAME))
                        ).CreateMapper();
+                case (nameof(CustomerContract), nameof(VE_CustomerContract)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerContract, VE_CustomerContract>()
+                        .ForMember(x => x.ContractGUID, y => y.MapFrom(o => o.CONTRACT_GUID))
+                        .ForMember(x => x.ContractName, y => y.MapFrom(o => o.CONTRACT_NAME))
+                       ).CreateMapper();
                 default:
                     return null;
             }
@@ -45,7 +51,7 @@ namespace PSI.Areas.SysConfig.Mappers
             #region --CustomerInfo --        
             if (typeof(T1) == typeof(CustomerInfo))
                 return new MapperConfiguration(cfg =>
-                cfg.CreateMap<CustomerInfo, PageCustomerEditCustomerInfo>()
+                cfg.CreateMap<CustomerInfo, SysConfigCustomerEditCustomerInfo>()
                .ForMember(x => x.CustomerGuid, y => y.MapFrom(o => o.CUSTOMER_GUID))
                .ForMember(x => x.CompanyName, y => y.MapFrom(o => o.COMPANY_NAME))
                .ForMember(x => x.CustomerName, y => y.MapFrom(o => o.CUSTOMER_NAME))
@@ -96,6 +102,11 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
                         .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
                        ).CreateMapper();
+                case (nameof(CustomerContract), nameof(VE_CustomerContract)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerContract, VE_CustomerContract>()
+                        .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
+                       ).CreateMapper();
                 default:
                     return null;
             }
@@ -134,9 +145,9 @@ namespace PSI.Areas.SysConfig.Mappers
         {
             switch ((typeof(T1).Name, typeof(T2).Name))
             {
-                case (nameof(PageCustomerEditCustomerInfo), nameof(CustomerInfo)):
+                case (nameof(SysConfigCustomerEditCustomerInfo), nameof(CustomerInfo)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<PageCustomerEditCustomerInfo, CustomerInfo>()
+                    cfg.CreateMap<SysConfigCustomerEditCustomerInfo, CustomerInfo>()
                        .ForMember(t => t.CUSTOMER_GUID, s => s.MapFrom(ss => ss.CustomerGuid))
                        .ForMember(t => t.COMPANY_NAME, s => s.MapFrom(ss => ss.EditCompanyName))
                        .ForMember(t => t.TAX_ID, s => s.MapFrom(ss => ss.EditTaxId))

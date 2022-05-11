@@ -1,4 +1,4 @@
-﻿@model PageCustomerEditCustomerInfo
+﻿@model SysConfigCustomerEditCustomerInfo
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -212,9 +212,13 @@
                                 }
                                 else
                                 {
-                                    @foreach (var item in Model.VE_CustomerCarList)
+                                    @foreach (var item in Model.VE_CustomerContractList)
                                     {
-                                        <li>@item.CarName</li>
+                                        <li>
+                                            <a asp-area="SysConfig" asp-controller="Contract" asp-action="EditCustomerContract" asp-route-unid="@item.ContractGUID" class="btn btn-default">
+                                                @item.ContractName
+                                            </a>
+                                        </li>
                                     }
                                 }
                             }
@@ -294,13 +298,14 @@
     <script asp-append-version="true" src="~/psi/create-customer-info.js"></script>
     <script asp-append-version="true" src="~/psi/CustomerAPI.js"></script>
     <script asp-append-version="true" src="~/psi/SysConfigPageHelper.js"></script>
-    <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfo.js"></script>
-    <script asp-append-version="true" src="~/psi/PageOfSysConfigEditCustomerInfoValidate.js"></script>
+    <script asp-append-version="true" src="~/psi/SysConfigCustomerEditCustomerInfo.js"></script>
 
     <script>
         $(function () {
-            const pageJsObj = new PageOfSysConfigEditCustomerInfo(window.baseApiUrl);
-            pageJsObj.PageEventInit();
+            const pageMain = new SysConfigCustomerEditCustomerInfo(window.baseApiUrl);
+            pageMain.PagePluginInit();
+            pageMain.PageEventInit();
+            pageMain.PageValidateInit();
 
         })
     </script>

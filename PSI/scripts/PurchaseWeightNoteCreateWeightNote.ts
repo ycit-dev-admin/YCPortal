@@ -109,6 +109,7 @@
                 selectedValue === "0") {  // 新客戶
                 curObj.DomOfCustomerName.readOnly = false;
                 curObj.ReSetCarNoItems([]);
+                curObj.ReSetContractItems([]);
             } else {
                 curObj.DomOfCustomerName.readOnly = true;
                 curObj.DomOfCustomerName.value = selectedText;
@@ -116,7 +117,14 @@
                 $.when(funcRs).then(function (data) {
                     curObj.ReSetCarNoItems(data);
                 });
+
+                let funcRs2 = curObj.CustomerContractAPI.GetContractsByCustomerUNID(selectedValue);
+                $.when(funcRs2).then(function (data) {
+                    curObj.ReSetContractItems(data);
+                    $(curObj.DomOfContractUNID).trigger("change");
+                });
             }
+            $(curObj.DomOfCarNoUNID).trigger("change");  // 加這個客戶車牌才會判斷 是否選到0
         });
 
         // 客戶車牌
@@ -352,6 +360,18 @@
         dataObjLs.forEach(function (item) {  // 清單項目
             let newOption = new Option(item.carName, item.carNoUNID, false, false);
             JqDomOfCarNoUNID.append(newOption);
+        });
+    }
+
+    private ReSetContractItems(dataObjLs) {
+        const JqDomOfContractUNID = $(this.DomOfContractUNID);
+
+        JqDomOfContractUNID.html('');  // 選項清空
+        let defaultOption = new Option("", "", false, false);
+        JqDomOfContractUNID.append(defaultOption);
+        dataObjLs.forEach(function (item) {  // 清單項目
+            let newOption = new Option(item.contractName, item.contractGUID, false, false);
+            JqDomOfContractUNID.append(newOption);
         });
     }
 

@@ -4,32 +4,9 @@
 };
 
 
-/* Page Initialize */
-// Select2 Elements
-$('.select2bs4').select2({
-    theme: 'bootstrap4',
-    placeholder: "請選擇項目"
-})
 
-// jquery dialog
-$("#dialog-confirm").dialog({
-    resizable: false,
-    height: "auto",
-    width: 400,
-    modal: true,
-    autoOpen: false,
-    buttons: {
-        "儲存": function () {
-            $('#edit-customer-form').submit();
-            $(this).dialog("close");
-        },
-        "取消": function () {
-            $(this).dialog("close");
-        }
-    }
-})
 
-class PageOfSysConfigEditCustomerInfo {
+class SysConfigCustomerEditCustomerInfo {
     // Base Porperites
     readonly BaseUrl: string;
 
@@ -81,86 +58,33 @@ class PageOfSysConfigEditCustomerInfo {
     private DomOfIsChanged = document.getElementById("IsChanged") as HTMLInputElement;
 
 
-    /* Class Variable */
+    public PagePluginInit() {
+        const curObj = this;
+        /* Page Initialize */
+        // Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4',
+            placeholder: "請選擇項目"
+        })
 
-    /* Page Function */
-    public SetChageStatus(result: boolean): void {
-        this.DomOfIsChanged.value = result.toString();
+        // jquery dialog
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            autoOpen: false,
+            buttons: {
+                "儲存": function () {
+                    $('#edit-customer-form').submit();
+                    $(this).dialog("close");
+                },
+                "取消": function () {
+                    $(this).dialog("close");
+                }
+            }
+        })
     }
-
-
-
-
-    //public EvenShow_JqUlDom: JQuery<HTMLUListElement> = $('#evenProductLs');
-    //public OddLShow_JqUlDom: JQuery<HTMLUListElement> = $('#oddProductLs');
-    //public UsProdItem_JqSelectDom: JQuery<HTMLSelectElement> = $('#user-select-proditem');
-    //public TotalProdItemInfo_JqSelectDom: JQuery<HTMLHeadingElement> = $('#total');
-    //public ingredientPost_JqDivDom: JQuery<HTMLDivElement> = $('#ingredientPost');
-    //public CustomerId_JqSelectDom: JQuery<HTMLSelectElement> = $('#VE_PurchaseWeightNote_CustomerId');
-    //public CustomerName_JqInputDom: JQuery<HTMLInputElement> = $('#VE_PurchaseWeightNote_CustomerName');
-    //public CarNoId_JqSelectDom: JQuery<HTMLElement> = $('#VE_PurchaseWeightNote_CarNoId');
-    //public CarName_JqInputDom: JQuery<HTMLInputElement> = $('#VE_PurchaseWeightNote_CarNo');
-    //public FullWeight_Dom = $('#VE_PurchaseWeightNote_FullWeight').get(0) as HTMLInputElement;
-    //public DefectiveWeight_DOM = $('#VE_PurchaseWeightNote_DefectiveWeight').get(0) as HTMLInputElement;
-    //public UnitPrice_DOM = $('#VE_PurchaseWeightNote_UnitPrice').get(0) as HTMLInputElement;
-    //public TraficUnitPrice_DOM = $('#VE_PurchaseWeightNote_TraficUnitPrice').get(0) as HTMLInputElement;
-    //public ThirdWeightFee_DOM = $('#VE_PurchaseWeightNote_ThirdWeightFee').get(0) as HTMLInputElement;
-    //public HasTaxList = $(".ishas_tax").get() as HTMLInputElement[];
-    //public DisplayFinalPrice_DOM = $('#show_final_price').get(0) as HTMLHeadingElement;
-    //public DisplayWeightPrice_DOM = $('#show_weight_price').get(0) as HTMLDivElement;
-    //public DispalyTraficPrice_DOM = $('#show_trafic_price').get(0) as HTMLDivElement;
-    //public ActualPrice_DOM = $('#VE_PurchaseWeightNote_ActualPrice').get(0) as HTMLInputElement;
-
-
-
-
-
-
-
-    //public CustomerId_Change() {
-    //    const thisObj = this;
-
-    //    this.CustomerName_JqInputDom.val("");
-    //    this.CarName_JqInputDom.val(""); // 車牌名稱清空
-
-    //    if (this.CustomerId_JqSelectDom &&
-    //        this.CustomerId_JqSelectDom.find(':selected').val() === "0") {  // 新客戶
-    //        this.CustomerName_JqInputDom.removeAttr("readonly");
-    //        thisObj.ReSetCarNoItems([]);
-    //    } else {
-    //        this.CustomerName_JqInputDom.attr("readonly", "readonly");
-    //        this.CustomerName_JqInputDom.val(this.CustomerId_JqSelectDom.find(':selected').text());
-    //        let funcRs = this.CustomerAPI.GetCarNoItemsBy(this.CustomerId_JqSelectDom.find(':selected').val().toString());
-    //        $.when(funcRs).then(function (data) {
-    //            thisObj.ReSetCarNoItems(data);
-    //        });
-    //    }
-    //}
-
-    //public CarNoId_Change() {
-    //    this.CarName_JqInputDom.val("");
-    //    if (this.CarNoId_JqSelectDom &&
-    //        this.CarNoId_JqSelectDom.find(':selected').val() === "0") {
-    //        this.CarName_JqInputDom.removeAttr("readonly");
-    //    } else {
-    //        this.CarName_JqInputDom.attr("readonly", "readonly");
-    //        this.CarName_JqInputDom.val(this.CarNoId_JqSelectDom.find(':selected').text());
-    //    }
-    //}
-
-    //private ReSetCarNoItems(dataObjLs) {
-    //    const thisPagObj = this;
-    //    thisPagObj.CarNoId_JqSelectDom.html('');  // 選項清空
-    //    let defaultOption = new Option("0.新車牌", "0", false, false);
-    //    thisPagObj.CarNoId_JqSelectDom.append(defaultOption);
-    //    dataObjLs.forEach(function (item) {  // 清單項目
-    //        let newOption = new Option(item.carName, item.id, false, false);
-    //        thisPagObj.CarNoId_JqSelectDom.append(newOption);
-    //    });
-    //}
-
-
-
 
     public PageEventInit() {
         const curObj = this;
@@ -263,6 +187,128 @@ class PageOfSysConfigEditCustomerInfo {
         //    });
         //});
     }
+
+
+    public PageValidateInit() {
+        // Form Validation
+        $('#edit-customer-form').validate({
+            submitHandler: function (form) {
+                let isChanged = (document.getElementById("IsChanged") as HTMLInputElement).value;
+                if (isChanged === "true") {
+                    form.submit();
+                } else {
+                    alert("並未有內容變更，故不進行資料變更!!")
+                }
+            },
+            rules: {
+                CompanyName: {
+                    required: true
+                },
+                CustomerName: {
+                    required: true
+                }
+            },
+            messages: {
+                CompanyName: {
+                    required: "該欄位為必填!!"
+                },
+                CustomerName: {
+                    required: "該欄位為必填!!"
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+    }
+
+    /* Page Function */
+    public SetChageStatus(result: boolean): void {
+        this.DomOfIsChanged.value = result.toString();
+    }
+
+
+
+
+    //public EvenShow_JqUlDom: JQuery<HTMLUListElement> = $('#evenProductLs');
+    //public OddLShow_JqUlDom: JQuery<HTMLUListElement> = $('#oddProductLs');
+    //public UsProdItem_JqSelectDom: JQuery<HTMLSelectElement> = $('#user-select-proditem');
+    //public TotalProdItemInfo_JqSelectDom: JQuery<HTMLHeadingElement> = $('#total');
+    //public ingredientPost_JqDivDom: JQuery<HTMLDivElement> = $('#ingredientPost');
+    //public CustomerId_JqSelectDom: JQuery<HTMLSelectElement> = $('#VE_PurchaseWeightNote_CustomerId');
+    //public CustomerName_JqInputDom: JQuery<HTMLInputElement> = $('#VE_PurchaseWeightNote_CustomerName');
+    //public CarNoId_JqSelectDom: JQuery<HTMLElement> = $('#VE_PurchaseWeightNote_CarNoId');
+    //public CarName_JqInputDom: JQuery<HTMLInputElement> = $('#VE_PurchaseWeightNote_CarNo');
+    //public FullWeight_Dom = $('#VE_PurchaseWeightNote_FullWeight').get(0) as HTMLInputElement;
+    //public DefectiveWeight_DOM = $('#VE_PurchaseWeightNote_DefectiveWeight').get(0) as HTMLInputElement;
+    //public UnitPrice_DOM = $('#VE_PurchaseWeightNote_UnitPrice').get(0) as HTMLInputElement;
+    //public TraficUnitPrice_DOM = $('#VE_PurchaseWeightNote_TraficUnitPrice').get(0) as HTMLInputElement;
+    //public ThirdWeightFee_DOM = $('#VE_PurchaseWeightNote_ThirdWeightFee').get(0) as HTMLInputElement;
+    //public HasTaxList = $(".ishas_tax").get() as HTMLInputElement[];
+    //public DisplayFinalPrice_DOM = $('#show_final_price').get(0) as HTMLHeadingElement;
+    //public DisplayWeightPrice_DOM = $('#show_weight_price').get(0) as HTMLDivElement;
+    //public DispalyTraficPrice_DOM = $('#show_trafic_price').get(0) as HTMLDivElement;
+    //public ActualPrice_DOM = $('#VE_PurchaseWeightNote_ActualPrice').get(0) as HTMLInputElement;
+
+
+
+
+
+
+
+    //public CustomerId_Change() {
+    //    const thisObj = this;
+
+    //    this.CustomerName_JqInputDom.val("");
+    //    this.CarName_JqInputDom.val(""); // 車牌名稱清空
+
+    //    if (this.CustomerId_JqSelectDom &&
+    //        this.CustomerId_JqSelectDom.find(':selected').val() === "0") {  // 新客戶
+    //        this.CustomerName_JqInputDom.removeAttr("readonly");
+    //        thisObj.ReSetCarNoItems([]);
+    //    } else {
+    //        this.CustomerName_JqInputDom.attr("readonly", "readonly");
+    //        this.CustomerName_JqInputDom.val(this.CustomerId_JqSelectDom.find(':selected').text());
+    //        let funcRs = this.CustomerAPI.GetCarNoItemsBy(this.CustomerId_JqSelectDom.find(':selected').val().toString());
+    //        $.when(funcRs).then(function (data) {
+    //            thisObj.ReSetCarNoItems(data);
+    //        });
+    //    }
+    //}
+
+    //public CarNoId_Change() {
+    //    this.CarName_JqInputDom.val("");
+    //    if (this.CarNoId_JqSelectDom &&
+    //        this.CarNoId_JqSelectDom.find(':selected').val() === "0") {
+    //        this.CarName_JqInputDom.removeAttr("readonly");
+    //    } else {
+    //        this.CarName_JqInputDom.attr("readonly", "readonly");
+    //        this.CarName_JqInputDom.val(this.CarNoId_JqSelectDom.find(':selected').text());
+    //    }
+    //}
+
+    //private ReSetCarNoItems(dataObjLs) {
+    //    const thisPagObj = this;
+    //    thisPagObj.CarNoId_JqSelectDom.html('');  // 選項清空
+    //    let defaultOption = new Option("0.新車牌", "0", false, false);
+    //    thisPagObj.CarNoId_JqSelectDom.append(defaultOption);
+    //    dataObjLs.forEach(function (item) {  // 清單項目
+    //        let newOption = new Option(item.carName, item.id, false, false);
+    //        thisPagObj.CarNoId_JqSelectDom.append(newOption);
+    //    });
+    //}
+
+
+
+
 
 }
 

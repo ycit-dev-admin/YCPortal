@@ -12,10 +12,11 @@ namespace PSI.Areas.Purchase.Helpers
     public class PurchaseEntityHelper
     {
         private readonly IMapper _mapper;
-        private PurchasePriceHelper _purchasePriceHelper;
-        public PurchaseEntityHelper(IMapper mapper)
+        private readonly IPsiService _psiService;
+        public PurchaseEntityHelper(IMapper mapper,
+            IPsiService psiService)
         {
-            _purchasePriceHelper = new PurchasePriceHelper();
+            _psiService = psiService;
             _mapper = mapper;
         }
 
@@ -23,15 +24,15 @@ namespace PSI.Areas.Purchase.Helpers
         {
             var purchaseWeightNote = _mapper.Map<PurchaseWeightNote>(vmPurchaseWeightNote);
             purchaseWeightNote.DOC_NO = docNo;
-            purchaseWeightNote.WEIGHT_PRICE = _purchasePriceHelper.GetWeightNotePrice(
+            purchaseWeightNote.WEIGHT_PRICE = _psiService.GetWeightNotePrice(
                 purchaseWeightNote.FULL_WEIGHT,
                 purchaseWeightNote.DEFECTIVE_WEIGHT,
                 purchaseWeightNote.UNIT_PRICE,
                 purchaseWeightNote.HAS_TAX);
-            purchaseWeightNote.DELIVERY_FEE = _purchasePriceHelper.GetDeliveryPrice(
+            purchaseWeightNote.DELIVERY_FEE = _psiService.GetDeliveryPrice(
                 purchaseWeightNote.FULL_WEIGHT,
                 purchaseWeightNote.TRAFIC_UNIT_PRICE.Value);
-            purchaseWeightNote.ACTUAL_PRICE = _purchasePriceHelper.GetActualPayPrice(
+            purchaseWeightNote.ACTUAL_PRICE = _psiService.GetActualPayPrice(
                purchaseWeightNote.THIRD_WEIGHT_FEE,
                purchaseWeightNote.WEIGHT_PRICE.Value,
                purchaseWeightNote.DELIVERY_FEE);

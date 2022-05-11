@@ -5,7 +5,7 @@ using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
-    public class PageCustomerEditCustomerInfo
+    public class SysConfigCustomerEditCustomerInfo
     {
         #region -- ForPost -- 
         public string EncodeSn { get; set; }
@@ -22,6 +22,7 @@ namespace PSI.Areas.SysConfig.Models.PageModels
         #region --- ForShow ---
 
         public List<VE_CustomerCar> VE_CustomerCarList { get; set; }
+        public List<VE_CustomerContract> VE_CustomerContractList { get; set; }
         public Guid CustomerGuid { get; set; }
         public string CompanyName { get; set; }
         public string TaxId { get; set; }

@@ -13,7 +13,7 @@ namespace PSI.Infrastructure.Extensions
             {
                 Text = argType.GetProperty(textName).GetValue(item).ToString(),
                 Value = argType.GetProperty(valueName).GetValue(item).ToString(),
-                Selected = selectedValue == argType.GetProperty(valueName).GetValue(item).ToString() ? true : false
+                Selected = selectedValue == argType.GetProperty(valueName).GetValue(item).ToString()
             }).ToList();
 
         }

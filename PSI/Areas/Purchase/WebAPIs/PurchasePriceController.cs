@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.Purchase.Helpers;
+using PSI.Service.IService;
 
 namespace PSI.Areas.Purchase.WebAPIs
 {
@@ -8,21 +9,25 @@ namespace PSI.Areas.Purchase.WebAPIs
     [ApiController]
     public class PurchasePriceController : ControllerBase
     {
+        private readonly IPsiService _psiService;
+
+        public PurchasePriceController(IPsiService psiService)
+        {
+            _psiService = psiService;
+        }
 
         [HttpGet]
         [Route("[action]")]
         public decimal GetWeightNotePrice(double fullWeight, double defectiveWeight, decimal unitPrice, bool hasTax)
         {
-            return new PurchasePriceHelper()
-                .GetWeightNotePrice(fullWeight, defectiveWeight, unitPrice, hasTax);
+            return _psiService.GetWeightNotePrice(fullWeight, defectiveWeight, unitPrice, hasTax);
 
         }
         [HttpGet]
         [Route("[action]")]
         public decimal GetDeliveryPrice(double fullWeight, decimal traficUnitPrice)
         {
-            return new PurchasePriceHelper()
-                .GetDeliveryPrice(fullWeight, traficUnitPrice);
+            return _psiService.GetDeliveryPrice(fullWeight, traficUnitPrice);
 
         }
 
@@ -30,8 +35,7 @@ namespace PSI.Areas.Purchase.WebAPIs
         [Route("[action]")]
         public decimal GetActualPayPrice(decimal thirdWeightPrice, decimal weightNotePrice, decimal deliveryPrice)
         {
-            return new PurchasePriceHelper()
-                .GetActualPayPrice(thirdWeightPrice, weightNotePrice, deliveryPrice);
+            return _psiService.GetActualPayPrice(thirdWeightPrice, weightNotePrice, deliveryPrice);
 
         }
     }

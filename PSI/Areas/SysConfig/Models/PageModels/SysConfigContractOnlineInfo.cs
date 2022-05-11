@@ -4,7 +4,7 @@ using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Models
 {
-    public class PageContractOnlineInfo
+    public class SysConfigContractOnlineInfo
     {
         // Post
 
@@ -14,6 +14,7 @@ namespace PSI.Areas.SysConfig.Models
         public List<SelectListItem> ContractTypeItems { set; get; }
         public List<VE_CustomerInfo> VeCustomerInfoList { get; set; }
         public List<VE_CustomerContract> VeCustomerContractList { get; set; }
+        public Dictionary<string, decimal> CompletedWeightDic { get; set; }
 
     }
 }

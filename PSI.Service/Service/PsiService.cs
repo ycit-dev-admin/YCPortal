@@ -61,13 +61,14 @@ namespace PSI.Service.Service
             // item.GetRawConstantValue().ToString()).AsQueryable();
         }
 
-        public FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNote(
+        public FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNoteForNormal(
             PurchaseWeightNote purchaseWeightNote,
             List<PurchaseIngredient> purchaseIngredientLs,
             AppUser operUserInfo,
             ICustomerContractService customerContractService,
-            CustomerInfo customerInfo = null,
-            CustomerCar customerCar = null,
+            ICustomerService customerService,
+            CustomerInfo tempCustomerInfo = null,
+            CustomerCar tempCustomerCar = null,
             CustomerContractLog customerContractLog = null)
         {
             /* Null檢核 */
@@ -82,11 +83,22 @@ namespace PSI.Service.Service
 
             /* 進貨磅單建立 */
             purchaseWeightNote.UNID = Guid.NewGuid();
+            purchaseWeightNote.DOC_NO = this.GetWeightNoteDocNo(operUserInfo.FacSite, PSIEnum.PSIType.Purchase);
+            purchaseWeightNote.WEIGHT_PRICE = this.GetWeightNotePrice(purchaseWeightNote.FULL_WEIGHT,
+               purchaseWeightNote.DEFECTIVE_WEIGHT,
+               purchaseWeightNote.UNIT_PRICE,
+               purchaseWeightNote.HAS_TAX);
+            purchaseWeightNote.DELIVERY_FEE = this.GetDeliveryPrice(purchaseWeightNote.FULL_WEIGHT, purchaseWeightNote.TRAFIC_UNIT_PRICE.Value);
+            purchaseWeightNote.ACTUAL_PRICE = this.GetActualPayPrice(purchaseWeightNote.THIRD_WEIGHT_FEE,
+               purchaseWeightNote.WEIGHT_PRICE.Value,
+               purchaseWeightNote.DELIVERY_FEE);
             purchaseWeightNote.FAC_NO = operUserInfo.FacSite;
+            purchaseWeightNote.CAR_NO = purchaseWeightNote.CAR_NO.ToUpper();
+            purchaseWeightNote.CREATE_EMPNO = operUserInfo.NickName;
             purchaseWeightNote.CREATE_TIME = DateTime.Now;
             purchaseWeightNote.EFFECTIVE_TIME = DateTime.Now;
+            purchaseWeightNote.UPDATE_EMPNO = operUserInfo.NickName;
             purchaseWeightNote.UPDATE_TIME = DateTime.Now;
-            purchaseWeightNote.CREATE_EMPNO = operUserInfo.NickName;
             var cRs = _purchaseWeightNoteRepository.Create(purchaseWeightNote);
             if (!cRs.Success)
             {
@@ -112,6 +124,7 @@ namespace PSI.Service.Service
             /* 合約紀錄建立 */
             if (customerContractLog != null)
             {
+                customerContractLog.PSI_DOC_UNID = purchaseWeightNote.UNID;
                 var creRs = _customerContractLogRepository.Create(customerContractLog);
                 var isCustomerContractCompleted = !creRs.Success ?
                     false :
@@ -128,13 +141,22 @@ namespace PSI.Service.Service
 
 
             /* 臨時客戶建立 */
-            if (customerInfo != null)
-                _customerInfoRepository.CreateNotSave(customerInfo);
-            // 臨時車牌建立 (似乎不用,因為跟著磅單走)            
-            if (customerCar != null)
-                _customerCarRepository.CreateNotSave(customerCar);
+            if (tempCustomerInfo != null)
+            {
+                tempCustomerInfo.PSI_TYPE = ((int)PSIEnum.PSIType.Purchase).ToString();
+                tempCustomerInfo.REMARK = "透過臨時客戶功能建立";
+                var customerInfoRs = customerService.CreateCustomerInfoForNormal(tempCustomerInfo, operUserInfo);
 
-            _unitOfwork.SaveChange();
+                // 臨時車牌建立        
+                if (customerInfoRs.Success && tempCustomerCar != null)
+                {
+                    tempCustomerCar.REMARK = "透過臨時車牌功能建立";
+                    tempCustomerCar.CUSTOMER_GUID = tempCustomerInfo.CUSTOMER_GUID;
+                    var customerCarRs = customerService.CreateCustomerCarForNormal(tempCustomerCar, operUserInfo);
+                }
+
+
+            }
 
 
 
@@ -192,16 +214,16 @@ namespace PSI.Service.Service
 
 
 
-        public string GetDocNo(string facSite, int psiType)
+        public string GetWeightNoteDocNo(string facSite, PSIEnum.PSIType psiType)
         {
             // 單號前綴
             string psiCode;
             switch (psiType)
             {
-                case 1:
+                case PSIEnum.PSIType.Purchase:
                     psiCode = "P";
                     break;
-                case 2:
+                case PSIEnum.PSIType.Sale:
                     psiCode = "S";
                     break;
                 default:
@@ -257,6 +279,31 @@ namespace PSI.Service.Service
         {
             return _codeTableRepository.GetAllAsync().Result
                 .Where(aa => aa.CODE_GROUP == "CONTRACT_TYPE").AsQueryable();
+        }
+
+        public decimal GetWeightNotePrice(double fullWeight, double defectiveWeight, decimal unitPrice, bool hasTax)
+        {
+            var caculateWeight = fullWeight - defectiveWeight;
+            if (caculateWeight <= 0 || unitPrice <= 0)
+                return 0;
+
+            var taxVal = hasTax ? 1.05 : 1;
+            return (decimal)caculateWeight * unitPrice * (decimal)taxVal;
+        }
+
+        public decimal GetDeliveryPrice(double fullWeight, decimal traficUnitPrice)
+        {
+            if (fullWeight <= 0 || traficUnitPrice <= 0)
+                return 0;
+
+            return (decimal)fullWeight * traficUnitPrice;
+        }
+
+        public decimal GetActualPayPrice(decimal thirdWeightPrice, decimal weightNotePrice, decimal deliveryPrice)
+        {
+            return thirdWeightPrice + weightNotePrice + deliveryPrice < 0 ?
+                0 :
+                decimal.Round(thirdWeightPrice + weightNotePrice + deliveryPrice);
         }
     }
 }

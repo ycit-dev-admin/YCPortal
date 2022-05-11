@@ -55,10 +55,10 @@ namespace PSI.Service.Service
                        .ToDictionary(r => (int)r, r => r);
         }
 
-        public CustomerContract GetCustomerContractsByCustomerUNID(Guid customerId)
+        public CustomerContract GetCustomerContractsByContractUNID(Guid contractUNID)
         {
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .FirstOrDefault(aa => aa.CONTRACT_GUID == customerId);
+                                                     .FirstOrDefault(aa => aa.CONTRACT_GUID == contractUNID);
             return queryRs;
         }
 
@@ -72,6 +72,17 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
+        public IQueryable<CustomerContract> GetContractsByCustomerUNID(Guid customerUNID)
+        {
+            var needStatus = new[] { CustomerContractEnum.Status.Ongoing,
+                CustomerContractEnum.Status.Completed,
+            CustomerContractEnum.Status.ForceCompleted};
+            var queryRs = _customerContractRepository.GetAllAsync().Result
+                                                     .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS) &&
+                                                     aa.CUSTOMER_GUID == customerUNID).AsQueryable();
+            return queryRs;
+        }
+
         public IQueryable<CustomerContract> GetPurchaseCustomerContracts()
         {
             var needStatus = new[] { CustomerContractEnum.Status.Ongoing };
@@ -80,6 +91,19 @@ namespace PSI.Service.Service
             var queryRs = _customerContractRepository.GetAllAsync().Result
                                                      .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS) &&
                                                      purchaseContractTypes.Contains((CustomerContractEnum.Types)aa.CONTRACT_TYPE))
+                                                     .AsQueryable();
+            return queryRs;
+        }
+
+        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID)
+        {
+            var needStatus = new[] { CustomerContractEnum.Status.Ongoing };
+            var purchaseContractTypes = this.GetPurchaseContractTypes();
+
+            var queryRs = _customerContractRepository.GetAllAsync().Result
+                                                     .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS) &&
+                                                     purchaseContractTypes.Contains((CustomerContractEnum.Types)aa.CONTRACT_TYPE) &&
+                                                     aa.CUSTOMER_GUID == cutsomerUNID)
                                                      .AsQueryable();
             return queryRs;
         }
@@ -235,6 +259,38 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
+
+        public FunctionResult<CustomerContract> UpdateCustomerContractBySpecFields(CustomerContract customerContract, List<string> onlyUpdateNameOfFields, AppUser operUser)
+        {
+            var funcRs = new FunctionResult<CustomerContract>();
+            if (customerContract == null)
+            {
+                funcRs.ResultFailure("無更新資料傳入!!");
+                return funcRs;
+            }
+            var dbCustomerContract = _customerContractRepository.GetAsync(item => item.CONTRACT_GUID == customerContract.CONTRACT_GUID).Result;
+            if (dbCustomerContract == null)
+            {
+                funcRs.ResultFailure("查無此筆資料!!");
+                return funcRs;
+            }
+
+            customerContract.UPDATE_EMPNO = operUser.NickName;
+            customerContract.UPDATE_TIME = DateTime.Now;
+
+            var upDbEntity = typeof(CustomerContract).ToUpdateEntity(
+            customerContract,
+            dbCustomerContract,
+            onlyUpdateNameOfFields);
+
+
+
+            funcRs = _customerContractRepository.Update(upDbEntity);
+            funcRs.ResultSuccess("更新客戶資料成功!!", upDbEntity);
+            return funcRs;
+
+        }
+
         public IQueryable<CustomerContractLog> GetCustomerContractLogs(Guid contractUNID)
         {
             var queryRs = _customerContractLogRepository.GetAllAsync().Result
@@ -242,11 +298,17 @@ namespace PSI.Service.Service
                                                        aa.IS_EFFECTIVE == "1").AsQueryable();
             return queryRs;
         }
+        public IQueryable<CustomerContractLog> GetContractLogsByContractUNIDs(List<Guid> contractUNIDs)
+        {
+            var queryRs = _customerContractLogRepository.GetAllAsync().Result
+                                          .Where(aa => contractUNIDs.Contains(aa.CONTRACT_UNID) &&
+                                                       aa.IS_EFFECTIVE == "1").AsQueryable();
+            return queryRs;
+        }
 
         public bool IsCustomerContractCompleted(Guid contractUNID)
         {
-            var customerContract = _customerContractRepository.GetAllAsync().Result
-                                          .FirstOrDefault(aa => aa.CONTRACT_GUID == contractUNID);
+            var customerContract = _customerContractRepository.GetAsync(aa => aa.CONTRACT_GUID == contractUNID).Result;
             var contractLogRelDocUNIDs = this.GetCustomerContractLogs(contractUNID)
                                                 .Select(aa => aa.PSI_DOC_UNID).ToList();
 

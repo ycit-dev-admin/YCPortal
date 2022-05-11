@@ -21,15 +21,18 @@ namespace PSI.Areas.SysConfig.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomerService _customerService;
+        private readonly ICustomerContractService _customerContractService;
         private readonly IPsiService _psiService;
         private readonly UserManager<AppUser> _userManager;
         private readonly CustomerControllerMapper _mapperHelper;
 
 
         public CustomerController(ICustomerService customerService,
+                                  ICustomerContractService customerContractService,
                                   IPsiService psiService,
                                   UserManager<AppUser> userManager)
         {
+            _customerContractService = customerContractService;
             _userManager = userManager;
             _customerService = customerService;
             _psiService = psiService;
@@ -53,22 +56,25 @@ namespace PSI.Areas.SysConfig.Controllers
 
 
             /* Local Functions */
-            FunctionResult<PageCustomerOnlineInfo> GetPageModel()
+            FunctionResult<SysConfigCustomerOnlineInfo> GetPageModel()
             {
                 var veCustomerInfoMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerInfo, VE_CustomerInfo>();
                 var customerInfoLs = _customerService.GetCustomerInfos();
                 var veCustomerInfoLs = veCustomerInfoMapper.Map<List<VE_CustomerInfo>>(customerInfoLs);
-
                 var veCustomerCarMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerCar, VE_CustomerCar>();
-                var customerCarLs = _customerService.GetCustomerCars().Where(aa => aa.IS_EFFECTIVE == "1").ToList();
+                var customerCarLs = _customerService.GetCustomerCars();
                 var veCustomerCarLs = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
+                var veCustomerContractMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerContract, VE_CustomerContract>();
+                var customerContracts = _customerContractService.GetEffectiveCustomerContracts();
+                var veCustomerContractList = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContracts);
 
-                var funRs = new FunctionResult<PageCustomerOnlineInfo>();
-                funRs.ResultSuccess("", new PageCustomerOnlineInfo
+                var funRs = new FunctionResult<SysConfigCustomerOnlineInfo>();
+                funRs.ResultSuccess("", new SysConfigCustomerOnlineInfo
                 {
-                    CustomerInfoLs = veCustomerInfoLs,
-                    CustomerCarLs = veCustomerCarLs
-                });
+                    VeCustomerInfoLs = veCustomerInfoLs,
+                    VeCustomerCarLs = veCustomerCarLs,
+                    VeCustomerContractList = veCustomerContractList
+                }); ;
                 return funRs;
             }
 
@@ -143,7 +149,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 var customerInfoCfgMapper = _mapperHelper.GetMapperOfCreateCustomerInfo<PageCustomerCreateCustomerInfo, CustomerInfo>();
                 var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
-                var funcRs = _customerService.CreateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
+                var funcRs = _customerService.CreateCustomerInfoForNormal(customerInfo, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result
             }
@@ -188,24 +194,27 @@ namespace PSI.Areas.SysConfig.Controllers
 
             // Step Functions 
             #region -- GetPageModel --
-            FunctionResult<PageCustomerEditCustomerInfo> GetPageModel(Guid unid)
+            FunctionResult<SysConfigCustomerEditCustomerInfo> GetPageModel(Guid unid)
             {
                 // Make Mapper
-                var pModelMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerInfo, PageCustomerEditCustomerInfo>();
+                var pModelMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerInfo, SysConfigCustomerEditCustomerInfo>();
                 var veCustomerCarMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerCar, VE_CustomerCar>();
+                var veCustomerContractMapper = _mapperHelper.GetMapperOfEditCustomerInfo<CustomerContract, VE_CustomerContract>();
 
                 // Query Data
                 var customerInfo = _customerService.GetCustomerInfo(unid);
-                var customerCarLs = _customerService.GetCustomerCarByCustomerUNID(unid).ToList();  // 要改成用Guid
+                var customerCarLs = _customerService.GetCustomerCarByCustomerUNID(unid);
+                var customerContractLs = _customerContractService.GetContractsByCustomerUNID(unid);
 
                 // Map to model
-                var pageModel = pModelMapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
+                var pageModel = pModelMapper.Map<SysConfigCustomerEditCustomerInfo>(customerInfo);
                 pageModel.VE_CustomerCarList = veCustomerCarMapper.Map<List<VE_CustomerCar>>(customerCarLs);
+                pageModel.VE_CustomerContractList = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContractLs);
                 pageModel.PsiTypeItems = _psiService.GetPsiTypeItems()
                     .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
 
                 // Return Result
-                var funRs = new FunctionResult<PageCustomerEditCustomerInfo>();
+                var funRs = new FunctionResult<SysConfigCustomerEditCustomerInfo>();
                 funRs.ResultSuccess("", pageModel);
                 return funRs;
             }
@@ -219,7 +228,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
         [HttpPost]
         [Authorize()]
-        public IActionResult EditCustomerInfo(PageCustomerEditCustomerInfo pageModel)
+        public IActionResult EditCustomerInfo(SysConfigCustomerEditCustomerInfo pageModel)
         {
             // Action variables
             var errMsg = "";
@@ -267,9 +276,9 @@ namespace PSI.Areas.SysConfig.Controllers
             }
             #endregion
             #region -- UpdateToDB --
-            FunctionResult<CustomerInfo> UpdateToDB(PageCustomerEditCustomerInfo pageModel)
+            FunctionResult<CustomerInfo> UpdateToDB(SysConfigCustomerEditCustomerInfo pageModel)
             {
-                var customerInfoMapper = _mapperHelper.GetMapperOfCustomerEditCustomerInfo<PageCustomerEditCustomerInfo, CustomerInfo>();
+                var customerInfoMapper = _mapperHelper.GetMapperOfCustomerEditCustomerInfo<SysConfigCustomerEditCustomerInfo, CustomerInfo>();
                 var customerInfo = customerInfoMapper.Map<CustomerInfo>(pageModel);
                 var funcRs = _customerService.UpdateCustomerInfo(customerInfo, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;

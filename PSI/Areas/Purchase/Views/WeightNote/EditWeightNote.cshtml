@@ -160,15 +160,6 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label>磅費</label>
-                        <p style="color:blue">@Model.ThirdWeightFee.ToString("'$' #,0.##")</p>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <br />
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
                         <label>@($@"計價金額＝ (進廠重量－扣重)×單價×稅率")</label>
                         <p>
                             <span style="color:blue">
@@ -222,7 +213,15 @@
                         </p>
                     </div>
                 </div>
-
+                <div class="col-sm-12">
+                    <br />
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>磅費</label>
+                        <p style="color:blue">@Model.ThirdWeightFee.ToString("'$' #,0.##")</p>
+                    </div>
+                </div>
 
 
                 @*<div class="col-sm-12">

@@ -2,7 +2,7 @@
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
-    public class PageCustomerEditCustomerInfoValidator : AbstractValidator<PageCustomerEditCustomerInfo>
+    public class PageCustomerEditCustomerInfoValidator : AbstractValidator<SysConfigCustomerEditCustomerInfo>
     {
         public PageCustomerEditCustomerInfoValidator()
         {

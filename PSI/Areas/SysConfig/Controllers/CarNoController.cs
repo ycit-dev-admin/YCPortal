@@ -158,7 +158,7 @@ namespace PSI.Areas.SysConfig.Controllers
             {
                 var mapperCfgOfCustomerCar = _mapperHelper.GetMapperOfCreateCarNoInfo<PageCreateCarNoInfo, CustomerCar>();
                 var customerCar = mapperCfgOfCustomerCar.Map<CustomerCar>(pageModel);
-                var funcRs = _customerService.CreateCustomerCar(customerCar, _userManager.GetUserAsync(User).Result);
+                var funcRs = _customerService.CreateCustomerCarForNormal(customerCar, _userManager.GetUserAsync(User).Result);
                 funcRs.ResultSuccess("ok", customerCar);
                 errMsg = funcRs.ErrorMessage;
                 return funcRs;     // Return Result

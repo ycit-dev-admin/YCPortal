@@ -10,6 +10,7 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Enums;
 using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
@@ -49,21 +50,68 @@ namespace PSI.Areas.SysConfig.Controllers
         [Authorize()]
         public IActionResult OnlineInfo()
         {
+            /* global variable */
             var errMsg = "";
-
             /* Local Functions */
-            FunctionResult<PageContractOnlineInfo> GetPageModel()
+            FunctionResult<SysConfigContractOnlineInfo> GetPageModel()
             {
                 var veCustomerContractMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerContract, VE_CustomerContract>();
-                var customerContractLs = _customerContractService.GetEffectiveCustomerContracts();
+                var customerContractLs = _customerContractService.GetEffectiveCustomerContracts().ToList();
                 var veCustomerContractLs = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContractLs);
                 var veCustomerInfoMapper = _mapperHelper.GetMapperOfOnlineInfo<CustomerInfo, VE_CustomerInfo>();
-                var customerInfoLs = _customerService.GetCustomerInfos();
+                var customerInfoLs = _customerService.GetCustomerInfos().ToList();
                 var veCustomerInfoLs = veCustomerInfoMapper.Map<List<VE_CustomerInfo>>(customerInfoLs);
 
+                var contractLogList = _customerContractService.GetContractLogsByContractUNIDs(customerContractLs.
+                    Select(aa => aa.CONTRACT_GUID).ToList()).ToList();
 
-                var funRs = new FunctionResult<PageContractOnlineInfo>();
-                funRs.ResultSuccess("", new PageContractOnlineInfo
+                var contractUNIDOfLog = contractLogList.Select(aa => aa.CONTRACT_UNID).Distinct();
+                var contractTypeDic = customerContractLs.Where(aa => contractUNIDOfLog.Contains(aa.CONTRACT_GUID))
+                    .ToDictionary(aa => aa.CONTRACT_GUID, aa => (CustomerContractEnum.Types)aa.CONTRACT_TYPE);
+
+
+                Dictionary<Guid, decimal> testDic = null;
+                contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToList().ForEach(aa =>
+               {
+                   var docUNIDs = aa.Select(bb => bb.PSI_DOC_UNID).ToList();
+
+
+               });
+                var abc = contractLogList.GroupBy(aa => aa.CONTRACT_UNID).ToDictionary(aa => aa.Key, aa => aa.Sum(bb =>
+                {
+                    var contractType = contractTypeDic[bb.CONTRACT_UNID];
+                    if (contractType == CustomerContractEnum.Types.Purchase)
+
+
+                        var total =
+                }));
+
+                // var abc3 = customerInfoLs.Where(aa => abc2.Contains(aa.CUSTOMER_GUID)).ToDictionary(aa => aa.CUSTOMER_GUID, aa => aa.PSI_TYPE);
+
+
+
+
+                // 用customercontract 跑loop
+                //customerContractLs.Select(aa =>
+                //{
+                //    var customerInfo = customerInfoLs.FirstOrDefault(bb => bb.CUSTOMER_GUID == aa.CUSTOMER_GUID);
+                //    if (customerInfo != null)
+                //    {
+                //        var psiType = customerInfo.PSI_TYPE;
+
+                //        var
+                //    }
+
+
+                //})
+
+
+
+
+
+
+                var funRs = new FunctionResult<SysConfigContractOnlineInfo>();
+                funRs.ResultSuccess("", new SysConfigContractOnlineInfo
                 {
                     VeCustomerContractList = veCustomerContractLs,
                     VeCustomerInfoList = veCustomerInfoLs,

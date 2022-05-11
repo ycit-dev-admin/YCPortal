@@ -10,7 +10,7 @@ namespace PSI.Service.IService
     public interface ICustomerService
     {
         // Customer Info
-        FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, AppUser operUser);
+        FunctionResult<CustomerInfo> CreateCustomerInfoForNormal(CustomerInfo customerInfo, AppUser operUser);
         FunctionResult<CustomerInfo> UpdateCustomerInfo(CustomerInfo customerInfo, AppUser appUser);
         CustomerInfo GetCustomerInfo(long id);
         CustomerInfo GetCustomerInfo(Guid guid);
@@ -26,7 +26,7 @@ namespace PSI.Service.IService
         CustomerCar GetCustomerCar(string carNo);
 
         IQueryable<CustomerCar> GetCustomerCars();
-        FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser appUser);
+        FunctionResult<CustomerCar> CreateCustomerCarForNormal(CustomerCar customerCar, AppUser appUser);
         FunctionResult<CustomerCar> UpdateCustomerCar(CustomerCar customerCar, AppUser appUser);
 
     }

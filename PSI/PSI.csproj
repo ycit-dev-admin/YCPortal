@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Purchase\Helpers\PurchaseDTEHelper.cs" />
+    <Compile Remove="Areas\Purchase\Helpers\PurchasePriceHelper.cs" />
     <Compile Remove="Areas\SysConfig\Helpers\SysConfigMapperHelper.cs" />
     <Compile Remove="Areas\SysConfig\Models\ShowModels\Show_CustomerInfo.cs" />
     <Compile Remove="Areas\SysConfig\Models\VM_Create_CustomerInfoValidator.cs" />

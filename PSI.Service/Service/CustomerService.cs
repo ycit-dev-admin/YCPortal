@@ -64,11 +64,11 @@ namespace PSI.Service.Service
         }
         public IQueryable<CustomerCar> GetCustomerCars()
         {
-            return _customerCarRepository.GetAllAsync().Result.AsQueryable();
+            return _customerCarRepository.GetAllAsync().Result.Where(aa => aa.IS_EFFECTIVE == "1").AsQueryable();
         }
 
 
-        public FunctionResult<CustomerInfo> CreateCustomerInfo(CustomerInfo customerInfo, AppUser operUser)
+        public FunctionResult<CustomerInfo> CreateCustomerInfoForNormal(CustomerInfo customerInfo, AppUser operUser)
         {
             var funcRs = new FunctionResult<CustomerInfo>();
             if (operUser != null)
@@ -78,8 +78,8 @@ namespace PSI.Service.Service
                 customerInfo.CREATE_TIME = DateTime.Now;
                 customerInfo.UPDATE_EMPNO = operUser.NickName;
                 customerInfo.UPDATE_TIME = DateTime.Now;
-                customerInfo.IS_CONTRACT = false;
                 customerInfo.IS_EFFECTIVE = "1";
+                //customerInfo.IS_CONTRACT = false;
 
                 var cCustomerInfoRs = _customerInfoRepository.Create(customerInfo);
 
@@ -150,7 +150,7 @@ namespace PSI.Service.Service
 
 
 
-        public FunctionResult<CustomerCar> CreateCustomerCar(CustomerCar customerCar, AppUser operUser)
+        public FunctionResult<CustomerCar> CreateCustomerCarForNormal(CustomerCar customerCar, AppUser operUser)
         {
             // var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
             var funcRs = new FunctionResult<CustomerCar>(this);
