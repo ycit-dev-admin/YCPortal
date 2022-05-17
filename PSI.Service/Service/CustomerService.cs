@@ -74,9 +74,9 @@ namespace PSI.Service.Service
             if (operUser != null)
             {
                 customerInfo.CUSTOMER_GUID = Guid.NewGuid();
-                customerInfo.CREATE_EMPNO = operUser.NickName;
+                customerInfo.CREATE_EMPNO = operUser.NICK_NAME;
                 customerInfo.CREATE_TIME = DateTime.Now;
-                customerInfo.UPDATE_EMPNO = operUser.NickName;
+                customerInfo.UPDATE_EMPNO = operUser.NICK_NAME;
                 customerInfo.UPDATE_TIME = DateTime.Now;
                 customerInfo.IS_EFFECTIVE = "1";
                 //customerInfo.IS_CONTRACT = false;
@@ -129,7 +129,7 @@ namespace PSI.Service.Service
             }
 
             // update logic
-            customerInfo.UPDATE_EMPNO = operUser.NickName;
+            customerInfo.UPDATE_EMPNO = operUser.NICK_NAME;
             customerInfo.UPDATE_TIME = DateTime.Now;
 
             var upDbEntity = typeof(CustomerInfo).ToUpdateEntityByNoNeed(
@@ -157,9 +157,9 @@ namespace PSI.Service.Service
             if (customerCar != null)
             {
                 customerCar.CAR_GUID = Guid.NewGuid();
-                customerCar.CREATE_EMPNO = operUser.NickName;
+                customerCar.CREATE_EMPNO = operUser.NICK_NAME;
                 customerCar.CREATE_TIME = DateTime.Now;
-                customerCar.UPDATE_EMPNO = operUser.NickName;
+                customerCar.UPDATE_EMPNO = operUser.NICK_NAME;
                 customerCar.UPDATE_TIME = DateTime.Now;
                 customerCar.IS_EFFECTIVE = "1";
                 customerCar.CAR_NAME = customerCar.CAR_NAME.ToUpper();
@@ -187,7 +187,7 @@ namespace PSI.Service.Service
             var funcRs = new FunctionResult<CustomerCar>(this);
             if (sourceEntity != null)
             {
-                sourceEntity.UPDATE_EMPNO = operUser.NickName;
+                sourceEntity.UPDATE_EMPNO = operUser.NICK_NAME;
                 sourceEntity.UPDATE_TIME = DateTime.Now;
                 sourceEntity.CAR_NAME = sourceEntity.CAR_NAME.ToUpper();
 

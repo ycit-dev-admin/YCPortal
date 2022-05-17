@@ -114,9 +114,9 @@ namespace PSI.Service.Service
             if (operUser != null)
             {
                 customerContract.CONTRACT_GUID = Guid.NewGuid();
-                customerContract.CREATE_EMPNO = operUser.NickName;
+                customerContract.CREATE_EMPNO = operUser.NICK_NAME;
                 customerContract.CREATE_TIME = DateTime.Now;
-                customerContract.UPDATE_EMPNO = operUser.NickName;
+                customerContract.UPDATE_EMPNO = operUser.NICK_NAME;
                 customerContract.UPDATE_TIME = DateTime.Now;
 
 
@@ -157,9 +157,9 @@ namespace PSI.Service.Service
             var funcRs = new FunctionResult<CustomerContractLog>();
             if (operUser != null)
             {
-                customerContractLog.CREATE_EMPNO = operUser.NickName;
+                customerContractLog.CREATE_EMPNO = operUser.NICK_NAME;
                 customerContractLog.CREATE_TIME = DateTime.Now;
-                customerContractLog.UPDATE_EMPNO = operUser.NickName;
+                customerContractLog.UPDATE_EMPNO = operUser.NICK_NAME;
                 customerContractLog.UPDATE_TIME = DateTime.Now;
 
 
@@ -215,7 +215,7 @@ namespace PSI.Service.Service
             }.Where(aa => aa != null).ToList();
 
 
-            customerContract.UPDATE_EMPNO = operUser.NickName;
+            customerContract.UPDATE_EMPNO = operUser.NICK_NAME;
             customerContract.UPDATE_TIME = DateTime.Now;
 
             var upDbEntity = typeof(CustomerContract).ToUpdateEntityByNoNeed(
@@ -247,7 +247,7 @@ namespace PSI.Service.Service
 
             // update logic
             dbCustomerContract.CONTRACT_STATUS = (int)contractStatus;
-            dbCustomerContract.UPDATE_EMPNO = operUser.NickName;
+            dbCustomerContract.UPDATE_EMPNO = operUser.NICK_NAME;
             dbCustomerContract.UPDATE_TIME = DateTime.Now;
 
 
@@ -275,7 +275,7 @@ namespace PSI.Service.Service
                 return funcRs;
             }
 
-            customerContract.UPDATE_EMPNO = operUser.NickName;
+            customerContract.UPDATE_EMPNO = operUser.NICK_NAME;
             customerContract.UPDATE_TIME = DateTime.Now;
 
             var upDbEntity = typeof(CustomerContract).ToUpdateEntity(

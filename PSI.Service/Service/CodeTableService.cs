@@ -50,11 +50,11 @@ namespace PSI.Service.Service
             //var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
 
             /* 進貨磅單建立 */
-            purchaseWeightNote.FAC_NO = operUserInfo.FacSite;
+            purchaseWeightNote.FAC_NO = operUserInfo.FAC_SITE;
             purchaseWeightNote.CREATE_TIME = DateTime.Now;
             purchaseWeightNote.EFFECTIVE_TIME = DateTime.Now;
             purchaseWeightNote.UPDATE_TIME = DateTime.Now;
-            purchaseWeightNote.CREATE_EMPNO = operUserInfo.NickName;
+            purchaseWeightNote.CREATE_EMPNO = operUserInfo.NICK_NAME;
             var cRs = _purchaseWeightNoteRepository.Create(purchaseWeightNote);
             if (!cRs.Success)
             {
@@ -66,9 +66,9 @@ namespace PSI.Service.Service
             purchaseIngredientLs.ForEach(aa =>
             {
                 aa.CREATE_TIME = DateTime.Now;
-                aa.CREATE_EMPNO = operUserInfo.NickName;
+                aa.CREATE_EMPNO = operUserInfo.NICK_NAME;
                 aa.UPDATE_TIME = DateTime.Now;
-                aa.UPDATE_EMPNO = operUserInfo.NickName;
+                aa.UPDATE_EMPNO = operUserInfo.NICK_NAME;
                 aa.PURCHASE_WEIGHTNOTE_UNID = purchaseWeightNote.UNID;
             });
             var piCreRs = _purchaseIngredientNoteRepository.Create(purchaseIngredientLs);

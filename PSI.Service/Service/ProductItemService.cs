@@ -56,9 +56,9 @@ namespace PSI.Service.Service
             if (productItem != null)
             {
                 productItem.PRODUCT_UNID = Guid.NewGuid();
-                productItem.CREATE_EMPNO = operUser.NickName;
+                productItem.CREATE_EMPNO = operUser.NICK_NAME;
                 productItem.CREATE_TIME = DateTime.Now;
-                productItem.UPDATE_EMPNO = operUser.NickName;
+                productItem.UPDATE_EMPNO = operUser.NICK_NAME;
                 productItem.UPDATE_TIME = DateTime.Now;
                 productItem.IS_EFFECTIVE = "1";
                 productItem.PRODUCT_NAME = productItem.PRODUCT_NAME.ToUpper();
@@ -86,7 +86,7 @@ namespace PSI.Service.Service
             var funcRs = new FunctionResult<ProductItem>(this);
             if (sourceEntity != null)
             {
-                sourceEntity.UPDATE_EMPNO = operUser.NickName;
+                sourceEntity.UPDATE_EMPNO = operUser.NICK_NAME;
                 sourceEntity.UPDATE_TIME = DateTime.Now;
 
                 var dbEntity = _productItemRepository.GetAsync(
