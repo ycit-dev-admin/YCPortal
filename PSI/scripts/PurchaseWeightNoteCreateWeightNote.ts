@@ -290,7 +290,8 @@
                 },
                 TraficUnitPrice: {
                     required: true,
-                    pattern: /^([1-9][0-9]*(\.[0-9]{1,2})?|0\.(?!0+$)[0-9]{1,2})$/  // 格式不符，需為大於0整數 且 最多2位小數!!
+                    pattern: /^([0-9][0-9]*(\.[0-9]{1,2})?|0\.(?!0+$)[0-9]{1,2})$/  // 格式不符，需為大於等於0整數 且 最多2位小數!!
+
                 },
                 ThirdWeightFee: {
                     required: true,
@@ -519,8 +520,10 @@
                 data2[0]
             );
 
-            $.when(funcRs3).then(function (data) {
-                thisObj.DomOfDisplayFinalPrice.textContent = data;
+            $.when(funcRs3).then(function (data: number) {
+                thisObj.DomOfDisplayFinalPrice.textContent = data.toLocaleString('zh-TW', {
+                    style: 'currency', currency: 'TWD', minimumFractionDigits: 0
+                });
                 // thisObj.ActualPrice_DOM.value = data; 應該把上述值 都帶回後端重新計算
             });
         });

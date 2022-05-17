@@ -19,7 +19,7 @@ namespace PSI.Areas.Purchase.Models.PageModels
         public string UnitPrice { get; set; }
         public bool HasTax { get; set; }
         public string ScaleNo { get; set; }
-        public string TraficUnitPrice { get; set; }  // 運費單價
+        public decimal TraficUnitPrice { get; set; }  // 運費單價
         public decimal ThirdWeightFee { get; set; }  // 磅費
         public string PayType { get; set; }
         public DateTime? PayTime { get; set; }
