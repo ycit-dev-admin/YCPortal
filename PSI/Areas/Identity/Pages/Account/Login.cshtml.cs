@@ -45,17 +45,18 @@ namespace PSI.Areas.Identity.Pages.Account
         {
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "User Name")]
+            [Display(Name = "帳號")]
             public string UserName { get; set; }
             [Required]
             [EmailAddress]
             public string Email { get; set; }
 
             [Required]
+            [Display(Name = "密碼")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "記住登入資訊?")]
             public bool RememberMe { get; set; }
         }
 

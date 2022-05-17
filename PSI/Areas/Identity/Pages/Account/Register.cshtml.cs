@@ -49,27 +49,41 @@ namespace PSI.Areas.Identity.Pages.Account
             [DataType(DataType.Text)]
             [Display(Name = "帳號")]
             public string UserName { get; set; }
-
+            [Required]
+            [StringLength(maximumLength: 3, ErrorMessage = "工號必須為3碼數值", MinimumLength = 3)]
+            [DataType(DataType.Text)]
+            [Display(Name = "工號")]
+            public string EmployeeNo { get; set; }
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "顯示名稱")]
+            [Display(Name = "系統顯示名稱")]
             public string NickName { get; set; }
 
             [Required]
-            [EmailAddress]
+            [DataType(DataType.Text)]
+            [StringLength(maximumLength: 1, ErrorMessage = "廠區必須為1碼數值", MinimumLength = 1)]
+            [Display(Name = "廠區  (西圳請填A，龜山請填B)")]
+            public string FacSite { get; set; }
+
+            // [Required]
+            //[EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "密碼")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "密碼確認")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "註冊碼")]
+            public string TokenPassword { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -82,11 +96,26 @@ namespace PSI.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            // Input.TokenPassword = Input.TokenPassword.Trim() != "yc27588138" ? "" : Input.TokenPassword;
+            if (Input.TokenPassword.Trim() != "yc27588138")
+                ModelState.AddModelError(string.Empty, "註冊碼不正確");
             if (ModelState.IsValid)
             {
                 //var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 //var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email };
-                var user = new AppUser { UserName = Input.UserName, Email = Input.Email, NickName = Input.NickName };
+                //Input.Email = $@"{Input.UserName}@yc.com";
+
+
+                Input.Email = $@"{Input.UserName}@yc.com";
+                Input.Password = "27588138";
+                var user = new AppUser
+                {
+                    UserName = Input.UserName,
+                    Email = Input.Email,
+                    NICK_NAME = Input.NickName,
+                    FAC_SITE = Input.FacSite.ToUpper()
+                };
+                //var user = new AppUser { UserName = Input.UserName, NickName = Input.NickName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
