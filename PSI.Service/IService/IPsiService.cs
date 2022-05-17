@@ -18,6 +18,7 @@ namespace PSI.Service.IService
 
         /* PSIWeightNoteEnum */
         public Dictionary<int, PSIWeightNoteEnum.PWeightNotesStatus> GetPurchaseWeightNotesStatus();
+        public Dictionary<string, PSIEnum.FacSite> GetFacSites();
 
         /* PurchaseWeightNote */
         FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNoteForNormal(PurchaseWeightNote purchaseWeightNote,
@@ -30,7 +31,7 @@ namespace PSI.Service.IService
             CustomerContractLog customerContractLog = null);
 
         IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes();
-        IEnumerable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime);
+        IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime);
         IQueryable<PurchaseWeightNote> GetPurchaseWeightNotesBy(List<Guid> weightNoteUNIDList);
         PurchaseWeightNote GetPurchaseWeightNote(string docNo);
         PurchaseWeightNote GetPurchaseWeightNote(Guid unid);

@@ -61,6 +61,26 @@ namespace PSI.Service.Service
             // item.GetRawConstantValue().ToString()).AsQueryable();
         }
 
+        public Dictionary<string, PSIEnum.FacSite> GetFacSites()
+        {
+            //var abc =
+            //    Enum.GetValues(typeof(PSIWeightNoteEnum.PWeightNotesStatus)).Cast<PSIWeightNoteEnum.PWeightNotesStatus>().Select
+            //        (r => new KeyValuePair<int, string>((int)r, "")).Select(aa=> aa.;
+
+            return Enum.GetValues(typeof(PSIEnum.FacSite))
+                       .Cast<PSIEnum.FacSite>()
+                       .ToDictionary(r => r.ToString(), r => r);
+
+            // return new[] { PSIWeightNoteEnum.PWeightNotesStatus.Ongo };
+
+            //var(CustomerContractEnum.Status)aa.CONTRACT_STATU;
+
+            //var abc = needStatus.Select(aa =>)
+            //return typeof(CustomerContractEnum.Types).GetAllFieldInfo()
+            //    .Where(fieldInfo => CustomerContractEnum.Types).Select(item =>
+            // item.GetRawConstantValue().ToString()).AsQueryable();
+        }
+
         public FunctionResult<PurchaseWeightNote> CreatePurchaseWeightNoteForNormal(
             PurchaseWeightNote purchaseWeightNote,
             List<PurchaseIngredient> purchaseIngredientLs,
@@ -83,7 +103,7 @@ namespace PSI.Service.Service
 
             /* 進貨磅單建立 */
             purchaseWeightNote.UNID = Guid.NewGuid();
-            purchaseWeightNote.DOC_NO = this.GetWeightNoteDocNo(operUserInfo.FacSite, PSIEnum.PSIType.Purchase);
+            purchaseWeightNote.DOC_NO = this.GetWeightNoteDocNo(operUserInfo.FAC_SITE, PSIEnum.PSIType.Purchase);
             purchaseWeightNote.WEIGHT_PRICE = this.GetWeightNotePrice(purchaseWeightNote.FULL_WEIGHT,
                purchaseWeightNote.DEFECTIVE_WEIGHT,
                purchaseWeightNote.UNIT_PRICE,
@@ -92,12 +112,12 @@ namespace PSI.Service.Service
             purchaseWeightNote.ACTUAL_PRICE = this.GetActualPayPrice(purchaseWeightNote.THIRD_WEIGHT_FEE,
                purchaseWeightNote.WEIGHT_PRICE.Value,
                purchaseWeightNote.DELIVERY_FEE);
-            purchaseWeightNote.FAC_NO = operUserInfo.FacSite;
+            purchaseWeightNote.FAC_NO = operUserInfo.FAC_SITE;
             purchaseWeightNote.CAR_NO = purchaseWeightNote.CAR_NO.ToUpper();
-            purchaseWeightNote.CREATE_EMPNO = operUserInfo.NickName;
+            purchaseWeightNote.CREATE_EMPNO = operUserInfo.NICK_NAME;
             purchaseWeightNote.CREATE_TIME = DateTime.Now;
             purchaseWeightNote.EFFECTIVE_TIME = DateTime.Now;
-            purchaseWeightNote.UPDATE_EMPNO = operUserInfo.NickName;
+            purchaseWeightNote.UPDATE_EMPNO = operUserInfo.NICK_NAME;
             purchaseWeightNote.UPDATE_TIME = DateTime.Now;
             var cRs = _purchaseWeightNoteRepository.Create(purchaseWeightNote);
             if (!cRs.Success)
@@ -110,9 +130,9 @@ namespace PSI.Service.Service
             purchaseIngredientLs.ForEach(aa =>
             {
                 aa.CREATE_TIME = DateTime.Now;
-                aa.CREATE_EMPNO = operUserInfo.NickName;
+                aa.CREATE_EMPNO = operUserInfo.NICK_NAME;
                 aa.UPDATE_TIME = DateTime.Now;
-                aa.UPDATE_EMPNO = operUserInfo.NickName;
+                aa.UPDATE_EMPNO = operUserInfo.NICK_NAME;
                 aa.PURCHASE_WEIGHTNOTE_UNID = purchaseWeightNote.UNID;
             });
             var piCreRs = _purchaseIngredientNoteRepository.Create(purchaseIngredientLs);
@@ -185,11 +205,11 @@ namespace PSI.Service.Service
                                                       .Where(aa => aa.EFFECTIVE_TIME.Date >= curMonthDate.Date);
             return result;
         }
-        public IEnumerable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime)
+        public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime)
         {
             return _purchaseWeightNoteRepository.GetAllAsync().Result
                                                       .Where(aa => aa.EFFECTIVE_TIME.Date >= sTime &&
-                                                      aa.EFFECTIVE_TIME.Date <= eTime);
+                                                      aa.EFFECTIVE_TIME.Date <= eTime).AsQueryable();
         }
         public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotesBy(List<Guid> weightNoteUNIDList)
         {

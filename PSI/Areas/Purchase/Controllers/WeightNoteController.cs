@@ -188,9 +188,9 @@ namespace PSI.Controllers
                 if (!string.IsNullOrEmpty(pageModel.ContractUNID))
                 {
                     var customerContractMapper = _mapperHelper.GetMapperOfCreateWeightNote<WeightNoteCreateWeightNote, CustomerContractLog>();
-                    var customerContractLog = customerContractMapper.Map<CustomerContractLog>(pageModel);
-                    rsCustomerContractLog = _customerContractService.CreateCustomerContractLog(customerContractLog,
-                        _userManager.GetUserAsync(User).Result).ResultValue;
+                    rsCustomerContractLog = customerContractMapper.Map<CustomerContractLog>(pageModel);
+                    //rsCustomerContractLog = _customerContractService.CreateCustomerContractLog(customerContractLog,
+                    //    _userManager.GetUserAsync(User).Result).ResultValue;
                 }
 
 
@@ -303,7 +303,7 @@ namespace PSI.Controllers
             var purchaseHelper = new PurchaseHelper(_mapper);
             var pEntityHelper = new PurchaseEntityHelper(_mapper, _psiService);
             var userInfo = _userManager.GetUserAsync(User).Result;
-            var docNo = _psiService.GetWeightNoteDocNo(userInfo.FacSite, PSIType.Purchase);
+            var docNo = _psiService.GetWeightNoteDocNo(userInfo.FAC_SITE, PSIType.Purchase);
             // var purchaseWeightNote = pEntityHelper.GetPurchaseWeightNote_Create(pageModel.VE_PurchaseWeightNote, docNo);  // 磅單
             var purchaseWeightNote = new PurchaseWeightNote();
 
@@ -352,7 +352,7 @@ namespace PSI.Controllers
 
         [HttpGet]
         [Authorize()]
-        public IActionResult WeightNoteList(string sTime = null, string eTime = null)
+        public IActionResult WeightNoteList(string sTime = null, string eTime = null, string facSite = null)
         {
             if (!DateTime.TryParse(sTime, out var pStatTime) ||
                 !DateTime.TryParse(eTime, out var pETime))
@@ -361,7 +361,22 @@ namespace PSI.Controllers
                 pETime = pStatTime.AddMonths(1);
             }
 
-            var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime);
+            var curUser = _userManager.GetUserAsync(User).Result;
+
+            //var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime)
+            //           .Where(aa => curUser.AUTHORITY_LEVEL > 2
+            //                        ||
+            //                        aa.DOC_NO.StartsWith(curUser.FAC_SITE)).ToList();
+            var curMonthPWeightNotes = _psiService.GetPurchaseWeightNotes(pStatTime, pETime)
+                            .Where(aa => curUser.AUTHORITY_LEVEL > 2
+                                         ||
+                                         aa.DOC_NO.StartsWith(curUser.FAC_SITE)).ToList();
+            // 區分權限大小
+            if (curUser.AUTHORITY_LEVEL > 2 &&
+                !string.IsNullOrEmpty(facSite) &&
+                facSite != "all")
+                curMonthPWeightNotes = curMonthPWeightNotes.Where(aa => aa.DOC_NO.StartsWith(facSite)).ToList();
+
 
             var vePurchaseIngredientMapper = _mapperHelper.GetMapperOfWeightNoteList<PurchaseIngredient, VE_PurchaseIngredient>();
             var pIngredientLs = _psiService.GetPurchaseIngredients(curMonthPWeightNotes.Select(aa => aa.UNID).ToList());
@@ -376,7 +391,10 @@ namespace PSI.Controllers
                 ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
                 PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
-                PIngredientLs = vePurchaseIngredientMapper.Map<List<VE_PurchaseIngredient>>(pIngredientLs)
+                PIngredientLs = vePurchaseIngredientMapper.Map<List<VE_PurchaseIngredient>>(pIngredientLs),
+                FacSiteItems = _psiService.GetFacSites()
+                .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key"),
+                UserAuthorityLevel = curUser.AUTHORITY_LEVEL
             };
 
             //TryUpdateModelAsync<IEmployee>(pageModel); // 比較適合Entity 檢核

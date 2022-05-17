@@ -16,5 +16,12 @@ namespace PSI.Core.Enums
             [Description("進出貨")]
             Both = 5
         }
+        public enum FacSite
+        {
+            [Description("西圳廠")]
+            A = 1,
+            [Description("龜山廠")]
+            B = 2
+        }
     }
 }

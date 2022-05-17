@@ -5,6 +5,8 @@
     <link href="~/lib/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
 }
 <div class="row">
     <div class="col-sm-2">
@@ -27,6 +29,20 @@
             </div>
         </div>
     </div>
+    @{
+        if (Model.UserAuthorityLevel != null &&
+            Model.UserAuthorityLevel > 2)
+        {
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <select asp-for="FacSite" asp-items="Model.FacSiteItems" class="select2bs4" style="width: 100%;">
+                        <option></option>
+                        <option value="all">全部廠區</option>
+                    </select>
+                </div>
+            </div>
+        }
+    }
     <div class="col-sm-2">
         <div class="form-group">
             <button class="btn btn-primary" id="data-query">資料查詢</button>
@@ -93,6 +109,7 @@
             </tr>
         </tfoot>*@
 </table>
+
 @section scripts{
     @if (TempData["pageMsg"] != null)
     {
@@ -116,8 +133,15 @@
     <script src="~/lib/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="~/lib/admin-lte/plugins/moment/moment-with-locales.js"></script>
     <script src="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/admin-lte/plugins/select2/js/select2.full.min.js"></script>
     <script>
         $(function () {
+
+            $('#FacSite').select2({
+                theme: 'bootstrap4',
+                placeholder: "廠區篩選"
+            })
+
 
             var sDate = moment(); // Initial moment object
             const urlParams = new URLSearchParams(window.location.search);
@@ -147,6 +171,7 @@
             $('#data-query').on('click', function () {
                 let sTime = $('#start_time').datetimepicker('date').format('YYYY-MM-DD HH:mm');
                 let eTime = $('#end_time').datetimepicker('date').format('YYYY-MM-DD HH:mm');
+                let facSite = $('#FacSite').val();
                 @*let hrefUrl = '@Url.Action("WeightNoteList", "Purchase", new { sTime = "__sTime__", eTime = "__eTime__" })';
                 alert(hrefUrl);
                 var abc = hrefUrl.replace('__eTime__', sDate);
@@ -155,7 +180,7 @@
                 //let okggogo = `/Purchase/WeightNoteList?sTime=${sTime}&eTime=${eTime}`;
                 //alert(okggogo);
 
-                window.location.href = `/Purchase/WeightNote/WeightNoteList?sTime=${sTime}&eTime=${eTime}`;
+                window.location.href = `/Purchase/WeightNote/WeightNoteList?sTime=${sTime}&eTime=${eTime}&facSite=${facSite}`;
 
             });
 
