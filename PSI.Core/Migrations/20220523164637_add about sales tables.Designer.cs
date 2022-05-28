@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220523164637_add about sales tables")]
+    partial class addaboutsalestables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,9 +74,6 @@ namespace PSI.Core.Migrations
 
                     b.Property<string>("CAR_NAME")
                         .HasColumnType("text");
-
-                    b.Property<int>("CAR_NO_TYPE")
-                        .HasColumnType("integer");
 
                     b.Property<string>("CREATE_EMPNO")
                         .HasColumnType("text");
@@ -453,117 +452,6 @@ namespace PSI.Core.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("PurchaseWeightNotes");
-                });
-
-            modelBuilder.Entity("PSI.Core.Entities.SalesIngredient", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CREATE_EMPNO")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CREATE_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ITEM_NAME")
-                        .HasColumnType("text");
-
-                    b.Property<double>("ITEM_PERCENT")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("PRODUCT_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SALES_WEIGHTNOTE_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("UPDATE_EMPNO")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UPDATE_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("SalesIngredients");
-                });
-
-            modelBuilder.Entity("PSI.Core.Entities.SalesWeightNote", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<double>("ACTUAL_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid?>("CONTRACT_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CREATE_EMPNO")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CREATE_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("CUSTOMER_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("DEFECTIVE_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("DOC_NO")
-                        .HasColumnType("text");
-
-                    b.Property<decimal?>("INVOICE_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<double>("LEAVE_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("NOTE_STATUS")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("PRODUCT_ITEM_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal?>("RECEIVED_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime?>("RECEIVED_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("RECEIVED_TYPE")
-                        .HasColumnType("text");
-
-                    b.Property<string>("REMARK")
-                        .HasColumnType("text");
-
-                    b.Property<decimal?>("TRAFIC_FEE")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("TRAFIC_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal>("UNIT_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("UPDATE_EMPNO")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UPDATE_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("SalesWeightNotes");
                 });
 
             modelBuilder.Entity("PSI.Core.Entities.SeqTypeConfig", b =>

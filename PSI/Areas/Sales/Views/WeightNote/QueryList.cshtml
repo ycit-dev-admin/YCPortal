@@ -1,4 +1,4 @@
-﻿@model Page_Purchase_WeightNoteList
+﻿@model WeightNoteQueryList
 @{
     <!-- DataTables -->
     <link href="~/lib/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -50,22 +50,22 @@
     </div>
 </div>
 @*<a href="@Url.Action("CreateWeightNote","Purchase")" style="float:left;margin-right:20px;" class="btn btn-primary">建立進貨磅單</a>*@
-<a asp-action="CreateWeightNote" style="float:left;margin-right:20px;" class="btn btn-primary">建立進貨磅單</a>
+<a asp-action="CreateWeightNote" style="float:left;margin-right:20px;" class="btn btn-primary">建立出貨磅單</a>
 @*<a class="btn btn-success" style="float:left;margin-right:20px;" href="https://codepen.io/collection/XKgNLN/" target="_blank">Other examples on Codepen</a>*@
 <table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>磅單時間</th>
             <th>單號</th>
-            <th>進貨對象</th>
-            <th>進貨認列</th>
-            <th>進場重量</th>
+            <th>出貨對象</th>
+            <th>出貨認列</th>
+            <th>出廠重量</th>
             <th>扣重</th>
-            <th>計價重量</th>
+            <th>請款重量</th>
             <th>單價</th>
-            <th>支出金額</th>
-            <th>付款方式</th>
-            <th>付款日</th>
+            <th>請款金額</th>
+            <th>收款方式</th>
+            <th>收款日</th>
             <th>功能操作</th>
         </tr>
     </thead>

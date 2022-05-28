@@ -65,11 +65,17 @@ namespace PSI
             services.AddScoped<IGenericRepository<CodeTable>, GenericRepository<CodeTable>>();
             services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();
             services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
+            services.AddScoped<IGenericRepository<SalesWeightNote>, GenericRepository<SalesWeightNote>>();
+            services.AddScoped<IGenericRepository<SalesIngredient>, GenericRepository<SalesIngredient>>();
+
+
             services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<ICodeTableService, CodeTableService>();
             services.AddScoped<ICustomerContractService, CustomerContractService>();
+            services.AddScoped<IPSIEnumService, PSIEnumService>();
+            services.AddScoped<ICustomerInfoService, CustomerInfoService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<AppUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -84,7 +87,8 @@
                     <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu">
 
                         <!--選項可直接超連結示範(打開註解)-->
-                        @*<li class="nav-item">
+                        @*
+                            <li class="nav-item">
                                 <a href="/docs/3.1//index.html" class="nav-link">
                                     <i class="nav-icon fas fa-microchip"></i>
                                     <p>
@@ -98,7 +102,7 @@
                             <a href="" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    進貨磅單管理
+                                    進貨管理
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
@@ -106,48 +110,124 @@
                                 <li class="nav-item">
                                     <a asp-area="Purchase" asp-controller="WeightNote" asp-action="WeightNoteList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>當月進貨磅單查詢</p>
+                                        <p>進貨磅單查詢</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <!-- class 給 menu-open 可預設直接打開項目  <li class="nav-item menu-open">-->
-                        <li class="nav-item">
-                            <a href="/docs/3.1//components" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                        <li class="nav-item menu-open">
+                            <a href="" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
                                 <p>
-                                    系統管理
+                                    出貨管理
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/SysConfig/Customer/OnlineInfo" class="nav-link">
+                                    <a asp-area="Sales" asp-controller="WeightNote" asp-action="QueryList" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>客戶設定</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-area="SysConfig" asp-controller="CarNo" asp-action="OnlineInfo" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>客戶車牌設定</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-area="SysConfig" asp-controller="Contract" asp-action="OnlineInfo" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>客戶合約設定</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-area="SysConfig" asp-controller="Product" asp-action="OnlineInfo" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>進出貨品項設定</p>
+                                        <p>出貨磅單查詢(施工中...)</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item menu-open">
+                            <a href="" class="nav-link">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    報表查詢
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-area="Purchase" asp-controller="WeightNote" asp-action="WeightNoteList" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>每日收支表(施工中...)</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        @if (UserManager.GetUserAsync(User).Result?.AUTHORITY_LEVEL > 1)
+                        {
+                            <li class="nav-item">
+                                <a href="/docs/3.1//components" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        共用資料維護
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/SysConfig/Customer/OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>客戶資料維護</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="SysConfig" asp-controller="CarNo" asp-action="OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>客戶車牌維護</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="SysConfig" asp-controller="Contract" asp-action="OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>客戶合約維護</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="SysConfig" asp-controller="Product" asp-action="OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>進出貨品項維護</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+
+
+                        <!-- class 給 menu-open 可預設直接打開項目  <li class="nav-item menu-open">-->
+                        @if (UserManager.GetUserAsync(User).Result?.AUTHORITY_LEVEL > 1)
+                        {
+                            <li class="nav-item">
+                                <a href="/docs/3.1//components" class="nav-link">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        員工資料管理
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/SysConfig/Customer/OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>員工帳號資訊</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="SysConfig" asp-controller="CarNo" asp-action="OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>員工忘記密碼</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a asp-area="SysConfig" asp-controller="Contract" asp-action="OnlineInfo" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>建立員工帳號</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+
 
                     </ul>
                 </nav>

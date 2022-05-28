@@ -35,6 +35,7 @@
     <Folder Include="Areas\Purchase\Data\" />
     <Folder Include="Areas\Purchase\Infrastructure\Mappgins\PageModelMapping\" />
     <Folder Include="Areas\Purchase\Models\ShowModels\" />
+    <Folder Include="Areas\Sales\Data\" />
     <Folder Include="Areas\SysConfig\Data\" />
     <Folder Include="Areas\SysConfig\Helpers\" />
     <Folder Include="Files\Images\Logo\" />

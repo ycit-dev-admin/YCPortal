@@ -8,6 +8,7 @@ namespace PSI.Core.Entities
     {
         public Guid CAR_GUID { get; set; }
         public Guid CUSTOMER_GUID { get; set; }
+        public int CAR_NO_TYPE { get; set; }   // 車牌類型  有內部 有外部
         public long CUSTOMER_ID { get; set; }
         public string CAR_NAME { get; set; }
         public string IS_EFFECTIVE { get; set; }

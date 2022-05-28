@@ -2,10 +2,12 @@
 using AutoMapper;
 using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.Purchase.Models.PageModels;
+using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Enums;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
+using WeightNoteCreateWeightNote = PSI.Areas.Purchase.Models.PageModels.WeightNoteCreateWeightNote;
 
 namespace PSI.Areas.Purchase.Mappers
 {

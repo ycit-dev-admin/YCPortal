@@ -35,6 +35,7 @@ namespace PSI.Core.Entities
         public DateTime? PAY_TIME { get; set; }
         public Guid CUSTOMER_UNID { get; set; }
         public Guid? CONTRACT_UNID { get; set; }
+        public Guid PRODUCT_ITEM_UNID { get; set; }   // 磅單認列品項
         public string CUSTOMER_NAME { get; set; }  // 當下客戶名
         public int NOTE_STATUS { get; set; }  // 磅單狀態
         public string REMARK { get; set; }
