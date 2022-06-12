@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Areas.Purchase.Helpers;
-using PSI.Areas.Purchase.Mappers;
 using PSI.Areas.Purchase.Models.PageModels;
-using PSI.Areas.Sales.Mappers;
 using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -292,8 +290,8 @@ namespace PSI.Areas.Sales.Controllers
             //var validRs = validator.Validate(vmPurchaseWeightNote);
             //var validRs = validator.Validate(vmPurchaseWeightNote, options => options.IncludeRuleSets("Create"));
 
-            pageModel.CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService);
-            pageModel.ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService);
+            //pageModel.CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService);
+            //pageModel.ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService);
             if (!ModelState.IsValid)
             {
                 TempData["pageMsg"] = $"資料驗證失敗，請檢查頁面訊息!!";
@@ -337,7 +335,7 @@ namespace PSI.Areas.Sales.Controllers
                 } };
 
                 _customerService.CreateCustomerInfoForNormal(customerInfo, _userManager.GetUserAsync(User).Result);
-        }
+            }
 
 
 
@@ -386,8 +384,12 @@ namespace PSI.Areas.Sales.Controllers
             var pageModel = new WeightNoteQueryList
             {
                 VE_PurchaseWeightNoteLs = vePurchaseWeightNoteMapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),
-                CustomerInfoItems = _purchaseHelper.PageGetCustomerInfoItems(_customerService),
-                ProductItemItems = _purchaseHelper.PageGetProductItems(_productItemService),
+                CustomerInfoItems = _customerService.GetCustomerInfos()
+                .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+                nameof(CustomerInfo.CUSTOMER_GUID)),
+                ProductItemItems = _productItemService.GetSalesProductItems(_pSIEnumService)
+                .ToPageSelectList(nameof(ProductItem.PRODUCT_NAME),
+                nameof(ProductItem.PRODUCT_UNID)),
                 PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
                 PIngredientLs = vePurchaseIngredientMapper.Map<List<VE_PurchaseIngredient>>(pIngredientLs),

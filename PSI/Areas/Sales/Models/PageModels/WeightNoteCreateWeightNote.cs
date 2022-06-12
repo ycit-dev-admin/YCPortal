@@ -36,17 +36,14 @@ namespace PSI.Areas.Sales.Models.PageModels
 
         public string CustomerName { get; set; }  // 當下客戶名     
         public string CarNoUNID { get; set; }
-        public string ContractUNID { get; set; }  // 進貨合約
         public string CarNo { get; set; }  // 當下車牌
 
 
         public bool HasTax { get; set; }
-        public string ScaleNo { get; set; }        
-        public decimal TraficUnitPrice { get; set; }  // 運費單價
+        public string ScaleNo { get; set; }
         public decimal ThirdWeightFee { get; set; }  // 磅費
         public string PayType { get; set; }
         public DateTime? PayTime { get; set; }
-        public string Remark { get; set; }
 
 
 
