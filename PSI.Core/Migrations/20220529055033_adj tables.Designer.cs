@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220529055033_adj tables")]
+    partial class adjtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -498,8 +500,8 @@ namespace PSI.Core.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<decimal?>("ACTUAL_TRAFIC_FEE")
-                        .HasColumnType("numeric");
+                    b.Property<double>("ACTUAL_WEIGHT")
+                        .HasColumnType("double precision");
 
                     b.Property<Guid?>("CONTRACT_UNID")
                         .HasColumnType("uuid");
@@ -513,47 +515,23 @@ namespace PSI.Core.Migrations
                     b.Property<Guid>("CUSTOMER_UNID")
                         .HasColumnType("uuid");
 
+                    b.Property<double>("DEFECTIVE_WEIGHT")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("DOC_NO")
                         .HasColumnType("text");
 
-                    b.Property<double>("INSIDE_ACTUAL_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("INSIDE_DEFECTIVE_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<decimal?>("INSIDE_INVOICE_PRICE")
+                    b.Property<decimal?>("INVOICE_PRICE")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("INSIDE_PRODUCT_ITEM_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("INSIDE_SALES_WEIGHT")
+                    b.Property<double>("LEAVE_WEIGHT")
                         .HasColumnType("double precision");
-
-                    b.Property<decimal?>("INSIDE_TRAFIC_FEE")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("INSIDE_UNIT_PRICE")
-                        .HasColumnType("numeric");
 
                     b.Property<int>("NOTE_STATUS")
                         .HasColumnType("integer");
 
-                    b.Property<double>("OUTSIDE_ACTUAL_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<double>("OUTSIDE_DEFECTIVE_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("OUTSIDE_PRODUCT_ITEM_UNID")
+                    b.Property<Guid>("PRODUCT_ITEM_UNID")
                         .HasColumnType("uuid");
-
-                    b.Property<double>("OUTSIDE_SALES_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<decimal>("OUTSIDE_UNIT_PRICE")
-                        .HasColumnType("numeric");
 
                     b.Property<decimal?>("RECEIVED_PRICE")
                         .HasColumnType("numeric");
@@ -561,17 +539,23 @@ namespace PSI.Core.Migrations
                     b.Property<DateTime?>("RECEIVED_TIME")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("RECEIVED_TYPE")
-                        .HasColumnType("integer");
+                    b.Property<string>("RECEIVED_TYPE")
+                        .HasColumnType("text");
 
                     b.Property<string>("REMARK")
                         .HasColumnType("text");
+
+                    b.Property<decimal?>("TRAFIC_FEE")
+                        .HasColumnType("numeric");
 
                     b.Property<decimal?>("TRAFIC_UNIT_PRICE")
                         .HasColumnType("numeric");
 
                     b.Property<Guid>("UNID")
                         .HasColumnType("uuid");
+
+                    b.Property<decimal>("UNIT_PRICE")
+                        .HasColumnType("numeric");
 
                     b.Property<string>("UPDATE_EMPNO")
                         .HasColumnType("text");

@@ -11,7 +11,7 @@ namespace PSI.Core.Entities
         public string CUSTOMER_NAME { get; set; }
         public string ADDRESS { get; set; }
         public string CONTENT_INFO { get; set; }
-        public string PSI_TYPE { get; set; }  // 進出貨類型的客戶(1:進貨 2:出貨 3:Both)
+        public int? PSI_TYPE { get; set; }  // 進出貨類型的客戶(1:進貨 2:出貨 3:Both)
         public string IS_EFFECTIVE { get; set; }
         public bool? IS_CONTRACT { get; set; }  // [是否有合約]  先保留，後續可以討論是否移除
         public string REMARK { get; set; }
