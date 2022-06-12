@@ -27,11 +27,19 @@ namespace PSI.Service.Service
 
 
 
-        public IQueryable<ProductItem> GetPurchaseProductItems()
+        public IQueryable<ProductItem> GetPurchaseProductItems(IPSIEnumService iPSIEnumService)
         {
-            var needPsiTypes = new[] { "1", "3" };
+            var needPsiTypes = iPSIEnumService.GetPurchasePsiTypes().Select(aa => (int)aa);
             return _productItemRepository.GetAllAsync().Result.
-                          Where(aa => needPsiTypes.Contains(aa.PSI_TYPE) &&
+                          Where(aa => needPsiTypes.Any(bb => bb == aa.PSI_TYPE) &&
+                                      aa.IS_EFFECTIVE == "1").AsQueryable();
+        }
+
+        public IQueryable<ProductItem> GetSalesProductItems(IPSIEnumService iPSIEnumService)
+        {
+            var needPsiTypes = iPSIEnumService.GetSalesPsiTypes().Select(aa => (int)aa);
+            return _productItemRepository.GetAllAsync().Result.
+                          Where(aa => needPsiTypes.Any(bb => bb == aa.PSI_TYPE) &&
                                       aa.IS_EFFECTIVE == "1").AsQueryable();
         }
         public IQueryable<ProductItem> GetAllProductItems()
@@ -117,5 +125,6 @@ namespace PSI.Service.Service
             }
             return funcRs;
         }
+
     }
 }

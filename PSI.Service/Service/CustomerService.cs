@@ -35,14 +35,7 @@ namespace PSI.Service.Service
             _codeTableRepository = _unitOfwork.CodeTableRepository;
         }
 
-        public IQueryable<CustomerInfo> GetPurchaseCustomerInfo()
-        {
-            var purchaseTypes = new string[] { "1", "3" }; // 看能否改成相依Enums
-
-            return _customerInfoRepository.GetAllAsync().Result.
-                   Where(aa => aa.IS_EFFECTIVE == "1" &&
-                   purchaseTypes.Contains(aa.PSI_TYPE)).AsQueryable();
-        }
+        
 
         public CustomerCar GetCustomerCarByUNID(Guid carNoUNID)
         {

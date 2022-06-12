@@ -10,15 +10,16 @@ namespace PSI.Service.IService
 {
     public interface ICustomerContractService
     {
-        // CustomerContractEnum
-        public IQueryable<CustomerContractEnum.Types> GetPurchaseContractTypes();
-        public Dictionary<int, CustomerContractEnum.Types> GetCustomerContracTypes();
+        //// CustomerContractEnum
+        //public IQueryable<CustomerContractEnum.Types> GetPurchaseContractTypes();
+        //public Dictionary<int, CustomerContractEnum.Types> GetCustomerContracTypes();
 
         // Customer Contract
         CustomerContract GetCustomerContractsByContractUNID(Guid contractUNID);
         IQueryable<CustomerContract> GetEffectiveCustomerContracts();
-        IQueryable<CustomerContract> GetPurchaseCustomerContracts();
-        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID);
+        IQueryable<CustomerContract> GetPurchaseCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService);
+        IQueryable<CustomerContract> GetSalesCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService);
+        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID, ICustomerContractEnumService iCustomerContractEnumService);
         FunctionResult<CustomerContract> CreateCustomerContract(CustomerContract customerContract, AppUser operUser);
         CustomerContract GetCustomerContract(Guid unid);
         IQueryable<CustomerContract> GetContractsByCustomerUNID(Guid customerUNID);

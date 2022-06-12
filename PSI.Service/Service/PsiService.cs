@@ -163,7 +163,7 @@ namespace PSI.Service.Service
             /* 臨時客戶建立 */
             if (tempCustomerInfo != null)
             {
-                tempCustomerInfo.PSI_TYPE = ((int)PSIEnum.PSIType.Purchase).ToString();
+                tempCustomerInfo.PSI_TYPE = (int)PSIEnum.PSIType.Purchase;
                 tempCustomerInfo.REMARK = "透過臨時客戶功能建立";
                 var customerInfoRs = customerService.CreateCustomerInfoForNormal(tempCustomerInfo, operUserInfo);
 

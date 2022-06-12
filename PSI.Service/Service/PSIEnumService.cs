@@ -27,12 +27,28 @@ namespace PSI.Service.Service
 
         public IQueryable<PSIEnum.PSIType> GetSalesPsiTypes()
         {
-            var needPsiTypes = new[] { PSIEnum.PSIType.Sale,
-                PSIEnum.PSIType.Both };
+            var needsPsiTypes = new[] { PSIEnum.PSIType.Sale,
+                PSIEnum.PSIType.Both,
+                PSIEnum.PSIType.Inside};
 
             return Enum.GetValues(typeof(PSIEnum.PSIType))
                        .Cast<PSIEnum.PSIType>()
-                       .Where(aa => needPsiTypes.Contains(aa)).AsQueryable();
+                       .Where(aa => needsPsiTypes.Contains(aa)).AsQueryable();
+        }
+        public IQueryable<PSIEnum.PSIType> GetPurchasePsiTypes()
+        {
+            return new[] { PSIEnum.PSIType.Purchase,
+                PSIEnum.PSIType.Both }.AsQueryable();
+
+            //return Enum.GetValues(typeof(PSIEnum.PSIType))
+            //           .Cast<PSIEnum.PSIType>()
+            //           .Where(aa => needsPsiTypes.Contains(aa)).AsQueryable();
+        }
+
+        public IQueryable<PSIEnum.PSIType> GetAllPsiTypes()
+        {
+            return Enum.GetValues(typeof(PSIEnum.PSIType))
+                       .Cast<PSIEnum.PSIType>().AsQueryable();
         }
     }
 }

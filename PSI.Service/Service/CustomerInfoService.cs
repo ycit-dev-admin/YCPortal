@@ -35,23 +35,25 @@ namespace PSI.Service.Service
             _codeTableRepository = _unitOfwork.CodeTableRepository;
         }
 
-        public IQueryable<CustomerInfo> GetPurchaseCustomerInfo()
+        public IQueryable<CustomerInfo> GetPurchaseCustomerInfo(IPSIEnumService iPSIEnumService)
         {
-            var purchaseTypes = new string[] { "1", "3" }; // 看能否改成相依Enums
+            var purchaseTypes = iPSIEnumService.GetPurchasePsiTypes().Select(aa => (int)aa);
+            var salesTypes = iPSIEnumService.GetSalesPsiTypes()
+                .Select(aa => (int)aa);
 
             return _customerInfoRepository.GetAllAsync().Result.
                    Where(aa => aa.IS_EFFECTIVE == "1" &&
-                   purchaseTypes.Contains(aa.PSI_TYPE)).AsQueryable();
+                   purchaseTypes.Contains(aa.PSI_TYPE.Value)).AsQueryable();
         }
 
         public IQueryable<CustomerInfo> GetSalesCustomerInfo(IPSIEnumService iPSIEnumService)
         {
-            var purchaseTypes = iPSIEnumService.GetSalesPsiTypes()
-                .Select(aa => ((int)aa).ToString());
+            var salesTypes = iPSIEnumService.GetSalesPsiTypes()
+                .Select(aa => (int)aa);
 
             return _customerInfoRepository.GetAllAsync().Result.
                    Where(aa => aa.IS_EFFECTIVE == "1" &&
-                   purchaseTypes.Contains(aa.PSI_TYPE)).AsQueryable();
+                   salesTypes.Any(bb => bb == aa.PSI_TYPE)).AsQueryable();
         }
 
         public FunctionResult<CustomerInfo> CreateCustomerInfoForNormal(CustomerInfo customerInfo, AppUser operUser)

@@ -35,25 +35,7 @@ namespace PSI.Service.Service
             _codeTableRepository = _unitOfwork.CodeTableRepository;
         }
 
-        public IQueryable<CustomerContractEnum.Types> GetPurchaseContractTypes()
-        {
 
-            return new[] { CustomerContractEnum.Types.Purchase }.AsQueryable();
-
-            //var(CustomerContractEnum.Status)aa.CONTRACT_STATU;
-
-            //var abc = needStatus.Select(aa =>)
-            //return typeof(CustomerContractEnum.Types).GetAllFieldInfo()
-            //    .Where(fieldInfo => CustomerContractEnum.Types).Select(item =>
-            // item.GetRawConstantValue().ToString()).AsQueryable();
-        }
-
-        public Dictionary<int, CustomerContractEnum.Types> GetCustomerContracTypes()
-        {
-            return Enum.GetValues(typeof(CustomerContractEnum.Types))
-                       .Cast<CustomerContractEnum.Types>()
-                       .ToDictionary(r => (int)r, r => r);
-        }
 
         public CustomerContract GetCustomerContractsByContractUNID(Guid contractUNID)
         {
@@ -83,22 +65,37 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
-        public IQueryable<CustomerContract> GetPurchaseCustomerContracts()
+        public IQueryable<CustomerContract> GetPurchaseCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService)
         {
-            var needStatus = new[] { CustomerContractEnum.Status.Ongoing };
-            var purchaseContractTypes = this.GetPurchaseContractTypes();
+            var needStatus = iCustomerContractEnumService.GetContracOngoStatus()
+                .Select(aa => (int)aa);
+            var purchaseContractTypes = iCustomerContractEnumService.GetPurchaseContractTypes()
+                .Select(aa => (int)aa);
 
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS) &&
-                                                     purchaseContractTypes.Contains((CustomerContractEnum.Types)aa.CONTRACT_TYPE))
+                                                     .Where(aa => needStatus.Contains(aa.CONTRACT_STATUS) &&
+                                                     purchaseContractTypes.Contains(aa.CONTRACT_TYPE))
+                                                     .AsQueryable();
+            return queryRs;
+        }
+        public IQueryable<CustomerContract> GetSalesCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService)
+        {
+            var needStatus = iCustomerContractEnumService.GetContracOngoStatus()
+                .Select(aa => (int)aa);
+            var needContractTypes = iCustomerContractEnumService.GetSaleContractTypes()
+                .Select(aa => (int)aa);
+
+            var queryRs = _customerContractRepository.GetAllAsync().Result
+                                                     .Where(aa => needStatus.Contains(aa.CONTRACT_STATUS) &&
+                                                     needContractTypes.Contains(aa.CONTRACT_TYPE))
                                                      .AsQueryable();
             return queryRs;
         }
 
-        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID)
+        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID, ICustomerContractEnumService iCustomerContractEnumService)
         {
             var needStatus = new[] { CustomerContractEnum.Status.Ongoing };
-            var purchaseContractTypes = this.GetPurchaseContractTypes();
+            var purchaseContractTypes = iCustomerContractEnumService.GetPurchaseContractTypes();
 
             var queryRs = _customerContractRepository.GetAllAsync().Result
                                                      .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS) &&

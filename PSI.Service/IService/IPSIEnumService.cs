@@ -7,6 +7,9 @@ namespace PSI.Service.IService
     {
         // PSIEnum.PSIType        
         IQueryable<PSIEnum.PSIType> GetSalesPsiTypes();
+        IQueryable<PSIEnum.PSIType> GetPurchasePsiTypes();
+        IQueryable<PSIEnum.PSIType> GetAllPsiTypes();
+
 
     }
 }
