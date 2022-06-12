@@ -27,6 +27,7 @@ namespace PSI.Areas.SysConfig.Controllers
         private readonly ICustomerContractService _customerContractService;
         private readonly IProductItemService _productItemService;
         private readonly IPsiService _psiService;
+        private readonly ICustomerContractEnumService _iCustomerContractEnumService;
         private readonly UserManager<AppUser> _userManager;
         private readonly ContractControllerMapper _mapperHelper;
         private readonly PageItemFromEnumHelper _enumHelper;
@@ -36,6 +37,7 @@ namespace PSI.Areas.SysConfig.Controllers
                                   ICustomerContractService customerContractService,
                                   IPsiService psiService,
                                   IProductItemService productItemService,
+                                  ICustomerContractEnumService iCustomerContractEnumService,
                                   UserManager<AppUser> userManager)
         {
             _userManager = userManager;
@@ -43,6 +45,7 @@ namespace PSI.Areas.SysConfig.Controllers
             _customerContractService = customerContractService;
             _psiService = psiService;
             _productItemService = productItemService;
+            _iCustomerContractEnumService = iCustomerContractEnumService;
             _mapperHelper = new ContractControllerMapper();
             _enumHelper = new PageItemFromEnumHelper();
         }
@@ -142,8 +145,8 @@ namespace PSI.Areas.SysConfig.Controllers
                 {
                     VeCustomerContractList = veCustomerContractLs,
                     VeCustomerInfoList = veCustomerInfoLs,
-                    ContractTypeItems = _customerContractService.GetCustomerContracTypes()
-                    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key"),
+                    ContractTypeItems = _iCustomerContractEnumService.GetAllContracTypes()
+                    .ToDictionary(aa => (int)aa, aa => aa.GetDescription()).ToPageSelectList("Value", "Key"),
                     CompletedWeightDic = completedWeightDic
                     // ContractTypeItems = _psiService.GetContractTypeItems()
                     //.ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
@@ -167,16 +170,17 @@ namespace PSI.Areas.SysConfig.Controllers
         [Authorize()]
         public IActionResult CreateContractInfo()
         {
-            var pageModel = new PageContractCreateContractInfo
-            {
-                ContractTypeItems = _psiService.GetContractTypeItems()
-                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
-                CustomerInfoItems = _customerService.GetCustomerInfos()
-                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
-                ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID))
-            };
-            return View(pageModel);
+            //var pageModel = new PageContractCreateContractInfo
+            //{
+            //    ContractTypeItems = _iCustomerContractEnumService.GetAllContracTypes()
+            //    .ToDictionary(aa => (int)aa, aa => aa.GetDescription())
+            //    .ToPageSelectList("Value", "Key"),
+            //    CustomerInfoItems = _customerService.GetCustomerInfos()
+            //        .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID)),
+            //    ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
+            //        nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID))
+            //};
+            return View(GetPModelOfCreateContractInfo());
         }
 
         [HttpPost]
@@ -343,8 +347,8 @@ namespace PSI.Areas.SysConfig.Controllers
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
                 //pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
-                pageModel.ContractTypeItems = _customerContractService.GetCustomerContracTypes()
-                    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key", pageModel.ContractType);
+                pageModel.ContractTypeItems = _iCustomerContractEnumService.GetAllContracTypes()
+                    .ToDictionary(aa => (int)aa, aa => aa.GetDescription()).ToPageSelectList("Value", "Key", pageModel.ContractType);
 
 
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
@@ -359,6 +363,28 @@ namespace PSI.Areas.SysConfig.Controllers
             // Successed
             TempData["pageMsg"] = $@"合約名稱:{resultCustomerContract.CONTRACT_NAME} 更新成功!!";
             return RedirectToAction("OnlineInfo");
+        }
+
+
+        [NonAction]
+        public PageContractCreateContractInfo GetPModelOfCreateContractInfo(PageContractCreateContractInfo pageModel = null)
+        {
+            pageModel ??= new PageContractCreateContractInfo();
+
+            pageModel.ContractTypeItems = _iCustomerContractEnumService.GetAllContracTypes()
+               .ToDictionary(aa => (int)aa, aa => aa.GetDescription())
+               .ToPageSelectList("Value", "Key", pageModel.ContractType);
+            pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
+                    .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+                    nameof(CustomerInfo.CUSTOMER_GUID),
+                    pageModel.CustomerGUID.ToString());
+            pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
+                    nameof(ProductItem.PRODUCT_NAME),
+                    nameof(ProductItem.PRODUCT_UNID));
+
+
+
+            return pageModel;
         }
     }
 }

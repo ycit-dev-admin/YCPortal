@@ -11,7 +11,7 @@ namespace PSI.Areas.Sales.Models.PageModels
             RuleFor(x => x.FullWeightTime).NotNull().WithMessage("為必填欄位");
             RuleFor(x => x.ScaleNo).NotNull().WithMessage("為必填欄位");
             RuleFor(x => x.CustomerUNID).NotNull().WithMessage("為必填欄位");
-            RuleFor(x => x.CustomerName).NotNull().When(x => string.IsNullOrEmpty(x.CustomerUNID)).WithMessage("進貨對象為新客戶時，客戶名稱為必填");
+            RuleFor(x => x.CustomerName).NotNull().When(x => string.IsNullOrEmpty(x.CustomerUNID.ToString())).WithMessage("進貨對象為新客戶時，客戶名稱為必填");
             RuleFor(x => x.CarNoUNID).NotNull().WithMessage("為必填欄位");
             RuleFor(x => x.HasTax).NotNull().WithMessage("為必填欄位");
             RuleFor(x => x.CarNo).NotNull().When(x => string.IsNullOrEmpty(x.CarNoUNID)).WithMessage("為新車牌的時候，車牌名稱為必填");

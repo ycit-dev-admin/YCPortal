@@ -11,6 +11,7 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
 using PSI.Infrastructure.Helpers;
@@ -26,6 +27,7 @@ namespace PSI.Areas.SysConfig.Controllers
         private readonly IProductItemService _productItemService;
 
         private readonly IPsiService _psiService;
+        private readonly IPSIEnumService _iPSIEnumService;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly ProductControllerMapper _mapperHelper;
@@ -34,12 +36,14 @@ namespace PSI.Areas.SysConfig.Controllers
         public ProductController(ICustomerService customerService,
                                   IProductItemService productItemService,
                                   IPsiService psiService,
+                                  IPSIEnumService iPSIEnumService,
                                   UserManager<AppUser> userManager)
         {
             _userManager = userManager;
             _customerService = customerService;
             _productItemService = productItemService;
             _psiService = psiService;
+            _iPSIEnumService = iPSIEnumService;
             _mapperHelper = new ProductControllerMapper();
         }
         [HttpGet]
@@ -63,8 +67,9 @@ namespace PSI.Areas.SysConfig.Controllers
                 funRs.ResultSuccess("", new PageProductOnlineInfo
                 {
                     VeProductItemList = veProductItemList,
-                    PsiTypeItems = _psiService.GetPsiTypeItems()
-                    .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
+                    PsiTypeItems = _iPSIEnumService.GetAllPsiTypes()
+                    .ToDictionary(aa => (int)aa, aa => aa.GetDescription())
+                    .ToPageSelectList("Value", "Key")
                     //CustomerCarLs = veCustomerCarLs,
                     //CustomerInfoLs = veCustomerInfoLs
                 });

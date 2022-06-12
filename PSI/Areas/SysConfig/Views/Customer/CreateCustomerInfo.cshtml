@@ -1,4 +1,4 @@
-﻿@model PageCustomerCreateCustomerInfo
+﻿@model SysConfigCustomerCreateCustomerInfo
 @{
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -21,7 +21,7 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="PsiType">進出貨歸屬</label>
+            <label for="PsiType">歸屬類型</label>
             <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" class="select2bs4" style="width: 100%;">
                 <option></option>
             </select>

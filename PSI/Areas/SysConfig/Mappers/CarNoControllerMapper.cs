@@ -36,13 +36,13 @@ namespace PSI.Areas.SysConfig.Mappers
                 case (nameof(CustomerCar), nameof(VE_CustomerCar)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<CustomerCar, VE_CustomerCar>()
-                        .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
-                        .ForMember(tar => tar.CarGUID, s => s.MapFrom(ss => ss.CAR_GUID))
-                        .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
-                        .ForMember(tar => tar.IsEffective, s => s.MapFrom(ss => ss.IS_EFFECTIVE))
-                        .ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
-                        .ForMember(tar => tar.UpdateEmpInfo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
-                        .ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
+                       //.ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
+                       //.ForMember(tar => tar.CarGUID, s => s.MapFrom(ss => ss.CAR_GUID))
+                       //.ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
+                       //.ForMember(tar => tar.IsEffective, s => s.MapFrom(ss => ss.IS_EFFECTIVE))
+                       //.ForMember(tar => tar.Remark, s => s.MapFrom(ss => ss.REMARK))
+                       //.ForMember(tar => tar.UpdateEmpInfo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
+                       //.ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
                        ).CreateMapper();
                 case (nameof(CustomerInfo), nameof(VE_CustomerInfo)):
                     return new MapperConfiguration(cfg =>

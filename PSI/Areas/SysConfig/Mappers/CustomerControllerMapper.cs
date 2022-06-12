@@ -3,6 +3,8 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Areas.SysConfig.Models.ShowModels;
 using PSI.Core.Entities;
+using PSI.Core.Enums;
+using PSI.Core.Extensions;
 using PSI.Models.VEModels;
 
 namespace PSI.Areas.SysConfig.Mappers
@@ -33,9 +35,9 @@ namespace PSI.Areas.SysConfig.Mappers
                 case (nameof(CustomerCar), nameof(VE_CustomerCar)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<CustomerCar, VE_CustomerCar>()
-                        .ForMember(x => x.CarGUID, y => y.MapFrom(o => o.CAR_GUID))
-                        .ForMember(x => x.CustomerGUID, y => y.MapFrom(o => o.CUSTOMER_GUID))
-                        .ForMember(x => x.CarName, y => y.MapFrom(o => o.CAR_NAME))
+                        //.ForMember(x => x.CarGUID, y => y.MapFrom(o => o.CAR_GUID))
+                        //.ForMember(x => x.CustomerGUID, y => y.MapFrom(o => o.CUSTOMER_GUID))
+                        //.ForMember(x => x.CarName, y => y.MapFrom(o => o.CAR_NAME))
                        ).CreateMapper();
                 case (nameof(CustomerContract), nameof(VE_CustomerContract)):
                     return new MapperConfiguration(cfg =>
@@ -95,12 +97,13 @@ namespace PSI.Areas.SysConfig.Mappers
                         .ForMember(tar => tar.CustomerName, s => s.MapFrom(ss => ss.CUSTOMER_NAME))
                         .ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
                         .ForMember(tar => tar.UpdateEmpNo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
+                        .ForMember(tar => tar.PsiTypeName, s => s.MapFrom(ss => ((PSIEnum.PSIType)ss.PSI_TYPE).GetDescription()))
                        ).CreateMapper();
                 case (nameof(CustomerCar), nameof(VE_CustomerCar)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<CustomerCar, VE_CustomerCar>()
-                        .ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
-                        .ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
+                        //.ForMember(tar => tar.CustomerGUID, s => s.MapFrom(ss => ss.CUSTOMER_GUID))
+                        //.ForMember(tar => tar.CarName, s => s.MapFrom(ss => ss.CAR_NAME))
                        ).CreateMapper();
                 case (nameof(CustomerContract), nameof(VE_CustomerContract)):
                     return new MapperConfiguration(cfg =>
@@ -125,9 +128,9 @@ namespace PSI.Areas.SysConfig.Mappers
                 //        .ForMember(tar => tar.UpdateTime, s => s.MapFrom(ss => ss.UPDATE_TIME))
                 //        .ForMember(tar => tar.UpdateEmpNo, s => s.MapFrom(ss => ss.UPDATE_EMPNO))
                 //       ).CreateMapper();
-                case (nameof(PageCustomerCreateCustomerInfo), nameof(CustomerInfo)):
+                case (nameof(SysConfigCustomerCreateCustomerInfo), nameof(CustomerInfo)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<PageCustomerCreateCustomerInfo, CustomerInfo>()
+                    cfg.CreateMap<SysConfigCustomerCreateCustomerInfo, CustomerInfo>()
                        .ForMember(t => t.COMPANY_NAME, s => s.MapFrom(ss => ss.CompanyName))
                        .ForMember(t => t.TAX_ID, s => s.MapFrom(ss => ss.TaxId))
                        .ForMember(t => t.CUSTOMER_NAME, s => s.MapFrom(ss => ss.CustomerName))

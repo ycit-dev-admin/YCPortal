@@ -29,24 +29,24 @@ namespace PSI.Infrastructure.Helpers
 
         }
 
-        public List<SelectListItem> PageGetCustomerInfoItems(ICustomerService customerService)
-        {
-            return customerService.GetPurchaseCustomerInfo()
-                    .Select(aa => new SelectListItem
-                    {
-                        Text = aa.CUSTOMER_NAME,
-                        Value = aa.ID.ToString()
-                    }).ToList();
-        }
-        public List<SelectListItem> PageGetProductItems(IProductItemService productItemService)
-        {
-            return productItemService.GetPurchaseProductItems()
-                .Select(aa => new SelectListItem
-                {
-                    Text = aa.PRODUCT_NAME,
-                    Value = aa.ID.ToString()
-                }).ToList();
-        }
+        //public List<SelectListItem> PageGetCustomerInfoItems(ICustomerService customerService)
+        //{
+        //    return customerService.GetPurchaseCustomerInfo()
+        //            .Select(aa => new SelectListItem
+        //            {
+        //                Text = aa.CUSTOMER_NAME,
+        //                Value = aa.ID.ToString()
+        //            }).ToList();
+        //}
+        //public List<SelectListItem> PageGetProductItems(IProductItemService productItemService)
+        //{
+        //    return productItemService.GetPurchaseProductItems()
+        //        .Select(aa => new SelectListItem
+        //        {
+        //            Text = aa.PRODUCT_NAME,
+        //            Value = aa.ID.ToString()
+        //        }).ToList();
+        //}
         public List<SelectListItem> PageGetPsiTypeItems(IPsiService psiService)
         {
             return psiService.GetPsiTypeItems()

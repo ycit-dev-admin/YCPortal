@@ -36,9 +36,27 @@
 <form id="creaet-form" asp-action="CreateWeightNote" method="post" autocomplete="off">
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
-            <legend class="scheduler-border">出貨客戶資訊</legend>
+            <legend class="scheduler-border">出貨磅單基本資訊</legend>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="ownername">出貨對象</label>
+                        <select asp-for="CustomerUNID" asp-items="@Model.CustomerInfoItems" class="select2bs4" style="width: 100%;">
+                            <option value=""></option>
+                            @*<option value="0">0.新客戶</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="form-control-label" for="CarNoId">出貨車牌</label>
+                        <select asp-for="CarNoUNID" asp-items="@Model.CarNoItems" class="select2bs4" style="width: 100%;">
+                            <option value=""></option>
+                            @*<option value="0">0.新車牌</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">出貨磅單時間</label>
                         <div class="input-group date" id="fullWeightTime_com" data-target-input="nearest">
@@ -50,42 +68,24 @@
                         <!--<span asp-validation-for="FusllWeightTime" class="text-danger"></span>-->
                     </div>
                 </div>
-                <div class="col-sm-9">
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="form-control-label" for="ownername">出貨對象</label>
-                        <select asp-for="CustomerUNID" asp-items="@Model.CustomerInfoItems" class="select2bs4" style="width: 100%;">
-                            <option value=""></option>
-                            <option value="0">0.新客戶</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="form-control-label" for="ownername">客戶名稱</label>
-                        <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="form-control-label" for="CarNoId">出貨車牌</label>
-                        <select asp-for="CarNoUNID" class="select2bs4" style="width: 100%;">
-                            <option value=""></option>
-                            <option value="0">0.新車牌</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="form-control-label" for="CarNoName">車牌名稱</label>
-                        <input asp-for="CarNo" class="form-control" type="text" placeholder="新車牌才需要填寫" readonly>
-                    </div>
-                </div>
+
+                @*<div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="ownername">客戶名稱</label>
+                            <input asp-for="CustomerName" class="form-control" type="text" placeholder="新客戶才需要填寫" readonly>
+                        </div>
+                    </div>*@
+
+                @*<div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="form-control-label" for="CarNoName">車牌名稱</label>
+                            <input asp-for="CarNo" class="form-control" type="text" placeholder="新車牌才需要填寫" readonly>
+                        </div>
+                    </div>*@
             </div>
         </fieldset>
         <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">合約資訊</legend>
+            <legend class="scheduler-border">出貨相關合約</legend>
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="form-control-label">合約名稱</label>
@@ -129,7 +129,7 @@
         </fieldset>
         <!-- fieldset -->
         <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">出貨資訊</legend>
+            <legend class="scheduler-border">廠內出貨預估資訊</legend>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group">

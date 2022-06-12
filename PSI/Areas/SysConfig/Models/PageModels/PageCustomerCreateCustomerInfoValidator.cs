@@ -2,7 +2,7 @@
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
-    public class PageCustomerCreateCustomerInfoValidator : AbstractValidator<PageCustomerCreateCustomerInfo>
+    public class PageCustomerCreateCustomerInfoValidator : AbstractValidator<SysConfigCustomerCreateCustomerInfo>
     {
         public PageCustomerCreateCustomerInfoValidator()
         {

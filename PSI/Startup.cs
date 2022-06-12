@@ -76,6 +76,8 @@ namespace PSI
             services.AddScoped<ICustomerContractService, CustomerContractService>();
             services.AddScoped<IPSIEnumService, PSIEnumService>();
             services.AddScoped<ICustomerInfoService, CustomerInfoService>();
+            services.AddScoped<ICustomerContractEnumService, CustomerContractEnumService>();
+            services.AddScoped<ICarNoService, CarNoService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile

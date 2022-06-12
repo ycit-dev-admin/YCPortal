@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Areas.Purchase.Helpers;
 using PSI.Areas.Purchase.Mappers;
 using PSI.Areas.Purchase.Models.PageModels;
+using PSI.Areas.Sales.Mappers;
 using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -21,6 +22,7 @@ using PSI.Infrastructure.Helpers;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
 using static PSI.Core.Enums.PSIEnum;
+using WeightNoteControllerMapper = PSI.Areas.Sales.Mappers.WeightNoteControllerMapper;
 using WeightNoteCreateWeightNote = PSI.Areas.Sales.Models.PageModels.WeightNoteCreateWeightNote;
 using WeightNoteCreateWeightNoteValidator = PSI.Areas.Sales.Models.PageModels.WeightNoteCreateWeightNoteValidator;
 
@@ -37,6 +39,8 @@ namespace PSI.Areas.Sales.Controllers
         private readonly ICustomerContractService _customerContractService;
         private readonly IPSIEnumService _pSIEnumService;
         private readonly IProductItemService _productItemService;
+        private readonly ICustomerContractEnumService _iCustomerContractEnumService;
+        private readonly ICarNoService _iCarNoService;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly PurchaseHelper _purchaseHelper;
@@ -50,7 +54,9 @@ namespace PSI.Areas.Sales.Controllers
                                             ICustomerContractService customerContractService,
                                             IProductItemService productItemService,
                                             ICustomerInfoService customerInfoService,
+                                            ICustomerContractEnumService iCustomerContractEnumService,
                                             IPSIEnumService pSIEnumService,
+                                            ICarNoService iCarNoService,
                                             IHttpContextAccessor httpContextAccessor,
                                             UserManager<AppUser> userManager)
         {
@@ -63,6 +69,8 @@ namespace PSI.Areas.Sales.Controllers
             _productItemService = productItemService;
             _customerInfoService = customerInfoService;
             _pSIEnumService = pSIEnumService;
+            _iCustomerContractEnumService = iCustomerContractEnumService;
+            _iCarNoService = iCarNoService;
             _httpContextAccessor = httpContextAccessor;
             _purchaseHelper = new PurchaseHelper(_mapper);
             _mapperHelper = new WeightNoteControllerMapper();
@@ -87,11 +95,7 @@ namespace PSI.Areas.Sales.Controllers
             //var haha = _psiService.GetPurchaseWeightNotesStatus()
             //    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key");
 
-
-            var pageModel = new WeightNoteCreateWeightNote();
-            PageOfCreateWeightNoteInit(pageModel);
-
-            return View(pageModel);
+            return View(GetPModelOfCreateWeightNote());
         }
 
         [HttpGet]
@@ -183,7 +187,7 @@ namespace PSI.Areas.Sales.Controllers
 
                 // 合約Log Entity
                 CustomerContractLog rsCustomerContractLog = null;
-                if (!string.IsNullOrEmpty(pageModel.ContractUNID))
+                if (!(pageModel.ContractUNID == Guid.Empty))
                 {
                     var customerContractMapper = _mapperHelper.GetMapperOfCreateWeightNote<WeightNoteCreateWeightNote, CustomerContractLog>();
                     rsCustomerContractLog = customerContractMapper.Map<CustomerContractLog>(pageModel);
@@ -194,7 +198,7 @@ namespace PSI.Areas.Sales.Controllers
 
                 CustomerInfo tempCustomerInfo = null;
                 // 客戶資訊Entity 
-                if (pageModel.CustomerUNID == "0") // 臨時客戶
+                if (pageModel.CustomerUNID == Guid.Empty) // 臨時客戶
                 {
                     var customerInfoMapper = _mapperHelper.GetMapperOfCreateWeightNote<WeightNoteCreateWeightNote, CustomerInfo>();
                     tempCustomerInfo = customerInfoMapper.Map<CustomerInfo>(pageModel);
@@ -255,13 +259,14 @@ namespace PSI.Areas.Sales.Controllers
 
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerUNID.ToString());
-                pageModel.ProductItemItems = _productItemService.GetPurchaseProductItems().ToPageSelectList(
-                   nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID));
+                pageModel.ProductItemItems = _productItemService.GetPurchaseProductItems(_pSIEnumService)
+                    .ToPageSelectList(nameof(ProductItem.PRODUCT_NAME),
+                    nameof(ProductItem.PRODUCT_UNID));
                 pageModel.PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.PayType);
-                pageModel.CustomerContractItems = pageModel.CustomerUNID == "0" ?
+                pageModel.CustomerContractItems = pageModel.CustomerUNID == Guid.Empty ?
                                     new List<SelectListItem>() :
-                    _customerContractService.GetPurchaseCustomerContracts().ToPageSelectList(
+                    _customerContractService.GetPurchaseCustomerContracts(_iCustomerContractEnumService).ToPageSelectList(
                     nameof(CustomerContract.CONTRACT_NAME),
                     nameof(CustomerContract.CONTRACT_GUID),
                     pageModel.ContractUNID.ToString());
@@ -332,7 +337,7 @@ namespace PSI.Areas.Sales.Controllers
                 } };
 
                 _customerService.CreateCustomerInfoForNormal(customerInfo, _userManager.GetUserAsync(User).Result);
-            }
+        }
 
 
 
@@ -400,17 +405,48 @@ namespace PSI.Areas.Sales.Controllers
         }
 
         [NonAction]
-        public void PageOfCreateWeightNoteInit(WeightNoteCreateWeightNote pageModel)
+        public WeightNoteCreateWeightNote GetPModelOfCreateWeightNote(WeightNoteCreateWeightNote pageModel = null)
         {
+            pageModel ??= new WeightNoteCreateWeightNote();
+
+            //pageModel.CarNoItems = _iCarNoService.GetAllCustomerCars()
             pageModel.CustomerInfoItems = _customerInfoService.GetSalesCustomerInfo(_pSIEnumService)
                 .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
                 nameof(CustomerInfo.CUSTOMER_GUID),
-                pageModel.CustomerUNID);
-            pageModel.ProductItemItems = _productItemService.GetPurchaseProductItems().ToPageSelectList(
-                    nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID));
+                pageModel.CustomerUNID.ToString());
+            pageModel.CarNoItems = _iCarNoService.GetSalesOfCarInfo(_pSIEnumService)
+                .ToPageSelectList(nameof(CustomerCar.CAR_NAME),
+                nameof(CustomerCar.CAR_GUID),
+                pageModel.CarNo);
+
+            pageModel.ProductItemItems = _productItemService.GetSalesProductItems(_pSIEnumService)
+                .ToPageSelectList(nameof(ProductItem.PRODUCT_NAME),
+                nameof(ProductItem.PRODUCT_UNID));
             pageModel.PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
-                    nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
-            pageModel.CustomerContractItems = new List<SelectListItem>();
+                    nameof(CodeTable.CODE_TEXT),
+                    nameof(CodeTable.CODE_VALUE));
+            pageModel.CustomerContractItems = pageModel.CustomerUNID == Guid.Empty ?
+                                  new List<SelectListItem>() :
+                  _customerContractService.GetSalesCustomerContracts(_iCustomerContractEnumService).ToPageSelectList(
+                  nameof(CustomerContract.CONTRACT_NAME),
+                  nameof(CustomerContract.CONTRACT_GUID),
+                  pageModel.ContractUNID.ToString());
+            return pageModel;
+        }
+
+        [NonAction]
+        public IMapper MapperForCreateWeightNote<T1, T2>()
+        {
+            switch (typeof(T1).Name, typeof(T2).Name)
+            {
+                case (nameof(CustomerCar), nameof(VE_CustomerCar)):
+                    return new MapperConfiguration(cfg =>
+                    cfg.CreateMap<CustomerCar, VE_CustomerCar>()
+                      // .ForMember(t => t.InsideCarName, s => s.MapFrom(o => o.PurchaseWeightNoteUNID))                      
+                      ).CreateMapper();
+                default:
+                    return null;
+            }
         }
 
 

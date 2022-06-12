@@ -21,15 +21,17 @@ namespace PSI.APIControllers
     {
         private readonly ICustomerContractService _customerContractService;
         private readonly IPsiService _psiService;
+        private readonly ICustomerContractEnumService _iCustomerContractEnumService;
         private readonly API_CustomerContractsMapper _mapperHelper;
 
 
         public CustomerContractsController(ICustomerContractService customerContractService,
-            IPsiService psiService
-            )
+            IPsiService psiService,
+            ICustomerContractEnumService iCustomerContractEnumService)
         {
             _customerContractService = customerContractService;
             _psiService = psiService;
+            _iCustomerContractEnumService = iCustomerContractEnumService;
             _mapperHelper = new API_CustomerContractsMapper();
         }
 
@@ -82,7 +84,7 @@ namespace PSI.APIControllers
         [HttpGet("GetContractsByCustomerUNID/{unid}")]
         public List<VE_CustomerContract> GetContractsByCustomerUNID(Guid unid)
         {
-            var customerContracts = _customerContractService.GetPurchaseContractsByCustomerUNID(unid);
+            var customerContracts = _customerContractService.GetPurchaseContractsByCustomerUNID(unid, _iCustomerContractEnumService);
             var veCustomerContractMapper = _mapperHelper.GetMapperOfGetContractsByCustomerUNID<CustomerContract, VE_CustomerContract>();
             var veCustomerContractList = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContracts);
             return veCustomerContractList;

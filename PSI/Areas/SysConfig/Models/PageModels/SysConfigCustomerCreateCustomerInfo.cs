@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Areas.SysConfig.Models.ShowModels;
 
 namespace PSI.Areas.SysConfig.Models.PageModels
 {
-    public class PageCustomerCreateCustomerInfo
+    public class SysConfigCustomerCreateCustomerInfo
     {
         #region -- ForPost -- 
         public string CompanyName { get; set; }

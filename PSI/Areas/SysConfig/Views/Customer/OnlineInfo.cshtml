@@ -14,6 +14,7 @@
             <th>客戶簡稱</th>
             <th>對應車牌</th>
             <th>是否有合約</th>
+            <th>歸屬類型</th>
             <th>最後更新時間</th>
             <th>最後操作人員</th>
             <th>功能操作</th>
@@ -27,10 +28,11 @@
                 <td>@item.CustomerName</td>
                 <td>
                     @(
-                    string.Join('、',Model.VeCustomerCarLs.Where(aa=> aa.CustomerGUID == item.CustomerGUID).Select(aa=> aa.CarName).ToList())
+                    string.Join('、',Model.VeCustomerCarLs.Where(aa=> aa.CUSTOMER_GUID.ToString() == item.CustomerGUID).Select(aa=> aa.CAR_NAME).ToList())
                     )
                 </td>
                 <td>@(Model.VeCustomerContractList.Any(aa=> aa.CustomerGUID==item.CustomerGUID)?"Yes":"No")</td>
+                <td>@item.PsiTypeName</td>
                 <td>@item.UpdateTime.ToString("yyyy-MM-dd:HH:mm:ss")</td>
                 <td>@item.UpdateEmpNo</td>
                 <td>

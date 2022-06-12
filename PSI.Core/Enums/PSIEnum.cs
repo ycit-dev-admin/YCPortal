@@ -14,7 +14,10 @@ namespace PSI.Core.Enums
             [Description("出貨")]
             Sale = 2,
             [Description("進出貨")]
-            Both = 5
+            Both = 5,
+            [Description("原群集團")]
+            Inside = 9
+
         }
         public enum FacSite
         {

@@ -10,6 +10,7 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
 using PSI.Models.VEModels;
@@ -23,6 +24,7 @@ namespace PSI.Areas.SysConfig.Controllers
         private readonly ICustomerService _customerService;
         private readonly ICustomerContractService _customerContractService;
         private readonly IPsiService _psiService;
+        private readonly IPSIEnumService _iPSIEnumService;
         private readonly UserManager<AppUser> _userManager;
         private readonly CustomerControllerMapper _mapperHelper;
 
@@ -30,12 +32,14 @@ namespace PSI.Areas.SysConfig.Controllers
         public CustomerController(ICustomerService customerService,
                                   ICustomerContractService customerContractService,
                                   IPsiService psiService,
+                                  IPSIEnumService iPSIEnumService,
                                   UserManager<AppUser> userManager)
         {
             _customerContractService = customerContractService;
             _userManager = userManager;
             _customerService = customerService;
             _psiService = psiService;
+            _iPSIEnumService = iPSIEnumService;
             _mapperHelper = new CustomerControllerMapper();
         }
         [HttpGet]
@@ -93,11 +97,8 @@ namespace PSI.Areas.SysConfig.Controllers
         [Authorize()]
         public IActionResult CreateCustomerInfo()
         {
-            var pageModel = new PageCustomerCreateCustomerInfo
-            {
-                PsiTypeItems = _psiService.GetPsiTypeItems()
-                   .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE))
-            };
+            var pageModel = new SysConfigCustomerCreateCustomerInfo();
+            SetPModelValueOfCreateCustomerInfo(pageModel);
             return View(pageModel);
         }
 
@@ -119,7 +120,7 @@ namespace PSI.Areas.SysConfig.Controllers
 
         [HttpPost]
         [Authorize()]
-        public IActionResult CreateCustomerInfo(PageCustomerCreateCustomerInfo pageModel)
+        public IActionResult CreateCustomerInfo(SysConfigCustomerCreateCustomerInfo pageModel)
         {
 
             // Action variables
@@ -145,9 +146,9 @@ namespace PSI.Areas.SysConfig.Controllers
             }
             #endregion
             #region -- CreateToDB --
-            FunctionResult<CustomerInfo> CreatDataToDB(PageCustomerCreateCustomerInfo pageModel)
+            FunctionResult<CustomerInfo> CreatDataToDB(SysConfigCustomerCreateCustomerInfo pageModel)
             {
-                var customerInfoCfgMapper = _mapperHelper.GetMapperOfCreateCustomerInfo<PageCustomerCreateCustomerInfo, CustomerInfo>();
+                var customerInfoCfgMapper = _mapperHelper.GetMapperOfCreateCustomerInfo<SysConfigCustomerCreateCustomerInfo, CustomerInfo>();
                 var customerInfo = customerInfoCfgMapper.Map<CustomerInfo>(pageModel);
                 var funcRs = _customerService.CreateCustomerInfoForNormal(customerInfo, _userManager.GetUserAsync(User).Result);
                 errMsg = funcRs.ErrorMessage;
@@ -331,9 +332,15 @@ namespace PSI.Areas.SysConfig.Controllers
             //var pageModel = _mapper.Map<PageCustomerEditCustomerInfo>(customerInfo);
             //pageModel.PostCarNo = carNoLs.ToArray();
             //pageModel.SetPsiTypeItems();
+        }
 
-
-
+        [NonAction]
+        public void SetPModelValueOfCreateCustomerInfo(SysConfigCustomerCreateCustomerInfo pageModel)
+        {
+            pageModel.PsiTypeItems = _iPSIEnumService.GetAllPsiTypes()
+               .ToDictionary(aa => (int)aa, aa => aa.GetDescription())
+               .ToPageSelectList("Value", "Key", pageModel.PsiType);
         }
     }
 }
+

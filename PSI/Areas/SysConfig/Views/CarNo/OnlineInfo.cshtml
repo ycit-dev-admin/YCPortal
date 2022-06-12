@@ -28,16 +28,16 @@
         @foreach (var item in Model.CustomerCarLs)
         {
             <tr>
-                <td>@item.CarName</td>
+                <td>@item.CAR_NAME</td>
                 <td>
-                    @(Model.CustomerInfoLs.FirstOrDefault(aa=> aa.CustomerGUID == item.CustomerGUID).CustomerName)
+                    @(Model.CustomerInfoLs.FirstOrDefault(aa=> aa.CustomerGUID == item.CUSTOMER_GUID.ToString()).CustomerName)
                 </td>
-                <td>@(item.IsEffective=="1"?"Yes":"No")</td>
-                <td>@item.Remark</td>
-                <td>@item.UpdateEmpInfo</td>
-                <td>@item.UpdateTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                <td>@(item.IS_EFFECTIVE=="1"?"Yes":"No")</td>
+                <td>@item.REMARK</td>
+                <td>@item.UPDATE_EMPNO</td>
+                <td>@item.UPDATE_TIME.ToString("yyyy/MM/dd HH:mm:ss")</td>
                 <td>
-                    <button name="query-btn" style="float:left;margin-right:20px;" class="btn btn-primary" type="button" value="@item.CarGUID">編輯</button>
+                    <button name="query-btn" style="float:left;margin-right:20px;" class="btn btn-primary" type="button" value="@item.CAR_GUID">編輯</button>
                 </td>
             </tr>
         }
@@ -96,6 +96,7 @@
                     modalObj.modal('show');
 
                     $.getScript("/psi/PageOfSysConfigCarNoOnlineInfoValidate.js"); // 載入檢核js
+
 
                     modalObj.find("#CustomerGUID").select2({
                         theme: 'bootstrap4',
