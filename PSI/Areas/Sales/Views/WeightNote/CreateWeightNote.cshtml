@@ -152,10 +152,19 @@
                         <span asp-validation-for="UnitPrice" class="text-danger"></span>
                     </div>
                 </div>
-
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <h6 id="total"><span>無選擇項目</span></h6>
+                        <label class="form-control-label">磅單認定</label>
+                        <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                        <select asp-for="InsideProductItemUNID" asp-items="@Model.ProductItemItems" class="select2bs4" style="width: 100%;">
+                            <option value=""></option>
+                            @*<option value="0">0.新客戶</option>*@
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <h6 id="total"><span>品項組成: 無選擇項目</span></h6>
                         <input asp-for="SelectPurchaseDetailInfos" type="hidden" />
                         <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>
                         <select id="user-select-proditem" name="USProdList" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
@@ -240,15 +249,15 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label style="color:blue">實付金額 = (磅費 + 計價金額 + 運費)</label>
+                        <label style="color:blue">預估實收金額 = (磅費 + 計價金額 + 運費)</label>
                         <h1 style="color:red" id="show_final_price"></h1>
                         @*<input asp-for="VE_PurchaseWeightNote.ActualPrice" type="hidden" />*@
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label style="color:blue">付款方式</label>
-                        <select asp-for="PayType" asp-items="Model.PayTypeItems" class="select2bs4" style="width: 100%;">
+                        <label style="color:blue">預估收款方式</label>
+                        <select asp-for="PayType" asp-items="Model.ReceivedTypeItems" class="select2bs4" style="width: 100%;">
                             <option></option>
                             <option value="0">請選擇</option>
                         </select>
@@ -256,7 +265,7 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label style="color:blue">付款日</label>
+                        <label style="color:blue">預估收款日</label>
                         <div class="input-group date" id="payTime_com" data-target-input="nearest">
                             <input asp-for="PayTime" type="text" class="form-control datetimepicker-input" data-target="#payTime_com" />
                             <div class="input-group-append" data-target="#payTime_com" data-toggle="datetimepicker">

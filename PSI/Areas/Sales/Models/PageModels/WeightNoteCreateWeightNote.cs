@@ -9,7 +9,7 @@ namespace PSI.Areas.Sales.Models.PageModels
     {
         /* For Post */
         public Guid CustomerUNID { get; set; }
-        public Guid InsideProductItemUNID { get; set; }   // 廠內磅單認列品項
+        public Guid InsideProductItemUNID { get; set; }   // 廠內磅單主要認列品項
         public double Inside_SALES_WEIGHT { get; set; }  // 廠內出貨重量
         public double InsideDefectiveWeight { get; set; } // 廠內扣重
         public double InsideActualWeight { get; set; }  // 廠內計價重量
@@ -19,6 +19,7 @@ namespace PSI.Areas.Sales.Models.PageModels
         public decimal? InsideTraficFee { get; set; }  // 廠內預估運費
         public Guid? ContractUNID { get; set; }
         public string Remark { get; set; }
+        public decimal RECEIVED_PRICE { get; set; }
 
 
         /* For Page */
@@ -27,7 +28,7 @@ namespace PSI.Areas.Sales.Models.PageModels
         public decimal UnitPrice { get; set; }
         public List<SelectListItem> CustomerInfoItems { set; get; }
         public List<SelectListItem> CarNoItems { set; get; }
-        public List<SelectListItem> PayTypeItems { set; get; }
+        public List<SelectListItem> ReceivedTypeItems { set; get; }
         public List<SelectListItem> ProductItemItems { set; get; }
         public List<SelectListItem> CustomerContractItems { set; get; }
 

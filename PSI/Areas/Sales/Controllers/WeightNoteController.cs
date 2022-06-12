@@ -260,7 +260,7 @@ namespace PSI.Areas.Sales.Controllers
                 pageModel.ProductItemItems = _productItemService.GetPurchaseProductItems(_pSIEnumService)
                     .ToPageSelectList(nameof(ProductItem.PRODUCT_NAME),
                     nameof(ProductItem.PRODUCT_UNID));
-                pageModel.PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
+                pageModel.ReceivedTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.PayType);
                 pageModel.CustomerContractItems = pageModel.CustomerUNID == Guid.Empty ?
                                     new List<SelectListItem>() :
@@ -424,7 +424,7 @@ namespace PSI.Areas.Sales.Controllers
             pageModel.ProductItemItems = _productItemService.GetSalesProductItems(_pSIEnumService)
                 .ToPageSelectList(nameof(ProductItem.PRODUCT_NAME),
                 nameof(ProductItem.PRODUCT_UNID));
-            pageModel.PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
+            pageModel.ReceivedTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT),
                     nameof(CodeTable.CODE_VALUE));
             pageModel.CustomerContractItems = pageModel.CustomerUNID == Guid.Empty ?

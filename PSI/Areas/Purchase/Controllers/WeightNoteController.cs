@@ -151,13 +151,15 @@ namespace PSI.Areas.Purchase.Controllers
         [Authorize()]
         public IActionResult CreateWeightNote(WeightNoteCreateWeightNote pageModel)
         {
+            #region -- Action variables --
 
-            // Action variables
             var errMsg = "";
             PurchaseWeightNote rsPurchaseWeightNote;
 
-            // Step Functions 
-            #region -- ValidPageModel --
+            #endregion
+
+            #region -- Step Functions --
+
             FunctionResult ValidPageModel(WeightNoteCreateWeightNote pageModel)
             {
                 var funRs = new FunctionResult();
@@ -174,8 +176,6 @@ namespace PSI.Areas.Purchase.Controllers
                 funRs.ResultSuccess("驗證成功");
                 return funRs;     // Return Result
             }
-            #endregion
-            #region -- InsertToDB --
             FunctionResult<PurchaseWeightNote> InsertToDB(WeightNoteCreateWeightNote pageModel)
             {
                 var funcRs = new FunctionResult<PurchaseWeightNote>();
@@ -236,9 +236,16 @@ namespace PSI.Areas.Purchase.Controllers
                 rsPurchaseWeightNote = funcRs.ResultValue;
                 return funcRs;     // Return Result
             }
+
+            #endregion
+
+            #region -- Action Process --
+
             #endregion
 
 
+
+            
             // Step Result
             if (!ValidPageModel(pageModel).Success ||
                 !InsertToDB(pageModel).Success)
