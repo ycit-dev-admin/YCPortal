@@ -76,7 +76,7 @@ namespace PSI.Areas.SysConfig.Controllers
                     var contractType = contractTypeDic[aa.Key];
                     if (contractType == CustomerContractEnum.Types.Purchase)  // 進貨
                     {
-                        var pWeightNoteList = _psiService.GetPurchaseWeightNotesBy(psiDocUNIDs);
+                        var pWeightNoteList = _psiService.GetPurchaseWeightNotes(psiDocUNIDs);
                         return pWeightNoteList.Sum(cc => cc.FULL_WEIGHT - cc.DEFECTIVE_WEIGHT);
                     }
                     else if (contractType == CustomerContractEnum.Types.Sale) // 出貨
@@ -229,8 +229,9 @@ namespace PSI.Areas.SysConfig.Controllers
                 TempData["pageMsg"] = errMsg;
 
 
-                pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
-                  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE), pageModel.ContractType);
+                pageModel.ContractTypeItems = CustomerContractEnum.GetAllContractTypes().
+                ToDictionary(aa => (int)aa, aa => aa.GetDescription()).
+                ToPageSelectList("Value", "Key", pageModel.ContractType);
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
@@ -265,7 +266,7 @@ namespace PSI.Areas.SysConfig.Controllers
                 // Query Data
                 var customerContract = _customerContractService.GetCustomerContract(unid);
                 var ContractLogList = _customerContractService.GetCustomerContractLogs(unid);
-                var pWeightDocList = _psiService.GetPurchaseWeightNotesBy(ContractLogList.Select(aa => aa.PSI_DOC_UNID).ToList());
+                var pWeightDocList = _psiService.GetPurchaseWeightNotes(ContractLogList.Select(aa => aa.PSI_DOC_UNID).ToList());
 
                 // Map to model
                 var vePurchaseWeightNoteMapper = _mapperHelper.GetMapperOfEditCustomerContract<PurchaseWeightNote, VE_PurchaseWeightNote>();
@@ -277,8 +278,13 @@ namespace PSI.Areas.SysConfig.Controllers
                 var pageModel = pModelMapper.Map<PageContractEditCustomerContract>(customerContract);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus();
                 pageModel.VE_PurchaseWeightNoteList = vePurchaseWeightNoteList;
-                pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
-                  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
+                //pageModel.ContractTypeItems = _psiService.GetContractTypeItems()
+                //  .ToPageSelectList(nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE));
+
+                pageModel.ContractTypeItems = CustomerContractEnum.GetAllContractTypes().
+                ToDictionary(aa => (int)aa, aa => aa.GetDescription()).
+                ToPageSelectList("Value", "Key", pageModel.ContractType);
+
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(
@@ -347,10 +353,9 @@ namespace PSI.Areas.SysConfig.Controllers
                 var veCustomerContractLogList = veCustomerContractLogMapper.Map<List<VE_CustomerContractLog>>(customerContractLogList);
                 pageModel.ContractStatusItems = _enumHelper.GetContractStatus(pageModel.ContractStatus);
                 //pageModel.VE_CustomerContractLogList = veCustomerContractLogList;
-                pageModel.ContractTypeItems = _iCustomerContractEnumService.GetAllContracTypes()
-                    .ToDictionary(aa => (int)aa, aa => aa.GetDescription()).ToPageSelectList("Value", "Key", pageModel.ContractType);
-
-
+                pageModel.ContractTypeItems = CustomerContractEnum.GetAllContractTypes().
+                    ToDictionary(aa => (int)aa, aa => aa.GetDescription()).
+                    ToPageSelectList("Value", "Key", pageModel.ContractType);
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID), pageModel.CustomerGUID.ToString());
                 pageModel.ProductItems = _productItemService.GetAllProductItems().ToPageSelectList(

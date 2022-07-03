@@ -37,12 +37,7 @@ namespace PSI.Service.Service
 
 
 
-        public CustomerContract GetCustomerContractsByContractUNID(Guid contractUNID)
-        {
-            var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .FirstOrDefault(aa => aa.CONTRACT_GUID == contractUNID);
-            return queryRs;
-        }
+        
 
         public IQueryable<CustomerContract> GetEffectiveCustomerContracts()
         {
@@ -65,11 +60,11 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
-        public IQueryable<CustomerContract> GetPurchaseCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService)
+        public IQueryable<CustomerContract> GetPurchaseCustomerContracts()
         {
-            var needStatus = iCustomerContractEnumService.GetContracOngoStatus()
+            var needStatus = CustomerContractEnum.GetContracOngoStatus()
                 .Select(aa => (int)aa);
-            var purchaseContractTypes = iCustomerContractEnumService.GetPurchaseContractTypes()
+            var purchaseContractTypes = CustomerContractEnum.GetPurchaseContractTypes()
                 .Select(aa => (int)aa);
 
             var queryRs = _customerContractRepository.GetAllAsync().Result
@@ -78,12 +73,12 @@ namespace PSI.Service.Service
                                                      .AsQueryable();
             return queryRs;
         }
-        public IQueryable<CustomerContract> GetSalesCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService)
+        public IQueryable<CustomerContract> GetSalesCustomerContracts()
         {
-            var needStatus = iCustomerContractEnumService.GetContracOngoStatus()
-                .Select(aa => (int)aa);
-            var needContractTypes = iCustomerContractEnumService.GetSaleContractTypes()
-                .Select(aa => (int)aa);
+            var needStatus = CustomerContractEnum.GetContracOngoStatus()
+                                                 .Select(aa => (int)aa);
+            var needContractTypes = CustomerContractEnum.GetSaleContractTypes()
+                                                        .Select(aa => (int)aa);
 
             var queryRs = _customerContractRepository.GetAllAsync().Result
                                                      .Where(aa => needStatus.Contains(aa.CONTRACT_STATUS) &&
@@ -92,14 +87,32 @@ namespace PSI.Service.Service
             return queryRs;
         }
 
-        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID, ICustomerContractEnumService iCustomerContractEnumService)
+        public IQueryable<CustomerContract> GetContracts(Guid cutsomerUNID)
         {
-            var needStatus = new[] { CustomerContractEnum.Status.Ongoing };
-            var purchaseContractTypes = iCustomerContractEnumService.GetPurchaseContractTypes();
+            var queryRs = _customerContractRepository.GetAllAsync().Result
+                                          .Where(aa => aa.CUSTOMER_GUID == cutsomerUNID)
+                                          .AsQueryable();
+            return queryRs;
+        }
+        public IQueryable<CustomerContract> GetContracts(Guid cutsomerUNID, IQueryable<CustomerContractEnum.Status> contractStatus)
+        {
+            var tContractStatus = contractStatus.Select(aa => (int)aa);
+            var queryRs = _customerContractRepository.GetAllAsync().Result
+                                                     .Where(aa => tContractStatus.Contains(aa.CONTRACT_STATUS) &&
+                                                     aa.CUSTOMER_GUID == cutsomerUNID)
+                                                     .AsQueryable();
+            return queryRs;
+        }
+        public IQueryable<CustomerContract> GetContracts(Guid cutsomerUNID,
+            IQueryable<CustomerContractEnum.Status> contractStatus,
+            IQueryable<CustomerContractEnum.Types> contractTypes)
+        {
+            var tContractStatus = contractStatus.Select(aa => (int)aa);
+            var tContractTypes = contractTypes.Select(aa => (int)aa);
 
             var queryRs = _customerContractRepository.GetAllAsync().Result
-                                                     .Where(aa => needStatus.Contains((CustomerContractEnum.Status)aa.CONTRACT_STATUS) &&
-                                                     purchaseContractTypes.Contains((CustomerContractEnum.Types)aa.CONTRACT_TYPE) &&
+                                                     .Where(aa => tContractStatus.Contains(aa.CONTRACT_STATUS) &&
+                                                     tContractTypes.Contains(aa.CONTRACT_TYPE) &&
                                                      aa.CUSTOMER_GUID == cutsomerUNID)
                                                      .AsQueryable();
             return queryRs;
@@ -177,9 +190,9 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-        public CustomerContract GetCustomerContract(Guid unid)
+        public CustomerContract GetCustomerContract(Guid contractUNID)
         {
-            return _customerContractRepository.GetAsync(aa => aa.CONTRACT_GUID == unid).Result;
+            return _customerContractRepository.GetAsync(aa => aa.CONTRACT_GUID == contractUNID).Result;
         }
 
         public FunctionResult<CustomerContract> UpdateCustomerContract(CustomerContract customerContract, AppUser operUser)
@@ -312,7 +325,7 @@ namespace PSI.Service.Service
             var contractType = (CustomerContractEnum.Types)customerContract.CONTRACT_TYPE;
             if (contractType == CustomerContractEnum.Types.Purchase)  // 進貨合約
             {
-                var pWeightNoteList = _psiService.GetPurchaseWeightNotesBy(contractLogRelDocUNIDs);
+                var pWeightNoteList = _psiService.GetPurchaseWeightNotes(contractLogRelDocUNIDs);
                 var sumWeightValues = pWeightNoteList.Sum(aa => aa.FULL_WEIGHT - aa.DEFECTIVE_WEIGHT);
 
                 return sumWeightValues >= customerContract.DEAL_WEIGHT ? true : false;

@@ -37,10 +37,10 @@ namespace PSI.Service.Service
                    Where(aa => aa.CUSTOMER_GUID == customerGUID &&
                                aa.IS_EFFECTIVE == "1").AsQueryable();
         }
-        public IQueryable<CustomerCar> GetSalesOfCarInfo(IPSIEnumService iPSIEnumService)
+        public IQueryable<CustomerCar> GetSalesOfCarInfo()
         {
-            var salesStatus = iPSIEnumService.GetSalesPsiTypes()
-                .Select(aa => (int)aa);
+            var salesStatus = PSIEnum.GetSalesPsiTypes().Select(aa => (int)aa);
+
             return _customerCarRepository.GetAllAsync().Result.
                    Where(aa => salesStatus.Contains(aa.CAR_NO_TYPE) &&
                                aa.IS_EFFECTIVE == "1").AsQueryable();

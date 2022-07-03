@@ -28,6 +28,11 @@ namespace PSI.Infrastructure.Helpers
             return _mapper.Map<List<PurchaseIngredient>>(purchaseDetailInfoLs);
 
         }
+        public List<PurchaseIngredient> GetPurchaseIngredientLs(List<PE_SalesIngredient> peSalesIngredientList)
+        {
+            return _mapper.Map<List<PurchaseIngredient>>(peSalesIngredientList);
+
+        }
 
         //public List<SelectListItem> PageGetCustomerInfoItems(ICustomerService customerService)
         //{

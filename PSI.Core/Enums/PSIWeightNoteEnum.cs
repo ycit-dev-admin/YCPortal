@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 
 namespace PSI.Core.Enums
 {
     public class PSIWeightNoteEnum
     {
-        public enum PWeightNotesStatus
+        public enum PWeightNotesStatus // 進貨磅單狀態
         {
             [Description("未結清")]
             Ongo = 0,
@@ -19,6 +20,25 @@ namespace PSI.Core.Enums
             WeightNoteError = 11,
             [Description("合約紀錄建立異常")]
             ContractLogError = 12
+        }
+
+        public enum SWeightNotesStatus // 出貨磅單狀態
+        {
+            [Description("預估階段")]
+            Estimate = 0,
+            [Description("回寫階段")]
+            Actual = 1,
+            [Description("已完成")]
+            Completed = 2,
+            [Description("單據異常")]
+            ContractLogError = 90
+        }
+
+
+        public static IQueryable<PSIWeightNoteEnum.SWeightNotesStatus> GetOngoSalesWeightDocStatus()
+        {
+            return new[] { PSIWeightNoteEnum.SWeightNotesStatus.Estimate,
+                PSIWeightNoteEnum.SWeightNotesStatus.Actual}.AsQueryable();
         }
     }
 }

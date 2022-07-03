@@ -17,7 +17,6 @@ namespace PSI.Service.IService
         string GetWeightNoteDocNo(string facSite, PSIEnum.PSIType psiType);
 
         /* PSIWeightNoteEnum */
-        public Dictionary<int, PSIWeightNoteEnum.PWeightNotesStatus> GetPurchaseWeightNotesStatus();
         public Dictionary<string, PSIEnum.FacSite> GetFacSites();
 
         /* PurchaseWeightNote */
@@ -30,10 +29,9 @@ namespace PSI.Service.IService
             CustomerCar customerCar = null,
             CustomerContractLog customerContractLog = null);
 
-        IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes();
         IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime);
-        IQueryable<PurchaseWeightNote> GetPurchaseWeightNotesBy(List<Guid> weightNoteUNIDList);
-        PurchaseWeightNote GetPurchaseWeightNote(string docNo);
+        IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(List<Guid> weightNoteUNIDList);
+
         PurchaseWeightNote GetPurchaseWeightNote(Guid unid);
 
 
@@ -46,7 +44,7 @@ namespace PSI.Service.IService
         /* CodeTable */
         IQueryable<CodeTable> GetPayTypeItems();
         IQueryable<CodeTable> GetPsiTypeItems();
-        IQueryable<CodeTable> GetContractTypeItems();
+
 
     }
 }

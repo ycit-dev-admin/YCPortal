@@ -25,22 +25,20 @@ namespace PSI.Areas.Sales.Mappers
 
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, PurchaseWeightNote>()
-                      .ForMember(t => t.FULL_WEIGHT_TIME, s => s.MapFrom(o => o.FullWeightTime))
+                      .ForMember(t => t.FULL_WEIGHT_TIME, s => s.MapFrom(o => o.LeaveWeightTime))
                       .ForMember(t => t.CUSTOMER_UNID, s => s.MapFrom(o => o.CustomerUNID))
                       .ForMember(t => t.CONTRACT_UNID, s => s.MapFrom(o => o.ContractUNID ?? null))
-                      .ForMember(t => t.CUSTOMER_NAME, s => s.MapFrom(o => o.CustomerName))
-                      .ForMember(t => t.CAR_NO, s => s.MapFrom(o => o.CarNo))
+                      //.ForMember(t => t.CAR_NO, s => s.MapFrom(o => o.CarNo))
                       .ForMember(t => t.DEFECTIVE_WEIGHT, s => s.MapFrom(o => o.DefectiveWeight))
                       .ForMember(t => t.UNIT_PRICE, s => s.MapFrom(o => o.UnitPrice))
-                      .ForMember(t => t.HAS_TAX, s => s.MapFrom(o => o.HasTax))
                       .ForMember(t => t.SCALE_NO, s => s.MapFrom(o => o.ScaleNo))
                       .ForMember(t => t.TRAFIC_UNIT_PRICE, s => s.MapFrom(o => o.TraficUnitPrice))
-                      .ForMember(t => t.THIRD_WEIGHT_FEE, s => s.MapFrom(o => o.ThirdWeightFee))
-                      .ForMember(t => t.PAY_TYPE, s => s.MapFrom(o => o.PayType))
-                      .ForMember(t => t.PAY_TIME, s => s.MapFrom(o => o.PayTime))
+                      //.ForMember(t => t.THIRD_WEIGHT_FEE, s => s.MapFrom(o => o.ThirdWeightFee))
+                      .ForMember(t => t.PAY_TYPE, s => s.MapFrom(o => o.ReceivedType))
+                      .ForMember(t => t.PAY_TIME, s => s.MapFrom(o => o.ReceivedTime))
                       .ForMember(t => t.REMARK, s => s.MapFrom(o => o.Remark))
                       .ForMember(t => t.INPUT_TYPE, s => s.MapFrom(o => "1"))
-                      .ForMember(t => t.NOTE_STATUS, s => s.MapFrom(o => o.PayType == "1" ?
+                      .ForMember(t => t.NOTE_STATUS, s => s.MapFrom(o => o.ReceivedType == 1 ?
                                                                     PSIWeightNoteEnum.PWeightNotesStatus.Completed :  // 只有付現是結清
                                                                     PSIWeightNoteEnum.PWeightNotesStatus.Ongo))
                       ).CreateMapper();
@@ -58,15 +56,13 @@ namespace PSI.Areas.Sales.Mappers
                 case (nameof(WeightNoteCreateWeightNote), nameof(CustomerInfo)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, CustomerInfo>()
-                      .ForMember(t => t.CUSTOMER_NAME, s => s.MapFrom(o => o.CustomerName))
-                      .ForMember(t => t.COMPANY_NAME, s => s.MapFrom(o => o.CustomerName))
                       .ForMember(t => t.PSI_TYPE, s => s.MapFrom(o => PSIEnum.PSIType.Purchase))
                       .ForMember(t => t.IS_EFFECTIVE, s => s.MapFrom(o => "1"))
                       ).CreateMapper();
                 case (nameof(WeightNoteCreateWeightNote), nameof(CustomerCar)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, CustomerCar>()
-                      .ForMember(t => t.CAR_NAME, s => s.MapFrom(o => o.CarNo))
+                      // .ForMember(t => t.CAR_NAME, s => s.MapFrom(o => o.CarNo))
                       .ForMember(t => t.IS_EFFECTIVE, s => s.MapFrom(o => "1"))
                       ).CreateMapper();
                 default:

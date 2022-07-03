@@ -118,7 +118,7 @@
                     curObj.ReSetCarNoItems(data);
                 });
 
-                let funcRs2 = curObj.CustomerContractAPI.GetContractsByCustomerUNID(selectedValue);
+                let funcRs2 = curObj.CustomerContractAPI.GetPurchaseContractsByCustomerUNID(selectedValue);
                 $.when(funcRs2).then(function (data) {
                     curObj.ReSetContractItems(data);
                     $(curObj.DomOfContractUNID).trigger("change");

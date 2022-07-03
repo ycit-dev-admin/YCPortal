@@ -154,7 +154,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">
-                            @($@"合約品項: {Model.ProductItems.FirstOrDefault(aa=> aa.Value==Model.ProductGUID.ToString()).Text}")
+                            @($@"合約品項: {Model.ProductItems.FirstOrDefault(aa=> aa.Value==Model.ProductGUID.ToString())?.Text}")
                             <span id="show-edit-EditProductGUID">
                             </span>
                         </label>

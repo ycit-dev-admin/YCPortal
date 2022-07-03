@@ -21,17 +21,20 @@ namespace PSI.APIControllers
     {
         private readonly ICustomerContractService _customerContractService;
         private readonly IPsiService _psiService;
+        private readonly ISalesWeightNoteService _iSalesWeightNoteService;
         private readonly ICustomerContractEnumService _iCustomerContractEnumService;
         private readonly API_CustomerContractsMapper _mapperHelper;
 
 
         public CustomerContractsController(ICustomerContractService customerContractService,
             IPsiService psiService,
-            ICustomerContractEnumService iCustomerContractEnumService)
+            ICustomerContractEnumService iCustomerContractEnumService,
+            ISalesWeightNoteService iSalesWeightNoteService)
         {
             _customerContractService = customerContractService;
             _psiService = psiService;
             _iCustomerContractEnumService = iCustomerContractEnumService;
+            _iSalesWeightNoteService = iSalesWeightNoteService;
             _mapperHelper = new API_CustomerContractsMapper();
         }
 
@@ -50,7 +53,7 @@ namespace PSI.APIControllers
         public FunctionResult<VE_CustomerContract> Get(Guid guid)
         {
             var funcRs = new FunctionResult<VE_CustomerContract>();
-            var customerContract = _customerContractService.GetCustomerContractsByContractUNID(guid);
+            var customerContract = _customerContractService.GetCustomerContract(guid);
             var veCustomerContractMapper = _mapperHelper.GetMapperOfGet<CustomerContract, VE_CustomerContract>();
             var veCustomerContract = veCustomerContractMapper.Map<VE_CustomerContract>(customerContract);
 
@@ -61,7 +64,7 @@ namespace PSI.APIControllers
             var contractType = (CustomerContractEnum.Types)customerContract.CONTRACT_TYPE;
             if (contractType == CustomerContractEnum.Types.Purchase)  // 進貨合約
             {
-                var pWeightNoteList = _psiService.GetPurchaseWeightNotesBy(contractLogRelDocUNIDs);
+                var pWeightNoteList = _psiService.GetPurchaseWeightNotes(contractLogRelDocUNIDs);
                 var sumWeightValues = pWeightNoteList.Sum(aa => aa.FULL_WEIGHT - aa.DEFECTIVE_WEIGHT).ToString();
                 if (long.TryParse(sumWeightValues, out var okVal))
                     veCustomerContract.NowActualWeight = okVal;
@@ -71,7 +74,13 @@ namespace PSI.APIControllers
             }
             else if (contractType == CustomerContractEnum.Types.Sale)  // 出貨合約
             {
-                //
+                //var sWeightNoteList = _iSalesWeightNoteService.GetSalesWeightNotes(contractLogRelDocUNIDs);
+                //var sumWeightValues = sWeightNoteList.Sum(aa => aa.OUTSIDE_SALES_WEIGHT - aa.OUTSIDE_DEFECTIVE_WEIGHT).ToString();
+                //if (long.TryParse(sumWeightValues, out var okVal))
+                //    veCustomerContract.NowActualWeight = okVal;
+
+                //veCustomerContract.NowActualPrice = sWeightNoteList.Sum(aa => aa.RECEIVED_PRICE);
+                //funcRs.ResultSuccess("查詢成功", veCustomerContract);
             }
             else
                 funcRs.ResultFailure("查無此筆資訊");
@@ -81,10 +90,22 @@ namespace PSI.APIControllers
 
         //  [HttpGet("{guid}")]
         // [HttpGet("{id}")]
-        [HttpGet("GetContractsByCustomerUNID/{unid}")]
-        public List<VE_CustomerContract> GetContractsByCustomerUNID(Guid unid)
+        [HttpGet("GetPurchaseContractsByCustomerUNID/{unid}")]
+        public List<VE_CustomerContract> GetPurchaseContractsByCustomerUNID(Guid unid)
         {
-            var customerContracts = _customerContractService.GetPurchaseContractsByCustomerUNID(unid, _iCustomerContractEnumService);
+            var customerContracts = _customerContractService.GetContracts(unid,
+                CustomerContractEnum.GetContracOngoStatus(),
+                CustomerContractEnum.GetPurchaseContractTypes());
+            var veCustomerContractMapper = _mapperHelper.GetMapperOfGetContractsByCustomerUNID<CustomerContract, VE_CustomerContract>();
+            var veCustomerContractList = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContracts);
+            return veCustomerContractList;
+        }
+        [HttpGet("GetSalesContractsByCustomerUNID/{unid}")]
+        public List<VE_CustomerContract> GetSalesContractsByCustomerUNID(Guid unid)
+        {
+            var customerContracts = _customerContractService.GetContracts(unid,
+                CustomerContractEnum.GetContracOngoStatus(),
+                CustomerContractEnum.GetSaleContractTypes());
             var veCustomerContractMapper = _mapperHelper.GetMapperOfGetContractsByCustomerUNID<CustomerContract, VE_CustomerContract>();
             var veCustomerContractList = veCustomerContractMapper.Map<List<VE_CustomerContract>>(customerContracts);
             return veCustomerContractList;

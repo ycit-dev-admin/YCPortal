@@ -10,7 +10,7 @@ namespace PSI.Service.IService
     public interface IProductItemService
     {
         IQueryable<ProductItem> GetPurchaseProductItems(IPSIEnumService iPSIEnumService);
-        IQueryable<ProductItem> GetSalesProductItems(IPSIEnumService iPSIEnumService);
+        IQueryable<ProductItem> GetSalesProductItems();
         IQueryable<ProductItem> GetAllProductItems();
         ProductItem GetProductItem(Guid productUNID);
         ProductItem GetProductItem(string productName);

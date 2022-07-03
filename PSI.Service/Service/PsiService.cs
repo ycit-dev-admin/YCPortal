@@ -41,25 +41,7 @@ namespace PSI.Service.Service
         }
 
 
-        public Dictionary<int, PSIWeightNoteEnum.PWeightNotesStatus> GetPurchaseWeightNotesStatus()
-        {
-            //var abc =
-            //    Enum.GetValues(typeof(PSIWeightNoteEnum.PWeightNotesStatus)).Cast<PSIWeightNoteEnum.PWeightNotesStatus>().Select
-            //        (r => new KeyValuePair<int, string>((int)r, "")).Select(aa=> aa.;
-
-            return Enum.GetValues(typeof(PSIWeightNoteEnum.PWeightNotesStatus))
-                       .Cast<PSIWeightNoteEnum.PWeightNotesStatus>()
-                       .ToDictionary(r => (int)r, r => r);
-
-            // return new[] { PSIWeightNoteEnum.PWeightNotesStatus.Ongo };
-
-            //var(CustomerContractEnum.Status)aa.CONTRACT_STATU;
-
-            //var abc = needStatus.Select(aa =>)
-            //return typeof(CustomerContractEnum.Types).GetAllFieldInfo()
-            //    .Where(fieldInfo => CustomerContractEnum.Types).Select(item =>
-            // item.GetRawConstantValue().ToString()).AsQueryable();
-        }
+       
 
         public Dictionary<string, PSIEnum.FacSite> GetFacSites()
         {
@@ -185,33 +167,21 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-        public PurchaseWeightNote GetPurchaseWeightNote(string docNo)
-        {
-            var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.DOC_NO == docNo).Result;
-            return result;
-        }
+      
         public PurchaseWeightNote GetPurchaseWeightNote(Guid unid)
         {
             var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.UNID == unid).Result;
             return result;
         }
 
-        public IEnumerable<PurchaseWeightNote> GetAllPurchaseWeightNotes()
-        {
-            var nowTime = DateTime.Now;
-            var curMonthDate = nowTime.AddDays(1 - nowTime.Day);
-            var qq = curMonthDate.Date;
-            var result = _purchaseWeightNoteRepository.GetAllAsync().Result
-                                                      .Where(aa => aa.EFFECTIVE_TIME.Date >= curMonthDate.Date);
-            return result;
-        }
+        
         public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime)
         {
             return _purchaseWeightNoteRepository.GetAllAsync().Result
                                                       .Where(aa => aa.EFFECTIVE_TIME.Date >= sTime &&
                                                       aa.EFFECTIVE_TIME.Date <= eTime).AsQueryable();
         }
-        public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotesBy(List<Guid> weightNoteUNIDList)
+        public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(List<Guid> weightNoteUNIDList)
         {
             return _purchaseWeightNoteRepository.GetAllAsync().Result
                                                       .Where(aa => weightNoteUNIDList.Contains(aa.UNID))
@@ -295,11 +265,7 @@ namespace PSI.Service.Service
                 .Where(aa => aa.CODE_GROUP == "PSI_TYPE").AsQueryable();
         }
 
-        public IQueryable<CodeTable> GetContractTypeItems()
-        {
-            return _codeTableRepository.GetAllAsync().Result
-                .Where(aa => aa.CODE_GROUP == "CONTRACT_TYPE").AsQueryable();
-        }
+
 
         public decimal GetWeightNotePrice(double fullWeight, double defectiveWeight, decimal unitPrice, bool hasTax)
         {

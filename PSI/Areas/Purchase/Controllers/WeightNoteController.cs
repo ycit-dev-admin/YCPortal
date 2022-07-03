@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Areas.Purchase.Mappers;
 using PSI.Areas.Purchase.Models.PageModels;
-using PSI.Areas.Sales.Mappers;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Extensions;
@@ -245,7 +243,7 @@ namespace PSI.Areas.Purchase.Controllers
 
 
 
-            
+
             // Step Result
             if (!ValidPageModel(pageModel).Success ||
                 !InsertToDB(pageModel).Success)
@@ -312,7 +310,7 @@ namespace PSI.Areas.Purchase.Controllers
             var pageModel = new Page_Purchase_WeightNoteList
             {
                 VE_PurchaseWeightNoteLs = vePurchaseWeightNoteMapper.Map<List<VE_PurchaseWeightNote>>(curMonthPWeightNotes),
-                CustomerInfoItems = _iCustomerInfoService.GetSalesCustomerInfo(_iPSIEnumService)
+                CustomerInfoItems = _iCustomerInfoService.GetSalesCustomerInfo()
                 .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
                 nameof(CustomerInfo.CUSTOMER_GUID)),
 
@@ -388,7 +386,7 @@ namespace PSI.Areas.Purchase.Controllers
             pageModel.CustomerContractItems = string.IsNullOrEmpty(pageModel.CustomerUNID) ||
                                               pageModel.CustomerUNID == "0" ?
                                                 new List<SelectListItem>() :
-                                                _customerContractService.GetPurchaseCustomerContracts(_iCustomerContractEnumService)
+                                                _customerContractService.GetPurchaseCustomerContracts()
                                                 .ToPageSelectList(nameof(CustomerContract.CONTRACT_NAME),
                                                                   nameof(CustomerContract.CONTRACT_GUID),
                                                                   pageModel.ContractUNID.ToString());

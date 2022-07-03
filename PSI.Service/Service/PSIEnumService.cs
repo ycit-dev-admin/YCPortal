@@ -25,16 +25,7 @@ namespace PSI.Service.Service
             _productItemRepository = _unitOfwork.ProductItemRepository;
         }
 
-        public IQueryable<PSIEnum.PSIType> GetSalesPsiTypes()
-        {
-            var needsPsiTypes = new[] { PSIEnum.PSIType.Sale,
-                PSIEnum.PSIType.Both,
-                PSIEnum.PSIType.Inside};
-
-            return Enum.GetValues(typeof(PSIEnum.PSIType))
-                       .Cast<PSIEnum.PSIType>()
-                       .Where(aa => needsPsiTypes.Contains(aa)).AsQueryable();
-        }
+        
         public IQueryable<PSIEnum.PSIType> GetPurchasePsiTypes()
         {
             return new[] { PSIEnum.PSIType.Purchase,

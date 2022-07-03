@@ -1,5 +1,4 @@
 using System;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Infrastructure.DBContext;
@@ -16,7 +14,10 @@ using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Repositorys;
 using PSI.Core.UnitOfWorks;
-using PSI.Models.VEModels;
+using PSI.Mappgins;
+using PSI.Mappgins.Interface;
+using PSI.Service.Helper;
+using PSI.Service.IHelper;
 using PSI.Service.IService;
 using PSI.Service.Service;
 
@@ -66,9 +67,10 @@ namespace PSI
             services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();
             services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
             services.AddScoped<IGenericRepository<SalesWeightNote>, GenericRepository<SalesWeightNote>>();
+            services.AddScoped<IGenericRepository<SalesWeightNoteResultPrice>, GenericRepository<SalesWeightNoteResultPrice>>();
             services.AddScoped<IGenericRepository<SalesIngredient>, GenericRepository<SalesIngredient>>();
 
-
+            // IService
             services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
@@ -79,6 +81,16 @@ namespace PSI
             services.AddScoped<ICustomerContractEnumService, CustomerContractEnumService>();
             services.AddScoped<ICarNoService, CarNoService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ISalesWeightNoteService, SalesWeightNoteService>();
+
+            // IHelper
+            services.AddScoped<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
+
+            // IMapper
+            services.AddScoped<IMapperOfSalesWeightNote, MapperOfSalesWeightNote>();
+            services.AddScoped<IMapperOfSalesIngredient, MapperOfSalesIngredient>();
+            services.AddScoped<IMapperOfSalesWeightNoteResultPrice, MapperOfSalesWeightNoteResultPrice>();
+
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile
             services.AddScoped<DbContext, MyContext>();

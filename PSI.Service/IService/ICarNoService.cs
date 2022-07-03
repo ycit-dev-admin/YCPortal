@@ -14,7 +14,7 @@ namespace PSI.Service.IService
         CustomerCar GetCustomerCarByUNID(Guid carNoUNID);
 
         IQueryable<CustomerCar> GetCustomerCarByCustomerUNID(Guid customerGUID);
-        IQueryable<CustomerCar> GetSalesOfCarInfo(IPSIEnumService iPSIEnumService);
+        IQueryable<CustomerCar> GetSalesOfCarInfo();
         CustomerCar GetCustomerCar(string carNo);
 
         IQueryable<CustomerCar> GetAllCustomerCars();

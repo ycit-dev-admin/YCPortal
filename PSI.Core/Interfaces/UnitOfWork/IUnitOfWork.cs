@@ -14,7 +14,7 @@ namespace PSI.Core.Interfaces.UnitOfWork
         /// <summary>
         ///
         /// </summary>
-        IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; }     
+        IGenericRepository<PurchaseWeightNote> PurchaseWeightNoteRepository { get; }
         IGenericRepository<CustomerInfo> CustomerInfoRepository { get; }
         IGenericRepository<CustomerContract> CustomerContractRepository { get; }
         IGenericRepository<CustomerContractLog> CustomerContractLogRepository { get; }
@@ -25,6 +25,8 @@ namespace PSI.Core.Interfaces.UnitOfWork
         IGenericRepository<SalesWeightNote> SalesWeightNoteRepository { get; }
         IGenericRepository<SalesIngredient> SalesIngredientRepository { get; }
         IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; }
+        IGenericRepository<SalesWeightNoteResultPrice> SalesWeightNoteResultPriceRepository { get; }
+
 
         /// <summary>
         /// DB Context

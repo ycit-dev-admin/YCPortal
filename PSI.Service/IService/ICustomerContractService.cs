@@ -15,13 +15,16 @@ namespace PSI.Service.IService
         //public Dictionary<int, CustomerContractEnum.Types> GetCustomerContracTypes();
 
         // Customer Contract
-        CustomerContract GetCustomerContractsByContractUNID(Guid contractUNID);
         IQueryable<CustomerContract> GetEffectiveCustomerContracts();
-        IQueryable<CustomerContract> GetPurchaseCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService);
-        IQueryable<CustomerContract> GetSalesCustomerContracts(ICustomerContractEnumService iCustomerContractEnumService);
-        public IQueryable<CustomerContract> GetPurchaseContractsByCustomerUNID(Guid cutsomerUNID, ICustomerContractEnumService iCustomerContractEnumService);
+        IQueryable<CustomerContract> GetPurchaseCustomerContracts();
+        IQueryable<CustomerContract> GetSalesCustomerContracts();
+        public IQueryable<CustomerContract> GetContracts(Guid cutsomerUNID);
+        public IQueryable<CustomerContract> GetContracts(Guid cutsomerUNID, IQueryable<CustomerContractEnum.Status> contractStatus);
+        public IQueryable<CustomerContract> GetContracts(Guid cutsomerUNID,
+            IQueryable<CustomerContractEnum.Status> contractStatus,
+            IQueryable<CustomerContractEnum.Types> contractTypes);
         FunctionResult<CustomerContract> CreateCustomerContract(CustomerContract customerContract, AppUser operUser);
-        CustomerContract GetCustomerContract(Guid unid);
+        CustomerContract GetCustomerContract(Guid contractUNID);
         IQueryable<CustomerContract> GetContractsByCustomerUNID(Guid customerUNID);
         FunctionResult<CustomerContract> UpdateCustomerContract(CustomerContract customerContract, AppUser appUser);
         FunctionResult<CustomerContract> UpdateCustomerContractStatus(CustomerContract customerContract, CustomerContractEnum.Status contractStatus, AppUser appUser);

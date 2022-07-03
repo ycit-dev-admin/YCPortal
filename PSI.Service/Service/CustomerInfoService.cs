@@ -38,17 +38,16 @@ namespace PSI.Service.Service
         public IQueryable<CustomerInfo> GetPurchaseCustomerInfo(IPSIEnumService iPSIEnumService)
         {
             var purchaseTypes = iPSIEnumService.GetPurchasePsiTypes().Select(aa => (int)aa);
-            var salesTypes = iPSIEnumService.GetSalesPsiTypes()
-                .Select(aa => (int)aa);
+            var salesTypes = PSIEnum.GetSalesPsiTypes().Select(aa => (int)aa);
 
             return _customerInfoRepository.GetAllAsync().Result.
                    Where(aa => aa.IS_EFFECTIVE == "1" &&
                    purchaseTypes.Contains(aa.PSI_TYPE.Value)).AsQueryable();
         }
 
-        public IQueryable<CustomerInfo> GetSalesCustomerInfo(IPSIEnumService iPSIEnumService)
+        public IQueryable<CustomerInfo> GetSalesCustomerInfo()
         {
-            var salesTypes = iPSIEnumService.GetSalesPsiTypes()
+            var salesTypes = PSIEnum.GetSalesPsiTypes()
                 .Select(aa => (int)aa);
 
             return _customerInfoRepository.GetAllAsync().Result.

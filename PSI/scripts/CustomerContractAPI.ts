@@ -21,8 +21,8 @@
 
     }
 
-    public GetContractsByCustomerUNID(argUNID: string): JQuery.jqXHR {
-        const apiUrl = `${this.BaseUrl}/api/CustomerContracts/GetContractsByCustomerUNID/${argUNID}`;
+    public GetPurchaseContractsByCustomerUNID(argUNID: string): JQuery.jqXHR {
+        const apiUrl = `${this.BaseUrl}/api/CustomerContracts/GetPurchaseContractsByCustomerUNID/${argUNID}`;
 
 
         //const apiUrl = `${this.BaseUrl}/api/CustomerCars`;
@@ -32,7 +32,17 @@
         return $.get(apiUrl);
 
     }
+    public GetSalesContractsByCustomerUNID(argUNID: string): JQuery.jqXHR {
+        const apiUrl = `${this.BaseUrl}/api/CustomerContracts/GetSalesContractsByCustomerUNID/${argUNID}`;
 
+
+        //const apiUrl = `${this.BaseUrl}/api/CustomerCars`;
+        //return $.get(apiUrl, { customerUNID: encodeURIComponent(customerUNID) });
+
+        //return $.get(apiUrl, { unid: encodeURIComponent(argUNID) });
+        return $.get(apiUrl);
+
+    }
 
 
 

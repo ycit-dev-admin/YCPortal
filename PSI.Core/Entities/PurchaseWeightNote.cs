@@ -11,7 +11,7 @@ namespace PSI.Core.Entities
         public string CAR_NO { get; set; }
         public double FULL_WEIGHT { get; set; }
         public DateTime FULL_WEIGHT_TIME { get; set; }
-        public string SCALE_NO { get; set; }
+        public int? SCALE_NO { get; set; }
         public string INPUT_TYPE { get; set; }  // 判斷人工 或 影像辨識 開單  1:人工  2:影像辨識
         public string FAC_NO { get; set; }
         public double DEFECTIVE_WEIGHT { get; set; }

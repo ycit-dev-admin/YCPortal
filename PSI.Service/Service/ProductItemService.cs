@@ -1,5 +1,6 @@
 ﻿using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Enums;
 using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Core.Interfaces.Repository;
@@ -35,9 +36,9 @@ namespace PSI.Service.Service
                                       aa.IS_EFFECTIVE == "1").AsQueryable();
         }
 
-        public IQueryable<ProductItem> GetSalesProductItems(IPSIEnumService iPSIEnumService)
+        public IQueryable<ProductItem> GetSalesProductItems()
         {
-            var needPsiTypes = iPSIEnumService.GetSalesPsiTypes().Select(aa => (int)aa);
+            var needPsiTypes = PSIEnum.GetSalesPsiTypes().Select(aa => (int)aa);
             return _productItemRepository.GetAllAsync().Result.
                           Where(aa => needPsiTypes.Any(bb => bb == aa.PSI_TYPE) &&
                                       aa.IS_EFFECTIVE == "1").AsQueryable();

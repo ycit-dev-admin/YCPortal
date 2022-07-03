@@ -18,7 +18,7 @@ namespace PSI.Service.IService
         CustomerInfo GetCustomerInfoByCompanyName(string customerName);
         IQueryable<CustomerInfo> GetCustomerInfos();
         IQueryable<CustomerInfo> GetPurchaseCustomerInfo(IPSIEnumService iPSIEnumService);
-        IQueryable<CustomerInfo> GetSalesCustomerInfo(IPSIEnumService iPSIEnumService);
+        IQueryable<CustomerInfo> GetSalesCustomerInfo();
 
     }
 }

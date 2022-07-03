@@ -92,13 +92,15 @@ namespace PSI.Service.Service
         public IQueryable<CodeTable> GetPayTypeItems()
         {
             return _codeTableRepository.GetAllAsync().Result
-                .Where(aa => aa.CODE_GROUP == "PAY_TYPE").AsQueryable();
+                .Where(aa => aa.CODE_GROUP == "PAY_TYPE" &&
+                             aa.IS_EFFECTIVE == "1").AsQueryable();
         }
 
-        public IQueryable<CodeTable> GetPsiTypeItems()
+        public IQueryable<CodeTable> GetReceivedTypeItems()
         {
             return _codeTableRepository.GetAllAsync().Result
-                .Where(aa => aa.CODE_GROUP == "PSI_TYPE").AsQueryable();
+                .Where(aa => aa.CODE_GROUP == "RECEIVED_TYPE" &&
+                             aa.IS_EFFECTIVE == "1").AsQueryable();
         }
 
 

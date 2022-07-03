@@ -70,22 +70,22 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.VE_PurchaseWeightNoteLs)
+        @foreach (var item in Model.PE_SalesWeightNoteData)
         {
             <tr>
-                <td>@item.FullWeightTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
-                <td>@item.DocNo</td>
-                <td>@item.CustomerName</td>
-                <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeightNoteUNID == item.Unid).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>
-                <td>@item.FullWeight.ToString("#,0")</td>
-                <td>@item.DefectiveWeight.ToString("#,0")</td>
-                <td>@((item.FullWeight- item.DefectiveWeight).ToString("#,0"))</td>
-                <td>@item.UnitPrice</td>
-                <td>@item.ActualPrice.Value.ToString("#,0")</td>
-                <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.PayType)?.Text</td>
-                <td>@item.PayTime?.ToString("yyyy-MM-dd")</td>
+                <td>@item.LEAVE_WEIGHT_TIME?.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                <td>@item.DOC_NO</td>
+                <td>@item.CUSTOMER_UNID</td>
+                <td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeightNoteUNID == item.UNID.ToString()).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>
+                <td>@item.ESTIMATE_SALES_WEIGHT.ToString("#,0")</td>
+                <td>@item.ESTIMATE_DEFECTIVE_WEIGHT.ToString("#,0")</td>
+                <td>@((item.ESTIMATE_SALES_WEIGHT - item.ESTIMATE_DEFECTIVE_WEIGHT).ToString("#,0"))</td>
+                <td>@item.ESTIMATE_UNIT_PRICE</td>
+                <td>123</td>
+                <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.ESTIMATE_RECEIVED_TYPE.ToString())?.Text</td>
+                <td>@item.ESTIMATE_RECEIVED_TIME?.ToString("yyyy-MM-dd")</td>
                 <td>
-                    <a asp-action="EditWeightNote" asp-route-unid="@item.Unid" class="btn btn-primary">細項</a>
+                    <a asp-action="EditWeightNote" asp-route-unid="@item.UNID" class="btn btn-primary">細項</a>
                     @*<a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>細項</a>*@
                     @*<a asp-controller="WeightNote" asp-action="EditWeightNote" asp-route-docNo="@item.DocNo" class="btn btn-primary">細項2</a>*@
                     @*<button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>*@

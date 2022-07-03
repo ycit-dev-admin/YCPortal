@@ -60,9 +60,6 @@ namespace PSI.Service.Service
             return Enum.GetValues(typeof(CustomerContractEnum.Status))
                        .Cast<CustomerContractEnum.Status>().AsQueryable();
         }
-        public IQueryable<CustomerContractEnum.Status> GetContracOngoStatus()
-        {
-            return new[] { CustomerContractEnum.Status.Ongoing }.AsQueryable();
-        }
+       
     }
 }

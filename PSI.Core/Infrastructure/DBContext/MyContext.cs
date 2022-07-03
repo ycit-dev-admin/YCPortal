@@ -26,6 +26,7 @@ namespace PSI.Core.Infrastructure.DBContext
         public DbSet<SeqTypeConfig> SeqTypeConfigs { get; set; }
         public DbSet<SalesIngredient> SalesIngredients { get; set; }
         public DbSet<SalesWeightNote> SalesWeightNotes { get; set; }
+        public DbSet<SalesWeightNoteResultPrice> SalesWeightNoteResultPrices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
