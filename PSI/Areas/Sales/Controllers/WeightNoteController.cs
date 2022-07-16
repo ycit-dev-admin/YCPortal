@@ -47,11 +47,14 @@ namespace PSI.Areas.Sales.Controllers
         private readonly IProductItemService _productItemService;
         private readonly ICarNoService _iCarNoService;
         private readonly ISalesIngredientService _iSalesIngredientService;
-        private readonly IMapperOfPE_SalesWeightNote _iMapperOfPE_SalesWeightNote;
         // Mapper
         private readonly IMapperOfSalesWeightNote _iMapperOfSalesWeightNote;
         private readonly IMapperOfSalesIngredient _iMapperOfSalesIngredient;
         private readonly IMapperOfSalesWeightNoteResultPrice _iMapperOfSalesWeightNoteResultPrice;
+        private readonly IPESalesWeightNoteMapper _iPESalesWeightNoteMapper;
+        private readonly IMapperOfPE_SalesIngredient _iMapperOfPE_SalesIngredient;
+        private readonly IPageModelMapper _iPageModelMapper;
+
         // Helper
         private readonly ISalesPriceCaculateHelper _iSalesPriceCaculateHelper;
 
@@ -77,7 +80,9 @@ namespace PSI.Areas.Sales.Controllers
                                     IMapperOfSalesWeightNoteResultPrice iMapperOfSalesWeightNoteResultPrice,
                                     IHttpContextAccessor httpContextAccessor,
                                     ISalesIngredientService iSalesIngredientService,
-                                    IMapperOfPE_SalesWeightNote iMapperOfPE_SalesWeightNote,
+                                    IPESalesWeightNoteMapper iPESalesWeightNoteMapper,
+                                    IMapperOfPE_SalesIngredient iMapperOfPE_SalesIngredient,
+                                    IPageModelMapper iPageModelMapper,
                                     UserManager<AppUser> userManager)
         {
             // Other
@@ -92,11 +97,13 @@ namespace PSI.Areas.Sales.Controllers
             _productItemService = productItemService;
             _customerInfoService = customerInfoService;
             _iCarNoService = iCarNoService;
-            _iMapperOfPE_SalesWeightNote = iMapperOfPE_SalesWeightNote;
+            _iPESalesWeightNoteMapper = iPESalesWeightNoteMapper;
             // Mapper
             _iMapperOfSalesWeightNoteResultPrice = iMapperOfSalesWeightNoteResultPrice;
             _iMapperOfSalesIngredient = iMapperOfSalesIngredient;
             _iMapperOfSalesWeightNote = iMapperOfSalesWeightNote;
+            _iMapperOfPE_SalesIngredient = iMapperOfPE_SalesIngredient;
+            _iPageModelMapper = iPageModelMapper;
 
             // Helper
             _iSalesPriceCaculateHelper = iSalesPriceCaculateHelper;
@@ -136,52 +143,46 @@ namespace PSI.Areas.Sales.Controllers
         // [RuleSetForClientSideMessages("Skip")]
         public IActionResult EditWeightNote(string unid)
         {
-            // Action variables
-            var errMsg = "";
+            // 或許編輯頁面和回血頁面的顯示方式應該要不同
+            return RedirectToAction(nameof(WeightNoteController.QueryList));
+        }
 
-            // Step Functions 
-            #region -- GetPageModel --
-            FunctionResult<PageWeightNoteEditWeightNote> GetPageModel()
-            {
-                var purchaseWeightNote = _psiService.GetPurchaseWeightNote(new Guid(unid));
-                var pModelMapperCfg = _mapperHelper.GetPageModelMapper<PurchaseWeightNote, PageWeightNoteEditWeightNote>();
-                var pageModel = pModelMapperCfg.Map<PageWeightNoteEditWeightNote>(purchaseWeightNote);
+        [HttpGet]
+        [Authorize()]
+        // [RuleSetForClientSideMessages("Skip")]
+        public IActionResult UpdateActualData(string unid)
+        {
+            // 用Unid去查出該筆的SalesWeightNote
+            var salesWeightNote = _iSalesWeightNoteService.GetSalesWeightNote(new Guid(unid));
+            // Mapper成關聯 peModel
+            var peSalesWeightNote = _iPESalesWeightNoteMapper.GetUpdateActualDataMapper<SalesWeightNote>()
+                .Map<PE_SalesWeightNote>(salesWeightNote);
 
-                /* 待改善 */
-                pageModel.PayTypeName = _psiService.GetPayTypeItems()
-             .FirstOrDefault(item => item.CODE_VALUE == purchaseWeightNote.PAY_TYPE).CODE_TEXT;
-
-                var purchaseIngredients = _psiService.GetPurchaseIngredients(purchaseWeightNote.UNID);
-                pageModel.IngredientInfos = purchaseIngredients.Select(item => $@"{item.ITEM_NAME}_{item.ITEM_PERCENT}%").ToArray();
-
-
-
-
-
-                pageModel.MainIngredientInfo = string.Format("{0}，共{1}項，合計{2}",
-                    purchaseIngredients.OrderByDescending(item => item.ITEM_PERCENT).FirstOrDefault().ITEM_NAME,
-                    purchaseIngredients.Count(),
-                    purchaseIngredients.Sum(aa => aa.ITEM_PERCENT)
-                    );
-
-                pageModel.MainIngredientInfo = $@"{purchaseIngredients.OrderByDescending(item => item.ITEM_PERCENT).FirstOrDefault().ITEM_NAME}，
-                                              共{  purchaseIngredients.Count()}項，
-                                              合計{ purchaseIngredients.Sum(aa => aa.ITEM_PERCENT)}%";
-                /* 待改善 */
+            var pageModel = _iPageModelMapper.GetModel<WeightNoteUpdateActualData>(salesWeightNote);
+            //var pModel = _iPageModelMapper.MapTo<SalesWeightNote, WeightNoteUpdateActualData>(salesWeightNote);
+            //var pModel1 = _iPageModelMapper.MapTo<WeightNoteUpdateActualData>(salesWeightNote);
+            //var pModel2 = _iPageModelMapper.GetMapper<SalesWeightNote, WeightNoteUpdateActualData>()
+            //    .Map<WeightNoteUpdateActualData>(salesWeightNote);
+            //var pModel3 = _iPageModelMapper.GetMapper<SalesWeightNote>().Map<WeightNoteUpdateActualData>(salesWeightNote);
+            //var abc2 = _iPESalesWeightNoteMapper.MapTo(abc);
+            //var abc3 = _iPESalesWeightNoteMapper.GetMapper<SalesWeightNote, WeightNoteUpdateActualData>()
+            //            .Map<WeightNoteUpdateActualData>(salesWeightNote);
+            //var abc4 = _iPESalesWeightNoteMapper.MapTo<SalesWeightNote, WeightNoteUpdateActualData>(salesWeightNote);
 
 
 
-                var funRs = new FunctionResult<PageWeightNoteEditWeightNote>();
-                funRs.ResultSuccess("", pageModel);
-                return funRs;
-            }
-            #endregion
+            // Set to pageModel
+            //var pageModel = new WeightNoteUpdateActualData
+            //{
+            //    PESalesWeightNote = peSalesWeightNote
+            //};
 
 
-            // Step Result
 
-            return View(GetPageModel().ResultValue);
 
+            // 或許編輯頁面和回寫頁面的顯示方式應該要不同
+            //return View(GetUpdateActualDataPModel(pageModel));
+            return View(pageModel);
         }
 
         [HttpPost]
@@ -272,7 +273,7 @@ namespace PSI.Areas.Sales.Controllers
 
 
                 // Create 進貨磅單  Logic
-                var funcRs = _iSalesWeightNoteService.SalesWeightNoteCreateWeightNote(argSalesWeightNote,
+                var funcRs = _iSalesWeightNoteService.CreateSalesWeightNote(argSalesWeightNote,
                               argSalesIngredientList,
                               argSalesWeightNoteResultPrice,
                               _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale), // 單號 (驗證完後再給)
@@ -318,24 +319,27 @@ namespace PSI.Areas.Sales.Controllers
 
             var curUser = _userManager.GetUserAsync(User).Result;
 
-            var curMonthWeightNotes = _iSalesWeightNoteService.SalesWeightNoteQueryList();
+            /* 這段感覺可以優化 改成相依Helper之類 */
+            var curMonthWeightNotes = _iSalesWeightNoteService.GetOngoSalesWeightDocs();
             if (curUser.AUTHORITY_LEVEL % 10 > 0 &&
                 !string.IsNullOrEmpty(facSite) &&
                 facSite != "all")
                 curMonthWeightNotes = curMonthWeightNotes.Where(aa => aa.DOC_NO.StartsWith(facSite));
             else if (curUser.AUTHORITY_LEVEL % 10 == 0)
                 curMonthWeightNotes = curMonthWeightNotes.Where(aa => aa.DOC_NO.StartsWith(curUser.FAC_SITE));
+            /* 這段感覺可以優化 改成相依Helper之類 end*/
 
-
-            var ingredientLs = _iSalesIngredientService.SalesWeightNoteQueryList(
-                curMonthWeightNotes.Select(aa => aa.UNID).ToList());
-
-            var peSalesWeightNotes = _iMapperOfPE_SalesWeightNote.SalesWeightNoteQueryList<SalesWeightNote>()
+            var peSalesWeightNotes = _iPESalesWeightNoteMapper.SalesWeightNoteQueryList<SalesWeightNote>()
                                   .Map<List<PE_SalesWeightNote>>(curMonthWeightNotes);
+
+            var ingredientLs = _iSalesIngredientService.GetSalesIngredients(
+                curMonthWeightNotes.Select(aa => aa.UNID).ToList());
+            var peSalesIngrediens = _iMapperOfPE_SalesIngredient.SalesWeightNoteQueryList<SalesIngredient>()
+                                            .Map<List<PE_SalesIngredient>>(ingredientLs);
 
 
             //var vePurchaseWeightNoteMapper = _mapperHelper.GetMapperOfWeightNoteList<PurchaseWeightNote, VE_PurchaseWeightNote>();
-            var vePurchaseIngredientMapper = _mapperHelper.GetMapperOfWeightNoteList<PurchaseIngredient, VE_PurchaseIngredient>();
+            //var vePurchaseIngredientMapper = _mapperHelper.GetMapperOfWeightNoteList<PurchaseIngredient, VE_PurchaseIngredient>();
             var pageModel = new WeightNoteQueryList
             {
                 PE_SalesWeightNoteData = peSalesWeightNotes,
@@ -343,7 +347,7 @@ namespace PSI.Areas.Sales.Controllers
                 // ProductItemItems = _productItemService.GetSalesProductItems().ToPageSelectList(nameof(ProductItem.PRODUCT_NAME), nameof(ProductItem.PRODUCT_UNID)),
                 PayTypeItems = _codeTableService.GetPayTypeItems().ToPageSelectList(
                     nameof(CodeTable.CODE_TEXT), nameof(CodeTable.CODE_VALUE)),
-                PIngredientLs = vePurchaseIngredientMapper.Map<List<VE_PurchaseIngredient>>(ingredientLs),
+                PESalesIngredients = peSalesIngrediens,
                 FacSiteItems = _psiService.GetFacSites()
                 .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key"),
                 UserAuthorityLevel = curUser.AUTHORITY_LEVEL
@@ -390,24 +394,40 @@ namespace PSI.Areas.Sales.Controllers
                   pageModel.ContractUNID.ToString());
             return pageModel;
             #endregion
-
-
         }
 
         [NonAction]
-        public IMapper MapperForCreateWeightNote<T1, T2>()
+        public WeightNoteUpdateActualData GetUpdateActualDataPModel(WeightNoteUpdateActualData pageModel = null)
         {
-            switch (typeof(T1).Name, typeof(T2).Name)
-            {
-                case (nameof(CustomerCar), nameof(VE_CustomerCar)):
-                    return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<CustomerCar, VE_CustomerCar>()
-                      // .ForMember(t => t.InsideCarName, s => s.MapFrom(o => o.PurchaseWeightNoteUNID))                      
-                      ).CreateMapper();
-                default:
-                    return null;
-            }
+            /* Function variables */
+
+            pageModel ??= new WeightNoteUpdateActualData();
+
+            //pageModel.CarNoItems = _iCarNoService.GetAllCustomerCars()
+            pageModel.CustomerInfoItems = _customerInfoService.GetSalesCustomerInfo()
+                .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+                nameof(CustomerInfo.CUSTOMER_GUID),
+                pageModel.CustomerUNID.ToString());
+            pageModel.CarNoItems = _iCarNoService.GetSalesOfCarInfo()
+                .ToPageSelectList(nameof(CustomerCar.CAR_NAME),
+                nameof(CustomerCar.CAR_GUID),
+                pageModel.CarNoUNID.ToString());
+            pageModel.ProductItemItems = _productItemService.GetSalesProductItems()
+                .ToPageSelectList(nameof(ProductItem.PRODUCT_NAME),
+                nameof(ProductItem.PRODUCT_UNID));
+            pageModel.ReceivedTypeItems = _codeTableService.GetReceivedTypeItems().ToPageSelectList(
+                    nameof(CodeTable.CODE_TEXT),
+                    nameof(CodeTable.CODE_VALUE));
+            pageModel.CustomerContractItems = pageModel.CustomerUNID == Guid.Empty ?
+                                  new List<SelectListItem>() :
+                  _customerContractService.GetSalesCustomerContracts().ToPageSelectList(
+                  nameof(CustomerContract.CONTRACT_NAME),
+                  nameof(CustomerContract.CONTRACT_GUID),
+                  pageModel.ContractUNID.ToString());
+            return pageModel;
         }
+
+
 
 
     }

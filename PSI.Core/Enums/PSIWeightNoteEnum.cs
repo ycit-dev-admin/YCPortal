@@ -24,12 +24,10 @@ namespace PSI.Core.Enums
 
         public enum SWeightNotesStatus // 出貨磅單狀態
         {
-            [Description("預估階段")]
+            [Description("預估完成")]
             Estimate = 0,
-            [Description("回寫階段")]
+            [Description("回寫完成")]
             Actual = 1,
-            [Description("已完成")]
-            Completed = 2,
             [Description("單據異常")]
             ContractLogError = 90
         }
@@ -37,8 +35,7 @@ namespace PSI.Core.Enums
 
         public static IQueryable<PSIWeightNoteEnum.SWeightNotesStatus> GetOngoSalesWeightDocStatus()
         {
-            return new[] { PSIWeightNoteEnum.SWeightNotesStatus.Estimate,
-                PSIWeightNoteEnum.SWeightNotesStatus.Actual}.AsQueryable();
+            return new[] { PSIWeightNoteEnum.SWeightNotesStatus.Estimate }.AsQueryable();
         }
     }
 }

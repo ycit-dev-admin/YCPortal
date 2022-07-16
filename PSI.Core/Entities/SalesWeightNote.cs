@@ -10,7 +10,7 @@ namespace PSI.Core.Entities
         public string DOC_NO { get; set; }
         public Guid CUSTOMER_UNID { get; set; }
         public Guid CARNO_UNID { get; set; }
-        public DateTime? LEAVE_WEIGHT_TIME { get; set; } // 預估收款時間
+        public DateTime? LEAVE_WEIGHT_TIME { get; set; } // 磅單出貨時間
         public int? SCALE_NO { get; set; }
 
         public Guid EXCAVATOR_OPERATOR_UNID { get; set; }  // 怪手司機UNID

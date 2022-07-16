@@ -82,14 +82,19 @@ namespace PSI
             services.AddScoped<ICarNoService, CarNoService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISalesWeightNoteService, SalesWeightNoteService>();
+            services.AddScoped<ISalesIngredientService, SalesIngredientService>();
+            services.AddScoped<ISalesWeightNoteResultPriceService, SalesWeightNoteResultPriceService>();
 
             // IHelper
             services.AddScoped<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
 
             // IMapper
+            services.AddScoped<IPageModelMapper, PageModelMapper>();
             services.AddScoped<IMapperOfSalesWeightNote, MapperOfSalesWeightNote>();
             services.AddScoped<IMapperOfSalesIngredient, MapperOfSalesIngredient>();
             services.AddScoped<IMapperOfSalesWeightNoteResultPrice, MapperOfSalesWeightNoteResultPrice>();
+            services.AddScoped<IPESalesWeightNoteMapper, MapperOfPE_SalesWeightNote>();
+            services.AddScoped<IMapperOfPE_SalesIngredient, MapperOfPE_SalesIngredient>();
 
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile

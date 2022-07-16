@@ -5,13 +5,13 @@ using PSI.Models.PEModels;
 
 namespace PSI.Areas.Sales.Models.PageModels
 {
-    public class WeightNoteCreateWeightNote
+    public class WeightNoteUpdateActualData
     {
         /* For Post */
         public Guid CustomerUNID { get; set; }
         public Guid CarNoUNID { get; set; }
         public Guid ExcavatorOperUNID { get; set; }
-        public DateTime? LeaveWeightTime { get; set; }
+     
         public Guid? ContractUNID { get; set; }
         public Guid ProductItemUNID { get; set; }   // 廠內磅單主要認列品項
         public List<PE_SalesIngredient> PESalesIngredientList { get; set; }
@@ -29,11 +29,15 @@ namespace PSI.Areas.Sales.Models.PageModels
 
 
         /* For Page */
-        public List<SelectListItem> CustomerInfoItems { set; get; }
-        public List<SelectListItem> CarNoItems { set; get; }
-        public List<SelectListItem> ReceivedTypeItems { set; get; }
-        public List<SelectListItem> ProductItemItems { set; get; }
-        public List<SelectListItem> CustomerContractItems { set; get; }
+        public string CustomerName { get; set; }
+        public string CarNo { get; set; }
+        public DateTime LeaveWeightTime { get; set; }
+        public PE_SalesWeightNote PESalesWeightNote { get; set; }
+        public List<SelectListItem> CustomerInfoItems { get; set; }
+        public List<SelectListItem> CarNoItems { get; set; }
+        public List<SelectListItem> ReceivedTypeItems { get; set; }
+        public List<SelectListItem> ProductItemItems { get; set; }
+        public List<SelectListItem> CustomerContractItems { get; set; }
 
 
 

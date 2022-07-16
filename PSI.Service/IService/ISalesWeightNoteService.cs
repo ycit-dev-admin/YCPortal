@@ -10,9 +10,10 @@ namespace PSI.Service.IService
     public interface ISalesWeightNoteService
     {
         IQueryable<SalesWeightNote> GetSalesWeightNotes(List<Guid> unids);
-        IQueryable<SalesWeightNote> SalesWeightNoteQueryList();
+        IQueryable<SalesWeightNote> GetOngoSalesWeightDocs();
+        SalesWeightNote GetSalesWeightNote(Guid unid);
 
-        FunctionResult<SalesWeightNote> SalesWeightNoteCreateWeightNote(SalesWeightNote salesWeightNote,
+        FunctionResult<SalesWeightNote> CreateSalesWeightNote(SalesWeightNote salesWeightNote,
          List<SalesIngredient> purchaseIngredientList,
          SalesWeightNoteResultPrice salesWeightNoteResultPrice,
          string docNo,

@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PSI.Core.Entities;
+using PSI.Models.PEModels;
 using PSI.Models.VEModels;
 using PSI.Service.IService;
 

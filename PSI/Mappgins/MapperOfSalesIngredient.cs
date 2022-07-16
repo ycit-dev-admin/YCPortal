@@ -7,21 +7,21 @@ using PSI.Core.Enums;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Mappgins.Interface;
-using PSI.Models.VEModels;
+using PSI.Models.PEModels;
 using PSI.Service.IService;
 
 namespace PSI.Mappgins
 {
     public class MapperOfSalesIngredient : IMapperOfSalesIngredient
     {
-        private readonly IPsiService _iPsiService;
+     
 
-        public MapperOfSalesIngredient(IPsiService iPsiService)
+        public MapperOfSalesIngredient()
         {
-            _iPsiService = iPsiService;
+        
         }
 
-        public IMapper SalesWeightNoteCreate<T>() where T : PE_SalesIngredient
+        public IMapper SalesWeightNoteCreate<T>() 
         {
 
             return new MapperConfiguration(cfg =>

@@ -11,7 +11,7 @@ namespace PSI.Service.IService
     public interface ICarNoService
     {
         /* Customer Car */
-        CustomerCar GetCustomerCarByUNID(Guid carNoUNID);
+        CustomerCar GetCustomerCarBy(Guid carNoUNID);
 
         IQueryable<CustomerCar> GetCustomerCarByCustomerUNID(Guid customerGUID);
         IQueryable<CustomerCar> GetSalesOfCarInfo();

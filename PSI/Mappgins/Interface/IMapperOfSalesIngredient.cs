@@ -11,6 +11,6 @@ namespace PSI.Mappgins.Interface
 {
     public interface IMapperOfSalesIngredient
     {
-        IMapper SalesWeightNoteCreate<T>() where T : PE_SalesIngredient;
+        IMapper SalesWeightNoteCreate<T>();
     }
 }

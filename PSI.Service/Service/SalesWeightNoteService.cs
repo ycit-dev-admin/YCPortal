@@ -35,8 +35,12 @@ namespace PSI.Service.Service
             return _salesWeightNoteRepository.GetAllAsync()
                 .Result.Where(aa => unids.Contains(aa.UNID)).AsQueryable();
         }
+        public SalesWeightNote GetSalesWeightNote(Guid unid)
+        {
+            return _salesWeightNoteRepository.GetAsync(aa => aa.UNID == unid).Result;
+        }
 
-        public IQueryable<SalesWeightNote> SalesWeightNoteQueryList()
+        public IQueryable<SalesWeightNote> GetOngoSalesWeightDocs()
         {
             var needStatus = PSIWeightNoteEnum.GetOngoSalesWeightDocStatus()
                 .Select(aa => (int)aa);
@@ -46,7 +50,7 @@ namespace PSI.Service.Service
         }
 
 
-        public FunctionResult<SalesWeightNote> SalesWeightNoteCreateWeightNote(SalesWeightNote salesWeightNote,
+        public FunctionResult<SalesWeightNote> CreateSalesWeightNote(SalesWeightNote salesWeightNote,
             List<SalesIngredient> salesIngredientList,
             SalesWeightNoteResultPrice salesWeightNoteResultPrice,
             string docNo,

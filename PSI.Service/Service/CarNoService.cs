@@ -25,11 +25,9 @@ namespace PSI.Service.Service
         }
 
 
-        public CustomerCar GetCustomerCarByUNID(Guid carNoUNID)
+        public CustomerCar GetCustomerCarBy(Guid carNoUNID)
         {
-            return _customerCarRepository.GetAllAsync().Result.
-                   FirstOrDefault(aa => aa.CAR_GUID == carNoUNID &&
-                               aa.IS_EFFECTIVE == "1");
+            return _customerCarRepository.GetAsync(aa => aa.CAR_GUID == carNoUNID).Result;
         }
         public IQueryable<CustomerCar> GetCustomerCarByCustomerUNID(Guid customerGUID)
         {
