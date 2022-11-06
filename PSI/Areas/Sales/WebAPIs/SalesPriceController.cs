@@ -40,6 +40,14 @@ namespace PSI.Areas.Purchase.WebAPIs
             return _iSalesPriceCaculateHelper.GetReceivedPrice(invoicePrice, deliveryPrice);
 
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public decimal GetTaxPrice(decimal price)
+        {
+            return _iSalesPriceCaculateHelper.GetTaxPrice(price);
+
+        }
     }
 
 }

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
+using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Models.PEModels;
 
 namespace PSI.Mappgins.Interface
 {
     public interface IPageModelMapper  // IEntityMapper  IPageModelMapper IPEModelMapper
     {
-        T GetModel<T>(SalesWeightNote salesWeightNote)
-           where T : WeightNoteUpdateActualData;
+        //T GetModel<T>(SalesWeightNote salesWeightNote)
+        //   where T : WeightNoteUpdateActualData;
 
         T2 MapTo<T1, T2>(SalesWeightNote salesWeightNote = null)
             where T1 : SalesWeightNote

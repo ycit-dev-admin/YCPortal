@@ -4,19 +4,13 @@ using System.Linq;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
+using PSI.Core.Models.DTOModels;
 
 namespace PSI.Service.IService
 {
-    public interface ISalesWeightNoteService
+    public interface ISalesWeightNoteService : IGenericService<SalesWeightNote>
     {
-        IQueryable<SalesWeightNote> GetSalesWeightNotes(List<Guid> unids);
-        IQueryable<SalesWeightNote> GetOngoSalesWeightDocs();
-        SalesWeightNote GetSalesWeightNote(Guid unid);
 
-        FunctionResult<SalesWeightNote> CreateSalesWeightNote(SalesWeightNote salesWeightNote,
-         List<SalesIngredient> purchaseIngredientList,
-         SalesWeightNoteResultPrice salesWeightNoteResultPrice,
-         string docNo,
-         AppUser operUserInfo);
+        List<DTO_SalesWeightNote> GetDTOOngoSalesWeightDocs();
     }
 }

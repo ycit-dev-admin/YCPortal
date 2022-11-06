@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentValidation;
+using PSI.Core.Models.PageModels.Areas.Sales;
 
 namespace PSI.Areas.Sales.Models.PageModels
 {

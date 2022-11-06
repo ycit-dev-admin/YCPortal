@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Models.PEModels;
+using PSI.Core.Models.DTOModels;
 
-namespace PSI.Areas.Sales.Models.PageModels
+namespace PSI.Core.Models.PageModels.Areas.Sales
 {
     public class WeightNoteCreateWeightNote
     {
@@ -14,7 +14,7 @@ namespace PSI.Areas.Sales.Models.PageModels
         public DateTime? LeaveWeightTime { get; set; }
         public Guid? ContractUNID { get; set; }
         public Guid ProductItemUNID { get; set; }   // 廠內磅單主要認列品項
-        public List<PE_SalesIngredient> PESalesIngredientList { get; set; }
+        public List<DTO_SalesIngredient> DTOSalesIngredients { get; set; }
         public double? LeaveWeight { get; set; }  // 出貨重量
         public double? DefectiveWeight { get; set; }
         public decimal? UnitPrice { get; set; }

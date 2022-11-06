@@ -19,6 +19,8 @@
             padding: 0 10px;
             border: 1px solid #e0e0e0;
         }*/
+
+
     </style>
     <style>
         legend.scheduler-border {
@@ -30,10 +32,12 @@
             border-bottom: none;
         }
     </style>
+
 }
 
 
 <form id="create-form" asp-action="CreateWeightNote" method="post" autocomplete="off">
+
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
             <legend class="scheduler-border">出貨磅單基本資訊</legend>
@@ -41,40 +45,42 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">出貨對象</label>
-                        <p>@Model.CustomerName</p>
+                        <p>@Model.DTOSalesWeightNote.DTO_CustomerInfo.CUSTOMER_NAME</p>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="CarNoId">出貨車牌</label>
-                        <p>@Model.CarNo</p>
+                        <p>@Model.DTOSalesWeightNote.DTO_CustomerCar.CAR_NAME</p>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="form-control-label" for="CarNoId">怪手疊貨司機</label>
-                        <select asp-for="ExcavatorOperUNID" asp-items="@Model.CarNoItems" class="select2bs4" style="width: 100%;">
-                            <option value=""></option>
-                            @*<option value="0">0.新車牌</option>*@
-                        </select>
+                        <label class="form-control-label" for="CarNoId">車牌類型</label>
+                        @{
+                            var carNoTypeName = ((PSIEnum.PSIType)Model.DTOSalesWeightNote.DTO_CustomerCar.CAR_NO_TYPE).GetDescription();
+                        }
+                        <p>@carNoTypeName</p>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">出貨磅單時間</label>
-                        <p>@Model.LeaveWeightTime.ToString("yyyy/MM/dd  HH:mm")</p>
+                        <p>@Model.DTOSalesWeightNote.LEAVE_WEIGHT_TIME.Value.ToString("yyyy/MM/dd  HH:mm")</p>
                     </div>
                 </div>
             </div>
         </fieldset>
-        <fieldset class="form-group col-sm-6 the-fieldset">
+        <fieldset class="form-group col-sm-12 the-fieldset">
             <legend class="scheduler-border">出貨相關合約</legend>
+            @{
+                var bindContractInfo = Model.DTOSalesWeightNote.DTO_CustomerContracts?
+                    .FirstOrDefault(aa => aa.CONTRACT_GUID == Model.DTOSalesWeightNote.CONTRACT_UNID);
+            }
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="form-control-label">合約名稱</label>
-                    <select asp-for="ContractUNID" asp-items="@Model.CustomerContractItems" style="width: 100%;">
-                        <option value="">&nbsp;</option>
-                    </select>
+                    <span>@bindContractInfo?.CONTRACT_NAME</span>
                 </div>
             </div>
             <div class="col-sm-12">
@@ -82,13 +88,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="form-control-label">合約重量:</label>
-                            <span id="ShowContractWeight"></span>
+                            <span id="ShowContractWeight">@bindContractInfo?.DEAL_WEIGHT</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="form-control-label">合約單價</label>
-                            <span id="ShowContractUnitPrice"></span>
+                            <label class="form-control-label">合約單價:</label>
+                            <span id="ShowContractUnitPrice">@bindContractInfo?.DEAL_UNIT_PRICE</span>
                         </div>
                     </div>
                 </div>
@@ -97,61 +103,70 @@
                 <div class="form-row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="form-control-label">已完成重量</label>
-                            <span id="NowContractWeight"></span>
+                            <label class="form-control-label">已完成重量:</label>
+                            <span id="NowContractWeight">@bindContractInfo?.SumEffectivedSalesWeight</span>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="form-control-label">目前合約金額</label>
+                            <label class="form-control-label"></label>
                             <span id="NowContractActualPrice"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </fieldset>
-        <!-- fieldset -->
-        <fieldset class="form-group col-sm-6 the-fieldset">
-            <legend class="scheduler-border">廠內出貨預估資訊</legend>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="form-control-label">磅單認定</label>
-                        <span asp-validation-for="ProductItemUNID" class="text-danger"></span>
-                        <select asp-for="ProductItemUNID" asp-items="@Model.ProductItemItems" class="select2bs4" style="width: 100%;">
-                            <option value=""></option>
-                            @*<option value="0">0.新客戶</option>*@
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <h6 id="total"><span>品項組成: 無選擇項目</span></h6>
-                        @*<input asp-for="SelectPurchaseDetailInfos" type="hidden" />
-                            <span asp-validation-for="SelectPurchaseDetailInfos" class="text-danger"></span>*@
-                        <select id="user-select-proditem" name="USProdList" asp-items="@Model.ProductItemItems" class="select2bs4" multiple="multiple" style="width: 100%;">
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-row">
-                        <div class="form-group col-sm-6">
-                            <ul id="evenProductLs">
-                            </ul>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <ul id="oddProductLs">
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </fieldset>
 
         <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">金額計算</legend>
+            <legend class="scheduler-border">出貨資訊</legend>
+            @{
+                var etimateStepData = Model.DTOSalesWeightNote.DTO_SalesWeightNoteStepDatas
+                ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
+            }
             <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label">出貨認列品項:</label>
+                        <span>@etimateStepData.DTO_ProductItem.PRODUCT_NAME</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-control-label">客戶判定品項:</label>
+                        @*<span>@Model.DTOSalesWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="form-control-label">品項組成:</label>
+                        <div class="form-row">
+                            <div class="form-group col-sm-2">
+                                <ul id="evenProductLs">
+                                    @foreach (var item in Model.DTOSalesWeightNote.DTO_SalesIngredients.Where((item, index) => index % 2 == 0))
+                                    {
+                                        <li>@($@"{item.ITEM_NAME}_ {item.ITEM_PERCENT}%")</li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <ul id="oddProductLs">
+                                    @foreach (var item in Model.DTOSalesWeightNote.DTO_SalesIngredients.Where((item, index) => index % 2 != 0))
+                                    {
+                                        <li>@($@"{item.ITEM_NAME}_ {item.ITEM_PERCENT}%")</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                    @*<h6 id="total"><span>品項組成: </span></h6>*@
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>磅秤類型:</label>
+                        <span>@(Model.ScaleNo.ToString() == "1"?"大磅":"小磅")</span>
+                    </div>
+                </div>
                 <div class="col-sm-12">
                     <table id="example1" class="table table-bordered">
                         <thead>
@@ -161,6 +176,20 @@
                                 <th class="col-sm-1">扣重</th>
                                 <th class="col-sm-1">單價</th>
                                 <th class="col-sm-1">運費單價</th>
+                                <th class="col-sm-1">
+                                    請款金額
+                                    <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="請款金額 = (出貨重量 - 扣重) * 單價 * 稅率"></i>
+                                </th>
+                                <th class="col-sm-1">
+                                    運費
+                                    <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="運費 = (出貨重量 - 扣重) * 運費單價"></i>
+                                </th>
+                                <th class="col-sm-1">
+                                    實收金額
+                                    <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="實收金額 = (請款金額 - 運費)"></i>
+                                </th>
+                                <th class="col-sm-1">收款方式</th>
+                                <th class="col-sm-2">收款日</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -172,31 +201,80 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="LeaveWeight" class="form-control" type="text" placeholder="出貨重量">
-                                        @*<span asp-validation-for="LeaveWeight" class="text-danger"></span>*@
+                                        @etimateStepData.SALES_WEIGHT
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="DefectiveWeight" class="form-control" type="text" placeholder="扣重">
+                                        @etimateStepData.DEFECTIVE_WEIGHT
                                         @*<span asp-validation-for="DefectiveWeight" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="UnitPrice" class="form-control" type="text" placeholder="單價">
+                                        @etimateStepData.UNIT_PRICE
                                         @*<span asp-validation-for="UnitPrice" class="text-danger"></span>*@
                                     </div>
 
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="TraficUnitPrice" class="form-control" type="text" placeholder="運費單價">
+                                        @etimateStepData.TRAFIC_UNIT_PRICE
                                         @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
                                     </div>
                                 </td>
+                                <td>
+                                    <div class="form-group">
+                                        @{
+                                            var taxStr = etimateStepData.INVOICEPRICE_HASTAX ? "(含發票)" : "(無發票)";
+                                            var taxPrice = etimateStepData.INVOICEPRICE_HASTAX ? Decimal.Multiply(etimateStepData.INVOICE_PRICE, 0.05m) : 0m;
+                                        }
+                                        <span>
+                                            @etimateStepData.INVOICE_PRICE
+                                        </span>
+                                        <br />
+                                        <span>
+                                            @taxStr
+                                        </span>
+                                        <br />
+                                        <span>
+                                            @($@"稅額: {taxPrice}")
+                                        </span>
+                                        @*@($@"{etimateStepData.INVOICE_PRICE} {taxStr}")*@
+                                        @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        @{
+                                            var taxStr2 = etimateStepData.TRAFICFEE_HASTAX ? "(含發票)" : "(無發票)";
+                                            var taxPrice2 = etimateStepData.TRAFICFEE_HASTAX ? Decimal.Multiply(etimateStepData.TRAFIC_FEE, 0.05m) : 0m;
+
+                                        }
+                                        <span>
+                                            @etimateStepData.TRAFIC_FEE
+                                        </span>
+                                        <br />
+                                        <span>
+                                            @taxStr2
+                                        </span>
+                                        <br />
+                                        <span>
+                                            @($@"稅額: {taxPrice2}")
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    @etimateStepData.RECEIVED_PRICE
+                                </td>
+                                <td>
+                                    @etimateStepData.DTO_ReceiveTypeInfo.CODE_TEXT
+                                </td>
+                                <td>
+                                    @etimateStepData.RECEIVED_TIME.ToString("yyyy/MM/dd  HH: mm")
+                                </td>
                             </tr>
-                            <tr>
+                            <tr class="table-warning">
                                 <td>
                                     <div class="form-group">
                                         實際
@@ -204,125 +282,160 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="LeaveWeight" class="form-control" type="text" placeholder="出貨重量">
+                                        <input asp-for="ActualLeaveWeight" value="@etimateStepData.SALES_WEIGHT" class="form-control" type="text" placeholder="出貨重量">
                                         @*<span asp-validation-for="LeaveWeight" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="DefectiveWeight" class="form-control" type="text" placeholder="扣重">
+                                        <input asp-for="ActualDefectiveWeight" value="@etimateStepData.DEFECTIVE_WEIGHT" class="form-control" type="text" placeholder="扣重">
                                         @*<span asp-validation-for="DefectiveWeight" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="UnitPrice" class="form-control" type="text" placeholder="單價">
+                                        <input asp-for="ActualUnitPrice" value="@etimateStepData.UNIT_PRICE" class="form-control" type="text" placeholder="單價">
                                         @*<span asp-validation-for="UnitPrice" class="text-danger"></span>*@
                                     </div>
 
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="TraficUnitPrice" class="form-control" type="text" placeholder="運費單價">
+                                        <input asp-for="ActualTraficUnitPrice" value="@etimateStepData.TRAFIC_UNIT_PRICE" class="form-control" type="text" placeholder="運費單價">
                                         @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <span id="ActualInvoiceprice"></span>
+                                        <br />
+                                        <input asp-for="ActualInvoicePriceHasTax" type="checkbox" />(需開發票)
+                                        <br />
+                                        <span id="ActualInvoiceTax"></span>
+                                        <br />
+                                        <span id="SumActualInvoiceprice"></span>
+                                        @*實際請款金額要用API回傳*@
+                                        @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <span id="ActualTraficprice"></span>
+                                        <br />
+                                        <input asp-for="ActualTraficHasTax" type="checkbox" />(需索發票)
+                                        <br />
+                                        <span id="ActualTraficTax"></span>
+                                        <br />
+                                        <span id="SumActualTraficprice"></span>
+                                        @*實際請款金額要用API回傳*@
+                                        @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <span id="ActualReceivedprice"></span>
+                                        @*實際請款金額要用API回傳*@
+                                        @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <select asp-for="ReceivedType" asp-items="Model.ReceivedTypItems" class="select2bs4" style="width: 100%;">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="input-group date" id="payTime_com" data-target-input="nearest">
+                                            <input asp-for="ReceivedTime" type="text" class="form-control datetimepicker-input" data-target="#payTime_com" />
+                                            <div class="input-group-append" data-target="#payTime_com" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-sm-12">
-                    <table id="example1" class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="col-sm-1">階段</th>
-                                <th class="col-sm-3">請款金額 = (出貨重量 - 扣重) * 單價</th>
-                                <th class="col-sm-2">請款金額含稅?</th>
-                                <th class="col-sm-3">運費 = (出貨重量 - 扣重) * 運費單價</th>
-                                <th class="col-sm-1">運費含稅?</th>
-                                <th class="col-sm-2">實收金額 = (請款金額 - 運費)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <h1 style="color:red" id="show_invoice_price">預估</h1>
-                                </td>
-                                <td>
-                                    <h1 style="color:red" id="show_invoice_price"></h1>
-                                </td>
-                                <td>
-                                    Yes
-                                </td>
-                                <td>
-                                    <h1 id="show_trafic_price"></h1>
-                                </td>
-                                <td>
-                                    Yes
-                                </td>
-                                <td>
-                                    <h1 id="show_received_price"></h1>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h1 style="color:red" id="show_invoice_price">實收</h1>
-                                </td>
-                                <td>
-                                    <h1 style="color:red" id="show_invoice_price"></h1>
-                                </td>
-                                <td>
-                                    Yes
-                                </td>
-                                <td>
-                                    <h1 id="show_trafic_price"></h1>
-                                </td>
-                                <td>
-                                    Yes
-                                </td>
-                                <td>
-                                    <h1 id="show_received_price"></h1>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                @*<div class="col-sm-12">
+                        <table id="example1" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-1">階段</th>
+                                    <th class="col-sm-3">請款金額 = (出貨重量 - 扣重) * 單價</th>
+                                    <th class="col-sm-2">請款金額含稅?</th>
+                                    <th class="col-sm-3">運費 = (出貨重量 - 扣重) * 運費單價</th>
+                                    <th class="col-sm-1">運費含稅?</th>
+                                    <th class="col-sm-2">實收金額 = (請款金額 - 運費)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h1 id="show_invoice_price">預估</h1>
+                                    </td>
+                                    <td>
+                                        <h1 style="color:red" id="show_invoice_price"></h1>
+                                    </td>
+                                    <td>
+                                        Yes
+                                    </td>
+                                    <td>
+                                        <h1 id="show_trafic_price"></h1>
+                                    </td>
+                                    <td>
+                                        Yes
+                                    </td>
+                                    <td>
+                                        <h1 id="show_received_price"></h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h1 style="color:red" id="show_invoice_price">實收</h1>
+                                    </td>
+                                    <td>
+                                        <h1 style="color:red" id="show_invoice_price"></h1>
+                                    </td>
+                                    <td>
+                                        Yes
+                                    </td>
+                                    <td>
+                                        <h1 id="show_trafic_price"></h1>
+                                    </td>
+                                    <td>
+                                        Yes
+                                    </td>
+                                    <td>
+                                        <h1 id="show_received_price"></h1>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>*@
 
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label>磅秤類型</label>
-                        <br>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input asp-for="ScaleNo" id="ScaleNo1" type="radio" class="form-check-input" value="1" checked>大磅
-                            </label>
+
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            <label style="color:blue">預估收款方式</label>
+                            <select asp-for="ReceivedType" asp-items="Model.ReceivedTypItems" class="select2bs4" style="width: 100%;">
+                                <option value=""></option>
+                            </select>
                         </div>
-                        <div class="form-check-inline">
-                            <label class="form-check-label">
-                                <input asp-for="ScaleNo" id="ScaleNo2" type="radio" value="2" class="form-check-input">小磅
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label style="color:blue">預估收款方式</label>
-                        <select asp-for="ReceivedType" asp-items="Model.ReceivedTypeItems" class="select2bs4" style="width: 100%;">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label style="color:blue">預估收款日</label>
-                        <div class="input-group date" id="payTime_com" data-target-input="nearest">
-                            <input asp-for="ReceivedTime" type="text" class="form-control datetimepicker-input" data-target="#payTime_com" />
-                            <div class="input-group-append" data-target="#payTime_com" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>*@
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            <label style="color:blue">預估收款日</label>
+                            <div class="input-group date" id="payTime_com" data-target-input="nearest">
+                                <input asp-for="ReceivedTime" type="text" class="form-control datetimepicker-input" data-target="#payTime_com" />
+                                <div class="input-group-append" data-target="#payTime_com" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>*@
             </div>
 
         </fieldset>
@@ -366,7 +479,7 @@
     <script asp-append-version="true" src="~/psi/CustomerContractAPI.js"></script>
     <script asp-append-version="true" src="~/psi/SalesPriceAPIClass.js"></script>
     <script asp-append-version="true" src="~/psi/PurchaseProdItemList.js"></script>
-    <script asp-append-version="true" src="~/psi/SalesWeightNoteCreateWeightNote.js"></script>
+    <script asp-append-version="true" src="~/psi/SalesWeightNoteUpdateActualData.js"></script>
 
 
     @*Form helper套件無法在Promp出來的頁面來使用 會看到 The request is not in the expected format. Check jQuery is loaded! 的錯誤訊息
@@ -377,8 +490,10 @@
 
     <script>
         $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
             /* Initialize Elements */
-            const pageMain = new SalesWeightNoteCreateWeightNote(window.baseApiUrl);
+            const pageMain = new SalesWeightNoteUpdateActualData(window.baseApiUrl);
             pageMain.PagePluginInit();
             pageMain.PageEventInit();
             pageMain.PageValidateInit();

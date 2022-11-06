@@ -25,18 +25,28 @@ namespace PSI.Core.Interfaces.UnitOfWork
         IGenericRepository<SalesWeightNote> SalesWeightNoteRepository { get; }
         IGenericRepository<SalesIngredient> SalesIngredientRepository { get; }
         IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; }
-        IGenericRepository<SalesWeightNoteResultPrice> SalesWeightNoteResultPriceRepository { get; }
+        IGenericRepository<SalesWeightNoteStepData> SalesWeightNoteResultPriceRepository { get; }
 
 
         /// <summary>
         /// DB Context
         /// </summary>
-        DbContext Context { get; }
+       // DbContext Context { get; }
 
         /// <summary>
         /// Saves the change.
         /// </summary>
         /// <returns></returns>
         FunctionResult SaveChange();
+
+        /// <summary>
+        /// 取得某一個Entity的Repository。
+        /// 如果沒有取過，會initialise一個
+        /// 如果有就取得之前initialise的那個。
+        /// 產生出 UnitOfWork 的物件時 可循環利用該方法達到節省記憶體空間之功能
+        /// </summary>
+        /// <typeparam name="T">此Context裡面的Entity Type</typeparam>
+        /// <returns>Entity的Repository</returns>
+        IGenericRepository<T> GetRepository<T>() where T : class;
     }
 }

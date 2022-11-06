@@ -1,4 +1,5 @@
 using System;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +19,12 @@ using PSI.Mappgins;
 using PSI.Mappgins.Interface;
 using PSI.Service.Helper;
 using PSI.Service.IHelper;
+using PSI.Service.ILogic;
+using PSI.Service.IMapperProfile;
 using PSI.Service.IService;
+using PSI.Service.Logic;
+using PSI.Service.MapActions;
+using PSI.Service.MapperProfile;
 using PSI.Service.Service;
 
 namespace PSI
@@ -67,26 +73,42 @@ namespace PSI
             services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();
             services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
             services.AddScoped<IGenericRepository<SalesWeightNote>, GenericRepository<SalesWeightNote>>();
-            services.AddScoped<IGenericRepository<SalesWeightNoteResultPrice>, GenericRepository<SalesWeightNoteResultPrice>>();
+            services.AddScoped<IGenericRepository<SalesWeightNoteStepData>, GenericRepository<SalesWeightNoteStepData>>();
             services.AddScoped<IGenericRepository<SalesIngredient>, GenericRepository<SalesIngredient>>();
 
             // IService
             services.AddScoped<IPsiService, PsiService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IProductItemService, ProductItemService>();
+            services.AddScoped<IProductItemServiceNew, ProductItemServiceNew>();
             services.AddScoped<ICodeTableService, CodeTableService>();
+            services.AddScoped<ICodeTableServiceNew, CodeTableServiceNew>();
             services.AddScoped<ICustomerContractService, CustomerContractService>();
+            services.AddScoped<ICustomerContractServiceNew, CustomerContractServiceNew>();
             services.AddScoped<IPSIEnumService, PSIEnumService>();
             services.AddScoped<ICustomerInfoService, CustomerInfoService>();
+            services.AddScoped<ICustomerInfoServiceNew, CustomerInfoServiceNew>();
             services.AddScoped<ICustomerContractEnumService, CustomerContractEnumService>();
             services.AddScoped<ICarNoService, CarNoService>();
+            services.AddScoped<ICarNoServiceNew, CarNoServiceNew>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ISalesWeightNoteService, SalesWeightNoteService>();
             services.AddScoped<ISalesIngredientService, SalesIngredientService>();
+            services.AddScoped<ISalesIngredientServiceNew, SalesIngredientServiceNew>();
+            services.AddScoped<ISalesWeightNoteStepDataService, SalesWeightNoteResultPriceServiceNew>();
             services.AddScoped<ISalesWeightNoteResultPriceService, SalesWeightNoteResultPriceService>();
 
+            //services.AddScoped<IGenericService<SalesWeightNote>, GenericService<SalesWeightNote>>();
+            //services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+
+            // ILogic
+            services.AddScoped<ISalesWeightNoteLogic, SalesWeightNoteLogic>();
+            services.AddScoped<IEntityMapperProfile, EntityMapperProfile>();
+
+
+
             // IHelper
-            services.AddScoped<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
+            services.AddSingleton<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
 
             // IMapper
             services.AddScoped<IPageModelMapper, PageModelMapper>();
@@ -97,7 +119,9 @@ namespace PSI
             services.AddScoped<IMapperOfPE_SalesIngredient, MapperOfPE_SalesIngredient>();
 
 
+            // services.AddAutoMapper(typeof(Startup));            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //µù¥U©Ò¦³automapper Profile
+
             services.AddScoped<DbContext, MyContext>();
             services.AddDbContext<MyContext>(options =>
             {

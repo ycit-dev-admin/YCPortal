@@ -42,6 +42,14 @@
                 deliveryPrice: deliveryPrice
             });
     }
+    public GetTaxPrice(price: number): JQuery.jqXHR {
+        const apiUrl = `${this.BaseUrl}/Sales/api/SalesPrice/GetTaxPrice`;
+
+        return $.get(apiUrl,
+            {
+                price: price
+            });
+    }
 
 
 

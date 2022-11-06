@@ -7,96 +7,132 @@
     <link href="~/lib/admin-lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2/css/select2.min.css" rel="stylesheet" />
     <link href="~/lib/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+
+    <style>
+        .the-fieldset {
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+        }
+    </style>
+    <style>
+        legend.scheduler-border {
+            font-size: 1.5em !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width: auto;
+            padding: 0 10px;
+            border-bottom: none;
+        }
+    </style>
 }
-<div class="row">
-    <div class="col-sm-2">
-        <div class="form-group">
-            <div class="input-group date" id="start_time" data-target-input="nearest">
-                <input type="text" class="form-control datetimepicker-input" data-target="#start_time" />
-                <div class="input-group-append" data-target="#start_time" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+
+<fieldset class="form-group col-sm-12 the-fieldset">
+    <legend class="scheduler-border">出貨磅單預估階段</legend>
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="form-group">
+                <div class="input-group date" id="start_time" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#start_time" />
+                    <div class="input-group-append" data-target="#start_time" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-2">
-        <div class="form-group">
-            <div class="input-group date" id="end_time" data-target-input="nearest">
-                <input type="text" class="form-control datetimepicker-input" data-target="#end_time" />
-                <div class="input-group-append" data-target="#end_time" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <div class="input-group date" id="end_time" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#end_time" />
+                    <div class="input-group-append" data-target="#end_time" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @{
-        if (Model.UserAuthorityLevel != null &&
-            Model.UserAuthorityLevel % 10 > 0)
-        {
-            <div class="col-sm-2">
-                <div class="form-group">
-                    <select asp-for="FacSite" asp-items="Model.FacSiteItems" class="select2bs4" style="width: 100%;">
-                        <option></option>
-                        <option value="all">全部廠區</option>
-                    </select>
+        @{
+            if (Model.UserAuthorityLevel != null &&
+                Model.UserAuthorityLevel % 10 > 0)
+            {
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select asp-for="FacSite" asp-items="Model.FacSiteItems" class="select2bs4" style="width: 100%;">
+                            <option></option>
+                            <option value="all">全部廠區</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+            }
         }
-    }
-    <div class="col-sm-2">
-        <div class="form-group">
-            <button class="btn btn-primary" id="data-query">資料查詢</button>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <button class="btn btn-primary" id="data-query">資料查詢</button>
+            </div>
         </div>
     </div>
-</div>
-@*<a href="@Url.Action("CreateWeightNote","Purchase")" style="float:left;margin-right:20px;" class="btn btn-primary">建立進貨磅單</a>*@
-<a asp-action="CreateWeightNote" style="float:left;margin-right:20px;" class="btn btn-primary">建立出貨磅單</a>
-@*<a class="btn btn-success" style="float:left;margin-right:20px;" href="https://codepen.io/collection/XKgNLN/" target="_blank">Other examples on Codepen</a>*@
-<table id="example1" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>磅單時間</th>
-            <th>單號</th>
-            <th>出貨對象</th>
-            <th>出貨認列</th>
-            <th>出廠重量(預估)</th>
-            <th>扣重(預估)</th>
-            <th>請款重量(預估)</th>
-            <th>單價(預估)</th>
-            <th>請款金額(預估)</th>
-            <th>收款方式</th>
-            <th>收款日(預估)</th>
-            <th>功能操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.PE_SalesWeightNoteData)
-        {
+    @*<a href="@Url.Action("CreateWeightNote","Purchase")" style="float:left;margin-right:20px;" class="btn btn-primary">建立進貨磅單</a>*@
+    <a asp-action="CreateWeightNote" style="float:left;margin-right:20px;" class="btn btn-primary">建立出貨磅單</a>
+    @*<a class="btn btn-success" style="float:left;margin-right:20px;" href="https://codepen.io/collection/XKgNLN/" target="_blank">Other examples on Codepen</a>*@
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>@item.LEAVE_WEIGHT_TIME?.ToString("yyyy/MM/dd HH:mm:ss")</td>
-                <td>@item.DOC_NO</td>
-                <td>@item.CustomerName</td>
-                <td>@item.MainProductItemName</td>
-                @*<td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeightNoteUNID == item.UNID.ToString()).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>*@
-                <td>@item.ESTIMATE_SALES_WEIGHT.ToString("#,0")</td>
-                <td>@item.ESTIMATE_DEFECTIVE_WEIGHT.ToString("#,0")</td>
-                <td>@((item.ESTIMATE_SALES_WEIGHT - item.ESTIMATE_DEFECTIVE_WEIGHT).ToString("#,0"))</td>
-                <td>@item.ESTIMATE_UNIT_PRICE</td>
-                <td>@item.EstimateInvoicePrice</td>  @*要改成相依計算結果的檔案*@
-                <td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.ESTIMATE_RECEIVED_TYPE.ToString())?.Text</td>
-                <td>@item.ESTIMATE_RECEIVED_TIME?.ToString("yyyy-MM-dd")</td>
-                <td>
-                    <a asp-action="UpdateActualData" asp-route-unid="@item.UNID" class="btn btn-primary">
-                        回填
-                    </a>
-                    @*<a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>細項</a>*@
-                    @*<a asp-controller="WeightNote" asp-action="EditWeightNote" asp-route-docNo="@item.DocNo" class="btn btn-primary">細項2</a>*@
-                    @*<button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>*@
-                </td>
+                <th>磅單時間</th>
+                <th>單號</th>
+                <th>出貨對象</th>
+                <th>出貨認列</th>
+                <th>出廠重量</th>
+                <th>扣重</th>
+                <th>單價</th>
+                <th>運費</th>
+                <th>實收金額</th>
+                <th>收款方式</th>
+                <th>收款日</th>
+                <th>功能操作</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DTOSalesWeightNotes)
+            {
+                var etimateStepData = item.DTO_SalesWeightNoteStepDatas
+                          ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
+
+                <tr>
+                    <td>@item.LEAVE_WEIGHT_TIME?.ToString("yyyy/MM/dd HH:mm")</td>
+                    <td>@item.DOC_NO</td>
+                    <td>@item.DTO_CustomerInfo.CUSTOMER_NAME</td>
+                    <td>@etimateStepData?.SALES_WEIGHT</td>
+                    <td>@etimateStepData?.DTO_ProductItem?.PRODUCT_NAME</td>
+                    <td>@etimateStepData?.DEFECTIVE_WEIGHT</td>
+                    <td>@etimateStepData?.UNIT_PRICE</td>
+                    <td>@etimateStepData?.TRAFIC_FEE</td>
+                    <td>@etimateStepData?.RECEIVED_PRICE</td>
+                    <td>@etimateStepData?.DTO_ReceiveTypeInfo.CODE_TEXT</td>
+                    <td>@etimateStepData.RECEIVED_TIME.ToString("yyyy/MM/dd HH:mm")</td>
+                    <td>
+                        <a asp-action="UpdateActualData" asp-route-unid="@item.UNID" class="btn btn-primary">
+                            回填
+                        </a>
+                        @*<a class="btn btn-primary" href='@Url.Action("EditWeightNote","Purchase",new { docNo = item.DocNo })'>細項</a>*@
+                        @*<a asp-controller="WeightNote" asp-action="EditWeightNote" asp-route-docNo="@item.DocNo" class="btn btn-primary">細項2</a>*@
+                        @*<button name="q-detail" value="@item.Id" type="button" class="btn btn-primary">查詢</button>*@
+                    </td>
+
+
+                    @*<td>@Model.PIngredientLs.Where(aa => aa.PurchaseWeightNoteUNID == item.UNID.ToString()).OrderByDescending(aa => aa.ItemPercent).FirstOrDefault()?.ItemName</td>*@
+                    @*<td>@item.ESTIMATE_SALES_WEIGHT.ToString("#,0")</td>
+                        <td>@item.ESTIMATE_DEFECTIVE_WEIGHT.ToString("#,0")</td>
+                        <td>@((item.ESTIMATE_SALES_WEIGHT - item.ESTIMATE_DEFECTIVE_WEIGHT).ToString("#,0"))</td>
+                        <td>@item.ESTIMATE_UNIT_PRICE</td>*@
+                    @*要改成相依計算結果的檔案*@
+                    @*<td>@Model.PayTypeItems.FirstOrDefault(aa => aa.Value == item.ESTIMATE_RECEIVED_TYPE.ToString())?.Text</td>*@
+                    @*<td>@item.ESTIMATE_RECEIVED_TIME?.ToString("yyyy-MM-dd")</td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+</fieldset>
+
+
+
 
 @section scripts{
     @if (TempData["pageMsg"] != null)

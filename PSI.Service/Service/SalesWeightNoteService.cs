@@ -1,134 +1,35 @@
-﻿using PSI.Core.Entities;
-using PSI.Core.Entities.Identity;
-using PSI.Core.Enums;
-using PSI.Core.Extensions;
-using PSI.Core.Helpers;
-using PSI.Core.Interfaces.Repository;
-using PSI.Core.Interfaces.UnitOfWork;
-using PSI.Service.IService;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
+using PSI.Core.Entities;
+using PSI.Core.Enums;
+using PSI.Core.Interfaces.UnitOfWork;
+using PSI.Core.Models.DTOModels;
+using PSI.Service.IMapperProfile;
+using PSI.Service.IService;
 
 namespace PSI.Service.Service
 {
-    public class SalesWeightNoteService : ISalesWeightNoteService
+    public class SalesWeightNoteService : GenericService<SalesWeightNote>, ISalesWeightNoteService
     {
         private readonly IUnitOfWork _unitOfwork;
-        private readonly IGenericRepository<SalesWeightNote> _salesWeightNoteRepository;
-        private readonly IGenericRepository<SalesIngredient> _salesIngredientRepository;
-        private readonly IGenericRepository<SalesWeightNoteResultPrice> _salesWeightNoteResultPriceRepository;
+        private readonly IMapper _iMapper;
 
-        public SalesWeightNoteService(IUnitOfWork unitOfWork)
+        public SalesWeightNoteService(IUnitOfWork unitOfWork,
+            IMapper iMapper)
+         : base(unitOfWork, iMapper)
         {
-            _unitOfwork = unitOfWork;
-            _salesWeightNoteRepository = _unitOfwork.SalesWeightNoteRepository;
-            _salesIngredientRepository = _unitOfwork.SalesIngredientRepository;
-            _salesWeightNoteResultPriceRepository = _unitOfwork.SalesWeightNoteResultPriceRepository;
+            _unitOfWork = unitOfWork;
+            _iMapper = iMapper;
+            //_iEntityMapperProfile = iEntityMapperProfile;
         }
 
-
-        public IQueryable<SalesWeightNote> GetSalesWeightNotes(List<Guid> unids)
-        {
-            return _salesWeightNoteRepository.GetAllAsync()
-                .Result.Where(aa => unids.Contains(aa.UNID)).AsQueryable();
-        }
-        public SalesWeightNote GetSalesWeightNote(Guid unid)
-        {
-            return _salesWeightNoteRepository.GetAsync(aa => aa.UNID == unid).Result;
-        }
-
-        public IQueryable<SalesWeightNote> GetOngoSalesWeightDocs()
+        public List<DTO_SalesWeightNote> GetDTOOngoSalesWeightDocs()
         {
             var needStatus = PSIWeightNoteEnum.GetOngoSalesWeightDocStatus()
-                .Select(aa => (int)aa);
-
-            return _salesWeightNoteRepository.GetAllAsync()
-                .Result.Where(aa => needStatus.Contains(aa.NOTE_STATUS)).AsQueryable();
-        }
-
-
-        public FunctionResult<SalesWeightNote> CreateSalesWeightNote(SalesWeightNote salesWeightNote,
-            List<SalesIngredient> salesIngredientList,
-            SalesWeightNoteResultPrice salesWeightNoteResultPrice,
-            string docNo,
-            AppUser operUserInfo)
-        {
-            /* Null檢核 */
-            var funcRs = new FunctionResult<SalesWeightNote>();
-            if (salesWeightNote == null)
-            {
-                funcRs.ResultFailure("新增失敗，新增磅單為空值!!");
-                return funcRs;
-            }
-
-            //var curUserInfo = _userManager.GetUserAsync(_httpContextAccessor.HttpContext?.User).Result;
-
-            /* 出貨磅單建立 */
-            salesWeightNote.DOC_NO = docNo; // 單號
-            salesWeightNote.UNID = Guid.NewGuid();
-            salesWeightNote.CREATE_TIME = DateTime.Now;
-            salesWeightNote.CREATE_EMPNO = operUserInfo.NICK_NAME;
-            salesWeightNote.UPDATE_TIME = DateTime.Now;
-            salesWeightNote.UPDATE_EMPNO = operUserInfo.NICK_NAME;
-
-
-
-            var cRs = _salesWeightNoteRepository.Create(salesWeightNote);
-            if (!cRs.Success)
-            {
-                funcRs.ResultFailure(cRs.ActionMessage);
-                return funcRs;
-            }
-
-            /* 出貨品項比例建立 */
-            if (salesIngredientList.Any())
-            {
-                foreach (var item in salesIngredientList)
-                {
-                    item.SALES_WEIGHTNOTE_UNID = salesWeightNote.UNID;
-                    item.CREATE_TIME = DateTime.Now;
-                    item.CREATE_EMPNO = operUserInfo.NICK_NAME;
-                    item.UPDATE_TIME = DateTime.Now;
-                    item.UPDATE_EMPNO = operUserInfo.NICK_NAME;
-                }
-
-                var piCreRs = _salesIngredientRepository.Create(salesIngredientList);
-                if (!piCreRs.Success)
-                {
-                    funcRs.ResultFailure(piCreRs.ActionMessage);
-                    return funcRs;
-                }
-            }
-
-
-            /* 相關金額值建立建立 */
-            if (salesWeightNoteResultPrice != null)
-            {
-                salesWeightNoteResultPrice.DOC_NO = docNo;
-                salesWeightNoteResultPrice.DOC_UNID = salesWeightNote.UNID;
-                salesWeightNoteResultPrice.CREATE_TIME = DateTime.Now;
-                salesWeightNoteResultPrice.CREATE_EMPNO = operUserInfo.NICK_NAME;
-                salesWeightNoteResultPrice.UPDATE_TIME = DateTime.Now;
-                salesWeightNoteResultPrice.UPDATE_EMPNO = operUserInfo.NICK_NAME;
-                var creRs = _salesWeightNoteResultPriceRepository.Create(salesWeightNoteResultPrice);
-                if (!creRs.Success)
-                {
-                    funcRs.ResultFailure(creRs.ActionMessage);
-                    return funcRs;
-                }
-            }
-
-
-
-
-
-
-            funcRs.ResultSuccess("新增出貨磅單成功!!", salesWeightNote);
-
-            return funcRs;
+               .Select(aa => (int)aa).ToList();
+            return this.GetDTOModels<DTO_SalesWeightNote>(aa => needStatus.Contains(aa.NOTE_STATUS));
         }
     }
 }

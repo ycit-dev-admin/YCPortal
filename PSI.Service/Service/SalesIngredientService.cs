@@ -26,7 +26,11 @@ namespace PSI.Service.Service
         }
 
 
-
+        public IQueryable<SalesIngredient> GetSalesIngredients(Guid weightNoteGUID)
+        {
+            return _salesIngredientRepository.GetAllAsync().Result
+                .Where(aa => aa.SALES_WEIGHTNOTE_UNID == weightNoteGUID).AsQueryable();
+        }
 
         public IQueryable<SalesIngredient> GetSalesIngredients(List<Guid> weightNoteGUIDs)
         {

@@ -54,6 +54,7 @@ namespace PSI.Service.Service
                    Where(aa => aa.IS_EFFECTIVE == "1" &&
                    salesTypes.Any(bb => bb == aa.PSI_TYPE)).AsQueryable();
         }
+       
 
         public FunctionResult<CustomerInfo> CreateCustomerInfoForNormal(CustomerInfo customerInfo, AppUser operUser)
         {

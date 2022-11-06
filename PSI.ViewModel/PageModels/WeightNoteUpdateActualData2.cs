@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PSI.Models.PEModels;
 
-namespace PSI.Areas.Sales.Models.PageModels
+namespace PSI.ViewModel.PageModels
 {
-    public class WeightNoteUpdateActualData
+    public class WeightNoteUpdateActualData2
     {
         /* For Post */
         public Guid CustomerUNID { get; set; }
         public Guid CarNoUNID { get; set; }
         public Guid ExcavatorOperUNID { get; set; }
-     
+
         public Guid? ContractUNID { get; set; }
         public Guid ProductItemUNID { get; set; }   // 廠內磅單主要認列品項
-        public List<PE_SalesIngredient> PESalesIngredientList { get; set; }
+    
         public double? LeaveWeight { get; set; }  // 出貨重量
         public double? DefectiveWeight { get; set; }
         public decimal? UnitPrice { get; set; }
@@ -32,14 +31,11 @@ namespace PSI.Areas.Sales.Models.PageModels
         public string CustomerName { get; set; }
         public string CarNo { get; set; }
         public DateTime LeaveWeightTime { get; set; }
-        public PE_SalesWeightNote PESalesWeightNote { get; set; }
         public List<SelectListItem> CustomerInfoItems { get; set; }
         public List<SelectListItem> CarNoItems { get; set; }
         public List<SelectListItem> ReceivedTypeItems { get; set; }
         public List<SelectListItem> ProductItemItems { get; set; }
         public List<SelectListItem> CustomerContractItems { get; set; }
-
-
 
 
         // Post

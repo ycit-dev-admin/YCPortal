@@ -17,7 +17,7 @@ namespace PSI.Service.Service
     public class SalesWeightNoteResultPriceService : ISalesWeightNoteResultPriceService
     {
         private readonly IUnitOfWork _unitOfwork;
-        private readonly IGenericRepository<SalesWeightNoteResultPrice> _salesWeightNoteResultPriceRepository;
+        private readonly IGenericRepository<SalesWeightNoteStepData> _salesWeightNoteResultPriceRepository;
 
         public SalesWeightNoteResultPriceService(IUnitOfWork unitOfWork)
         {
@@ -25,7 +25,7 @@ namespace PSI.Service.Service
             _salesWeightNoteResultPriceRepository = _unitOfwork.SalesWeightNoteResultPriceRepository;
         }
 
-        public SalesWeightNoteResultPrice GetEstimateSalesWeightNoteResultPrice(Guid salesWeightNoteDocGUID)
+        public SalesWeightNoteStepData GetEstimateSalesWeightNoteResultPrice(Guid salesWeightNoteDocGUID)
         {
             return _salesWeightNoteResultPriceRepository
                     .GetAsync(aa => aa.DOC_UNID == salesWeightNoteDocGUID &&

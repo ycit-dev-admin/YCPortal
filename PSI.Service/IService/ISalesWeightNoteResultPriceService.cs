@@ -5,7 +5,7 @@ namespace PSI.Service.IService
 {
     public interface ISalesWeightNoteResultPriceService
     {
-        SalesWeightNoteResultPrice GetEstimateSalesWeightNoteResultPrice(Guid salesWeightNoteDocGUID);
+        SalesWeightNoteStepData GetEstimateSalesWeightNoteResultPrice(Guid salesWeightNoteDocGUID);
 
 
     }

@@ -498,24 +498,6 @@ namespace PSI.Core.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<double>("ACTUAL_DEFECTIVE_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("ACTUAL_PRODUCT_ITEM_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("ACTUAL_RECEIVED_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("ACTUAL_RECEIVED_TYPE")
-                        .HasColumnType("integer");
-
-                    b.Property<double>("ACTUAL_SALES_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<decimal>("ACTUAL_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
                     b.Property<Guid>("CARNO_UNID")
                         .HasColumnType("uuid");
 
@@ -534,24 +516,6 @@ namespace PSI.Core.Migrations
                     b.Property<string>("DOC_NO")
                         .HasColumnType("text");
 
-                    b.Property<double>("ESTIMATE_DEFECTIVE_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("ESTIMATE_PRODUCT_ITEM_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("ESTIMATE_RECEIVED_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("ESTIMATE_RECEIVED_TYPE")
-                        .HasColumnType("integer");
-
-                    b.Property<double>("ESTIMATE_SALES_WEIGHT")
-                        .HasColumnType("double precision");
-
-                    b.Property<decimal>("ESTIMATE_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
                     b.Property<Guid>("EXCAVATOR_OPERATOR_UNID")
                         .HasColumnType("uuid");
 
@@ -567,9 +531,6 @@ namespace PSI.Core.Migrations
                     b.Property<int?>("SCALE_NO")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("TRAFIC_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
                     b.Property<Guid>("UNID")
                         .HasColumnType("uuid");
 
@@ -584,7 +545,7 @@ namespace PSI.Core.Migrations
                     b.ToTable("SalesWeightNotes");
                 });
 
-            modelBuilder.Entity("PSI.Core.Entities.SalesWeightNoteResultPrice", b =>
+            modelBuilder.Entity("PSI.Core.Entities.SalesWeightNoteStepData", b =>
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd()
@@ -600,6 +561,9 @@ namespace PSI.Core.Migrations
                     b.Property<int>("DATA_STEP")
                         .HasColumnType("integer");
 
+                    b.Property<double>("DEFECTIVE_WEIGHT")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("DOC_NO")
                         .HasColumnType("text");
 
@@ -612,13 +576,31 @@ namespace PSI.Core.Migrations
                     b.Property<decimal>("INVOICE_PRICE")
                         .HasColumnType("numeric");
 
+                    b.Property<Guid>("PRODUCT_ITEM_UNID")
+                        .HasColumnType("uuid");
+
                     b.Property<decimal>("RECEIVED_PRICE")
                         .HasColumnType("numeric");
+
+                    b.Property<DateTime>("RECEIVED_TIME")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("RECEIVED_TYPE")
+                        .HasColumnType("integer");
+
+                    b.Property<double>("SALES_WEIGHT")
+                        .HasColumnType("double precision");
 
                     b.Property<bool>("TRAFICFEE_HASTAX")
                         .HasColumnType("boolean");
 
                     b.Property<decimal>("TRAFIC_FEE")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("TRAFIC_UNIT_PRICE")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("UNIT_PRICE")
                         .HasColumnType("numeric");
 
                     b.Property<string>("UPDATE_EMPNO")
@@ -629,7 +611,7 @@ namespace PSI.Core.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("SalesWeightNoteResultPrices");
+                    b.ToTable("SalesWeightNotesStepDatas");
                 });
 
             modelBuilder.Entity("PSI.Core.Entities.SeqTypeConfig", b =>

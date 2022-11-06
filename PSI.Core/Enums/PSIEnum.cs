@@ -40,5 +40,20 @@ namespace PSI.Core.Enums
             return new[] { PSIEnum.PSIType.Purchase,
                 PSIEnum.PSIType.Both }.AsQueryable();
         }
+
+        public static IQueryable<PSIEnum.PSIType> GetAllPsiTypes()
+        {
+            return Enum.GetValues(typeof(PSIEnum.PSIType))
+                       .Cast<PSIEnum.PSIType>().AsQueryable();
+        }
+
+        public static IQueryable<PSIEnum.FacSite> GetAllFacSites()
+        {
+            return Enum.GetValues(typeof(PSIEnum.FacSite))
+                        .Cast<PSIEnum.FacSite>().AsQueryable();
+        }
+
+
+
     }
 }

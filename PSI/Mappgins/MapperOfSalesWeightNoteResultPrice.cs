@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Enums;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
+using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Mappgins.Interface;
 using PSI.Models.VEModels;
 using PSI.Service.IHelper;
@@ -31,7 +31,7 @@ namespace PSI.Mappgins
             {
                 case (nameof(WeightNoteCreateWeightNote)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNoteResultPrice>()
+                    cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNoteStepData>()
                     .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate))
                     .ForMember(tar => tar.INVOICEPRICE_HASTAX, ss => ss.MapFrom(src => src.InvoicePriceHasTax))
                     .ForMember(tar => tar.TRAFICFEE_HASTAX, ss => ss.MapFrom(src => src.TraficFeeHasTax))

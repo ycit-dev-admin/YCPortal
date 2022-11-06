@@ -11,6 +11,8 @@ using PSI.Areas.SysConfig.Models;
 using PSI.Areas.SysConfig.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
+using PSI.Core.Enums;
+using PSI.Core.Extensions;
 using PSI.Core.Helpers;
 using PSI.Infrastructure.Extensions;
 using PSI.Infrastructure.Helpers;
@@ -89,11 +91,13 @@ namespace PSI.Areas.SysConfig.Controllers
                     _customerService.GetCustomerCars().FirstOrDefault(aa => aa.CAR_GUID == carGUID));
                 pageModel.IsNewOpen = isNewOpen;
                 pageModel.IsOnlyQuery = isOnlyQuery;
-                pageModel.ActionTypeName = isOnlyQuery ? "查詢" : 
+                pageModel.ActionTypeName = isOnlyQuery ? "查詢" :
                                            isNewOpen ? "建立" : "編輯";
                 pageModel.FormActionName = isNewOpen ?
                     nameof(this.CreateCarNoInfo) :
                     nameof(this.UpdateCarNoInfo);
+                pageModel.PsiTypeItems = PSIEnum.GetAllPsiTypes().ToDictionary(aa => (int)aa, aa => aa.GetDescription()).
+                         ToPageSelectList("Value", "Key");
                 pageModel.CustomerInfoItems = _customerService.GetCustomerInfos()
                     .ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME), nameof(CustomerInfo.CUSTOMER_GUID));
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
+using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Infrastructure.Extensions;
 using PSI.Mappgins.Interface;
 using PSI.Models.PEModels;
@@ -31,8 +31,8 @@ namespace PSI.Mappgins
             cfg.CreateMap<T, PE_SalesWeightNote>()
                 .ForMember(tar => tar.CustomerName,
                            arg => arg.MapFrom(src => _iCustomerInfoService.GetCustomerInfo(src.CUSTOMER_UNID).CUSTOMER_NAME))
-                .ForMember(tar => tar.MainProductItemName,
-                           arg => arg.MapFrom(src => _iProductItemService.GetProductItem(src.ESTIMATE_PRODUCT_ITEM_UNID).PRODUCT_NAME))
+                //.ForMember(tar => tar.MainProductItemName,
+                //           arg => arg.MapFrom(src => _iProductItemService.GetProductItem(src.ESTIMATE_PRODUCT_ITEM_UNID).PRODUCT_NAME))
                 .ForMember(tar => tar.EstimateInvoicePrice,
                            arg => arg.MapFrom(src => _iSalesWeightNoteResultPriceService
                                                     .GetEstimateSalesWeightNoteResultPrice(src.UNID).INVOICE_PRICE))
@@ -46,8 +46,8 @@ namespace PSI.Mappgins
             cfg.CreateMap<SalesWeightNote, PE_SalesWeightNote>()
                 .ForMember(tar => tar.CustomerName,
                            arg => arg.MapFrom(src => _iCustomerInfoService.GetCustomerInfo(src.CUSTOMER_UNID).CUSTOMER_NAME))
-                .ForMember(tar => tar.MainProductItemName,
-                           arg => arg.MapFrom(src => _iProductItemService.GetProductItem(src.ESTIMATE_PRODUCT_ITEM_UNID).PRODUCT_NAME))
+                //.ForMember(tar => tar.MainProductItemName,
+                //           arg => arg.MapFrom(src => _iProductItemService.GetProductItem(src.ESTIMATE_PRODUCT_ITEM_UNID).PRODUCT_NAME))
                 .ForMember(tar => tar.EstimateInvoicePrice,
                            arg => arg.MapFrom(src => _iSalesWeightNoteResultPriceService
                                                     .GetEstimateSalesWeightNoteResultPrice(src.UNID).INVOICE_PRICE))
@@ -61,8 +61,8 @@ namespace PSI.Mappgins
             cfg.CreateMap<T, PE_SalesWeightNote>()
                 .ForMember(tar => tar.CustomerName,
                            arg => arg.MapFrom(src => _iCustomerInfoService.GetCustomerInfo(src.CUSTOMER_UNID).CUSTOMER_NAME))
-                .ForMember(tar => tar.MainProductItemName,
-                           arg => arg.MapFrom(src => _iProductItemService.GetProductItem(src.ESTIMATE_PRODUCT_ITEM_UNID).PRODUCT_NAME))
+                //.ForMember(tar => tar.MainProductItemName,
+                //           arg => arg.MapFrom(src => _iProductItemService.GetProductItem(src.ESTIMATE_PRODUCT_ITEM_UNID).PRODUCT_NAME))
                 .ForMember(tar => tar.EstimateInvoicePrice,
                            arg => arg.MapFrom(src => _iSalesWeightNoteResultPriceService
                                                     .GetEstimateSalesWeightNoteResultPrice(src.UNID).INVOICE_PRICE))
@@ -71,63 +71,63 @@ namespace PSI.Mappgins
 
         }
 
-        public T MapTo<T>(SalesWeightNote salesWeightNote) where T : WeightNoteUpdateActualData
-        {
-            return new MapperConfiguration(cfg =>
-              cfg.CreateMap<SalesWeightNote, T>()
-                  .ForMember(tar => tar.CustomerInfoItems,
-                  arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
-                  nameof(CustomerInfo.CUSTOMER_GUID), src.CUSTOMER_UNID.ToString())))
+        //public T MapTo<T>(SalesWeightNote salesWeightNote) where T : WeightNoteUpdateActualData
+        //{
+        //    return new MapperConfiguration(cfg =>
+        //      cfg.CreateMap<SalesWeightNote, T>()
+        //          .ForMember(tar => tar.CustomerInfoItems,
+        //          arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+        //          nameof(CustomerInfo.CUSTOMER_GUID), src.CUSTOMER_UNID.ToString())))
 
 
-             //.ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
-             //nameof(CustomerInfo.CUSTOMER_GUID),
-             //pageModel.CustomerUNID.ToString());
+        //     //.ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+        //     //nameof(CustomerInfo.CUSTOMER_GUID),
+        //     //pageModel.CustomerUNID.ToString());
 
-             ).CreateMapper().Map<T>(salesWeightNote);
+        //     ).CreateMapper().Map<T>(salesWeightNote);
 
-        }
+        //}
 
-        public T MapTo<T>(T salesWeightNote) where T : WeightNoteUpdateActualData
-        {
-            return new MapperConfiguration(cfg =>
-              cfg.CreateMap<T, T>()
-                  .ForMember(tar => tar.CustomerInfoItems,
-                  arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
-                  nameof(CustomerInfo.CUSTOMER_GUID), src.CarNoUNID.ToString())))
+        //public T MapTo<T>(T salesWeightNote) where T : WeightNoteUpdateActualData
+        //{
+        //    return new MapperConfiguration(cfg =>
+        //      cfg.CreateMap<T, T>()
+        //          .ForMember(tar => tar.CustomerInfoItems,
+        //          arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+        //          nameof(CustomerInfo.CUSTOMER_GUID), src.CarNoUNID.ToString())))
 
 
-             //.ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
-             //nameof(CustomerInfo.CUSTOMER_GUID),
-             //pageModel.CustomerUNID.ToString());
+        //     //.ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+        //     //nameof(CustomerInfo.CUSTOMER_GUID),
+        //     //pageModel.CustomerUNID.ToString());
 
-             ).CreateMapper().Map<T>(salesWeightNote);
+        //     ).CreateMapper().Map<T>(salesWeightNote);
 
-        }
+        //}
 
-        public IMapper GetMapper<T1, T2>()
-            where T1 : SalesWeightNote
-            where T2 : WeightNoteUpdateActualData
-        {
-            return new MapperConfiguration(cfg =>
-              cfg.CreateMap<T1, T2>()
-                  .ForMember(tar => tar.CustomerInfoItems,
-                  arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
-                  nameof(CustomerInfo.CUSTOMER_GUID), src.CUSTOMER_UNID.ToString())))
-                  ).CreateMapper();
-        }
+        //public IMapper GetMapper<T1, T2>()
+        //    where T1 : SalesWeightNote
+        //    where T2 : WeightNoteUpdateActualData
+        //{
+        //    return new MapperConfiguration(cfg =>
+        //      cfg.CreateMap<T1, T2>()
+        //          .ForMember(tar => tar.CustomerInfoItems,
+        //          arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+        //          nameof(CustomerInfo.CUSTOMER_GUID), src.CUSTOMER_UNID.ToString())))
+        //          ).CreateMapper();
+        //}
 
-        public T2 MapTo<T1, T2>(T1 salesWeightNote)
-            where T1 : SalesWeightNote
-            where T2 : WeightNoteUpdateActualData
-        {
-            return new MapperConfiguration(cfg =>
-             cfg.CreateMap<T1, T2>()
-                 .ForMember(tar => tar.CustomerInfoItems,
-                 arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
-                 nameof(CustomerInfo.CUSTOMER_GUID), src.CUSTOMER_UNID.ToString())))
-            ).CreateMapper().Map<T2>(salesWeightNote);
-        }
+        //public T2 MapTo<T1, T2>(T1 salesWeightNote)
+        //    where T1 : SalesWeightNote
+        //    where T2 : WeightNoteUpdateActualData
+        //{
+        //    return new MapperConfiguration(cfg =>
+        //     cfg.CreateMap<T1, T2>()
+        //         .ForMember(tar => tar.CustomerInfoItems,
+        //         arg => arg.MapFrom(src => _iCustomerInfoService.GetSalesCustomerInfo().ToPageSelectList(nameof(CustomerInfo.CUSTOMER_NAME),
+        //         nameof(CustomerInfo.CUSTOMER_GUID), src.CUSTOMER_UNID.ToString())))
+        //    ).CreateMapper().Map<T2>(salesWeightNote);
+        //}
 
         //public List<T> MapTo<T>(List<SalesWeightNote> salesWeightNote) where T : WeightNoteUpdateActualData
         //{

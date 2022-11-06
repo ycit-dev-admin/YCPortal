@@ -4,7 +4,7 @@ using PSI.Areas.Purchase.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Enums;
 using PSI.Models.VEModels;
-using WeightNoteCreateWeightNote = PSI.Areas.Sales.Models.PageModels.WeightNoteCreateWeightNote;
+using WeightNoteCreateWeightNote = PSI.Core.Models.PageModels.Areas.Sales.WeightNoteCreateWeightNote;
 
 namespace PSI.Areas.Sales.Mappers
 {

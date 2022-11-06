@@ -12,6 +12,7 @@ namespace PSI.Areas.SysConfig.Models
         public Guid CustomerGUID { get; set; }
         public Guid CarGUID { get; set; }
         public string CarName { get; set; }
+        public int? PsiType { get; set; }
         public string IsEffective { get; set; }
         public string Remark { get; set; }
 
@@ -22,6 +23,7 @@ namespace PSI.Areas.SysConfig.Models
         public bool IsOnlyQuery { get; set; }
 
         public List<SelectListItem> CustomerInfoItems { set; get; }
+        public List<SelectListItem> PsiTypeItems { set; get; }
 
     }
 }

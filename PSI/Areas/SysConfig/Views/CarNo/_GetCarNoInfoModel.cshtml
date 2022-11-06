@@ -1,7 +1,7 @@
 ﻿@model PageCustomer_GetCarNoInfoModel
 
 
-<div class="modal"  id="myModal">
+<div class="modal" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,6 +56,20 @@
                                             </select>
                                         }
                                     }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-control-label" for="ownername">
+                                    車牌類別
+                                </label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <select asp-for="PsiType" asp-items="@Model.PsiTypeItems" style="width: 100%;">
+                                        <option></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
