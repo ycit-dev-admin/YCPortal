@@ -36,12 +36,12 @@ namespace PSI.Mappgins
                     .ForMember(tar => tar.INVOICEPRICE_HASTAX, ss => ss.MapFrom(src => src.InvoicePriceHasTax))
                     .ForMember(tar => tar.TRAFICFEE_HASTAX, ss => ss.MapFrom(src => src.TraficFeeHasTax))
                     .ForMember(tar => tar.INVOICE_PRICE, ss => ss.MapFrom(src =>
-                    _iSalesPriceCaculateHelper.GetInvoicePrice(src.LeaveWeight.Value,
+                    _iSalesPriceCaculateHelper.GetInvoicePrice((double)src.SalesWeight,
                     src.DefectiveWeight.Value,
                     src.UnitPrice.Value,
                     src.InvoicePriceHasTax)))
                     .ForMember(tar => tar.TRAFIC_FEE, ss => ss.MapFrom(src =>
-                    _iSalesPriceCaculateHelper.GetDeliveryPrice(src.LeaveWeight.Value,
+                    _iSalesPriceCaculateHelper.GetDeliveryPrice((double)src.SalesWeight,
                     src.TraficUnitPrice,
                     src.TraficFeeHasTax)))
                     .AfterMap((src, tar) =>

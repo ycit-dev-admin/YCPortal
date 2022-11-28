@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20221121165611_adj data type")]
+    partial class adjdatatype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -615,74 +617,29 @@ namespace PSI.Core.Migrations
                     b.Property<Guid>("CUSTOMER_UNID")
                         .HasColumnType("uuid");
 
-                    b.Property<decimal?>("DEFECTIVE_WEIGHT")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("DOC_NO")
                         .HasColumnType("text");
 
                     b.Property<Guid>("EXCAVATOR_OPERATOR_UNID")
                         .HasColumnType("uuid");
 
-                    b.Property<decimal?>("INVOICEPRICE_TAX")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("INVOICE_PRICE")
-                        .HasColumnType("numeric");
+                    b.Property<DateTime?>("LEAVE_WEIGHT_TIME")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("NOTE_STATUS")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("PRODUCT_ITEM_UNID")
-                        .HasColumnType("uuid");
-
-                    b.Property<decimal?>("RECEIVED_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<DateTime?>("RECEIVED_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int?>("RECEIVED_TYPE")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal?>("RECEIVED_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("REMARK")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("SALES_TIME")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<decimal>("SALES_UNIT_PRICE")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal>("SALES_WEIGHT")
-                        .HasColumnType("numeric");
-
                     b.Property<int?>("SCALE_NO")
                         .HasColumnType("integer");
-
-                    b.Property<decimal?>("TAX_RENT")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("TRAFIC_FEE")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("TRAFIC_FEE_TAX")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("TRAFIC_UNIT_PRICE")
-                        .HasColumnType("numeric");
 
                     b.Property<Guid>("UNID")
                         .HasColumnType("uuid");
 
                     b.Property<string>("UPDATE_EMPNO")
                         .HasColumnType("text");
-
-                    b.Property<DateTime?>("UPDATE_SALES_TIME")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("UPDATE_TIME")
                         .HasColumnType("timestamp without time zone");

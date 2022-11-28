@@ -62,7 +62,7 @@ namespace PSI.Service.Service
             // Mapper.Initialize(cfg);
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile<DTOModelMappings>();
+                cfg.AddProfile<DTOModelMappingProfile>();
             });
 
 
@@ -90,7 +90,7 @@ namespace PSI.Service.Service
             // Mapper.Initialize(cfg);
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile<DTOModelMappings>();
+                cfg.AddProfile<DTOModelMappingProfile>();
             });
 
 
@@ -250,9 +250,13 @@ namespace PSI.Service.Service
         public virtual FunctionResult CreateEntityByDTOModelNoSave<TViewModel>(TViewModel viewModel)
         {
             var funRs = new FunctionResult(this);
-            if (viewModel == null) { throw new ArgumentNullException("instance"); }
+            if (viewModel == null)
+            {
+                funRs.ResultFailure("參數為null");
+                throw new ArgumentNullException("instance");
+            }
             var entity = staticConvertViewModelToModel(viewModel);
-            this._unitOfWork.GetRepository<TEntity>().Create(entity);
+            funRs = this._unitOfWork.GetRepository<TEntity>().Create(entity);
             return funRs;
         }
 

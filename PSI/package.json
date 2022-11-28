@@ -10,6 +10,9 @@
     "@types/moment": "2.11.29",
     "@types/select2": "4.0.53",
     "@types/jqueryui": "1.12.1",
-    "@types/jquery.validation": "1.16.7"
+    "@types/jquery.validation": "1.16.7",
+    "@types/datatables.net": "1.10.24",
+    "sweetalert2": "8.19.1",    
+    "just-validate": "3.8.1"
   }
 }

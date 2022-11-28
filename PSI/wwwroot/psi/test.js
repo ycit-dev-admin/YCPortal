@@ -1,0 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var just_validate_1 = require("just-validate");
+var validate = new just_validate_1.default('#form');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVzdC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NjcmlwdHMvdGVzdC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLCtDQUF5QztBQUV6QyxJQUFNLFFBQVEsR0FBRyxJQUFJLHVCQUFZLENBQUMsT0FBTyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgSnVzdFZhbGlkYXRlIGZyb20gXCJqdXN0LXZhbGlkYXRlXCI7XHJcblxyXG5jb25zdCB2YWxpZGF0ZSA9IG5ldyBKdXN0VmFsaWRhdGUoJyNmb3JtJyk7Il19

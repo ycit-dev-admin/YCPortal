@@ -143,7 +143,7 @@ namespace PSI.Service.Logic
                        .ForMember(tar => tar.CUSTOMER_UNID, ss => ss.MapFrom(src => src.CustomerUNID))
                        .ForMember(tar => tar.CARNO_UNID, ss => ss.MapFrom(src => src.CarNoUNID))
                        .ForMember(tar => tar.EXCAVATOR_OPERATOR_UNID, ss => ss.MapFrom(src => src.ExcavatorOperUNID))
-                       .ForMember(tar => tar.LEAVE_WEIGHT_TIME, ss => ss.MapFrom(src => src.LeaveWeightTime))
+                       .ForMember(tar => tar.SALES_TIME, ss => ss.MapFrom(src => src.SalesTime))
                        .ForMember(tar => tar.CONTRACT_UNID, ss => ss.MapFrom(src => src.ContractUNID))
                        //.ForMember(tar => tar.PRODUCT_ITEM_UNID, ss => ss.MapFrom(src => src.ProductItemUNID))
                        //.ForMember(tar => tar.ESTIMATE_SALES_WEIGHT, ss => ss.MapFrom(src => src.LeaveWeight))

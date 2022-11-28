@@ -18,7 +18,7 @@ namespace PSI.Service.AutoMapperProfiles
                 .ForMember(tar => tar.CUSTOMER_UNID, ss => ss.MapFrom(src => src.CustomerUNID))
                 .ForMember(tar => tar.CARNO_UNID, ss => ss.MapFrom(src => src.CarNoUNID))
                 .ForMember(tar => tar.EXCAVATOR_OPERATOR_UNID, ss => ss.MapFrom(src => src.ExcavatorOperUNID))
-                .ForMember(tar => tar.LEAVE_WEIGHT_TIME, ss => ss.MapFrom(src => src.LeaveWeightTime))
+                .ForMember(tar => tar.SALES_TIME, ss => ss.MapFrom(src => src.SalesTime))
                 .ForMember(tar => tar.CONTRACT_UNID, ss => ss.MapFrom(src => src.ContractUNID))
                 //.ForMember(tar => tar.PRODUCT_ITEM_UNID, ss => ss.MapFrom(src => src.ProductItemUNID))
                 //.ForMember(tar => tar.ESTIMATE_SALES_WEIGHT, ss => ss.MapFrom(src => src.LeaveWeight))
@@ -41,11 +41,11 @@ namespace PSI.Service.AutoMapperProfiles
             {
                 var salesPriceCaculateHelper = new SalesPriceCaculateHelper();
 
-                tar.INVOICE_PRICE = salesPriceCaculateHelper.GetInvoicePrice(src.LeaveWeight.Value,
+                tar.INVOICE_PRICE = salesPriceCaculateHelper.GetInvoicePrice((double)src.SalesWeight,
                    src.DefectiveWeight.Value,
                    src.UnitPrice.Value,
                    src.InvoicePriceHasTax);
-                tar.TRAFIC_FEE = salesPriceCaculateHelper.GetDeliveryPrice(src.LeaveWeight.Value,
+                tar.TRAFIC_FEE = salesPriceCaculateHelper.GetDeliveryPrice((double)src.SalesWeight,
                         src.TraficUnitPrice,
                         src.TraficFeeHasTax);
                 tar.RECEIVED_PRICE = tar.INVOICE_PRICE - tar.TRAFIC_FEE;

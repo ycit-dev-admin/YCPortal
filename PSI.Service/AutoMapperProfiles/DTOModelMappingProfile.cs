@@ -10,10 +10,10 @@ using PSI.Service.MapActions;
 
 namespace PSI.Service.Mappings
 {
-    public class DTOModelMappings : Profile
+    public class DTOModelMappingProfile : Profile
     {
 
-        public DTOModelMappings()
+        public DTOModelMappingProfile()
         {
             // DTOModel -> Entity
             this.CreateMap<DTO_SalesIngredient, SalesIngredient>();  // test

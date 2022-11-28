@@ -96,7 +96,7 @@
                           ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
 
                 <tr>
-                    <td>@item.LEAVE_WEIGHT_TIME?.ToString("yyyy/MM/dd HH:mm")</td>
+                    <td>@item.SALES_TIME.ToString("yyyy/MM/dd HH:mm")</td>
                     <td>@item.DOC_NO</td>
                     <td>@item.DTO_CustomerInfo.CUSTOMER_NAME</td>
                     <td>@etimateStepData?.SALES_WEIGHT</td>

@@ -230,6 +230,13 @@ namespace PSI.Areas.Sales.Controllers
         public IActionResult CreateWeightNote(WeightNoteCreateWeightNote pageModel)
         {
             var operUser = _userManager.GetUserAsync(User).Result;
+            // ---------------- new
+            var ddd = _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(pageModel);
+
+
+
+            // ----------------old
+
 
             var createRs = _iSalesWeightNoteLogic.CreateSalesWeightNote(pageModel,
                 pageModel.DTOSalesIngredients,
@@ -569,14 +576,14 @@ namespace PSI.Areas.Sales.Controllers
             /* Set to page model */
             pageModel ??= new WeightNoteUpdateActualData();
             pageModel.DTOSalesWeightNote = dtoSalesWeightNote;
-            
+
 
             // Basic type property   
             //pageModel.SalesIngredients = dtoSalesIngredients
             //                            .Select(aa => $@"{aa.ITEM_NAME}_ {aa.ITEM_PERCENT}%").ToList();
 
             // DTO type property
-           
+
 
             pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
             pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Actual);

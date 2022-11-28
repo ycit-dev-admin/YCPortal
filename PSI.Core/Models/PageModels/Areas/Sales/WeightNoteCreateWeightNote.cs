@@ -11,11 +11,11 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
         public Guid CustomerUNID { get; set; }
         public Guid CarNoUNID { get; set; }
         public Guid ExcavatorOperUNID { get; set; }
-        public DateTime? LeaveWeightTime { get; set; }
+        public DateTime? SalesTime { get; set; }
         public Guid? ContractUNID { get; set; }
         public Guid ProductItemUNID { get; set; }   // 廠內磅單主要認列品項
         public List<DTO_SalesIngredient> DTOSalesIngredients { get; set; }
-        public double? LeaveWeight { get; set; }  // 出貨重量
+        public decimal SalesWeight { get; set; }  // 出貨重量
         public double? DefectiveWeight { get; set; }
         public decimal? UnitPrice { get; set; }
         public decimal TraficUnitPrice { get; set; }  // 運費單價

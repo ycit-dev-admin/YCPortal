@@ -75,6 +75,7 @@ namespace PSI
             services.AddScoped<IGenericRepository<SalesWeightNote>, GenericRepository<SalesWeightNote>>();
             services.AddScoped<IGenericRepository<SalesWeightNoteStepData>, GenericRepository<SalesWeightNoteStepData>>();
             services.AddScoped<IGenericRepository<SalesIngredient>, GenericRepository<SalesIngredient>>();
+            //services.AddScoped<IGenericRepository<P_Inventory>, GenericRepository<P_Inventory>>();
 
             // IService
             services.AddScoped<IPsiService, PsiService>();
@@ -97,6 +98,7 @@ namespace PSI
             services.AddScoped<ISalesIngredientServiceNew, SalesIngredientServiceNew>();
             services.AddScoped<ISalesWeightNoteStepDataService, SalesWeightNoteResultPriceServiceNew>();
             services.AddScoped<ISalesWeightNoteResultPriceService, SalesWeightNoteResultPriceService>();
+            services.AddScoped<IGenericService<P_Inventory>, GenericService<P_Inventory>>();
 
             //services.AddScoped<IGenericService<SalesWeightNote>, GenericService<SalesWeightNote>>();
             //services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
@@ -109,6 +111,7 @@ namespace PSI
 
             // IHelper
             services.AddSingleton<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
+            services.AddSingleton<IWeightCaculateHelper, WeightCaculateHelper>();
 
             // IMapper
             services.AddScoped<IPageModelMapper, PageModelMapper>();

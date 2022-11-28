@@ -25,7 +25,7 @@ namespace PSI.Areas.Sales.Mappers
 
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, PurchaseWeightNote>()
-                      .ForMember(t => t.FULL_WEIGHT_TIME, s => s.MapFrom(o => o.LeaveWeightTime))
+                      .ForMember(t => t.FULL_WEIGHT_TIME, s => s.MapFrom(o => o.SalesTime))
                       .ForMember(t => t.CUSTOMER_UNID, s => s.MapFrom(o => o.CustomerUNID))
                       .ForMember(t => t.CONTRACT_UNID, s => s.MapFrom(o => o.ContractUNID ?? null))
                       //.ForMember(t => t.CAR_NO, s => s.MapFrom(o => o.CarNo))

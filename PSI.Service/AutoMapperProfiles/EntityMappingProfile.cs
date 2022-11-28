@@ -6,9 +6,9 @@ using PSI.Service.AutoMapperMappActions;
 
 namespace PSI.Service.Mappings
 {
-    public class EntityMappings : Profile
+    public class EntityMappingProfile : Profile
     {
-        public EntityMappings()
+        public EntityMappingProfile()
         {
             // Entity -> DTOModel
             this.CreateMap<SalesWeightNote, DTO_SalesWeightNote>()
@@ -23,6 +23,7 @@ namespace PSI.Service.Mappings
             this.CreateMap<SalesIngredient, DTO_SalesIngredient>();
             this.CreateMap<ProductItem, DTO_ProductItem>();
             this.CreateMap<CustomerContract, DTO_CustomerContract>();
+            this.CreateMap<P_Inventory, DTO_P_Inventory>();
 
 
             //this.CreateMap<CardSearchInfo, CardSearchCondition>();
