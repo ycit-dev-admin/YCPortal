@@ -126,13 +126,21 @@ namespace PSI
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //註冊所有automapper Profile
 
             services.AddScoped<DbContext, MyContext>();
+            services.AddDbContext<LiteContext>(options =>
+            {
+                //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlite("Data Source = psiDev.db");
+            });
             services.AddDbContext<MyContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlite("Data Source = psiDev.db");
             });
-            services.AddDbContext<IdentityContext>(options =>
+            services.AddDbContext<LiteIdContext>(options =>
             {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlite("Data Source = psiDev.db");
+
             });
             services.AddDefaultIdentity<AppUser>(options =>
             {
@@ -147,7 +155,7 @@ namespace PSI
 
                 // Email settings
                 options.User.RequireUniqueEmail = true;  //Email不能重複
-            }).AddEntityFrameworkStores<IdentityContext>();
+            }).AddEntityFrameworkStores<LiteIdContext>();
 
         }
 
