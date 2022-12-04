@@ -121,7 +121,7 @@
             <legend class="scheduler-border">出貨資訊</legend>
             @{
                 var etimateStepData = Model.DTOSalesWeightNote.DTO_SalesWeightNoteStepDatas
-                ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
+                ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc);
             }
             <div class="row">
                 <div class="col-sm-6">

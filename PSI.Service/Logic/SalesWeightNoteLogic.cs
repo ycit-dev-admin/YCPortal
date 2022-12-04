@@ -162,7 +162,7 @@ namespace PSI.Service.Logic
                 case (nameof(WeightNoteCreateWeightNote), nameof(SalesWeightNoteStepData)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNoteStepData>()
-                       .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate))
+                       .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))
                        .ForMember(tar => tar.INVOICEPRICE_HASTAX, ss => ss.MapFrom(src => src.InvoicePriceHasTax))
                        .ForMember(tar => tar.TRAFICFEE_HASTAX, ss => ss.MapFrom(src => src.TraficFeeHasTax)))
                        .CreateMapper();
@@ -199,7 +199,7 @@ namespace PSI.Service.Logic
             salesWeightNote.CREATE_EMPNO = createEmpNo;
             salesWeightNote.UPDATE_TIME = updateTime;
             salesWeightNote.UPDATE_EMPNO = updateEmpNo;
-            salesWeightNote.NOTE_STATUS = (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate;
+            salesWeightNote.NOTE_STATUS = (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc;
 
 
             // 出貨品項比例建立

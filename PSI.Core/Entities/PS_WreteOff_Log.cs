@@ -12,6 +12,8 @@ namespace PSI.Core.Entities
         public string SALES_DOC_NO { get; set; }
         public Guid WRITEOFF_PRODUCT_UNID { get; set; }
         public string WRITEOFF_ITEM_NAME { get; set; }
-        public double WRITEOFF_WEIGHT { get; set; }
+        public decimal WRITEOFF_WEIGHT { get; set; }
+        public double ITEM_PERCENT { get; set; }
+
     }
 }

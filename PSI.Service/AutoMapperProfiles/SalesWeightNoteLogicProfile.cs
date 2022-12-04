@@ -33,7 +33,7 @@ namespace PSI.Service.AutoMapperProfiles
             CreateMap<DTO_SalesIngredient, SalesIngredient>();
 
             CreateMap<WeightNoteCreateWeightNote, SalesWeightNoteStepData>()
-                .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate))
+                .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))
                 .ForMember(tar => tar.INVOICEPRICE_HASTAX, ss => ss.MapFrom(src => src.InvoicePriceHasTax))
                 .ForMember(tar => tar.TRAFICFEE_HASTAX, ss => ss.MapFrom(src => src.TraficFeeHasTax))
             //.AfterMap<SalesWeightNoteLogicMapAction>();

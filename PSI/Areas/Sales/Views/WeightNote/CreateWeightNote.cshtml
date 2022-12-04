@@ -186,12 +186,12 @@
                         <div style="display:inline">
                             <label id="total"><span>品項組成: 無選擇項目</span></label>
                             <h6 class="form-control-label" style="display:inline-block;">，調整磅單認定</h6>
-                            <span asp-validation-for="ProductItemUNID" class="text-danger"></span>
                             @*<select asp-for="ProductItemUNID" asp-items="@Model.ProductItemItems" class="select2bs4" style="display: inline-block;">  先用普通的*@
                             <select asp-for="ProductItemUNID" asp-items="@Model.ProductItemItems" style="display: inline-block;">
                                 <option value=""></option>
                                 @*<option value="0">0.新客戶</option>*@
                             </select>
+                            <span asp-validation-for="ProductItemUNID" class="text-danger"></span>
                             @*<button type="button" class="btn btn-primary" style="display: inline-block;">成本試算</button>*@
                         </div>
 

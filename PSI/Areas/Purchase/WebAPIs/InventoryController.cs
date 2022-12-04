@@ -32,19 +32,48 @@ namespace PSI.Areas.Purchase.WebAPIs
 
         [HttpGet]
         [Route("[action]")]
-        public string GetInventoryUnitPrice(Guid prodItemGuid)
+        public decimal GetInventoryUnitPrice(Guid prodItemGuid)
         {
             var remainingInventory = _pInventoryService
                                      .GetDTOModels<DTO_P_Inventory>(aa => aa.STATUS != 0 &&
                                                                     aa.PRODUCT_UNID == prodItemGuid);
             if (!remainingInventory.Any())
-                return 0m.ToString("N0");
+                return 0m;
 
             var totalWeight = remainingInventory.Sum(aa => aa.REMAINING_WEIGHT);
             var totalPrice = remainingInventory.Sum(aa => aa.REMAINING_WEIGHT * aa.UNIT_PRICE);
 
-            return (totalPrice / totalWeight).ToString("N2");  
+            return totalPrice / totalWeight;
+            //return (totalPrice / totalWeight).ToString("N2");
             //return _psiService.GetActualPayPrice(thirdWeightPrice, weightNotePrice, deliveryPrice);
+
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public decimal GetInventoryMaxUnitPrice(Guid prodItemGuid)
+        {
+            var remainingInventory = _pInventoryService
+                                     .GetDTOModels<DTO_P_Inventory>(aa => aa.STATUS != 0 &&
+                                                                    aa.PRODUCT_UNID == prodItemGuid);
+            if (!remainingInventory.Any())
+                return 0m;
+
+            return remainingInventory.Max(aa => aa.UNIT_PRICE);
+        }
+
+
+        [HttpGet]
+        [Route("[action]")]
+        public decimal GetInventoryMinUnitPrice(Guid prodItemGuid)
+        {
+            var remainingInventory = _pInventoryService
+                                     .GetDTOModels<DTO_P_Inventory>(aa => aa.STATUS != 0 &&
+                                                                    aa.PRODUCT_UNID == prodItemGuid);
+            if (!remainingInventory.Any())
+                return 0m;
+
+            return remainingInventory.Min(aa => aa.UNIT_PRICE);
 
         }
     }

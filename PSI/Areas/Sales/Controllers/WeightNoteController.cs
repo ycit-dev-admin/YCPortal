@@ -12,6 +12,7 @@ using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Enums;
 using PSI.Core.Extensions;
+using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Models.DTOModels;
 using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.EntityValidators;
@@ -35,6 +36,7 @@ namespace PSI.Areas.Sales.Controllers
         // Other
         //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IUnitOfWork _unitOfWork;
 
         // Service
         // private readonly ISalesWeightNoteService _iSalesWeightNoteService;
@@ -101,10 +103,12 @@ namespace PSI.Areas.Sales.Controllers
                                     IPageModelMapper iPageModelMapper,
                                     ISalesWeightNoteLogic iSalesWeightNoteLogic,
                                     //IEntityMapperProfile iEntityMapperProfile,
-                                    UserManager<AppUser> userManager)
+                                    UserManager<AppUser> userManager,
+                                    IUnitOfWork unitOfWork)
         {
             // Other
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
             // Service
             _iSalesWeightNoteService = iSalesWeightNoteService;
             _iSalesIngredientService = iSalesIngredientService;
@@ -231,27 +235,39 @@ namespace PSI.Areas.Sales.Controllers
         {
             var operUser = _userManager.GetUserAsync(User).Result;
             // ---------------- new
-            var ddd = _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(pageModel);
+            var saleWeightNote = _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(pageModel)
+                                                         .ResultValue;
+            saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);
+            saleWeightNote.CREATE_EMPNO = operUser.NICK_NAME;
+            saleWeightNote.UPDATE_EMPNO = operUser.NICK_NAME;
 
+            var salesIngredients = _iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOSalesIngredients).ResultValue;
+            salesIngredients.ForEach(item =>
+            {
+                item.SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID;
+                item.CREATE_EMPNO = operUser.NICK_NAME;
+                item.UPDATE_EMPNO = operUser.NICK_NAME;
+            });
 
+            var commitRs = _unitOfWork.SaveChange();
 
             // ----------------old
 
 
-            var createRs = _iSalesWeightNoteLogic.CreateSalesWeightNote(pageModel,
-                pageModel.DTOSalesIngredients,
-                pageModel,
-                _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale), // 單號 (驗證完後再給)
-                operUser);
+            //var createRs = _iSalesWeightNoteLogic.CreateSalesWeightNote(pageModel,
+            //    pageModel.DTOSalesIngredients,
+            //    pageModel,
+            //    _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale), // 單號 (驗證完後再給)
+            //    operUser);
 
-            if (!createRs.Success)
+            if (!commitRs.Success)
             {
-                TempData["pageMsg"] = createRs.ErrorMessage;
+                TempData["pageMsg"] = commitRs.ErrorMessage;
                 return View(PageModelOfCreateWeightNote(pageModel));
             }
 
             // Successed
-            TempData["pageMsg"] = $@"磅單:{createRs.ResultValue.DOC_NO} 建立成功!!";
+            TempData["pageMsg"] = $@"磅單:{ saleWeightNote.DOC_NO } 建立成功!!";
             return RedirectToAction(nameof(WeightNoteController.QueryList));
         }
 
@@ -585,8 +601,8 @@ namespace PSI.Areas.Sales.Controllers
             // DTO type property
 
 
-            pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
-            pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Actual);
+            pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc);
+            pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Customer);
             //pageModel.DTOSalesWeightNote = dtoSalesWeightNote;
             //pageModel.DTOCustomerCarItems = dtoCustomerCars;
             pageModel.ReceivedTypItems = dtoReceivedTypeCodeTables.ToPageSelectList(nameof(DTO_CodeTable.CODE_TEXT),

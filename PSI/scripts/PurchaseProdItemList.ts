@@ -9,6 +9,8 @@
         const isItemExist = this.Data.filter(item => item.prodId === prodId).length > 0;
         if (!isItemExist) {
             let prodItem = new PurchaseProdItem(prodId, prodText, this.Data.length === 0 ? 90 : 10);
+            //var abp = new PurchaseProdItem({ prodId: prodId, percent: 100, prodText: "" })
+            //abp.prodId = "234";
             this.Data.push(prodItem);
         }
     }

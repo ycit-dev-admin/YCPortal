@@ -16,7 +16,10 @@ namespace PSI.Service.Mappings
         public DTOModelMappingProfile()
         {
             // DTOModel -> Entity
-            this.CreateMap<DTO_SalesIngredient, SalesIngredient>();  // test
+            this.CreateMap<DTO_SalesIngredient, SalesIngredient>()
+                .ForMember(tar => tar.PRODUCT_UNID, ss => ss.MapFrom(src => src.PRODUCT_UNID))
+                .ForMember(tar => tar.CREATE_TIME, ss => ss.MapFrom(src => DateTime.Now))
+                .ForMember(tar => tar.UPDATE_TIME, ss => ss.MapFrom(src => DateTime.Now));
 
 
             this.CreateMap<DTO_SalesWeightNote, SalesWeightNote>()

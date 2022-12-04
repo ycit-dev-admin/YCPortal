@@ -35,8 +35,8 @@ namespace PSI.Service.IService
         /// <typeparam name="TViewModel">ViewModel的形態</typeparam>
         /// <param name="viewModel">ViewModel的Reference</param>
         /// <returns>是否儲存成功</returns>
-        FunctionResult CreateEntityByDTOModelNoSave<TViewModel>(TViewModel viewModel);
-        void CreateEntityByDTOModelNoSave<TViewModel>(List<TViewModel> viewModels);
+        FunctionResult<T> CreateEntityByDTOModelNoSave<TViewModel>(TViewModel viewModel);
+        FunctionResult<List<T>> CreateEntityByDTOModelNoSave<TViewModel>(List<TViewModel> viewModels);
 
 
         /// <summary>

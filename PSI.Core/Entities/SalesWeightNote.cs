@@ -15,7 +15,7 @@ namespace PSI.Core.Entities
         public int? SCALE_NO { get; set; }
         public Guid EXCAVATOR_OPERATOR_UNID { get; set; }  // 怪手司機UNID
         public Guid? CONTRACT_UNID { get; set; }  // 對應合約
-        public int NOTE_STATUS { get; set; }  // 磅單狀態   1:廠內出貨 2: 客戶資訊回填
+        public int NOTE_STATUS { get; set; }  // 磅單狀態   1:廠內出貨 2: 客戶資訊回填 3: 完成  90:單據異常
         public decimal? TAX_RENT { get; set; }  // 當下稅率
         public decimal? INVOICE_PRICE { get; set; }  // 請款金額 
         public decimal? INVOICEPRICE_TAX { get; set; } // 請款金額稅額
@@ -30,7 +30,7 @@ namespace PSI.Core.Entities
         public decimal? RECEIVED_UNIT_PRICE { get; set; } // 客戶實收平均單價
         public int? RECEIVED_TYPE { get; set; }  // 收款方式
         public DateTime? RECEIVED_TIME { get; set; } // 收款時間
-        public string? REMARK { get; set; }  // 磅單備註
+        public string REMARK { get; set; }  // 磅單備註
 
         // 下列預計廢除
         //public Guid PRODUCT_ITEM_UNID { get; set; }   // 出貨認列品項

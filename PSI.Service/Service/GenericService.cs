@@ -52,25 +52,26 @@ namespace PSI.Service.Service
         /// <typeparam name="ViewModel">對應的ViewModel類型</typeparam>
         /// <param name="inViewModelData">帶有資料的ViewModel</param>
         /// <returns>帶有資料的 TEntity 類別</returns>
-        protected static TEntity staticConvertViewModelToModel<ViewModel>(ViewModel inViewModelData)
+        protected TEntity staticConvertViewModelToModel<ViewModel>(ViewModel inViewModelData)
         {
-            //建立組態檔
-            var cfg = new MapperConfigurationExpression();
-            //可反轉
-            cfg.CreateMap<ViewModel, TEntity>().ReverseMap();
-            //實例 Mapper 的物件
-            // Mapper.Initialize(cfg);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<DTOModelMappingProfile>();
-            });
+            ////建立組態檔
+            //var cfg = new MapperConfigurationExpression();
+            ////可反轉
+            //cfg.CreateMap<ViewModel, TEntity>().ReverseMap();
+            ////實例 Mapper 的物件
+            //// Mapper.Initialize(cfg);
+            //var config = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.AddProfile<DTOModelMappingProfile>();
+            //});
 
 
 
-            var mapper = config.CreateMapper();
+            //var mapper = config.CreateMapper();
 
             // 依據 ViewModel 的資料 建立出 <TEntity> 型別的物件
-            return mapper.Map<TEntity>(inViewModelData);
+            //return mapper.Map<TEntity>(inViewModelData);
+            return _iMapper.Map<TEntity>(inViewModelData);
         }
 
         // 使用 AutoMapper 轉成對應的 Entity Model
@@ -247,16 +248,21 @@ namespace PSI.Service.Service
         /// <param name="viewModel">ViewModel的Reference</param>
         /// <returns>是否儲存成功</returns>
         /// <exception cref="System.ArgumentNullException">資料的Entity為Null</exception>
-        public virtual FunctionResult CreateEntityByDTOModelNoSave<TViewModel>(TViewModel viewModel)
+        public virtual FunctionResult<TEntity> CreateEntityByDTOModelNoSave<TViewModel>(TViewModel viewModel)
         {
-            var funRs = new FunctionResult(this);
+            var funRs = new FunctionResult<TEntity>();
             if (viewModel == null)
             {
                 funRs.ResultFailure("參數為null");
                 throw new ArgumentNullException("instance");
             }
             var entity = staticConvertViewModelToModel(viewModel);
-            funRs = this._unitOfWork.GetRepository<TEntity>().Create(entity);
+            var createRs = this._unitOfWork.GetRepository<TEntity>().Create(entity);
+
+            funRs.ResultFailure($@"Error: {createRs.ErrorMessage}");
+            if (createRs.Success)
+                funRs.ResultSuccess("successed", entity);
+
             return funRs;
         }
 
@@ -267,13 +273,17 @@ namespace PSI.Service.Service
         /// <param name="viewModel">ViewModel的Reference</param>
         /// <returns>是否儲存成功</returns>
         /// <exception cref="System.ArgumentNullException">資料的Entity為Null</exception>
-        public virtual void CreateEntityByDTOModelNoSave<TViewModel>(List<TViewModel> viewModels)
+        public virtual FunctionResult<List<TEntity>> CreateEntityByDTOModelNoSave<TViewModel>(List<TViewModel> viewModels)
         {
-            //var funRs = new FunctionResult<List<TEntity>>(this);
+            var funcRs = new FunctionResult<List<TEntity>>(this);
             if (viewModels == null) { throw new ArgumentNullException("instance"); }
             var entities = staticConvertViewModelToModel(viewModels);
-            this._unitOfWork.GetRepository<TEntity>().Create(entities);
-            //return wfunRs;
+            var createRs = this._unitOfWork.GetRepository<TEntity>().Create(entities);
+
+            funcRs.ResultFailure($@"Error: {createRs.ErrorMessage}");
+            if (createRs.Success)
+                funcRs.ResultSuccess("successed", entities);
+            return funcRs;
         }
 
         /// <summary>

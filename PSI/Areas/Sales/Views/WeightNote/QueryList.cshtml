@@ -93,7 +93,7 @@
             @foreach (var item in Model.DTOSalesWeightNotes)
             {
                 var etimateStepData = item.DTO_SalesWeightNoteStepDatas
-                          ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Estimate);
+                          ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc);
 
                 <tr>
                     <td>@item.SALES_TIME.ToString("yyyy/MM/dd HH:mm")</td>
@@ -106,7 +106,7 @@
                     <td>@etimateStepData?.TRAFIC_FEE</td>
                     <td>@etimateStepData?.RECEIVED_PRICE</td>
                     <td>@etimateStepData?.DTO_ReceiveTypeInfo.CODE_TEXT</td>
-                    <td>@etimateStepData.RECEIVED_TIME.ToString("yyyy/MM/dd HH:mm")</td>
+                    <td>@etimateStepData?.RECEIVED_TIME.ToString("yyyy/MM/dd HH:mm")</td>
                     <td>
                         <a asp-action="UpdateActualData" asp-route-unid="@item.UNID" class="btn btn-primary">
                             回填

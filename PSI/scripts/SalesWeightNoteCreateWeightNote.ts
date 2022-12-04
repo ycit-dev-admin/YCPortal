@@ -614,15 +614,15 @@
             // Create a hidden input element, and append it to the li:
             let nameProperty = document.createElement("input");
             nameProperty.type = "hidden";
-            nameProperty.name = `DTOSalesIngredients[${index}].ItemName`;
+            nameProperty.name = `DTOSalesIngredients[${index}].ITEM_NAME`;
             nameProperty.value = item.prodText
             let valueProperty = document.createElement("input");
             valueProperty.type = "hidden";
-            valueProperty.name = `DTOSalesIngredients[${index}].ProductUNID`;
+            valueProperty.name = `DTOSalesIngredients[${index}].PRODUCT_UNID`;
             valueProperty.value = item.prodId;
             let percentProperty = document.createElement("input");
             percentProperty.type = "hidden";
-            percentProperty.name = `DTOSalesIngredients[${index}].ItemPercent`;
+            percentProperty.name = `DTOSalesIngredients[${index}].ITEM_PERCENT`;
             percentProperty.value = item.percent.toString();
 
             postDiv.append(nameProperty);
@@ -756,6 +756,8 @@
             //    thisObj.DataTableObj.order([1, 'desc']).draw();
             //});
             let funcRs3 = thisObj.InventoryAPIClass.GetInventoryUnitPrice(productUNID);
+            let funcRs4 = thisObj.InventoryAPIClass.GetInventoryMinUnitPrice(productUNID);
+            let funcRs5 = thisObj.InventoryAPIClass.GetInventoryMaxUnitPrice(productUNID);
             //$.when(funcRs3).then(function (data) {
             //    thisRowData[4] = `${data} 元/kg`;
             //    thisRow.invalidate();
@@ -773,7 +775,7 @@
             //    //});
             //});
 
-            $.when(funcRs, funcRs2, funcRs3).then(function (data, data2, data3) {
+            $.when(funcRs, funcRs2, funcRs3, funcRs4, funcRs5).then(function (data, data2, data3, data4, data5) {
                 // data
                 thisRowData[2] = data[0];
 
@@ -781,7 +783,7 @@
                 thisRowData[3] = data2[0];
 
                 // data3
-                thisRowData[4] = `${data3[0]} 元/kg`;
+                thisRowData[4] = `(${data4[0].toLocaleString('zh-TW')}~${data5[0].toLocaleString('zh-TW')}), 平均${data3[0].toLocaleString('zh-TW')} 元/kg`;
 
                 thisRow.invalidate();
                 thisObj.DataTableObj.order([2, 'desc']).draw();
