@@ -27,6 +27,8 @@ namespace PSI.Core.Infrastructure.DBContext
         public DbSet<SalesIngredient> SalesIngredients { get; set; }
         public DbSet<SalesWeightNote> SalesWeightNotes { get; set; }
         public DbSet<SalesWeightNoteStepData> SalesWeightNotesStepDatas { get; set; }
+        public DbSet<P_Inventory> P_Inventory { get; set; }
+        public DbSet<PS_WreteOff_Record> PS_WreteOff_Record { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
           => options.UseSqlite("Data Source=psiDev.db");

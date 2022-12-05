@@ -9,8 +9,8 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations.Lite
 {
     [DbContext(typeof(LiteContext))]
-    [Migration("20221115032947_init sqllite")]
-    partial class initsqllite
+    [Migration("20221129023534_update db")]
+    partial class updatedb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -250,6 +250,97 @@ namespace PSI.Core.Migrations.Lite
                     b.ToTable("CustomerInfos");
                 });
 
+            modelBuilder.Entity("PSI.Core.Entities.PS_WreteOff_Record", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CREATE_EMPNO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CREATE_TIME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PURCHASE_DOC_NO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PURCHASE_WEIGHTNOTE_UNID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SALES_DOC_NO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SALES_WEIGHTNOTE_UNID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UPDATE_EMPNO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UPDATE_TIME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WRITEOFF_ITEM_NAME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("WRITEOFF_PRODUCT_UNID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("WRITEOFF_WEIGHT")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PS_WreteOff_Record");
+                });
+
+            modelBuilder.Entity("PSI.Core.Entities.P_Inventory", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CREATE_EMPNO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CREATE_TIME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ITEM_PERCENT")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PRODUCT_ITEM_NAME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PRODUCT_UNID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("PURCHASE_WEIGHTNOTE")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PURCHASE_WEIGHTNOTE_UNID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("REMAINING_WEIGHT")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("STATUS")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("UNIT_PRICE")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UPDATE_EMPNO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UPDATE_TIME")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("P_Inventory");
+                });
+
             modelBuilder.Entity("PSI.Core.Entities.ProductItem", b =>
                 {
                     b.Property<long>("ID")
@@ -309,8 +400,17 @@ namespace PSI.Core.Migrations.Lite
                     b.Property<Guid>("PRODUCT_UNID")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("PURCHASE_WEIGHTNOTE")
+                        .HasColumnType("REAL");
+
                     b.Property<Guid>("PURCHASE_WEIGHTNOTE_UNID")
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("REMAINING_WEIGHT")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("STATUS")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UPDATE_EMPNO")
                         .HasColumnType("TEXT");
@@ -498,28 +598,73 @@ namespace PSI.Core.Migrations.Lite
                     b.Property<Guid>("CUSTOMER_UNID")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("DEFECTIVE_WEIGHT")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("DOC_NO")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("EXCAVATOR_OPERATOR_UNID")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("LEAVE_WEIGHT_TIME")
+                    b.Property<decimal?>("INVOICEPRICE_TAX")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("INVOICE_PRICE")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("NOTE_STATUS")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("PRODUCT_ITEM_UNID")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("RECEIVED_PRICE")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RECEIVED_TIME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("RECEIVED_TYPE")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("RECEIVED_UNIT_PRICE")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("REMARK")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SALES_TIME")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("SALES_UNIT_PRICE")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("SALES_WEIGHT")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("SCALE_NO")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal?>("TAX_RENT")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TRAFIC_FEE")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TRAFIC_FEE_TAX")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TRAFIC_UNIT_PRICE")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UNID")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UPDATE_EMPNO")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UPDATE_SALES_TIME")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("UPDATE_TIME")

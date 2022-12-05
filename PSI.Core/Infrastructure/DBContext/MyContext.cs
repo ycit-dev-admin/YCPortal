@@ -40,6 +40,9 @@ namespace PSI.Core.Infrastructure.DBContext
             modelBuilder.ApplyConfiguration(new CodeTableConfiguration());
             //modelBuilder.ApplyConfiguration(new ProductItemsConfiguration());
             //modelBuilder.ApplyConfiguration(new CustomerInfosConfiguration());
+
+            // https://www.learnentityframeworkcore.com/migrations/seeding
+            //modelBuilder.Entity<P_Inventory>().HasData(new P_Inventory {  });
         }
 
         // 疑似取代.net framework 的DbEntityValidationException用法  https://entityframeworkcore.com/knowledge-base/46430619/-net-core-2---ef-core-error-handling-save-changes

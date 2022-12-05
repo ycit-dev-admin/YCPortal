@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PSI.Core.Migrations.LiteId
 {
-    public partial class ini_liteId : Migration
+    public partial class init_litid : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

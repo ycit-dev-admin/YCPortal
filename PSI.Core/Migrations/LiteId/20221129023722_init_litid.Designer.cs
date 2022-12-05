@@ -9,8 +9,8 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations.LiteId
 {
     [DbContext(typeof(LiteIdContext))]
-    [Migration("20221124095559_ini_liteId")]
-    partial class ini_liteId
+    [Migration("20221129023722_init_litid")]
+    partial class init_litid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

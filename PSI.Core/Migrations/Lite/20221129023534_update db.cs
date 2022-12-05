@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PSI.Core.Migrations.Lite
 {
-    public partial class initsqllite : Migration
+    public partial class updatedb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -127,6 +127,30 @@ namespace PSI.Core.Migrations.Lite
                 });
 
             migrationBuilder.CreateTable(
+                name: "P_Inventory",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CREATE_TIME = table.Column<DateTime>(nullable: false),
+                    CREATE_EMPNO = table.Column<string>(nullable: true),
+                    UPDATE_TIME = table.Column<DateTime>(nullable: false),
+                    UPDATE_EMPNO = table.Column<string>(nullable: true),
+                    PURCHASE_WEIGHTNOTE_UNID = table.Column<Guid>(nullable: false),
+                    PRODUCT_UNID = table.Column<Guid>(nullable: false),
+                    PRODUCT_ITEM_NAME = table.Column<string>(nullable: true),
+                    PURCHASE_WEIGHTNOTE = table.Column<decimal>(nullable: false),
+                    REMAINING_WEIGHT = table.Column<decimal>(nullable: false),
+                    ITEM_PERCENT = table.Column<int>(nullable: false),
+                    UNIT_PRICE = table.Column<decimal>(nullable: false),
+                    STATUS = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_P_Inventory", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductItems",
                 columns: table => new
                 {
@@ -148,6 +172,29 @@ namespace PSI.Core.Migrations.Lite
                 });
 
             migrationBuilder.CreateTable(
+                name: "PS_WreteOff_Record",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CREATE_TIME = table.Column<DateTime>(nullable: false),
+                    CREATE_EMPNO = table.Column<string>(nullable: true),
+                    UPDATE_TIME = table.Column<DateTime>(nullable: false),
+                    UPDATE_EMPNO = table.Column<string>(nullable: true),
+                    PURCHASE_WEIGHTNOTE_UNID = table.Column<Guid>(nullable: false),
+                    PURCHASE_DOC_NO = table.Column<string>(nullable: true),
+                    SALES_WEIGHTNOTE_UNID = table.Column<Guid>(nullable: false),
+                    SALES_DOC_NO = table.Column<string>(nullable: true),
+                    WRITEOFF_PRODUCT_UNID = table.Column<Guid>(nullable: false),
+                    WRITEOFF_ITEM_NAME = table.Column<string>(nullable: true),
+                    WRITEOFF_WEIGHT = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PS_WreteOff_Record", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PurchaseIngredients",
                 columns: table => new
                 {
@@ -160,7 +207,10 @@ namespace PSI.Core.Migrations.Lite
                     PURCHASE_WEIGHTNOTE_UNID = table.Column<Guid>(nullable: false),
                     PRODUCT_UNID = table.Column<Guid>(nullable: false),
                     ITEM_NAME = table.Column<string>(nullable: true),
-                    ITEM_PERCENT = table.Column<double>(nullable: false)
+                    PURCHASE_WEIGHTNOTE = table.Column<double>(nullable: false),
+                    REMAINING_WEIGHT = table.Column<double>(nullable: false),
+                    ITEM_PERCENT = table.Column<double>(nullable: false),
+                    STATUS = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,11 +299,26 @@ namespace PSI.Core.Migrations.Lite
                     DOC_NO = table.Column<string>(nullable: true),
                     CUSTOMER_UNID = table.Column<Guid>(nullable: false),
                     CARNO_UNID = table.Column<Guid>(nullable: false),
-                    LEAVE_WEIGHT_TIME = table.Column<DateTime>(nullable: true),
+                    SALES_TIME = table.Column<DateTime>(nullable: false),
+                    UPDATE_SALES_TIME = table.Column<DateTime>(nullable: true),
                     SCALE_NO = table.Column<int>(nullable: true),
                     EXCAVATOR_OPERATOR_UNID = table.Column<Guid>(nullable: false),
                     CONTRACT_UNID = table.Column<Guid>(nullable: true),
                     NOTE_STATUS = table.Column<int>(nullable: false),
+                    TAX_RENT = table.Column<decimal>(nullable: true),
+                    INVOICE_PRICE = table.Column<decimal>(nullable: true),
+                    INVOICEPRICE_TAX = table.Column<decimal>(nullable: true),
+                    TRAFIC_UNIT_PRICE = table.Column<decimal>(nullable: true),
+                    TRAFIC_FEE = table.Column<decimal>(nullable: true),
+                    TRAFIC_FEE_TAX = table.Column<decimal>(nullable: true),
+                    RECEIVED_PRICE = table.Column<decimal>(nullable: true),
+                    PRODUCT_ITEM_UNID = table.Column<Guid>(nullable: false),
+                    SALES_WEIGHT = table.Column<decimal>(nullable: false),
+                    DEFECTIVE_WEIGHT = table.Column<decimal>(nullable: true),
+                    SALES_UNIT_PRICE = table.Column<decimal>(nullable: false),
+                    RECEIVED_UNIT_PRICE = table.Column<decimal>(nullable: true),
+                    RECEIVED_TYPE = table.Column<int>(nullable: true),
+                    RECEIVED_TIME = table.Column<DateTime>(nullable: true),
                     REMARK = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -329,7 +394,13 @@ namespace PSI.Core.Migrations.Lite
                 name: "CustomerInfos");
 
             migrationBuilder.DropTable(
+                name: "P_Inventory");
+
+            migrationBuilder.DropTable(
                 name: "ProductItems");
+
+            migrationBuilder.DropTable(
+                name: "PS_WreteOff_Record");
 
             migrationBuilder.DropTable(
                 name: "PurchaseIngredients");
