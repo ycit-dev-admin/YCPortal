@@ -3,6 +3,8 @@ using PSI.Core.Entities;
 using PSI.Core.Enums;
 using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Helpers.IHelper;
+using PSI.Service.IService;
+using PSI.Service.Service;
 using System;
 using System.Collections.Generic;
 
@@ -10,10 +12,14 @@ namespace PSI.Helpers
 {
     public class WeightNoteCreateWeightNote_MapperConfig : IMapperConfigAction
     {
-
+        private readonly IPsiService _psiService;
         public WeightNoteCreateWeightNote_MapperConfig()
         {
-
+            _psiService = new PsiService();
+        }
+        public WeightNoteCreateWeightNote_MapperConfig(IPsiService psiService)
+        {
+            _psiService = psiService;
         }
 
         public Dictionary<(Type, Type, int), IMapper> GetConfigDic()
@@ -35,7 +41,8 @@ namespace PSI.Helpers
                       .ForMember(tar => tar.CONTRACT_UNID, ss => ss.MapFrom(src => src.ContractUNID))
                       .ForMember(tar => tar.CREATE_TIME, ss => ss.MapFrom(src => DateTime.Now))
                       .ForMember(tar => tar.UPDATE_TIME, ss => ss.MapFrom(src => DateTime.Now))
-                      .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc)))
+                      .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))
+                      .ForMember(tar=> tar.DOC_NO,ss=> ss.MapFrom(src=> _psiService.GetWeightNoteDocNo("A", PSIEnum.PSIType.Sale))))
                       .CreateMapper()
 
 

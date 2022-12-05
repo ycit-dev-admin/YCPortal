@@ -25,6 +25,9 @@ namespace PSI.Service.Service
         private readonly IGenericRepository<CustomerContract> _customerContractRepository;
         private readonly IGenericRepository<CustomerContractLog> _customerContractLogRepository;
 
+        public PsiService()
+        {
+        }
         public PsiService(IUnitOfWork unitOfWork)
         {
             //_httpContextAccessor = httpContextAccessor;
@@ -41,7 +44,7 @@ namespace PSI.Service.Service
         }
 
 
-       
+
 
         public Dictionary<string, PSIEnum.FacSite> GetFacSites()
         {
@@ -167,14 +170,14 @@ namespace PSI.Service.Service
             return funcRs;
         }
 
-      
+
         public PurchaseWeightNote GetPurchaseWeightNote(Guid unid)
         {
             var result = _purchaseWeightNoteRepository.GetAsync(aa => aa.UNID == unid).Result;
             return result;
         }
 
-        
+
         public IQueryable<PurchaseWeightNote> GetPurchaseWeightNotes(DateTime sTime, DateTime eTime)
         {
             return _purchaseWeightNoteRepository.GetAllAsync().Result

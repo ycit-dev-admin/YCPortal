@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PSI.Areas.Purchase.Models.PageModels;
+using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Helpers.IHelper;
 using System;
 using System.Collections.Generic;
@@ -22,6 +22,8 @@ namespace PSI.Helpers
             var srcType = typeof(SrcType);
 
             var instanceTypeDic = GetInstanceTypeDic();
+            var qq = GetInstanceTypeDic().Keys;
+
             var instanceType = instanceTypeDic[typeof(SrcType)];
 
             var wowInsetance = Activator.CreateInstance(instanceType);

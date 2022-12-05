@@ -16,6 +16,7 @@ using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Models.DTOModels;
 using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.EntityValidators;
+using PSI.Helpers.IHelper;
 using PSI.Infrastructure.Extensions;
 using PSI.Mappgins.Interface;
 using PSI.Models.PEModels;
@@ -69,6 +70,7 @@ namespace PSI.Areas.Sales.Controllers
 
         // Helper
         private readonly ISalesPriceCaculateHelper _iSalesPriceCaculateHelper;
+        private readonly IMapperHelper _iMapperHelper;
 
         // 準備移除
         private readonly IPSIEnumService _pSIEnumService;
@@ -104,6 +106,7 @@ namespace PSI.Areas.Sales.Controllers
                                     ISalesWeightNoteLogic iSalesWeightNoteLogic,
                                     //IEntityMapperProfile iEntityMapperProfile,
                                     UserManager<AppUser> userManager,
+                                   IMapperHelper iMapperHelper,
                                     IUnitOfWork unitOfWork)
         {
             // Other
@@ -135,6 +138,7 @@ namespace PSI.Areas.Sales.Controllers
 
             // Helper
             _iSalesPriceCaculateHelper = iSalesPriceCaculateHelper;
+            _iMapperHelper = iMapperHelper;
 
             // Logic
             _iSalesWeightNoteLogic = iSalesWeightNoteLogic;
@@ -235,6 +239,7 @@ namespace PSI.Areas.Sales.Controllers
         {
             var operUser = _userManager.GetUserAsync(User).Result;
             // ---------------- new
+            var abc = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, SalesWeightNote>(pageModel);
             var saleWeightNote = _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(pageModel)
                                                          .ResultValue;
             saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);

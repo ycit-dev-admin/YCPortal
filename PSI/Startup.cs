@@ -15,6 +15,8 @@ using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Repositorys;
 using PSI.Core.UnitOfWorks;
+using PSI.Helpers;
+using PSI.Helpers.IHelper;
 using PSI.Mappgins;
 using PSI.Mappgins.Interface;
 using PSI.Service.Helper;
@@ -112,6 +114,10 @@ namespace PSI
             // IHelper
             services.AddSingleton<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
             services.AddSingleton<IWeightCaculateHelper, WeightCaculateHelper>();
+            services.AddSingleton<IMapperHelper, MapperHelper>();
+            //services.AddSingleton<IMapperAllConfig, MapperAllConfig>();
+            //services.AddSingleton<IMapperConfigAction, WeightNoteCreateWeightNote_MapperConfig>();
+            //services.AddSingleton<IMapperConfig, MapperConfig>();
 
             // IMapper
             services.AddScoped<IPageModelMapper, PageModelMapper>();
@@ -133,13 +139,13 @@ namespace PSI
             });
             services.AddDbContext<MyContext>(options =>
             {
-                //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-                options.UseSqlite("Data Source = psiDev.db");
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseSqlite("Data Source = psiDev.db");
             });
             services.AddDbContext<LiteIdContext>(options =>
             {
-                //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-                options.UseSqlite("Data Source = psiDev.db");
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                //options.UseSqlite("Data Source = psiDev.db");
 
             });
             services.AddDefaultIdentity<AppUser>(options =>
