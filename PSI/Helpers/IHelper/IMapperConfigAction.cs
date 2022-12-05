@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace PSI.Helpers.IHelper
 {
-    public interface IMapperConfig
+    public interface IMapperConfigAction
     {
-        Dictionary<(Type, Type, int), IMapper> GetConfig<SrcType>();
+        Dictionary<(Type, Type, int), IMapper> GetConfigDic();
 
 
 

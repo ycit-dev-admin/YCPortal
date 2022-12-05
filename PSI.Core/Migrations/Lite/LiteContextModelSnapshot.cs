@@ -260,6 +260,9 @@ namespace PSI.Core.Migrations.Lite
                     b.Property<DateTime>("CREATE_TIME")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("ITEM_PERCENT")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("PURCHASE_DOC_NO")
                         .HasColumnType("TEXT");
 
@@ -284,8 +287,8 @@ namespace PSI.Core.Migrations.Lite
                     b.Property<Guid>("WRITEOFF_PRODUCT_UNID")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("WRITEOFF_WEIGHT")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("WRITEOFF_WEIGHT")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 

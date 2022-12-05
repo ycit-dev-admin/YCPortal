@@ -222,6 +222,27 @@ namespace PSI.Core.Migrations.LiteId
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a035b649-e018-449f-bd6d-eba3aec5a117",
+                            AUTHORITY_LEVEL = 0,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a66c1a38-64f9-4339-a5f6-3b9973530c7e",
+                            Email = "waynelee@yc.com",
+                            EmailConfirmed = true,
+                            FAC_SITE = "A",
+                            LockoutEnabled = true,
+                            NICK_NAME = "管理員",
+                            NormalizedEmail = "WAYNELEE@YC.COM",
+                            NormalizedUserName = "WAYNELEE",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAbj60M2d59Q+tRgJf2+z4xBnFyufQUInySMKeOQm6RAiI9sS8J59fjNE9+DryaP7Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "XQETP2NFPURVTDGBIFTCQHZBACWA3HN3",
+                            TwoFactorEnabled = false,
+                            UserName = "waynelee"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

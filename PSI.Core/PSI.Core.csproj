@@ -33,6 +33,16 @@
     <Compile Remove="Migrations\20220529054328_adj tables.Designer.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.cs" />
     <Compile Remove="Migrations\Identity\20210912031453_IdentityTest.Designer.cs" />
+    <Compile Remove="Migrations\LiteId\20221205072411_ini idty.cs" />
+    <Compile Remove="Migrations\LiteId\20221205072411_ini idty.Designer.cs" />
+    <Compile Remove="Migrations\LiteId\20221205074240_ini idty.cs" />
+    <Compile Remove="Migrations\LiteId\20221205074240_ini idty.Designer.cs" />
+    <Compile Remove="Migrations\Lite\20221205042847_update column.cs" />
+    <Compile Remove="Migrations\Lite\20221205042847_update column.Designer.cs" />
+    <Compile Remove="Migrations\Lite\20221205063913_update column.cs" />
+    <Compile Remove="Migrations\Lite\20221205063913_update column.Designer.cs" />
+    <Compile Remove="Migrations\Lite\20221205064030_update column.cs" />
+    <Compile Remove="Migrations\Lite\20221205064030_update column.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

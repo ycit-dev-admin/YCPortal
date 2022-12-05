@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using PSI.Core.Entities;
 using PSI.Core.Entities.EntityConfigurations;
+using PSI.Core.Entities.Identity;
 
 namespace PSI.Core.Infrastructure.DBContext
 {
@@ -32,5 +33,10 @@ namespace PSI.Core.Infrastructure.DBContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
           => options.UseSqlite("Data Source=psiDev.db");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

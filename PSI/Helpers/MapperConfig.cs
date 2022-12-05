@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using PSI.Areas.Purchase.Models.PageModels;
-using PSI.Core.Entities;
-using PSI.Service.IHelper;
+using PSI.Helpers.IHelper;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace PSI.Helpers
 {
@@ -12,27 +12,36 @@ namespace PSI.Helpers
 
         public MapperConfig()
         {
-            // new 
-            //_sysEmitSapDataMapConfig = new SysEmitSapDataMapConfig();
+
         }
 
-        public IMapper GetMapConfig(int mapType)
+        public Dictionary<(Type, Type, int), IMapper> GetConfig<SrcType>()
         {
-            Dictionary<(Type, Type, int), IMapper> abc = null;
+            // 取得泛型中的類型型態
+            Dictionary<(Type, Type, int), IMapper> rsDic = new Dictionary<(Type, Type, int), IMapper>();
+            var srcType = typeof(SrcType);
 
-            //var mapConfigRs = new TypeAdapterConfig();
-            //var dd =;
+            var instanceTypeDic = GetInstanceTypeDic();
+            var instanceType = instanceTypeDic[typeof(SrcType)];
+
+            var wowInsetance = Activator.CreateInstance(instanceType);
+            MethodInfo method = instanceType.GetMethod(nameof(IMapperConfigAction.GetConfigDic));
+            var funRs = method.Invoke(wowInsetance, null);
+            rsDic = funRs as Dictionary<(Type, Type, int), IMapper>;
+            return rsDic;
+
+        }
 
 
-            //abc.Add((typeof(WeightNoteCreateWeightNote), typeof(SalesWeightNote), mapType),
-            //   new MapperConfiguration(cfg =>
-            //        cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNote>()
-            //            .ForMember(tar => tar.SCALE_NO, s => s.MapFrom(ss => ss.Remark))
-            //            ).CreateMapper());
+        private Dictionary<Type, Type> GetInstanceTypeDic()
+        {
+            var instanceTypeDic = new Dictionary<Type, Type>
+            {
+                { typeof(WeightNoteCreateWeightNote), typeof(WeightNoteCreateWeightNote_MapperConfig) }
+                //,                { typeof(Sys_Show_199BOM), typeof(SysShow199BOM_MapperConfig) }
+            };
 
-
-
-            throw new NotImplementedException();
+            return instanceTypeDic;
         }
     }
 }

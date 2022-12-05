@@ -9,8 +9,8 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations.Lite
 {
     [DbContext(typeof(LiteContext))]
-    [Migration("20221129023534_update db")]
-    partial class updatedb
+    [Migration("20221205080103_ini liteTable")]
+    partial class iniliteTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -262,6 +262,9 @@ namespace PSI.Core.Migrations.Lite
                     b.Property<DateTime>("CREATE_TIME")
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("ITEM_PERCENT")
+                        .HasColumnType("REAL");
+
                     b.Property<string>("PURCHASE_DOC_NO")
                         .HasColumnType("TEXT");
 
@@ -286,8 +289,8 @@ namespace PSI.Core.Migrations.Lite
                     b.Property<Guid>("WRITEOFF_PRODUCT_UNID")
                         .HasColumnType("TEXT");
 
-                    b.Property<double>("WRITEOFF_WEIGHT")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("WRITEOFF_WEIGHT")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ID");
 

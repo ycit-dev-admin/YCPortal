@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PSI.Core.Migrations.Lite
 {
-    public partial class updatedb : Migration
+    public partial class iniliteTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -187,7 +187,8 @@ namespace PSI.Core.Migrations.Lite
                     SALES_DOC_NO = table.Column<string>(nullable: true),
                     WRITEOFF_PRODUCT_UNID = table.Column<Guid>(nullable: false),
                     WRITEOFF_ITEM_NAME = table.Column<string>(nullable: true),
-                    WRITEOFF_WEIGHT = table.Column<double>(nullable: false)
+                    WRITEOFF_WEIGHT = table.Column<decimal>(nullable: false),
+                    ITEM_PERCENT = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {

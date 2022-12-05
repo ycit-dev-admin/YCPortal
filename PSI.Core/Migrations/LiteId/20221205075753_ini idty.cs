@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PSI.Core.Migrations.LiteId
 {
-    public partial class init_litid : Migration
+    public partial class iniidty : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -155,6 +155,11 @@ namespace PSI.Core.Migrations.LiteId
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AUTHORITY_LEVEL", "AccessFailedCount", "ConcurrencyStamp", "EMPLOYEE_NO", "Email", "EmailConfirmed", "FAC_SITE", "LockoutEnabled", "LockoutEnd", "NICK_NAME", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "a035b649-e018-449f-bd6d-eba3aec5a117", 0, 0, "a66c1a38-64f9-4339-a5f6-3b9973530c7e", null, "waynelee@yc.com", true, "A", true, null, "管理員", "WAYNELEE@YC.COM", "WAYNELEE", "AQAAAAEAACcQAAAAEAbj60M2d59Q+tRgJf2+z4xBnFyufQUInySMKeOQm6RAiI9sS8J59fjNE9+DryaP7Q==", null, false, "XQETP2NFPURVTDGBIFTCQHZBACWA3HN3", false, "waynelee" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
