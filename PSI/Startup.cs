@@ -115,9 +115,9 @@ namespace PSI
             services.AddSingleton<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
             services.AddSingleton<IWeightCaculateHelper, WeightCaculateHelper>();
             services.AddSingleton<IMapperHelper, MapperHelper>();
-            //services.AddSingleton<IMapperAllConfig, MapperAllConfig>();
-            //services.AddSingleton<IMapperConfigAction, WeightNoteCreateWeightNote_MapperConfig>();
-            //services.AddSingleton<IMapperConfig, MapperConfig>();
+            services.AddSingleton<IMapperAllConfig, MapperAllConfig>();
+            services.AddSingleton<IMapperConfigAction, WeightNoteCreateWeightNote_MapperConfig>();
+            services.AddSingleton<IMapperConfig, MapperConfig>();
 
             // IMapper
             services.AddScoped<IPageModelMapper, PageModelMapper>();

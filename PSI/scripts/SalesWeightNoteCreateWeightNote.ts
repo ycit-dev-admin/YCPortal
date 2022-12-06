@@ -60,7 +60,7 @@
             let api = this.api();
             //let rsStr = sumAvg.toLocaleString('zh-TW');
             //let rsStr = sumAvg.toString();
-            $(api.column(4).footer()).html(`${sumAvg.toLocaleString('zh-TW')} 元/kg`);
+            $(api.column(6).footer()).html(`${sumAvg.toLocaleString('zh-TW')} 元/kg`);
 
             //oSettings.aoData.forEach(item => {
             //    let tempDiv = document.createElement('div');
@@ -566,6 +566,7 @@
                 '',
                 '',
                 '',
+                '',
                 '']).draw(false);
 
         });
@@ -783,7 +784,9 @@
                 thisRowData[3] = data2[0];
 
                 // data3
-                thisRowData[4] = `(${data4[0].toLocaleString('zh-TW')}~${data5[0].toLocaleString('zh-TW')}), 平均${data3[0].toLocaleString('zh-TW')} 元/kg`;
+                thisRowData[4] = `${data3[0].toLocaleString('zh-TW')} 元/kg`;
+                thisRowData[5] = data4[0].toLocaleString('zh-TW');
+                thisRowData[6] = data5[0].toLocaleString('zh-TW')
 
                 thisRow.invalidate();
                 thisObj.DataTableObj.order([2, 'desc']).draw();

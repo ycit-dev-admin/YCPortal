@@ -239,12 +239,11 @@ namespace PSI.Areas.Sales.Controllers
         {
             var operUser = _userManager.GetUserAsync(User).Result;
             // ---------------- new
-            var abc = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, SalesWeightNote>(pageModel);
-            var saleWeightNote = _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(pageModel)
-                                                         .ResultValue;
+            var saleWeightNote = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, SalesWeightNote>(pageModel);
             saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);
             saleWeightNote.CREATE_EMPNO = operUser.NICK_NAME;
             saleWeightNote.UPDATE_EMPNO = operUser.NICK_NAME;
+            _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(saleWeightNote);
 
             var salesIngredients = _iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOSalesIngredients).ResultValue;
             salesIngredients.ForEach(item =>
