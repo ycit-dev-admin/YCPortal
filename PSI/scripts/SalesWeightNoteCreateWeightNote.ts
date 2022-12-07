@@ -60,7 +60,7 @@
             let api = this.api();
             //let rsStr = sumAvg.toLocaleString('zh-TW');
             //let rsStr = sumAvg.toString();
-            $(api.column(6).footer()).html(`${sumAvg.toLocaleString('zh-TW')} 元/kg`);
+            $(api.column(6).footer()).html(`${sumAvg.toLocaleString('zh-TW', { maximumFractionDigits: 2 })} 元/kg`);
 
             //oSettings.aoData.forEach(item => {
             //    let tempDiv = document.createElement('div');
@@ -615,15 +615,15 @@
             // Create a hidden input element, and append it to the li:
             let nameProperty = document.createElement("input");
             nameProperty.type = "hidden";
-            nameProperty.name = `DTOSalesIngredients[${index}].ITEM_NAME`;
+            nameProperty.name = `DTOPSWreteOffRecords[${index}].PRODUCT_NAME`;
             nameProperty.value = item.prodText
             let valueProperty = document.createElement("input");
             valueProperty.type = "hidden";
-            valueProperty.name = `DTOSalesIngredients[${index}].PRODUCT_UNID`;
+            valueProperty.name = `DTOPSWreteOffRecords[${index}].PRODUCT_UNID`;
             valueProperty.value = item.prodId;
             let percentProperty = document.createElement("input");
             percentProperty.type = "hidden";
-            percentProperty.name = `DTOSalesIngredients[${index}].ITEM_PERCENT`;
+            percentProperty.name = `DTOPSWreteOffRecords[${index}].PERCENT`;
             percentProperty.value = item.percent.toString();
 
             postDiv.append(nameProperty);
@@ -647,6 +647,18 @@
 
         let nowProdItem = this._prodItemList.Data.find(item => item.prodId === curBtnDom.value);
         if (nowProdItem) {
+            var nowAllPercent = this._prodItemList.Data.map(item => item.percent)
+                .reduce((sum, num) => sum + num);
+            if (nowAllPercent + 10 > 100) {
+                Swal.fire({
+                    icon: 'info',
+                    //title: 'Oops...',
+                    text: '加總比例已超過100%!!',
+                    returnFocus: false
+                    //focusConfirm: false
+                })
+                return;
+            }
             nowProdItem.percent = nowProdItem.percent + 10 > 100 ? 100 : nowProdItem.percent + 10;
         }
         this.CaculateWeight();
@@ -784,9 +796,9 @@
                 thisRowData[3] = data2[0];
 
                 // data3
-                thisRowData[4] = `${data3[0].toLocaleString('zh-TW')} 元/kg`;
-                thisRowData[5] = data4[0].toLocaleString('zh-TW');
-                thisRowData[6] = data5[0].toLocaleString('zh-TW')
+                thisRowData[4] = `${data4[0].toLocaleString('zh-TW')} 元/kg`;
+                thisRowData[5] = `${data5[0].toLocaleString('zh-TW')} 元/kg`;
+                thisRowData[6] = `${data3[0].toLocaleString('zh-TW', { maximumFractionDigits: 2 })} 元/kg`;
 
                 thisRow.invalidate();
                 thisObj.DataTableObj.order([2, 'desc']).draw();

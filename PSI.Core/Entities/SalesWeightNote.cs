@@ -27,7 +27,7 @@ namespace PSI.Core.Entities
         public decimal SALES_WEIGHT { get; set; }  // 出貨總重量
         public decimal? DEFECTIVE_WEIGHT { get; set; } // 出貨總扣重
         public decimal SALES_UNIT_PRICE { get; set; } // 成本平均單價
-        public decimal? RECEIVED_UNIT_PRICE { get; set; } // 客戶實收平均單價
+        public decimal? RECEIVED_UNIT_PRICE { get; set; } // 客戶付款平均單價
         public int? RECEIVED_TYPE { get; set; }  // 收款方式
         public DateTime? RECEIVED_TIME { get; set; } // 收款時間
         public string REMARK { get; set; }  // 磅單備註

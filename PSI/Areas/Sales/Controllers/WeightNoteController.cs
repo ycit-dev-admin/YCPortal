@@ -237,15 +237,18 @@ namespace PSI.Areas.Sales.Controllers
         [Authorize()]
         public IActionResult CreateWeightNote(WeightNoteCreateWeightNote pageModel)
         {
+            // 之後要做後端檢核 在這邊
+
+            // DB邏輯
             var operUser = _userManager.GetUserAsync(User).Result;
             // ---------------- new
             var saleWeightNote = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, SalesWeightNote>(pageModel);
             saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);
-            saleWeightNote.CREATE_EMPNO = operUser.NICK_NAME;
-            saleWeightNote.UPDATE_EMPNO = operUser.NICK_NAME;
+            saleWeightNote.CREATE_EMPNO = operUser.EMPLOYEE_NO;
+            saleWeightNote.UPDATE_EMPNO = operUser.EMPLOYEE_NO;
             _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(saleWeightNote);
 
-            var salesIngredients = _iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOSalesIngredients).ResultValue;
+            var salesIngredients = _iMapperHelper.MapTo<DTO_PS_WreteOff_Record, PS_WreteOff_Record>(pageModel.DTOPSWreteOffRecords);
             salesIngredients.ForEach(item =>
             {
                 item.SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID;
@@ -253,7 +256,9 @@ namespace PSI.Areas.Sales.Controllers
                 item.UPDATE_EMPNO = operUser.NICK_NAME;
             });
 
-            var commitRs = _unitOfWork.SaveChange();
+            _iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOPSWreteOffRecords);
+
+            var commitRs = _unitOfWork.SaveChange();  // 都沒有問題在建立
 
             // ----------------old
 
@@ -312,12 +317,12 @@ namespace PSI.Areas.Sales.Controllers
                 salesWeightNote = _iMapperOfSalesWeightNote.SalesWeightNoteCreate<WeightNoteCreateWeightNote>()
                                       .Map<SalesWeightNote>(pageModel);
                 salesIngredients = _iMapperOfSalesIngredient.SalesWeightNoteCreate<PE_SalesIngredient>()
-                                   .Map<List<SalesIngredient>>(pageModel.DTOSalesIngredients);
+                                   .Map<List<SalesIngredient>>(pageModel.DTOPSWreteOffRecords);
                 salesWeightNoteResultPrice = _iMapperOfSalesWeightNoteResultPrice.SalesWeightNoteCreate<WeightNoteCreateWeightNote>()
                                              .Map<SalesWeightNoteStepData>(pageModel);
 
                 var ddd = _iMapperOfSalesIngredient.SalesWeightNoteCreate<PE_SalesIngredient>()
-                                   .Map<List<SalesIngredient>>(pageModel.DTOSalesIngredients);
+                                   .Map<List<SalesIngredient>>(pageModel.DTOPSWreteOffRecords);
 
                 errMsg = "";
                 return true;

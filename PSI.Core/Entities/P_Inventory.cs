@@ -9,7 +9,7 @@ namespace PSI.Core.Entities
         public Guid PURCHASE_WEIGHTNOTE_UNID { get; set; }
         public Guid PRODUCT_UNID { get; set; }
         public string PRODUCT_ITEM_NAME { get; set; }
-        public decimal PURCHASE_WEIGHTNOTE { get; set; }
+        public decimal PURCHASE_WEIGHT { get; set; }
         public decimal REMAINING_WEIGHT { get; set; }
         public int ITEM_PERCENT { get; set; }
         public decimal UNIT_PRICE { get; set; }  // 進貨單價

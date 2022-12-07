@@ -3,12 +3,10 @@ using PSI.Core.Entities;
 using PSI.Core.Enums;
 using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Helpers.IHelper;
-using PSI.Service.IService;
-using PSI.Service.Service;
 using System;
 using System.Collections.Generic;
 
-namespace PSI.Helpers
+namespace PSI.Mappgins.PageModels
 {
     public class WeightNoteCreateWeightNote_MapperConfig : IMapperConfigAction
     {
@@ -40,8 +38,6 @@ namespace PSI.Helpers
                       .ForMember(tar => tar.UPDATE_TIME, ss => ss.MapFrom(src => DateTime.Now))
                       .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc)))
                     .CreateMapper()
-
-
                 }
 
             };

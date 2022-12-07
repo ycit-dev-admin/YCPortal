@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations.MyContextDevMigrations
 {
     [DbContext(typeof(MyContextDev))]
-    partial class MyContextDevModelSnapshot : ModelSnapshot
+    [Migration("20221207081824_add new cloumn")]
+    partial class addnewcloumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,9 +278,6 @@ namespace PSI.Core.Migrations.MyContextDevMigrations
                     b.Property<decimal>("LIVEIN_UNIT_PRICE")
                         .HasColumnType("numeric");
 
-                    b.Property<decimal>("PERCENT")
-                        .HasColumnType("numeric");
-
                     b.Property<string>("PRODUCT_NAME")
                         .HasColumnType("text");
 
@@ -310,6 +309,9 @@ namespace PSI.Core.Migrations.MyContextDevMigrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<decimal>("WRITEOFF_WEIGHT")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("_PERCENT")
                         .HasColumnType("numeric");
 
                     b.HasKey("ID");
