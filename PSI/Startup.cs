@@ -131,23 +131,49 @@ namespace PSI
             // services.AddAutoMapper(typeof(Startup));            
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  //註冊所有automapper Profile
 
-            services.AddScoped<DbContext, MyContext>();
+
+            if (Configuration.GetSection("IsProdEnv").Value == "1")
+            {
+                services.AddScoped<DbContext, MyContext>();
+                services.AddDbContext<MyContext>(options =>
+                {
+                    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+
+                });
+            }
+            else
+            {
+                services.AddScoped<DbContext, MyContextDev>();
+                services.AddDbContext<MyContextDev>(options =>
+                {
+                    options.UseNpgsql(Configuration.GetConnectionString("DevConnection"));
+
+                });
+            }
+
+
             services.AddDbContext<LiteContext>(options =>
             {
                 //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
                 options.UseSqlite("Data Source = psiDev.db");
             });
-            services.AddDbContext<MyContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-                //options.UseSqlite("Data Source = psiDev.db");
-            });
-            services.AddDbContext<LiteIdContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
-                //options.UseSqlite("Data Source = psiDev.db");
+            //if (Configuration.GetSection("IsProdEnv").Value == "0")
+            //{
 
+
+
+            services.AddDbContext<IdentityContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("IdentityConn_Dev"));
+                if (Configuration.GetSection("IsProdEnv").Value == "1")
+                {
+                    options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                }
+
+                //options.UseSqlite("Data Source = psiDev.db");
             });
+            //}
+
             services.AddDefaultIdentity<AppUser>(options =>
             {
                 // Password settings              
@@ -161,7 +187,26 @@ namespace PSI
 
                 // Email settings
                 options.User.RequireUniqueEmail = true;  //Email不能重複
-            }).AddEntityFrameworkStores<LiteIdContext>();
+            }).AddEntityFrameworkStores<IdentityContext>();
+
+
+
+            //services.AddDefaultIdentity<AppUser>(options =>
+            //{
+            //    // Password settings              
+            //    options.Password.RequiredLength = 6;     //密碼至少要6個字元長
+            //    options.Password.RequireNonAlphanumeric = false;  //不需要符號字元
+            //    options.Password.RequireUppercase = false;         //要有大寫英文字母
+            //    options.Password.RequireLowercase = false;        //不一定要有小寫英文字母
+
+
+            //    options.SignIn.RequireConfirmedAccount = true;
+
+            //    // Email settings
+            //    options.User.RequireUniqueEmail = true;  //Email不能重複
+            //}).AddEntityFrameworkStores<IdentityContext>();
+
+
 
         }
 

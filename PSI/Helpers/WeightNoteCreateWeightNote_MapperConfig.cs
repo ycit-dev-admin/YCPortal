@@ -13,11 +13,11 @@ namespace PSI.Helpers
     public class WeightNoteCreateWeightNote_MapperConfig : IMapperConfigAction
     {
 
+
         public WeightNoteCreateWeightNote_MapperConfig()
         {
 
         }
-
 
         public Dictionary<(Type, Type, int), IMapper> GetConfigDic()
         {
