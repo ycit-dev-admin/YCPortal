@@ -9,7 +9,7 @@
         this.BaseUrl = baseUrl;
     }
 
-    public GetProportionWeight(nominator: string, totalWeight:string): JQuery.jqXHR {
+    public GetProportionWeight(nominator: number, totalWeight: number): JQuery.jqXHR {
         const apiUrl = `${this.BaseUrl}/api/Weight/GetProportionWeight`;
         return $.get(apiUrl,
             {

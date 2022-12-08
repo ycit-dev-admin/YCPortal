@@ -4,7 +4,7 @@ using PSI.Core.Entities;
 
 namespace PSI.Core.Models.DTOModels
 {
-    public class DTO_SalesWeightNote : SalesWeightNote
+    public class DTO_SalesWeightNote : S_WeightNote
     {
         // Rel DTOs
         public DTO_CustomerInfo DTO_CustomerInfo { get; set; }

@@ -14,8 +14,8 @@
                 prodItemGuid: prodItemGuid
             });
     }
-    public GetInventoryUnitPrice(prodItemGuid: string): JQuery.jqXHR {
-        const apiUrl = `${this.BaseUrl}/Purchase/api/Inventory/GetInventoryUnitPrice`;
+    public GetInventoryAvgUnitPrice(prodItemGuid: string): JQuery.jqXHR {
+        const apiUrl = `${this.BaseUrl}/Purchase/api/Inventory/GetInventoryAvgUnitPrice`;
         return $.get(apiUrl,
             {
                 prodItemGuid: prodItemGuid

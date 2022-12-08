@@ -4,7 +4,7 @@ using PSI.Core.Entities;
 
 namespace PSI.Core.Models.DTOModels
 {
-    public class DTO_PS_WreteOff_Record : PS_WreteOff_Record
+    public class DTO_PS_WreteOff_Record : PS_WriteOff_Log
     {
         // Rel DTOs
         //public DTO_ProductItem DTO_ProductItem { get; set; }

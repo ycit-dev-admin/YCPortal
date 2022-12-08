@@ -22,7 +22,7 @@ namespace PSI.WebAPI
 
         [HttpGet]
         [Route("[action]")]
-        public string GetProportionWeight(string nominator, string totalWeight)
+        public decimal GetProportionWeight(decimal nominator, decimal totalWeight)
         {
             return _iWeightCaculateHelper.GetProportionWeight(nominator, totalWeight);
             //return _iSalesPriceCaculateHelper.GetInvoicePrice(salesWeight, defectiveWeight, unitPrice, hasTax);

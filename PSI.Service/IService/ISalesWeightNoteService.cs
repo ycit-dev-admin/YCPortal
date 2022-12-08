@@ -8,7 +8,7 @@ using PSI.Core.Models.DTOModels;
 
 namespace PSI.Service.IService
 {
-    public interface ISalesWeightNoteService : IGenericService<SalesWeightNote>
+    public interface ISalesWeightNoteService : IGenericService<S_WeightNote>
     {
 
         List<DTO_SalesWeightNote> GetDTOOngoSalesWeightDocs();

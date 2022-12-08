@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PSI.Areas.Purchase.WebAPIs;
 using PSI.Areas.Sales.Models.PageModels;
 using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
@@ -56,6 +57,7 @@ namespace PSI.Areas.Sales.Controllers
         private readonly ICarNoServiceNew _iCarNoServiceNew;
         private readonly ISalesIngredientService _iSalesIngredientService;
         private readonly ISalesIngredientServiceNew _iSalesIngredientServiceNew;
+        private readonly IGenericService<P_Inventory> _pInventoryService;
         // Mapper
         private readonly IMapperOfSalesWeightNote _iMapperOfSalesWeightNote;
         private readonly IMapperOfSalesIngredient _iMapperOfSalesIngredient;
@@ -71,6 +73,7 @@ namespace PSI.Areas.Sales.Controllers
         // Helper
         private readonly ISalesPriceCaculateHelper _iSalesPriceCaculateHelper;
         private readonly IMapperHelper _iMapperHelper;
+        private readonly IWeightCaculateHelper _iWeightCaculateHelper;
 
         // 準備移除
         private readonly IPSIEnumService _pSIEnumService;
@@ -107,7 +110,9 @@ namespace PSI.Areas.Sales.Controllers
                                     //IEntityMapperProfile iEntityMapperProfile,
                                     UserManager<AppUser> userManager,
                                    IMapperHelper iMapperHelper,
-                                    IUnitOfWork unitOfWork)
+                                    IUnitOfWork unitOfWork,
+                                    IGenericService<P_Inventory> pInventoryService,
+                                    IWeightCaculateHelper iWeightCaculateHelper)
         {
             // Other
             _userManager = userManager;
@@ -129,6 +134,7 @@ namespace PSI.Areas.Sales.Controllers
             _iCarNoService = iCarNoService;
             _iCarNoServiceNew = iCarNoServiceNew;
             _iPESalesWeightNoteMapper = iPESalesWeightNoteMapper;
+            _pInventoryService = pInventoryService;
             // Mapper
             _iMapperOfSalesWeightNoteResultPrice = iMapperOfSalesWeightNoteResultPrice;
             _iMapperOfSalesIngredient = iMapperOfSalesIngredient;
@@ -139,6 +145,7 @@ namespace PSI.Areas.Sales.Controllers
             // Helper
             _iSalesPriceCaculateHelper = iSalesPriceCaculateHelper;
             _iMapperHelper = iMapperHelper;
+            _iWeightCaculateHelper = iWeightCaculateHelper;
 
             // Logic
             _iSalesWeightNoteLogic = iSalesWeightNoteLogic;
@@ -242,19 +249,126 @@ namespace PSI.Areas.Sales.Controllers
             // DB邏輯
             var operUser = _userManager.GetUserAsync(User).Result;
             // ---------------- new
-            var saleWeightNote = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, SalesWeightNote>(pageModel);
+            var saleWeightNote = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, S_WeightNote>(pageModel);
+            var psWreteOffRecord = _iMapperHelper.MapTo<DTO_PS_WreteOff_Record, PS_WriteOff_Log>(pageModel.DTOPSWreteOffRecords)
+                                                .Where(aa => aa.PERCENT != 0m).ToList();
+            // 建立出貨單
+            // 建立出貨組成表(含比例)(出貨重量)(根據沖銷結果的品項平均成本單價)
+            // 建立沖銷紀錄表 (主要包含 對應的庫存單號 還有沖銷的重量)(不用比例)
+            // 更新庫存表
+
             saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);
             saleWeightNote.CREATE_EMPNO = operUser.EMPLOYEE_NO;
             saleWeightNote.UPDATE_EMPNO = operUser.EMPLOYEE_NO;
-            _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(saleWeightNote);
+            saleWeightNote.PRODUCT_ITEM_UNID = psWreteOffRecord.OrderByDescending(aa => aa.PERCENT)
+                                                                             .FirstOrDefault().PRODUCT_UNID;
 
-            var salesIngredients = _iMapperHelper.MapTo<DTO_PS_WreteOff_Record, PS_WreteOff_Record>(pageModel.DTOPSWreteOffRecords);
-            salesIngredients.ForEach(item =>
+            var costAPICtrl = new CostController();
+            var inventoryAPCtrl = new InventoryController(_pInventoryService);
+            var salesUnitPrice = psWreteOffRecord.Sum(aa =>
+            {
+                var avgUnitPrice = inventoryAPCtrl.GetInventoryAvgUnitPrice(aa.PRODUCT_UNID);
+                return costAPICtrl.GetCostUnitPrce(aa.PERCENT, avgUnitPrice);
+            });
+            saleWeightNote.SALES_UNIT_PRICE = Math.Round(salesUnitPrice, 2); // 四捨五入 保留兩位小數 (應該需要移除 不能這樣算)
+
+
+            // 認列策略 需要討論  要先進先出 還是先把便宜的出掉還是貴的出掉 (會影響平均成本計算)
+            // 更新庫存 
+            var userDerItemUNIDs = psWreteOffRecord.Select(aa => aa.PRODUCT_UNID).ToList();
+            var dtoPInventories = _pInventoryService.GetDTOModels<DTO_P_Inventory>(aa => userDerItemUNIDs.Contains(aa.PRODUCT_UNID) &&
+            aa.STATUS == (int)PSIWeightNoteEnum.P_InventoryStatus.HasInventory &&
+            aa.REMAINING_WEIGHT > 0).GroupBy(aa => aa.PRODUCT_UNID);
+
+            var inventyRs = new List<DTO_P_Inventory>();
+            var dtoPSWreteOffRecordRs = new List<DTO_PS_WreteOff_Record>(); // 沖銷表，  沖銷表不等於出貨組成比例表
+            dtoPInventories.ToList().ForEach(group =>
+            {
+                var nominator = psWreteOffRecord.FirstOrDefault(bb => bb.PRODUCT_UNID == group.Key).PERCENT;
+                var writeOffWeight = _iWeightCaculateHelper.GetProportionWeight(nominator, saleWeightNote.INSIDE_SALES_WEIGHT);
+                group.OrderBy(bb => bb.PURCHASE_DOC_NO).ToList().ForEach(item =>
+                {
+                    var writeOffRs = writeOffWeight - item.REMAINING_WEIGHT;
+                    if (writeOffRs > 0)  // 預計出貨本張庫存沖不完
+                    {
+                        item.REMAINING_WEIGHT = 0m;
+                        writeOffWeight = writeOffRs;
+                        inventyRs.Add(item);
+                        var temp = new DTO_PS_WreteOff_Record
+                        {
+                            PURCHASE_DOC_NO = item.PURCHASE_DOC_NO,
+                            WRITEOFF_WEIGHT = item.REMAINING_WEIGHT,
+
+
+                        };
+                        dtoPSWreteOffRecordRs.Add(temp);
+                    }
+                    else // 預計出貨於本張庫存沖完
+                    {
+                        item.REMAINING_WEIGHT = item.REMAINING_WEIGHT - writeOffWeight;
+                        writeOffWeight = 0;
+                        inventyRs.Add(item);
+                        return;  // 一沖完就結束
+                    }
+                });
+            });
+
+
+            //var lalau = dtoPInventories.Select(group =>
+            //  {
+            //      var nominator = psWreteOffRecord.FirstOrDefault(bb => bb.PRODUCT_UNID == group.Key).PERCENT;
+            //      var writeOffWeight = _iWeightCaculateHelper.GetProportionWeight(nominator, saleWeightNote.INSIDE_SALES_WEIGHT);
+
+
+            //      var abc = aa.OrderBy(bb => bb.PURCHASE_DOC_NO).Select(bb =>
+            //      {
+            //          var writeOffRs = writeOffWeight - bb.REMAINING_WEIGHT;
+            //          if (writeOffRs > 0)  // 預計出貨本張庫存沖不完
+            //          {
+            //              bb.REMAINING_WEIGHT = 0m;
+            //              writeOffWeight = writeOffRs;
+            //          }
+            //          else // 預計出貨於本張庫存沖完
+            //          {
+            //              bb.REMAINING_WEIGHT = bb.REMAINING_WEIGHT - writeOffWeight;
+            //              writeOffWeight = 0;
+            //          }
+
+
+
+            //          return bb;
+            //      });
+            //      return aa;
+            //  });
+
+
+            // 建立沖銷表
+
+
+            //vdd.ToList().ForEach
+
+            //var sum199BOMRs = data199Boms.Where(aa => aa.PROCESS_ID == userSelectTerminal)
+            //                            .GroupBy(aa => new { aa.LOT_NO, aa.PART_NO })
+            //                            .Select(bb => new Sys_Show_199BOM
+            //                            {
+            //                                LOT_NO = bb.Key.LOT_NO,
+            //                                PART_NO = bb.Key.PART_NO,
+            //                                SPEC1 = bb.FirstOrDefault().SPEC1,
+            //                                QTY_NORMAL = bb.Sum(aa => aa.QTY_NORMAL),
+            //                                UOM = bb.FirstOrDefault().UOM,
+            //                                SUB_SPEC1 = bb.FirstOrDefault().SUB_SPEC1
+            //                            }).ToList();
+
+
+
+            psWreteOffRecord.ForEach(item =>
             {
                 item.SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID;
                 item.CREATE_EMPNO = operUser.NICK_NAME;
                 item.UPDATE_EMPNO = operUser.NICK_NAME;
             });
+            _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(saleWeightNote);
+
 
             _iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOPSWreteOffRecords);
 
@@ -309,13 +423,13 @@ namespace PSI.Areas.Sales.Controllers
             // Insert Table
 
             /* Step Functions */
-            bool TurnToEntities(out SalesWeightNote salesWeightNote,
+            bool TurnToEntities(out S_WeightNote salesWeightNote,
                 out List<SalesIngredient> salesIngredients,
                 out SalesWeightNoteStepData salesWeightNoteResultPrice,
                 out string errMsg)
             {
                 salesWeightNote = _iMapperOfSalesWeightNote.SalesWeightNoteCreate<WeightNoteCreateWeightNote>()
-                                      .Map<SalesWeightNote>(pageModel);
+                                      .Map<S_WeightNote>(pageModel);
                 salesIngredients = _iMapperOfSalesIngredient.SalesWeightNoteCreate<PE_SalesIngredient>()
                                    .Map<List<SalesIngredient>>(pageModel.DTOPSWreteOffRecords);
                 salesWeightNoteResultPrice = _iMapperOfSalesWeightNoteResultPrice.SalesWeightNoteCreate<WeightNoteCreateWeightNote>()
@@ -327,7 +441,7 @@ namespace PSI.Areas.Sales.Controllers
                 errMsg = "";
                 return true;
             }
-            bool ValidEntities(in SalesWeightNote argSalesWeightNote,
+            bool ValidEntities(in S_WeightNote argSalesWeightNote,
                 in List<SalesIngredient> argSalesIngredientList,
                 in SalesWeightNoteStepData argSalesWeightNoteResultPrice,
                 out string errMsg)
@@ -372,10 +486,10 @@ namespace PSI.Areas.Sales.Controllers
             }
 
             #region -- InsertToDB --
-            bool InsertToDB(in SalesWeightNote argSalesWeightNote,
+            bool InsertToDB(in S_WeightNote argSalesWeightNote,
                 in List<SalesIngredient> argSalesIngredientList,
                 in SalesWeightNoteStepData argSalesWeightNoteResultPrice,
-                out SalesWeightNote rsSalesWeightNote,
+                out S_WeightNote rsSalesWeightNote,
                 out string errMsg)
             {
 

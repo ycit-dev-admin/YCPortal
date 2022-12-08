@@ -25,7 +25,7 @@ namespace PSI.Mappgins
             _iSalesWeightNoteResultPriceService = iSalesWeightNoteResultPriceService;
         }
 
-        public IMapper SalesWeightNoteQueryList<T>() where T : SalesWeightNote
+        public IMapper SalesWeightNoteQueryList<T>() where T : S_WeightNote
         {
             return new MapperConfiguration(cfg =>
             cfg.CreateMap<T, PE_SalesWeightNote>()
@@ -40,10 +40,10 @@ namespace PSI.Mappgins
             ).CreateMapper();
         }
 
-        public IMapper SalesWeightNoteActualDataUpdate<T>() where T : SalesWeightNote
+        public IMapper SalesWeightNoteActualDataUpdate<T>() where T : S_WeightNote
         {
             return new MapperConfiguration(cfg =>
-            cfg.CreateMap<SalesWeightNote, PE_SalesWeightNote>()
+            cfg.CreateMap<S_WeightNote, PE_SalesWeightNote>()
                 .ForMember(tar => tar.CustomerName,
                            arg => arg.MapFrom(src => _iCustomerInfoService.GetCustomerInfo(src.CUSTOMER_UNID).CUSTOMER_NAME))
                 //.ForMember(tar => tar.MainProductItemName,
@@ -55,7 +55,7 @@ namespace PSI.Mappgins
             ).CreateMapper();
         }
 
-        public IMapper GetUpdateActualDataMapper<T>() where T : SalesWeightNote
+        public IMapper GetUpdateActualDataMapper<T>() where T : S_WeightNote
         {
             return new MapperConfiguration(cfg =>
             cfg.CreateMap<T, PE_SalesWeightNote>()

@@ -12,6 +12,7 @@ namespace PSI.Areas.Purchase.WebAPIs
     [ApiController]
     public class InventoryController : ControllerBase
     {
+
         private readonly IGenericService<P_Inventory> _pInventoryService;
 
         public InventoryController(IGenericService<P_Inventory> pInventoryService)
@@ -32,7 +33,7 @@ namespace PSI.Areas.Purchase.WebAPIs
 
         [HttpGet]
         [Route("[action]")]
-        public decimal GetInventoryUnitPrice(Guid prodItemGuid)
+        public decimal GetInventoryAvgUnitPrice(Guid prodItemGuid)
         {
             var remainingInventory = _pInventoryService
                                      .GetDTOModels<DTO_P_Inventory>(aa => aa.STATUS != 0 &&

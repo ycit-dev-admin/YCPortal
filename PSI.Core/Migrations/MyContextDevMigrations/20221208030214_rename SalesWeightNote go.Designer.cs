@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations.MyContextDevMigrations
 {
     [DbContext(typeof(MyContextDev))]
-    partial class MyContextDevModelSnapshot : ModelSnapshot
+    [Migration("20221208030214_rename SalesWeightNote go")]
+    partial class renameSalesWeightNotego
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,9 +340,6 @@ namespace PSI.Core.Migrations.MyContextDevMigrations
 
                     b.Property<Guid>("PRODUCT_UNID")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("PURCHASE_DOC_NO")
-                        .HasColumnType("text");
 
                     b.Property<decimal>("PURCHASE_WEIGHT")
                         .HasColumnType("numeric");

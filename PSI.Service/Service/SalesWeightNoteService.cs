@@ -11,7 +11,7 @@ using PSI.Service.IService;
 
 namespace PSI.Service.Service
 {
-    public class SalesWeightNoteService : GenericService<SalesWeightNote>, ISalesWeightNoteService
+    public class SalesWeightNoteService : GenericService<S_WeightNote>, ISalesWeightNoteService
     {
         private readonly IUnitOfWork _unitOfwork;
         private readonly IMapper _iMapper;

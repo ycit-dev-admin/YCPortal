@@ -51,7 +51,7 @@
                 let tempDiv = document.createElement('div');
                 tempDiv.innerHTML = item._aData[1];
                 var percent = +(tempDiv.querySelector("span").textContent.replace("%", "")) / 100;
-                var unitPrice = +((item._aData[4] as string).replace("元/kg", ""));
+                var unitPrice = +((item._aData[6] as string).replace("元/kg", ""));
                 return percent * unitPrice
             });
 
@@ -505,6 +505,7 @@
         //oddShowUlDom.innerHTML = "";
 
         this.DataTableObj.clear().draw();
+        this._prodItemList.Data.sort((x, y) => y.percent - x.percent); // 排序大排前面  https://www.w3schools.com/jsref/jsref_sort.asp
         this._prodItemList.Data.forEach((item, index) => {
 
             //const iMinusTag = document.createElement("i");
@@ -750,7 +751,7 @@
 
 
 
-            let funcRs = thisObj.WeightAPIClass.GetProportionWeight(nominatorVal, thisObj.DomOfLeaveWeight.value);
+            let funcRs = thisObj.WeightAPIClass.GetProportionWeight(+nominatorVal, +thisObj.DomOfLeaveWeight.value);
             //$.when(funcRs).then(function (data) {
             //    thisRowData[2] = `${data} kg`;
             //    thisRow.invalidate();
@@ -768,7 +769,7 @@
             //    thisRow.invalidate();
             //    thisObj.DataTableObj.order([1, 'desc']).draw();
             //});
-            let funcRs3 = thisObj.InventoryAPIClass.GetInventoryUnitPrice(productUNID);
+            let funcRs3 = thisObj.InventoryAPIClass.GetInventoryAvgUnitPrice(productUNID);
             let funcRs4 = thisObj.InventoryAPIClass.GetInventoryMinUnitPrice(productUNID);
             let funcRs5 = thisObj.InventoryAPIClass.GetInventoryMaxUnitPrice(productUNID);
             //$.when(funcRs3).then(function (data) {

@@ -34,9 +34,9 @@ namespace PSI.Service.MapperProfile
         {
             switch (typeof(TEntity).Name, typeof(DTOModel).Name)
             {
-                case (nameof(SalesWeightNote), nameof(DTO_SalesWeightNote)):
+                case (nameof(S_WeightNote), nameof(DTO_SalesWeightNote)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<SalesWeightNote, DTO_SalesWeightNote>()
+                    cfg.CreateMap<S_WeightNote, DTO_SalesWeightNote>()
                         //.ForMember(tar => tar.PayTypeName,
                         //           arg => arg.MapFrom(src => _iCodeTableServiceNew.GetReceivedTypeItems()
                         //                  .FirstOrDefault(aa => aa.CODE_VALUE == src.ESTIMATE_RECEIVED_TYPE.ToString()).CODE_TEXT))

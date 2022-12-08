@@ -11,24 +11,23 @@ namespace PSI.Areas.Purchase.WebAPIs
     [ApiController]
     public class CostController : ControllerBase
     {
-        private readonly ISalesPriceCaculateHelper _iSalesPriceCaculateHelper;
-
-        public CostController(ISalesPriceCaculateHelper iSalesPriceCaculateHelper)
+        public CostController()
         {
 
-            _iSalesPriceCaculateHelper = iSalesPriceCaculateHelper;
         }
+
 
         [HttpGet]
         [Route("[action]")]
-        public decimal GetCostUnitPrce(int percent, decimal unitPrice)
+        public decimal GetCostUnitPrce(decimal percent, decimal unitPrice)
         {
-            if (percent > 100 ||
-                percent < 0)
-                return 0m;
-            //var lala = (decimal)(percent / 100);
-            var ddd = (decimal)percent / 100 * unitPrice;
-            return (decimal)percent / 100 * unitPrice;
+            // percent的異常值處理後續可以討論
+            percent = percent > 100 ? 100 : percent;
+            percent = percent < 0 ? 0 : percent;
+
+
+
+            return percent / 100 * unitPrice;
         }
 
     }

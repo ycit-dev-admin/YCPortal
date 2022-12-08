@@ -30,7 +30,7 @@ namespace PSI.Core.UnitOfWorks
         public IGenericRepository<CodeTable> CodeTableRepository { get; private set; }
         public IGenericRepository<PurchaseIngredient> PurchaseIngredientRepository { get; private set; }
         public IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; private set; }
-        public IGenericRepository<SalesWeightNote> SalesWeightNoteRepository { get; private set; }
+        public IGenericRepository<S_WeightNote> SalesWeightNoteRepository { get; private set; }
         public IGenericRepository<SalesWeightNoteStepData> SalesWeightNoteResultPriceRepository { get; private set; }
         public IGenericRepository<SalesIngredient> SalesIngredientRepository { get; private set; }
 
@@ -52,7 +52,7 @@ namespace PSI.Core.UnitOfWorks
             IGenericRepository<CodeTable> codeTableRepository,
             IGenericRepository<PurchaseIngredient> purchaseIngredientRepository,
             IGenericRepository<SeqTypeConfig> seqTypeConfigRepository,
-            IGenericRepository<SalesWeightNote> salesWeightNoteRepository,
+            IGenericRepository<S_WeightNote> salesWeightNoteRepository,
             IGenericRepository<SalesWeightNoteStepData> salesWeightNoteResultPriceRepository,
             IGenericRepository<SalesIngredient> salesIngredientRepository)
 

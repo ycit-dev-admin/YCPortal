@@ -5,7 +5,7 @@ using PSI.Core.Entities;
 
 namespace PSI.EntityValidators
 {
-    public class SalesWeightNoteValidator : AbstractValidator<SalesWeightNote>
+    public class SalesWeightNoteValidator : AbstractValidator<S_WeightNote>
     {
         public SalesWeightNoteValidator()
         {

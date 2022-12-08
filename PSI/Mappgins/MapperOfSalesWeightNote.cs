@@ -22,7 +22,7 @@ namespace PSI.Mappgins
             {
                 case (nameof(WeightNoteCreateWeightNote)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNote>()
+                    cfg.CreateMap<WeightNoteCreateWeightNote, S_WeightNote>()
                       .ForMember(tar => tar.CUSTOMER_UNID, ss => ss.MapFrom(src => src.CustomerUNID))
                       .ForMember(tar => tar.CARNO_UNID, ss => ss.MapFrom(src => src.CarNoUNID))
                       .ForMember(tar => tar.EXCAVATOR_OPERATOR_UNID, ss => ss.MapFrom(src => src.ExcavatorOperUNID))

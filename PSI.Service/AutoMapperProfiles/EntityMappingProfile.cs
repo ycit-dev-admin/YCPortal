@@ -11,7 +11,7 @@ namespace PSI.Service.Mappings
         public EntityMappingProfile()
         {
             // Entity -> DTOModel
-            this.CreateMap<SalesWeightNote, DTO_SalesWeightNote>()
+            this.CreateMap<S_WeightNote, DTO_SalesWeightNote>()
                 .AfterMap<SalesWeightNoteToDTOAction>();
             this.CreateMap<SalesWeightNoteStepData, DTO_SalesWeightNoteStepData>()
                 .AfterMap<SalesWeightNoteStepDataToDTOAction>();

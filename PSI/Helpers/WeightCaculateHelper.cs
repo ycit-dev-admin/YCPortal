@@ -18,16 +18,16 @@ namespace PSI.Service.Helper
         }
 
 
-        public string GetProportionWeight(string nominator, string totalWeight)
+        public decimal GetProportionWeight(decimal nominator, decimal totalWeight)
         {
             // 4捨5入參考來源  https://ithelp.ithome.com.tw/articles/10213221
 
-            var caculateRs = "0";
-            if (decimal.TryParse((totalWeight ?? "").Trim(), out decimal tWeightRs) &&
-                decimal.TryParse((nominator ?? "").Trim(), out decimal nomiRs) &&
-                nomiRs > 0 &&
-                tWeightRs > 0)
-                caculateRs = Convert.ToInt64(nomiRs / 100 * tWeightRs).ToString("N0");
+            var caculateRs = 0m;
+            if (nominator > 0m &&
+                nominator <= 100m &&
+                totalWeight > 0m)
+                caculateRs = nominator / 100m * totalWeight;
+            //caculateRs = Convert.ToInt64(nomiRs / 100 * tWeightRs).ToString("N0");
 
             //var lala = decimal.TryParse(totalWeight, out decimal tWeightRs2) &&
             //    decimal.TryParse(nominator, out decimal nomiRs2);

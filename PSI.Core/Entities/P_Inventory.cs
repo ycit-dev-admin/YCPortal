@@ -7,6 +7,7 @@ namespace PSI.Core.Entities
     public class P_Inventory : Entity
     {
         public Guid PURCHASE_WEIGHTNOTE_UNID { get; set; }
+        public string PURCHASE_DOC_NO { get; set; }
         public Guid PRODUCT_UNID { get; set; }
         public string PRODUCT_ITEM_NAME { get; set; }
         public decimal PURCHASE_WEIGHT { get; set; }

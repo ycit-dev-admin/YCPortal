@@ -8,7 +8,7 @@ using PSI.Service.IService;
 
 namespace PSI.Service.AutoMapperMappActions
 {
-    public class EntityToDTOAction2 : IMappingAction<SalesWeightNote, WeightNoteUpdateActualData>
+    public class EntityToDTOAction2 : IMappingAction<S_WeightNote, WeightNoteUpdateActualData>
     {
         private readonly ICarNoService _iCarNoService;
         private readonly ISalesIngredientServiceNew _iSalesIngredientServiceNew;
@@ -28,7 +28,7 @@ namespace PSI.Service.AutoMapperMappActions
 
         }
 
-        public void Process(SalesWeightNote src, WeightNoteUpdateActualData tar, ResolutionContext context)
+        public void Process(S_WeightNote src, WeightNoteUpdateActualData tar, ResolutionContext context)
         {
             //tar.DTOSalesWeightNote = _iSalesWeightNoteService.GetDTOModel<DTO_SalesWeightNote>(aa => aa.UNID == src.UNID);
 

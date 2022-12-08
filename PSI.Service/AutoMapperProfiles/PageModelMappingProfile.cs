@@ -15,10 +15,10 @@ namespace PSI.Service.Mappings
         // PageModel -> Entity
         public PageModelMappingProfile()
         {
-            this.CreateMap<WeightNoteCreateWeightNote, SalesWeightNote>()
+            this.CreateMap<WeightNoteCreateWeightNote, S_WeightNote>()
                 .ForMember(tar => tar.CUSTOMER_UNID, ss => ss.MapFrom(src => src.CustomerUNID))
                 .ForMember(tar => tar.SCALE_NO, ss => ss.MapFrom(src => src.ScaleNo))
-                .ForMember(tar => tar.SALES_WEIGHT, ss => ss.MapFrom(src => src.SalesWeight))
+                .ForMember(tar => tar.INSIDE_SALES_WEIGHT, ss => ss.MapFrom(src => src.SalesWeight))
                 .ForMember(tar => tar.CARNO_UNID, ss => ss.MapFrom(src => src.CarNoUNID))
                 .ForMember(tar => tar.EXCAVATOR_OPERATOR_UNID, ss => ss.MapFrom(src => src.ExcavatorOperUNID))
                 .ForMember(tar => tar.SALES_TIME, ss => ss.MapFrom(src => src.SalesTime))

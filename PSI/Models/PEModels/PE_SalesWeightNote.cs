@@ -3,7 +3,7 @@ using PSI.Core.Entities;
 
 namespace PSI.Models.PEModels
 {
-    public class PE_SalesWeightNote : SalesWeightNote
+    public class PE_SalesWeightNote : S_WeightNote
     {
         public string CustomerName { get; set; }
         public string MainProductItemName { get; set; }

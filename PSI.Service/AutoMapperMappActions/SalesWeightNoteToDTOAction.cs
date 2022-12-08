@@ -7,7 +7,7 @@ using PSI.Service.IService;
 
 namespace PSI.Service.AutoMapperMappActions
 {
-    public class SalesWeightNoteToDTOAction : IMappingAction<SalesWeightNote, DTO_SalesWeightNote>
+    public class SalesWeightNoteToDTOAction : IMappingAction<S_WeightNote, DTO_SalesWeightNote>
     {
         private readonly ICustomerInfoServiceNew _iCustomerInfoServiceNew;
         private readonly IProductItemService _iProductItemService;
@@ -46,7 +46,7 @@ namespace PSI.Service.AutoMapperMappActions
             _iCustomerContractServiceNew = iCustomerContractServiceNew ?? throw new ArgumentNullException(nameof(iCustomerContractServiceNew));
         }
 
-        public void Process(SalesWeightNote src, DTO_SalesWeightNote dest, ResolutionContext context)
+        public void Process(S_WeightNote src, DTO_SalesWeightNote dest, ResolutionContext context)
         {
             //destination.INVOICE_PRICE = _iSalesPriceCaculateHelper.GetInvoicePrice(source.LeaveWeight.Value,
             //        source.DefectiveWeight.Value,

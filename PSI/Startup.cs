@@ -75,7 +75,7 @@ namespace PSI
             services.AddScoped<IGenericRepository<CodeTable>, GenericRepository<CodeTable>>();
             services.AddScoped<IGenericRepository<PurchaseIngredient>, GenericRepository<PurchaseIngredient>>();
             services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
-            services.AddScoped<IGenericRepository<SalesWeightNote>, GenericRepository<SalesWeightNote>>();
+            services.AddScoped<IGenericRepository<S_WeightNote>, GenericRepository<S_WeightNote>>();
             services.AddScoped<IGenericRepository<SalesWeightNoteStepData>, GenericRepository<SalesWeightNoteStepData>>();
             services.AddScoped<IGenericRepository<SalesIngredient>, GenericRepository<SalesIngredient>>();
             //services.AddScoped<IGenericRepository<P_Inventory>, GenericRepository<P_Inventory>>();

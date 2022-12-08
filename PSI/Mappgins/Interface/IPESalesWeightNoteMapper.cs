@@ -6,9 +6,9 @@ namespace PSI.Mappgins.Interface
 {
     public interface IPESalesWeightNoteMapper // IEntityMapper  IPageModelMapper IPEModelMapper
     {
-        IMapper SalesWeightNoteQueryList<T>() where T : SalesWeightNote;
-        IMapper SalesWeightNoteActualDataUpdate<T>() where T : SalesWeightNote;
-        IMapper GetUpdateActualDataMapper<T>() where T : SalesWeightNote;
+        IMapper SalesWeightNoteQueryList<T>() where T : S_WeightNote;
+        IMapper SalesWeightNoteActualDataUpdate<T>() where T : S_WeightNote;
+        IMapper GetUpdateActualDataMapper<T>() where T : S_WeightNote;
         //T MapTo<T>(SalesWeightNote salesWeightNote) where T : WeightNoteUpdateActualData;
         //IMapper GetMapper<T1, T2>() where T1 : SalesWeightNote where T2 : WeightNoteUpdateActualData;
 

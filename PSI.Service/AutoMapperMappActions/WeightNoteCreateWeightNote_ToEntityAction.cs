@@ -10,7 +10,7 @@ using PSI.Service.IService;
 
 namespace PSI.Service.AutoMapperMappActions
 {
-    public class WeightNoteCreateWeightNote_ToEntityAction : IMappingAction<WeightNoteCreateWeightNote, SalesWeightNote>
+    public class WeightNoteCreateWeightNote_ToEntityAction : IMappingAction<WeightNoteCreateWeightNote, S_WeightNote>
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IPsiService _psiService;
@@ -29,7 +29,7 @@ namespace PSI.Service.AutoMapperMappActions
             _psiService = psiService;
         }
 
-        public void Process(WeightNoteCreateWeightNote src, SalesWeightNote dest, ResolutionContext context)
+        public void Process(WeightNoteCreateWeightNote src, S_WeightNote dest, ResolutionContext context)
         {
            
             //dest.DTO_SalesIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_SalesIngredient>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);

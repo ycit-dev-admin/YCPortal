@@ -32,7 +32,7 @@ namespace PSI.Service.Logic
         private readonly ISalesPriceCaculateHelper _iSalesPriceCaculateHelper;
 
         /* Repository */
-        private readonly IGenericRepository<SalesWeightNote> _salesWeightNoteRepository;
+        private readonly IGenericRepository<S_WeightNote> _salesWeightNoteRepository;
         private readonly IGenericRepository<SalesIngredient> _salesIngredientRepository;
         private readonly IGenericRepository<SalesWeightNoteStepData> _salesWeightNoteResultPriceRepository;
 
@@ -46,7 +46,7 @@ namespace PSI.Service.Logic
             _iSalesPriceCaculateHelper = iSalesPriceCaculateHelper;
 
             /* Repository */
-            _salesWeightNoteRepository = _unitOfWork.GetRepository<SalesWeightNote>();
+            _salesWeightNoteRepository = _unitOfWork.GetRepository<S_WeightNote>();
             _salesIngredientRepository = _unitOfWork.GetRepository<SalesIngredient>();
             _salesWeightNoteResultPriceRepository = _unitOfWork.GetRepository<SalesWeightNoteStepData>();
             //_iSalesWeightNoteServic = iSalesWeightNoteService;
@@ -139,7 +139,7 @@ namespace PSI.Service.Logic
             {
                 case (nameof(WeightNoteCreateWeightNote), nameof(DTO_SalesWeightNote)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNote>()
+                    cfg.CreateMap<WeightNoteCreateWeightNote, S_WeightNote>()
                        .ForMember(tar => tar.CUSTOMER_UNID, ss => ss.MapFrom(src => src.CustomerUNID))
                        .ForMember(tar => tar.CARNO_UNID, ss => ss.MapFrom(src => src.CarNoUNID))
                        .ForMember(tar => tar.EXCAVATOR_OPERATOR_UNID, ss => ss.MapFrom(src => src.ExcavatorOperUNID))
@@ -171,14 +171,14 @@ namespace PSI.Service.Logic
             }
         }
 
-        public FunctionResult<SalesWeightNote> CreateSalesWeightNote<T1, T2, T3>(T1 dtoSalesWeightNote,
+        public FunctionResult<S_WeightNote> CreateSalesWeightNote<T1, T2, T3>(T1 dtoSalesWeightNote,
             List<T2> dtoSalesIngredientList,
             T3 dtoSalesWeightNoteResultPrice,
             string docNo,
             AppUser operUserInfo)
         {
             /* 共用變數 */
-            var funcRs = new FunctionResult<SalesWeightNote>();
+            var funcRs = new FunctionResult<S_WeightNote>();
             var salseWeightNoteUNID = Guid.NewGuid();
             var createTime = DateTime.Now;
             var createEmpNo = operUserInfo.NICK_NAME;
@@ -187,7 +187,7 @@ namespace PSI.Service.Logic
 
             /* Get Entity */
             // 出貨磅單建立 
-            var salesWeightNote = this.ConvertDTOToEntity2<T1, SalesWeightNote>(dtoSalesWeightNote);
+            var salesWeightNote = this.ConvertDTOToEntity2<T1, S_WeightNote>(dtoSalesWeightNote);
             if (salesWeightNote == null)
             {
                 funcRs.ResultFailure("新增失敗，新增磅單為空值!!");

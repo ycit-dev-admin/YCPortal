@@ -28,8 +28,8 @@ namespace PSI.Mappgins
 
 
 
-        public T2 MapTo<T1, T2>(SalesWeightNote salesWeightNote)
-            where T1 : SalesWeightNote
+        public T2 MapTo<T1, T2>(S_WeightNote salesWeightNote)
+            where T1 : S_WeightNote
             where T2 : WeightNoteUpdateActualData
         {
             return new MapperConfiguration(cfg =>
@@ -66,8 +66,8 @@ namespace PSI.Mappgins
         //    ).CreateMapper().Map<T>(salesWeightNote);
         //}
 
-        public IMapper GetMapper<T1, T2>(SalesWeightNote salesWeightNote = null)
-          where T1 : SalesWeightNote
+        public IMapper GetMapper<T1, T2>(S_WeightNote salesWeightNote = null)
+          where T1 : S_WeightNote
           where T2 : WeightNoteUpdateActualData
         {
             return new MapperConfiguration(cfg =>
@@ -82,8 +82,8 @@ namespace PSI.Mappgins
             ).CreateMapper();
         }
 
-        public IMapper GetMapper<T1>(SalesWeightNote salesWeightNote = null, WeightNoteUpdateActualData weightNoteUpdateActualData = null)
-          where T1 : SalesWeightNote
+        public IMapper GetMapper<T1>(S_WeightNote salesWeightNote = null, WeightNoteUpdateActualData weightNoteUpdateActualData = null)
+          where T1 : S_WeightNote
         {
             return new MapperConfiguration(cfg =>
              cfg.CreateMap<T1, WeightNoteUpdateActualData>()

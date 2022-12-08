@@ -22,6 +22,14 @@ namespace PSI.Core.Enums
             ContractLogError = 12
         }
 
+        public enum P_InventoryStatus // 庫存狀態  // 1:在庫存  0:已出貨
+        {
+            [Description("已出貨")]
+            SellOut = 0,
+            [Description("在庫存")]
+            HasInventory = 1
+        }
+
         public enum SWeightNotesStatus // 出貨磅單狀態
         {
             [Description("廠內出貨")]

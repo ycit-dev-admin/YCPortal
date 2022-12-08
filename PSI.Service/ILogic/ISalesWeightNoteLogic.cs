@@ -7,7 +7,7 @@ namespace PSI.Service.ILogic
 {
     public interface ISalesWeightNoteLogic
     {
-        FunctionResult<SalesWeightNote> CreateSalesWeightNote<T1, T2, T3>(T1 salesWeightNote,
+        FunctionResult<S_WeightNote> CreateSalesWeightNote<T1, T2, T3>(T1 salesWeightNote,
          List<T2> s,
          T3 salesWeightNoteResultPrice,
          string docNo,

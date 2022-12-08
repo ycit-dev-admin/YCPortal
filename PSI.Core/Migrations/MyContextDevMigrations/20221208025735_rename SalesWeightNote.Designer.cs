@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PSI.Core.Infrastructure.DBContext;
@@ -9,9 +10,10 @@ using PSI.Core.Infrastructure.DBContext;
 namespace PSI.Core.Migrations.MyContextDevMigrations
 {
     [DbContext(typeof(MyContextDev))]
-    partial class MyContextDevModelSnapshot : ModelSnapshot
+    [Migration("20221208025735_rename SalesWeightNote")]
+    partial class renameSalesWeightNote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,9 +341,6 @@ namespace PSI.Core.Migrations.MyContextDevMigrations
                     b.Property<Guid>("PRODUCT_UNID")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("PURCHASE_DOC_NO")
-                        .HasColumnType("text");
-
                     b.Property<decimal>("PURCHASE_WEIGHT")
                         .HasColumnType("numeric");
 
@@ -365,7 +364,7 @@ namespace PSI.Core.Migrations.MyContextDevMigrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("P_Inventorys");
+                    b.ToTable("P_Inventory");
                 });
 
             modelBuilder.Entity("PSI.Core.Entities.ProductItem", b =>
@@ -671,7 +670,7 @@ namespace PSI.Core.Migrations.MyContextDevMigrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("S_WeightNotes");
+                    b.ToTable("SalesWeightNotes");
                 });
 
             modelBuilder.Entity("PSI.Core.Entities.SalesIngredient", b =>

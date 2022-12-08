@@ -17,7 +17,7 @@ namespace PSI.Service.Service
     public class SalesWeightNoteServiceOld : ISalesWeightNoteServiceOld
     {
         private readonly IUnitOfWork _unitOfwork;
-        private readonly IGenericRepository<SalesWeightNote> _salesWeightNoteRepository;
+        private readonly IGenericRepository<S_WeightNote> _salesWeightNoteRepository;
         private readonly IGenericRepository<SalesIngredient> _salesIngredientRepository;
         private readonly IGenericRepository<SalesWeightNoteStepData> _salesWeightNoteResultPriceRepository;
 
@@ -35,17 +35,17 @@ namespace PSI.Service.Service
         }
 
 
-        public IQueryable<SalesWeightNote> GetSalesWeightNotes(List<Guid> unids)
+        public IQueryable<S_WeightNote> GetSalesWeightNotes(List<Guid> unids)
         {
             return _salesWeightNoteRepository.GetAllAsync()
                 .Result.Where(aa => unids.Contains(aa.UNID)).AsQueryable();
         }
-        public SalesWeightNote GetSalesWeightNote(Guid unid)
+        public S_WeightNote GetSalesWeightNote(Guid unid)
         {
             return _salesWeightNoteRepository.GetAsync(aa => aa.UNID == unid).Result;
         }
 
-        public IQueryable<SalesWeightNote> GetOngoSalesWeightDocs()
+        public IQueryable<S_WeightNote> GetOngoSalesWeightDocs()
         {
             var needStatus = PSIWeightNoteEnum.GetOngoSalesWeightDocStatus()
                 .Select(aa => (int)aa);
@@ -55,14 +55,14 @@ namespace PSI.Service.Service
         }
 
 
-        public FunctionResult<SalesWeightNote> CreateSalesWeightNote(SalesWeightNote salesWeightNote,
+        public FunctionResult<S_WeightNote> CreateSalesWeightNote(S_WeightNote salesWeightNote,
             List<SalesIngredient> salesIngredientList,
             SalesWeightNoteStepData salesWeightNoteResultPrice,
             string docNo,
             AppUser operUserInfo)
         {
             /* Null檢核 */
-            var funcRs = new FunctionResult<SalesWeightNote>();
+            var funcRs = new FunctionResult<S_WeightNote>();
             if (salesWeightNote == null)
             {
                 funcRs.ResultFailure("新增失敗，新增磅單為空值!!");
