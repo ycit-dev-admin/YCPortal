@@ -18,7 +18,7 @@ namespace PSI.Service.Service
     {
         private readonly IUnitOfWork _unitOfwork;
         private readonly IGenericRepository<S_WeightNote> _salesWeightNoteRepository;
-        private readonly IGenericRepository<SalesIngredient> _salesIngredientRepository;
+        private readonly IGenericRepository<S_WeightNote_Ingredient> _salesIngredientRepository;
         private readonly IGenericRepository<SalesWeightNoteStepData> _salesWeightNoteResultPriceRepository;
 
         public SalesWeightNoteServiceOld(IUnitOfWork unitOfWork)
@@ -56,7 +56,7 @@ namespace PSI.Service.Service
 
 
         public FunctionResult<S_WeightNote> CreateSalesWeightNote(S_WeightNote salesWeightNote,
-            List<SalesIngredient> salesIngredientList,
+            List<S_WeightNote_Ingredient> salesIngredientList,
             SalesWeightNoteStepData salesWeightNoteResultPrice,
             string docNo,
             AppUser operUserInfo)

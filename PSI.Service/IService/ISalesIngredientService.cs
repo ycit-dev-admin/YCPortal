@@ -7,8 +7,8 @@ namespace PSI.Service.IService
 {
     public interface ISalesIngredientService
     {
-        IQueryable<SalesIngredient> GetSalesIngredients(Guid weightNoteGUID);
-        IQueryable<SalesIngredient> GetSalesIngredients(List<Guid> weightNoteGUIDs);
+        IQueryable<S_WeightNote_Ingredient> GetSalesIngredients(Guid weightNoteGUID);
+        IQueryable<S_WeightNote_Ingredient> GetSalesIngredients(List<Guid> weightNoteGUIDs);
 
 
     }

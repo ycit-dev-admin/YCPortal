@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace PSI.Service.Service
 {
-    public class SalesIngredientServiceNew : GenericService<SalesIngredient>, ISalesIngredientServiceNew
+    public class SalesIngredientServiceNew : GenericService<S_WeightNote_Ingredient>, ISalesIngredientServiceNew
     {
         private readonly IUnitOfWork _unitOfwork;
         //private readonly IEntityMapperProfile _iEntityMapperProfile;

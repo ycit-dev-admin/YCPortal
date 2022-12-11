@@ -14,7 +14,7 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
         public DateTime? SalesTime { get; set; }
         public Guid? ContractUNID { get; set; }
         public Guid ProductItemUNID { get; set; }   // 廠內磅單主要認列品項
-        public List<DTO_PS_WreteOff_Record> DTOPSWreteOffRecords { get; set; }
+        public List<DTO_S_WeightNote_Ingredient> DTOSWeightNoteIngredients { get; set; }
         public decimal SalesWeight { get; set; }  // 出貨重量
         public double? DefectiveWeight { get; set; }
         public decimal? UnitPrice { get; set; }

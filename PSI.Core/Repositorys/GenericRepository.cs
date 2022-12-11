@@ -164,7 +164,7 @@ namespace PSI.Core.Repositorys
         public IQueryable<TEntity> Reads(Expression<Func<TEntity, bool>> predicate,
             params Expression<Func<TEntity, bool>>[] predicates)
         {
-            var datas = this._context.Set<TEntity>().Where(predicate);
+            var datas = this._context.Set<TEntity>().Where(predicate).AsNoTracking();
             if (predicates != null)
             {
                 foreach (var expression in predicates)
@@ -254,6 +254,32 @@ namespace PSI.Core.Repositorys
             {
                 //this._context.Entry(entity).State = EntityState.Modified;
                 _context.Set<TEntity>().Update(entity);
+                //this.SaveChanges();
+                funcRs.ResultSuccess("更新成功");
+            }
+            catch (Exception ex)
+            {
+                funcRs.ResultException(ex);
+            }
+            return funcRs;
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="entity">實體</param>
+        /// <exception cref="ArgumentNullException">entity</exception>
+        public FunctionResult<List<TEntity>> Update(List<TEntity> entity)
+        {
+            var funcRs = new FunctionResult<List<TEntity>>(this);
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+            try
+            {
+                //this._context.Entry(entity).State = EntityState.Modified;
+                _context.Set<TEntity>().UpdateRange(entity);
                 //this.SaveChanges();
                 funcRs.ResultSuccess("更新成功");
             }

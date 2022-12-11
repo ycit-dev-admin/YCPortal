@@ -13,7 +13,6 @@ namespace PSI.Core.Entities
         public Guid PRODUCT_UNID { get; set; }    // (狀態1)
         public string PRODUCT_NAME { get; set; }    // (狀態1)
         public decimal WRITEOFF_WEIGHT { get; set; }    // (狀態1)
-        public decimal PERCENT { get; set; }    // (狀態1)
         public int WRITEOFF_STATUS { get; set; }
         //public decimal LIVEIN_UNIT_PRICE { get; set; }  // 當下品項成本單價
         //public decimal REAL_UNIT_PRICE { get; set; }  // 客戶付款品像單價 (狀態2)

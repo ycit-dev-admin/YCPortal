@@ -17,7 +17,7 @@ namespace PSI.Service.Service
     public class SalesIngredientService : ISalesIngredientService
     {
         private readonly IUnitOfWork _unitOfwork;
-        private readonly IGenericRepository<SalesIngredient> _salesIngredientRepository;
+        private readonly IGenericRepository<S_WeightNote_Ingredient> _salesIngredientRepository;
 
         public SalesIngredientService(IUnitOfWork unitOfWork)
         {
@@ -26,13 +26,13 @@ namespace PSI.Service.Service
         }
 
 
-        public IQueryable<SalesIngredient> GetSalesIngredients(Guid weightNoteGUID)
+        public IQueryable<S_WeightNote_Ingredient> GetSalesIngredients(Guid weightNoteGUID)
         {
             return _salesIngredientRepository.GetAllAsync().Result
                 .Where(aa => aa.SALES_WEIGHTNOTE_UNID == weightNoteGUID).AsQueryable();
         }
 
-        public IQueryable<SalesIngredient> GetSalesIngredients(List<Guid> weightNoteGUIDs)
+        public IQueryable<S_WeightNote_Ingredient> GetSalesIngredients(List<Guid> weightNoteGUIDs)
         {
             return _salesIngredientRepository.GetAllAsync()
                 .Result.Where(aa => weightNoteGUIDs.Contains(aa.SALES_WEIGHTNOTE_UNID)).AsQueryable();

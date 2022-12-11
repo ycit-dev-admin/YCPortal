@@ -33,7 +33,7 @@ namespace PSI.Service.Logic
 
         /* Repository */
         private readonly IGenericRepository<S_WeightNote> _salesWeightNoteRepository;
-        private readonly IGenericRepository<SalesIngredient> _salesIngredientRepository;
+        private readonly IGenericRepository<S_WeightNote_Ingredient> _salesIngredientRepository;
         private readonly IGenericRepository<SalesWeightNoteStepData> _salesWeightNoteResultPriceRepository;
 
 
@@ -47,7 +47,7 @@ namespace PSI.Service.Logic
 
             /* Repository */
             _salesWeightNoteRepository = _unitOfWork.GetRepository<S_WeightNote>();
-            _salesIngredientRepository = _unitOfWork.GetRepository<SalesIngredient>();
+            _salesIngredientRepository = _unitOfWork.GetRepository<S_WeightNote_Ingredient>();
             _salesWeightNoteResultPriceRepository = _unitOfWork.GetRepository<SalesWeightNoteStepData>();
             //_iSalesWeightNoteServic = iSalesWeightNoteService;
             //_iSalesIngredientServiceNew = iSalesIngredientServiceNew;
@@ -155,9 +155,9 @@ namespace PSI.Service.Logic
                        //.ForMember(tar => tar.ESTIMATE_RECEIVED_TIME, ss => ss.MapFrom(src => src.ReceivedTime))
                        .ForMember(tar => tar.REMARK, ss => ss.MapFrom(src => src.Remark)))
                        .CreateMapper();
-                case (nameof(DTO_SalesIngredient), nameof(SalesIngredient)):
+                case (nameof(DTO_S_WeightNote_Ingredient), nameof(S_WeightNote_Ingredient)):
                     return new MapperConfiguration(cfg =>
-                    cfg.CreateMap<DTO_SalesIngredient, SalesIngredient>())
+                    cfg.CreateMap<DTO_S_WeightNote_Ingredient, S_WeightNote_Ingredient>())
                        .CreateMapper();
                 case (nameof(WeightNoteCreateWeightNote), nameof(SalesWeightNoteStepData)):
                     return new MapperConfiguration(cfg =>
@@ -203,7 +203,7 @@ namespace PSI.Service.Logic
 
 
             // 出貨品項比例建立
-            var salesIngredientList = this.ConvertDTOsToEntities<T2, SalesIngredient>(dtoSalesIngredientList);
+            var salesIngredientList = this.ConvertDTOsToEntities<T2, S_WeightNote_Ingredient>(dtoSalesIngredientList);
             if (!salesIngredientList.Any())
             {
                 funcRs.ResultFailure("新增失敗，出貨品項比例為空值!!");

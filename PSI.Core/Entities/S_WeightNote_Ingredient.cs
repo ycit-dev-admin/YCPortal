@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PSI.Core.Entities
 {
-    public class SalesIngredient : Entity
+    public class S_WeightNote_Ingredient : Entity
     {
         /* 進貨組成表  */
         public Guid SALES_WEIGHTNOTE_UNID { get; set; }

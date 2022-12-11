@@ -17,7 +17,7 @@ namespace PSI.Mappgins
         public IMapper SalesWeightNoteQueryList<T>()
         {
             return new MapperConfiguration(cfg =>
-            cfg.CreateMap<SalesIngredient, PE_SalesIngredient>()
+            cfg.CreateMap<S_WeightNote_Ingredient, PE_SalesIngredient>()
             ).CreateMapper();
 
         }

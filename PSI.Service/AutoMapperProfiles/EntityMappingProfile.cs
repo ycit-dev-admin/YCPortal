@@ -20,7 +20,7 @@ namespace PSI.Service.Mappings
             this.CreateMap<CodeTable, DTO_CodeTable>();
             this.CreateMap<CustomerInfo, DTO_CustomerInfo>();
             this.CreateMap<CustomerCar, DTO_CustomerCar>();
-            this.CreateMap<SalesIngredient, DTO_SalesIngredient>();
+            this.CreateMap<S_WeightNote_Ingredient, DTO_S_WeightNote_Ingredient>();
             this.CreateMap<ProductItem, DTO_ProductItem>();
             this.CreateMap<CustomerContract, DTO_CustomerContract>();
             this.CreateMap<P_Inventory, DTO_P_Inventory>();

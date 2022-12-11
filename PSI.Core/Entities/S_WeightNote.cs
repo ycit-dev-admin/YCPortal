@@ -23,7 +23,7 @@ namespace PSI.Core.Entities
         public decimal? TRAFIC_FEE { get; set; }  // 運費  (狀態2)
         public decimal? TRAFIC_FEE_TAX { get; set; }  // 運費稅額   (狀態2)
         public decimal? RECEIVED_PRICE { get; set; }  // 實收總金額   (狀態2)
-        public Guid PRODUCT_ITEM_UNID { get; set; }   // 主要認列出貨品項 (還不確定用途)   (狀態1)
+        public Guid? PRODUCT_ITEM_UNID { get; set; }   // 主要認列出貨品項 (還不確定用途)   (狀態1)
         public decimal INSIDE_SALES_WEIGHT { get; set; }  // 廠內出貨總秤重   (狀態1)
         public decimal? CUSTOMER_SALES_WEIGHT { get; set; }  // 客戶收貨總秤重   (狀態2)
         public decimal? DEFECTIVE_WEIGHT { get; set; } // 客戶出貨總扣重  (狀態2)

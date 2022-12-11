@@ -5,7 +5,7 @@ using PSI.Core.Entities;
 
 namespace PSI.Service.IService
 {
-    public interface ISalesIngredientServiceNew : IGenericService<SalesIngredient>
+    public interface ISalesIngredientServiceNew : IGenericService<S_WeightNote_Ingredient>
     {
 
     }

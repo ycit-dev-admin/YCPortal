@@ -616,15 +616,15 @@
             // Create a hidden input element, and append it to the li:
             let nameProperty = document.createElement("input");
             nameProperty.type = "hidden";
-            nameProperty.name = `DTOPSWreteOffRecords[${index}].PRODUCT_NAME`;
+            nameProperty.name = `DTOSWeightNoteIngredients[${index}].ITEM_NAME`;
             nameProperty.value = item.prodText
             let valueProperty = document.createElement("input");
             valueProperty.type = "hidden";
-            valueProperty.name = `DTOPSWreteOffRecords[${index}].PRODUCT_UNID`;
+            valueProperty.name = `DTOSWeightNoteIngredients[${index}].PRODUCT_UNID`;
             valueProperty.value = item.prodId;
             let percentProperty = document.createElement("input");
             percentProperty.type = "hidden";
-            percentProperty.name = `DTOPSWreteOffRecords[${index}].PERCENT`;
+            percentProperty.name = `DTOSWeightNoteIngredients[${index}].ITEM_PERCENT`;
             percentProperty.value = item.percent.toString();
 
             postDiv.append(nameProperty);

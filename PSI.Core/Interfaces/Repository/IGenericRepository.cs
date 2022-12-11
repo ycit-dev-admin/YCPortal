@@ -55,6 +55,8 @@ namespace PSI.Core.Interfaces.Repository
         /// <param name="entity">實體</param>
         FunctionResult<TEntity> Update(TEntity entity);
 
+        FunctionResult<List<TEntity>> Update(List<TEntity> entity);
+
         /// <summary>
         /// 更新一筆資料的內容。只更新部分欄位。
         /// Lambda 運算式 只需要傳遞欄位屬性 EX : x => { x.ColumnName1, x.Column2 }

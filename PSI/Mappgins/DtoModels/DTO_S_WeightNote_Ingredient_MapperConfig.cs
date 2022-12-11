@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace PSI.Mappgins.DtoModels
 {
-    public class DTO_P_Inventory_MapperConfig : IMapperConfigAction
+    public class DTO_S_WeightNote_Ingredient_MapperConfig : IMapperConfigAction
     {
 
 
-        public DTO_P_Inventory_MapperConfig()
+        public DTO_S_WeightNote_Ingredient_MapperConfig()
         {
 
         }
@@ -21,15 +21,12 @@ namespace PSI.Mappgins.DtoModels
             Dictionary<(Type, Type, int), IMapper> rsDic = new Dictionary<(Type, Type, int), IMapper>
             {
                 {
-                    (typeof(DTO_P_Inventory), typeof(P_Inventory), 0),
+                    (typeof(DTO_S_WeightNote_Ingredient), typeof(S_WeightNote_Ingredient), 0),
                   new MapperConfiguration(cfg =>
-                    cfg.CreateMap<DTO_P_Inventory, P_Inventory>()
+                    cfg.CreateMap<DTO_S_WeightNote_Ingredient, S_WeightNote_Ingredient>()
                        //.ForMember(tar => tar.PRODUCT_UNID, ss => ss.MapFrom(src => src.PRODUCT_UNID))
                        //.ForMember(tar => tar.LIVEIN_UNIT_PRICE, ss => ss.MapFrom(src => src.UNIT_PRICE))
-                       )
-                       //.ForMember(tar => tar.CREATE_TIME, ss => ss.MapFrom(src => DateTime.Now))
-                       //.ForMember(tar => tar.UPDATE_TIME, ss => ss.MapFrom(src => DateTime.Now)))
-                    .CreateMapper()
+                       ).CreateMapper()
                 }
 
             };

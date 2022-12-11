@@ -21,9 +21,9 @@ namespace PSI.Mappgins.DtoModels
             Dictionary<(Type, Type, int), IMapper> rsDic = new Dictionary<(Type, Type, int), IMapper>
             {
                 {
-                    (typeof(DTO_PS_WreteOff_Record), typeof(PS_WriteOff_Log), 0),
+                    (typeof(DTO_PS_WriteOff_Log), typeof(PS_WriteOff_Log), 0),
                   new MapperConfiguration(cfg =>
-                    cfg.CreateMap<DTO_PS_WreteOff_Record, PS_WriteOff_Log>())
+                    cfg.CreateMap<DTO_PS_WriteOff_Log, PS_WriteOff_Log>())
                        //.ForMember(tar => tar.PRODUCT_UNID, ss => ss.MapFrom(src => src.PRODUCT_UNID))
                        //.ForMember(tar => tar.CREATE_TIME, ss => ss.MapFrom(src => DateTime.Now))
                        //.ForMember(tar => tar.UPDATE_TIME, ss => ss.MapFrom(src => DateTime.Now)))

@@ -25,7 +25,7 @@ namespace PSI.Mappgins
         {
 
             return new MapperConfiguration(cfg =>
-            cfg.CreateMap<PE_SalesIngredient, SalesIngredient>()).CreateMapper();
+            cfg.CreateMap<PE_SalesIngredient, S_WeightNote_Ingredient>()).CreateMapper();
         }
 
 

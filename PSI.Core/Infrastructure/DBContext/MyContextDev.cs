@@ -24,7 +24,7 @@ namespace PSI.Core.Infrastructure.DBContext
         public DbSet<CodeTable> CodeTables { get; set; }
         public DbSet<PurchaseIngredient> PurchaseIngredients { get; set; }
         public DbSet<SeqTypeConfig> SeqTypeConfigs { get; set; }
-        public DbSet<SalesIngredient> SalesIngredients { get; set; }
+        public DbSet<S_WeightNote_Ingredient> S_WeightNotes_Ingredients { get; set; }
         public DbSet<S_WeightNote> S_WeightNotes { get; set; }
         public DbSet<SalesWeightNoteStepData> SalesWeightNotesStepDatas { get; set; }
         public DbSet<P_Inventory> P_Inventorys { get; set; }

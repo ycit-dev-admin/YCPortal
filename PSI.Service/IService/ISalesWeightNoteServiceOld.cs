@@ -14,7 +14,7 @@ namespace PSI.Service.IService
         S_WeightNote GetSalesWeightNote(Guid unid);
 
         FunctionResult<S_WeightNote> CreateSalesWeightNote(S_WeightNote salesWeightNote,
-         List<SalesIngredient> purchaseIngredientList,
+         List<S_WeightNote_Ingredient> purchaseIngredientList,
          SalesWeightNoteStepData salesWeightNoteResultPrice,
          string docNo,
          AppUser operUserInfo);

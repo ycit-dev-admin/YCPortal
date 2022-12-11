@@ -56,7 +56,7 @@ namespace PSI.Service.AutoMapperMappActions
             //        source.TraficUnitPrice,
             //        source.TraficFeeHasTax);
             //dest.RECEIVED_PRICE = dest.INVOICE_PRICE - dest.TRAFIC_FEE;
-            dest.DTO_SalesIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_SalesIngredient>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
+            dest.DTO_SalesIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_S_WeightNote_Ingredient>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
             dest.DTO_CustomerInfo = _iCustomerInfoServiceNew.GetDTOModel<DTO_CustomerInfo>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
             dest.DTO_SalesWeightNoteStepDatas = _iSalesWeightNoteStepDataService.GetDTOModels<DTO_SalesWeightNoteStepData>(aa => aa.DOC_UNID == src.UNID);
             dest.DTO_CustomerCar = _iCarNoServiceNew.GetDTOModel<DTO_CustomerCar>(aa => aa.CAR_GUID == src.CARNO_UNID);

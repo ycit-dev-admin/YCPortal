@@ -29,6 +29,13 @@ namespace PSI.Core.Enums
             [Description("在庫存")]
             HasInventory = 1
         }
+        public enum S_WriteOffLogStatus  // 庫存狀態  // 1:有效沖銷紀錄  0:無效沖銷紀錄
+        {
+            [Description("有效")]
+            Available = 0,
+            [Description("無效")]
+            Unavailable = 1
+        }
 
         public enum SWeightNotesStatus // 出貨磅單狀態
         {

@@ -318,6 +318,32 @@ namespace PSI.Service.Service
         }
 
         /// <summary>
+        /// 依照某一個ViewModel的值，覆寫對應的Entity
+        /// </summary>
+        /// <typeparam name="TViewModel">ViewModel的形態</typeparam>
+        /// <param name="viewModel">ViewModel的值</param>
+        /// <returns>是否更新成功</returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public virtual void UpdateViewModelToDatabases<TViewModel>(List<TViewModel> viewModels)
+        {
+            if (viewModels == null) { throw new ArgumentNullException("instance"); }
+            //取得對應並帶有資料的 Entity 類別
+            var enitity = staticConvertViewModelToModel(viewModels);
+            this._unitOfWork.GetRepository<TEntity>().Update(enitity);
+            this._unitOfWork.SaveChange();
+        }
+
+        public virtual void UpdateViewModelToDatabasesNoSave<TViewModel>(List<TViewModel> viewModels)
+        {
+            if (viewModels == null) { throw new ArgumentNullException("instance"); }
+            //取得對應並帶有資料的 Entity 類別
+            var enitity = staticConvertViewModelToModel(viewModels);
+            this._unitOfWork.GetRepository<TEntity>().Update(enitity);
+            //this._unitOfWork.SaveChange();
+        }
+
+
+        /// <summary>
         /// 更新一筆資料的內容。只更新部分欄位的。
         /// Lambda 運算式 只需要傳遞欄位屬性 EX : x => x.ColumnName1, x => x.Column2....
         /// </summary>

@@ -30,7 +30,7 @@ namespace PSI.Service.AutoMapperProfiles
                 //.ForMember(tar => tar.ESTIMATE_RECEIVED_TIME, ss => ss.MapFrom(src => src.ReceivedTime))
                 .ForMember(tar => tar.REMARK, ss => ss.MapFrom(src => src.Remark));
 
-            CreateMap<DTO_SalesIngredient, SalesIngredient>();
+            CreateMap<DTO_S_WeightNote_Ingredient, S_WeightNote_Ingredient>();
 
             CreateMap<WeightNoteCreateWeightNote, SalesWeightNoteStepData>()
                 .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))

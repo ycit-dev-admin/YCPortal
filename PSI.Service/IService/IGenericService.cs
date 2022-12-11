@@ -53,6 +53,8 @@ namespace PSI.Service.IService
         /// <param name="viewModel">ViewModel的值</param>
         /// <returns>是否更新成功</returns>
         void UpdateViewModelToDatabase<TViewModel>(TViewModel viewModel);
+        void UpdateViewModelToDatabases<TViewModel>(List<TViewModel> viewModel);
+        void UpdateViewModelToDatabasesNoSave<TViewModel>(List<TViewModel> viewModel);
 
         /// <summary>
         /// 更新一筆資料的內容。只更新部分欄位的。

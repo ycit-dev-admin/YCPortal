@@ -77,7 +77,7 @@ namespace PSI
             services.AddScoped<IGenericRepository<SeqTypeConfig>, GenericRepository<SeqTypeConfig>>();
             services.AddScoped<IGenericRepository<S_WeightNote>, GenericRepository<S_WeightNote>>();
             services.AddScoped<IGenericRepository<SalesWeightNoteStepData>, GenericRepository<SalesWeightNoteStepData>>();
-            services.AddScoped<IGenericRepository<SalesIngredient>, GenericRepository<SalesIngredient>>();
+            services.AddScoped<IGenericRepository<S_WeightNote_Ingredient>, GenericRepository<S_WeightNote_Ingredient>>();
             //services.AddScoped<IGenericRepository<P_Inventory>, GenericRepository<P_Inventory>>();
 
             // IService
@@ -102,6 +102,7 @@ namespace PSI
             services.AddScoped<ISalesWeightNoteStepDataService, SalesWeightNoteResultPriceServiceNew>();
             services.AddScoped<ISalesWeightNoteResultPriceService, SalesWeightNoteResultPriceService>();
             services.AddScoped<IGenericService<P_Inventory>, GenericService<P_Inventory>>();
+            services.AddScoped<IGenericService<PS_WriteOff_Log>, GenericService<PS_WriteOff_Log>>();
 
             //services.AddScoped<IGenericService<SalesWeightNote>, GenericService<SalesWeightNote>>();
             //services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));

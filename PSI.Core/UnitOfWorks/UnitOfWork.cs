@@ -32,7 +32,7 @@ namespace PSI.Core.UnitOfWorks
         public IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; private set; }
         public IGenericRepository<S_WeightNote> SalesWeightNoteRepository { get; private set; }
         public IGenericRepository<SalesWeightNoteStepData> SalesWeightNoteResultPriceRepository { get; private set; }
-        public IGenericRepository<SalesIngredient> SalesIngredientRepository { get; private set; }
+        public IGenericRepository<S_WeightNote_Ingredient> SalesIngredientRepository { get; private set; }
 
 
 
@@ -54,7 +54,7 @@ namespace PSI.Core.UnitOfWorks
             IGenericRepository<SeqTypeConfig> seqTypeConfigRepository,
             IGenericRepository<S_WeightNote> salesWeightNoteRepository,
             IGenericRepository<SalesWeightNoteStepData> salesWeightNoteResultPriceRepository,
-            IGenericRepository<SalesIngredient> salesIngredientRepository)
+            IGenericRepository<S_WeightNote_Ingredient> salesIngredientRepository)
 
 
 

@@ -80,7 +80,7 @@ namespace PSI.Helpers
         {
             var instanceTypeDic = new Dictionary<Type, Type>
             {
-                { typeof(DTO_PS_WreteOff_Record), typeof(DTO_PS_WreteOff_Record_MapperConfig) }
+                { typeof(DTO_PS_WriteOff_Log), typeof(DTO_PS_WreteOff_Record_MapperConfig) }
             };
 
             return instanceTypeDic;

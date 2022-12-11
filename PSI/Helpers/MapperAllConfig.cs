@@ -38,7 +38,7 @@ namespace PSI.Helpers
         {
             var concatRs = new Dictionary<(Type, Type, int), IMapper>()
                        .Concat(_iMapperConfig.GetConfig<WeightNoteCreateWeightNote>())
-                       .Concat(_iMapperConfig.GetConfig<DTO_PS_WreteOff_Record>());
+                       .Concat(_iMapperConfig.GetConfig<DTO_PS_WriteOff_Log>());
 
             var allMapConfigs = concatRs.ToDictionary(dic => dic.Key, dic => dic.Value);
             return allMapConfigs;
@@ -82,8 +82,10 @@ namespace PSI.Helpers
         {
             var instanceTypeDic = new Dictionary<Type, Type>
             {
-                { typeof(DTO_PS_WreteOff_Record), typeof(DTO_PS_WreteOff_Record_MapperConfig) },
-                { typeof(DTO_P_Inventory), typeof(DTO_PS_WreteOff_Record_MapperConfig) },
+                { typeof(DTO_PS_WriteOff_Log), typeof(DTO_PS_WreteOff_Record_MapperConfig) },
+                { typeof(DTO_S_WeightNote_Ingredient), typeof(DTO_S_WeightNote_Ingredient_MapperConfig) },
+                { typeof(DTO_P_Inventory), typeof(DTO_P_Inventory_MapperConfig) }
+
             };
 
             return instanceTypeDic;

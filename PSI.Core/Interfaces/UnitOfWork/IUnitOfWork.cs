@@ -23,7 +23,7 @@ namespace PSI.Core.Interfaces.UnitOfWork
         IGenericRepository<CodeTable> CodeTableRepository { get; }
         IGenericRepository<PurchaseIngredient> PurchaseIngredientRepository { get; }
         IGenericRepository<S_WeightNote> SalesWeightNoteRepository { get; }
-        IGenericRepository<SalesIngredient> SalesIngredientRepository { get; }
+        IGenericRepository<S_WeightNote_Ingredient> SalesIngredientRepository { get; }
         IGenericRepository<SeqTypeConfig> SeqTypeConfigRepository { get; }
         IGenericRepository<SalesWeightNoteStepData> SalesWeightNoteResultPriceRepository { get; }
 
