@@ -5,9 +5,9 @@ using PSI.Core.Entities;
 using PSI.Core.Models.DTOModels;
 using PSI.Service.IService;
 
-namespace PSI.Service.AutoMapperMappActions
+namespace PSI.Service.AutoMapperProfiles.Entity
 {
-    public class SalesWeightNoteToDTOAction : IMappingAction<S_WeightNote, DTO_SalesWeightNote>
+    public class S_WeightNote_MapProfile_Action1 : IMappingAction<S_WeightNote, DTO_SalesWeightNote>
     {
         private readonly ICustomerInfoServiceNew _iCustomerInfoServiceNew;
         private readonly IProductItemService _iProductItemService;
@@ -19,12 +19,12 @@ namespace PSI.Service.AutoMapperMappActions
         private readonly ISalesIngredientServiceNew _iSalesIngredientServiceNew;
         private readonly ICustomerContractServiceNew _iCustomerContractServiceNew;
 
-        public SalesWeightNoteToDTOAction()
+        public S_WeightNote_MapProfile_Action1()
         {
             // _iCustomerInfoService = new CustomerInfoService();
         }
 
-        public SalesWeightNoteToDTOAction(ICustomerInfoServiceNew iCustomerInfoServiceNew
+        public S_WeightNote_MapProfile_Action1(ICustomerInfoServiceNew iCustomerInfoServiceNew
             , IProductItemService iProductItemService
             , ISalesWeightNoteResultPriceService iSalesWeightNoteResultPriceService
             , ICodeTableServiceNew iCodeTableServiceNew

@@ -3,6 +3,7 @@ using PSI.Core.Entities;
 using PSI.Core.Models.DTOModels;
 using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.Service.AutoMapperMappActions;
+using PSI.Service.AutoMapperProfiles.Entity;
 
 namespace PSI.Service.Mappings
 {
@@ -12,7 +13,7 @@ namespace PSI.Service.Mappings
         {
             // Entity -> DTOModel
             this.CreateMap<S_WeightNote, DTO_SalesWeightNote>()
-                .AfterMap<SalesWeightNoteToDTOAction>();
+                .AfterMap<S_WeightNote_MapProfile_Action1>();
             this.CreateMap<SalesWeightNoteStepData, DTO_SalesWeightNoteStepData>()
                 .AfterMap<SalesWeightNoteStepDataToDTOAction>();
 

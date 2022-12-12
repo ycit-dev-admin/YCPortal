@@ -49,6 +49,18 @@ namespace PSI.Helpers
             // 取得泛型中的類型型態
             //Dictionary<(Type, Type, int), IMapper> rsDic = new Dictionary<(Type, Type, int), IMapper>();
 
+            //var config = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.AddProfile(new S_WeightNote_MapProfile(_psiService));
+            //}).CreateMapper();
+
+            //var newSS = new S_WeightNote();
+
+            //var qqt = config.Map<DTO_SalesWeightNote>(newSS);
+
+
+
+
 
             var instanceTypeDic = GetInstanceTypeDic_PageModel()
                                   .Concat(GetInstanceTypeDic_DTO())

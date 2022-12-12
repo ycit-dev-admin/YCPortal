@@ -399,9 +399,11 @@ namespace PSI.Service.Service
         /// <param name="wherePredicate">過濾邏輯</param>
         /// <param name="wherePredicates">要取得的Where條件。可新增N個條件值</param>
         /// <returns>取得轉換過的List<ViewModel>或者是null</returns>
-        public virtual List<TViewModel> GetDTOModels<TViewModel>(Expression<Func<TEntity, bool>> wherePredicate)
+        public virtual List<TViewModel> GetDTOModels<TViewModel>(Expression<Func<TEntity, bool>> wherePredicate, bool needNoTracking = true)
         {
             var datas = this._unitOfWork.GetRepository<TEntity>().Reads(wherePredicate);
+            if (needNoTracking)
+                datas.AsNoTracking();
             return staticConvertListModelToListViewModel<TViewModel>(datas).ToList();
         }
 

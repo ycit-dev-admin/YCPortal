@@ -87,7 +87,7 @@ namespace PSI.Service.IService
         /// <param name="wherePredicate">過濾邏輯</param>
         /// <param name="wherePredicates">要取得的Where條件。可新增N個條件值</param>
         /// <returns>取得轉換過的ViewModel或者是null</returns>
-        List<TViewModel> GetDTOModels<TViewModel>(Expression<Func<T, bool>> wherePredicate);
+        List<TViewModel> GetDTOModels<TViewModel>(Expression<Func<T, bool>> wherePredicate, bool needNoTracking = true);
 
         /// <summary>
         /// 取得某一個條件下面的某一筆Entity並且轉成對應的List<ViewModel>
