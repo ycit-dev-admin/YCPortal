@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using PSI.Helpers.IHelper;
+using PSI.Service.Helper.IHelper;
 using System.Collections.Generic;
 
-namespace PSI.Helpers
+namespace PSI.Service.Helper
 {
     public class MapperHelper : IMapperHelper
     {
@@ -11,16 +11,16 @@ namespace PSI.Helpers
         {
             _iMapperAllConfig = iMapperAllConfig;
         }
-        public MapperHelper()
-        {
-            _iMapperAllConfig = new MapperAllConfig();
-        }
+        //public MapperHelper()
+        //{
+        //    _iMapperAllConfig = new MapperAllConfig();
+        //}
 
         public TargetType MapTo<SourceType, TargetType>(SourceType srcData, int mapType = 0)
             where SourceType : class
            where TargetType : class
         {
-            var mapperConfigRs = GetMapperConfig<SourceType, TargetType>(mapType);
+            var mapperConfigRs = GetMapperConfig<SourceType>(mapType);
             return mapperConfigRs.Map<TargetType>(srcData);
         }
 
@@ -28,15 +28,14 @@ namespace PSI.Helpers
             where SourceType : class
             where TargetType : class
         {
-            var mapperConfigRs = GetMapperConfig<SourceType, TargetType>(mapType);
+            var mapperConfigRs = GetMapperConfig<SourceType>(mapType);
             return mapperConfigRs.Map<List<TargetType>>(srcData);
         }
 
-        private IMapper GetMapperConfig<SourceType, TargetType>(int mapType = 0)
+        private IMapper GetMapperConfig<SourceType>(int mapType = 0)
             where SourceType : class
-            where TargetType : class
         {
-            var adapterConfigRs = _iMapperAllConfig.FindConfig<SourceType, TargetType>(mapType);
+            var adapterConfigRs = _iMapperAllConfig.FindConfig<SourceType>(mapType);
             return adapterConfigRs;
         }
     }

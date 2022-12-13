@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSI.Areas.Purchase.Helpers;
-using PSI.Service.IHelper;
+using PSI.Service.Helper.IHelper;
 using PSI.Service.IService;
 
 namespace PSI.Areas.Purchase.WebAPIs

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using PSI.Core.Entities;
-
-namespace PSI.Service.IHelper
+﻿namespace PSI.Service.Helper.IHelper
 {
     public interface ISalesPriceCaculateHelper
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PSI.Service.IHelper;
+using PSI.Service.Helper.IHelper;
 
 namespace PSI.WebAPI
 {

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using PSI.Core.Entities;
 using PSI.Core.Models.DTOModels;
-using PSI.Core.Models.PageModels.Areas.Sales;
-using PSI.Service.Helper;
-using PSI.Service.IHelper;
 using PSI.Service.IService;
-using PSI.Service.Service;
+using System;
 
 namespace PSI.Service.AutoMapperMappActions
 {
@@ -36,7 +30,7 @@ namespace PSI.Service.AutoMapperMappActions
             //        source.TraficUnitPrice,
             //        source.TraficFeeHasTax);
             //destination.RECEIVED_PRICE = destination.INVOICE_PRICE - destination.TRAFIC_FEE;
-           // destination.CustomerName = _iCustomerInfoService.GetCustomerInfo(source.CUSTOMER_UNID).CUSTOMER_NAME;
+            // destination.CustomerName = _iCustomerInfoService.GetCustomerInfo(source.CUSTOMER_UNID).CUSTOMER_NAME;
         }
     }
 }

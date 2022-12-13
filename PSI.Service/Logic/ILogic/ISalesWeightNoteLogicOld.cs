@@ -3,9 +3,9 @@ using PSI.Core.Entities;
 using PSI.Core.Entities.Identity;
 using PSI.Core.Helpers;
 
-namespace PSI.Service.ILogic
+namespace PSI.Service.Logic.ILogic
 {
-    public interface ISalesWeightNoteLogic
+    public interface ISalesWeightNoteLogicOld
     {
         FunctionResult<S_WeightNote> CreateSalesWeightNote<T1, T2, T3>(T1 salesWeightNote,
          List<T2> s,

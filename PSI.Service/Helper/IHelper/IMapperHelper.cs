@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PSI.Helpers.IHelper
+namespace PSI.Service.Helper.IHelper
 {
     public interface IMapperHelper
     {

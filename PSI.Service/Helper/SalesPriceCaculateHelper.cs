@@ -4,7 +4,7 @@ using System.Linq;
 using PSI.Core.Entities;
 using PSI.Core.Interfaces.Repository;
 using PSI.Core.Interfaces.UnitOfWork;
-using PSI.Service.IHelper;
+using PSI.Service.Helper.IHelper;
 
 namespace PSI.Service.Helper
 {

@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AutoMapperProfiles\PageModelMappingProfile.cs" />
     <Compile Remove="AutoMapperProfiles\VVVMappings.cs" />
   </ItemGroup>
 
@@ -16,6 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PSI.Core\PSI.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IHelper\" />
   </ItemGroup>
 
 </Project>

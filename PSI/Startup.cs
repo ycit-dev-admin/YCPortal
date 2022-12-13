@@ -21,11 +21,11 @@ using PSI.Mappgins;
 using PSI.Mappgins.Interface;
 using PSI.Mappgins.PageModels;
 using PSI.Service.Helper;
-using PSI.Service.IHelper;
-using PSI.Service.ILogic;
+using PSI.Service.Helper.IHelper;
 using PSI.Service.IMapperProfile;
 using PSI.Service.IService;
 using PSI.Service.Logic;
+using PSI.Service.Logic.ILogic;
 using PSI.Service.MapActions;
 using PSI.Service.MapperProfile;
 using PSI.Service.Service;
@@ -116,8 +116,8 @@ namespace PSI
             // IHelper
             services.AddSingleton<ISalesPriceCaculateHelper, SalesPriceCaculateHelper>();
             services.AddSingleton<IWeightCaculateHelper, WeightCaculateHelper>();
-            services.AddSingleton<IMapperHelper, MapperHelper>();
-            services.AddSingleton<IMapperAllConfig, MapperAllConfig>();
+            services.AddScoped<IMapperHelper, MapperHelper>();
+            services.AddScoped<IMapperAllConfig, MapperAllConfig>();
             services.AddSingleton<IMapperConfigAction, WeightNoteCreateWeightNote_MapperConfig>();
             services.AddSingleton<IMapperConfig, MapperConfig>();
 
