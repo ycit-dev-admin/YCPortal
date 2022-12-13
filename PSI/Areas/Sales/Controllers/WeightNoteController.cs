@@ -17,15 +17,14 @@ using PSI.Core.Interfaces.UnitOfWork;
 using PSI.Core.Models.DTOModels;
 using PSI.Core.Models.PageModels.Areas.Sales;
 using PSI.EntityValidators;
-using PSI.Helpers.IHelper;
 using PSI.Infrastructure.Extensions;
 using PSI.Mappgins.Interface;
 using PSI.Models.PEModels;
-using PSI.Service.IHelper;
-using PSI.Service.ILogic;
+using PSI.Service.Helper.IHelper;
 using PSI.Service.IMapperProfile;
 using PSI.Service.IService;
 using PSI.Service.Logic;
+using PSI.Service.Logic.ILogic;
 using PSI.Service.Service;
 using WeightNoteControllerMapper = PSI.Areas.Sales.Mappers.WeightNoteControllerMapper;
 using WeightNoteCreateWeightNote = PSI.Core.Models.PageModels.Areas.Sales.WeightNoteCreateWeightNote;
@@ -183,6 +182,10 @@ namespace PSI.Areas.Sales.Controllers
             //var haha = _psiService.GetPurchaseWeightNotesStatus()
             //    .ToDictionary(aa => aa.Key, aa => aa.Value.GetDescription()).ToPageSelectList("Value", "Key");
 
+
+
+            //_iSalesWeightNoteService.CreateEntityByDTOModelNoSave(abcd.ResultValue);
+
             return View(PageModelOfCreateWeightNote());
         }
 
@@ -254,6 +257,12 @@ namespace PSI.Areas.Sales.Controllers
             var operUser = _userManager.GetUserAsync(User).Result;
             // DB邏輯 ---------------- new (感覺最後要弄成Logic)
 
+            var createRs = _iSalesWeightNoteLogic.CreateSalesWeightNote(pageModel,
+                pageModel.DTOSWeightNoteIngredients,
+                operUser); ;
+
+
+            var dddde = createRs.Success;
 
             // 建立出貨組成表(含比例)(出貨重量 optional)(根據沖銷結果的品項平均成本單價)(客戶回填單價)
             var sWeightNoteIngredients = _iMapperHelper.MapTo<DTO_S_WeightNote_Ingredient, S_WeightNote_Ingredient>(pageModel.DTOSWeightNoteIngredients).Where(aa => aa.ITEM_PERCENT != 0m).ToList();
