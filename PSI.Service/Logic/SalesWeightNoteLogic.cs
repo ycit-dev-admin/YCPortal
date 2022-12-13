@@ -262,12 +262,16 @@ namespace PSI.Service.Logic
             var commitRs = _unitOfWork.SaveChange();  // 都沒有問題在建立
 
 
-
-
             //_unitOfWork.SaveChange();
             //var iMaper = GetInstanceTypeDic_PageModel()[typeof(T1)];
 
             //var lala = iMaper.Map<S_WeightNote>(salesWeightNote);
+            if (commitRs.Success == false)
+            {
+                funcRs.ResultFailure("Error");
+                return funcRs;
+            }
+
             funcRs.ResultSuccess("Successed", cSWeightNote);
             return funcRs;
         }
