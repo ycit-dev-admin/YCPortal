@@ -27,9 +27,9 @@ namespace PSI.Core.Enums
         }
         public enum InspectMethord // 客戶評級驗收方式
         {
-            [Description("整批驗收")]
+            [Description("整批評級收貨")]
             LotInspection = 1,
-            [Description("品項驗收")]
+            [Description("各別評級收貨")]
             ItemInspection = 2
         }
 

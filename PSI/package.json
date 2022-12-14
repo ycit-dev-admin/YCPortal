@@ -12,9 +12,9 @@
     "@types/jqueryui": "1.12.1",
     "@types/jquery.validation": "1.16.7",
     "@types/datatables.net": "1.10.24",
-    "@types/tabulator-tables": "5.4.2",
+    "@types/tabulator-tables": "4.9.4",
     "sweetalert2": "8.19.1",
     "just-validate": "3.8.1",
-    "tabulator-tables": "5.4.2"
+    "tabulator-tables": "4.9.3"
   }
 }

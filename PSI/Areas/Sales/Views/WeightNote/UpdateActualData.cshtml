@@ -74,13 +74,13 @@
         </fieldset>
 
         <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">客戶驗貨回填資訊</legend>
+            <legend class="scheduler-border">客戶收貨回填資訊</legend>
             @{
                 var etimateStepData = Model.DTO_SWeightNote.DTO_SalesWeightNoteStepDatas
                 ?.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);
             }
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="form-group">
                         <label class="form-control-label">客戶評級方式:</label>
                         @{
@@ -93,82 +93,97 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="form-control-label">出貨認列品項:</label>
+                        <label class="form-control-label">出貨重量:</label>
+                        <span>123</span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">客戶扣重:</label>
+                        <span>123</span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">運費單價:</label>
+                        <span>123</span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">運費:</label>
+                        <span>123</span>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">廠內判定整批品項:</label>
                         @*<span>@etimateStepData.DTO_ProductItem.PRODUCT_NAME</span>*@
                         <span>123</span>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="form-control-label">客戶判定品項:</label>
+                        <label class="form-control-label">客戶判定整批品項:</label>
+                        @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">客戶判定整批單價:</label>
+                        @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label">客戶判定整批等級:</label>
                         @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="form-control-label">品項組成:</label>
-                        <div class="form-row">
-                            <div class="form-group col-sm-2">
-                                <ul id="evenProductLs">
-                                    @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients.Where((item, index) => index % 2 == 0))
-                                    {
-                                        <li>@($@"{item.ITEM_NAME}_ {item.ITEM_PERCENT}%")</li>
-                                    }
-                                </ul>
-                            </div>
-                            <div class="form-group col-sm-2">
-                                <ul id="oddProductLs">
-                                    @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients.Where((item, index) => index % 2 != 0))
-                                    {
-                                        <li>@($@"{item.ITEM_NAME}_ {item.ITEM_PERCENT}%")</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
+                    <label class="form-control-label">出貨品項組成:</label>
+                    @*<div class="form-group">
+                            <div style="display:inline">
 
-                    </div>
-                    @*<h6 id="total"><span>品項組成: </span></h6>*@
-                </div>
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>磅秤類型:</label>
-                        <span>@(Model.ScaleNo.ToString() == "1"?"大磅":"小磅")</span>
-                    </div>
+
+                            </div>
+
+
+
+                        </div>*@
+
                 </div>
                 <div class="col-sm-12">
                     <table id="example1" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th class="col-sm-1">階段</th>
+                                <th class="col-sm-1">品項名稱</th>
+                                <th class="col-sm-1">品項比例</th>
                                 <th class="col-sm-1">出貨重量</th>
-                                <th class="col-sm-1">扣重</th>
-                                <th class="col-sm-1">單價</th>
-                                <th class="col-sm-1">運費單價</th>
+                                <th class="col-sm-1">成本單價</th>
+                                <th class="col-sm-1">實際單價</th>
                                 <th class="col-sm-1">
-                                    請款金額
+                                    請款金額(X)
                                     <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="請款金額 = (出貨重量 - 扣重) * 單價 * 稅率"></i>
                                 </th>
                                 <th class="col-sm-1">
-                                    運費
+                                    運費(X)
                                     <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="運費 = (出貨重量 - 扣重) * 運費單價"></i>
                                 </th>
                                 <th class="col-sm-1">
-                                    實收金額
+                                    實收金額(X)
                                     <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="實收金額 = (請款金額 - 運費)"></i>
                                 </th>
-                                <th class="col-sm-1">收款方式</th>
-                                <th class="col-sm-2">收款日</th>
+                                <th class="col-sm-1">收款方式(X)</th>
+                                <th class="col-sm-2">收款日(X)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>
-                                    <div class="form-group">
-                                        預估
-                                    </div>
-                                </td>
                                 <td>
                                     <div class="form-group">
                                         678
@@ -252,11 +267,6 @@
                             <tr class="table-warning">
                                 <td>
                                     <div class="form-group">
-                                        實際
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-group">
                                         <input asp-for="ActualLeaveWeight" value="@etimateStepData?.SALES_WEIGHT" class="form-control" type="text" placeholder="出貨重量">
                                         @*<span asp-validation-for="LeaveWeight" class="text-danger"></span>*@
                                     </div>
@@ -334,62 +344,62 @@
                         </tbody>
                     </table>
                 </div>
-                @*<div class="col-sm-12">
-                        <table id="example1" class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th class="col-sm-1">階段</th>
-                                    <th class="col-sm-3">請款金額 = (出貨重量 - 扣重) * 單價</th>
-                                    <th class="col-sm-2">請款金額含稅?</th>
-                                    <th class="col-sm-3">運費 = (出貨重量 - 扣重) * 運費單價</th>
-                                    <th class="col-sm-1">運費含稅?</th>
-                                    <th class="col-sm-2">實收金額 = (請款金額 - 運費)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h1 id="show_invoice_price">預估</h1>
-                                    </td>
-                                    <td>
-                                        <h1 style="color:red" id="show_invoice_price"></h1>
-                                    </td>
-                                    <td>
-                                        Yes
-                                    </td>
-                                    <td>
-                                        <h1 id="show_trafic_price"></h1>
-                                    </td>
-                                    <td>
-                                        Yes
-                                    </td>
-                                    <td>
-                                        <h1 id="show_received_price"></h1>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h1 style="color:red" id="show_invoice_price">實收</h1>
-                                    </td>
-                                    <td>
-                                        <h1 style="color:red" id="show_invoice_price"></h1>
-                                    </td>
-                                    <td>
-                                        Yes
-                                    </td>
-                                    <td>
-                                        <h1 id="show_trafic_price"></h1>
-                                    </td>
-                                    <td>
-                                        Yes
-                                    </td>
-                                    <td>
-                                        <h1 id="show_received_price"></h1>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>*@
+                <div class="col-sm-12">
+                    <table id="example1" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-sm-1">階段</th>
+                                <th class="col-sm-3">請款金額 = (出貨重量 - 扣重) * 單價</th>
+                                <th class="col-sm-2">請款金額含稅?</th>
+                                <th class="col-sm-3">運費 = (出貨重量 - 扣重) * 運費單價</th>
+                                <th class="col-sm-1">運費含稅?</th>
+                                <th class="col-sm-2">實收金額 = (請款金額 - 運費)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h1 id="show_invoice_price">預估</h1>
+                                </td>
+                                <td>
+                                    <h1 style="color:red" id="show_invoice_price"></h1>
+                                </td>
+                                <td>
+                                    Yes
+                                </td>
+                                <td>
+                                    <h1 id="show_trafic_price"></h1>
+                                </td>
+                                <td>
+                                    Yes
+                                </td>
+                                <td>
+                                    <h1 id="show_received_price"></h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h1 style="color:red" id="show_invoice_price">實際</h1>
+                                </td>
+                                <td>
+                                    <h1 style="color:red" id="show_invoice_price"></h1>
+                                </td>
+                                <td>
+                                    Yes
+                                </td>
+                                <td>
+                                    <h1 id="show_trafic_price"></h1>
+                                </td>
+                                <td>
+                                    Yes
+                                </td>
+                                <td>
+                                    <h1 id="show_received_price"></h1>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
 
                 @*<div class="col-sm-4">
