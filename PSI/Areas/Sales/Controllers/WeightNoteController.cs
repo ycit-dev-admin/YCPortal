@@ -281,7 +281,7 @@ namespace PSI.Areas.Sales.Controllers
 
             var userDerItemUNIDs = sWeightNoteIngredients.Select(aa => aa.PRODUCT_UNID).ToList();
             var dtoPInventories = _pInventoryService.GetDTOModels<DTO_P_Inventory>(aa => userDerItemUNIDs.Contains(aa.PRODUCT_UNID) &&
-               aa.STATUS == (int)PSIWeightNoteEnum.P_InventoryStatus.HasInventory &&
+               aa.STATUS == (int)P_Enum.P_InventoryStatus.HasInventory &&
                aa.REMAINING_WEIGHT > 0).ToList();
             var dtoPSWreteOffRecordRs = dtoPInventories.GroupBy(aa => aa.PRODUCT_UNID).SelectMany(inventoryGroup =>
             {
@@ -302,7 +302,7 @@ namespace PSI.Areas.Sales.Controllers
                         SALES_DOC_NO = saleWeightNote.DOC_NO,
                         PRODUCT_UNID = inventory.PRODUCT_UNID,
                         PRODUCT_NAME = inventory.PRODUCT_ITEM_NAME,
-                        WRITEOFF_STATUS = (int)PSIWeightNoteEnum.S_WriteOffLogStatus.Available
+                        WRITEOFF_STATUS = (int)S_Enum.WriteOffLogStatus.Available
                     };
                     partSellWeight = caculateRs;
 
@@ -767,7 +767,7 @@ namespace PSI.Areas.Sales.Controllers
         public WeightNoteUpdateActualData PageModelOfUpdateActualData(WeightNoteUpdateActualData pageModel = null, string unid = null)
         {
             /* Rel DTOs */
-            var dtoSalesWeightNote = _iSalesWeightNoteService.GetDTOModel<DTO_SalesWeightNote>(aa => aa.UNID == new Guid(unid));
+            var dtoSalesWeightNote = _iSalesWeightNoteService.GetDTOModel<DTO_S_WeightNote>(aa => aa.UNID == new Guid(unid));
             //var dtoSalesIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_SalesIngredient>(aa => aa.SALES_WEIGHTNOTE_UNID == dtoSalesWeightNote.UNID);
 
             var dtoCustomerInfo = _iCustomerInfoServiceNew.GetDTOModel<DTO_CustomerInfo>(aa => aa.CUSTOMER_GUID == dtoSalesWeightNote.CUSTOMER_UNID);
@@ -779,7 +779,7 @@ namespace PSI.Areas.Sales.Controllers
 
             /* Set to page model */
             pageModel ??= new WeightNoteUpdateActualData();
-            pageModel.DTOSalesWeightNote = dtoSalesWeightNote;
+            pageModel.DTO_SWeightNote = dtoSalesWeightNote;
 
 
             // Basic type property   
@@ -789,8 +789,8 @@ namespace PSI.Areas.Sales.Controllers
             // DTO type property
 
 
-            pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc);
-            pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Customer);
+            pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);
+            pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.Customer);
             //pageModel.DTOSalesWeightNote = dtoSalesWeightNote;
             //pageModel.DTOCustomerCarItems = dtoCustomerCars;
             pageModel.ReceivedTypItems = dtoReceivedTypeCodeTables.ToPageSelectList(nameof(DTO_CodeTable.CODE_TEXT),

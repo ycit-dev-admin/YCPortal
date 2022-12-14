@@ -45,8 +45,8 @@ namespace PSI.Areas.Purchase.Mappers
                       .ForMember(t => t.REMARK, s => s.MapFrom(o => o.Remark))
                       .ForMember(t => t.INPUT_TYPE, s => s.MapFrom(o => "1"))
                       .ForMember(t => t.NOTE_STATUS, s => s.MapFrom(o => o.PayType == "1" ?
-                                                                    PSIWeightNoteEnum.PWeightNotesStatus.Completed :  // 只有付現是結清
-                                                                    PSIWeightNoteEnum.PWeightNotesStatus.Ongo))
+                                                                    P_Enum.WeightNotesStatus.Completed :  // 只有付現是結清
+                                                                    P_Enum.WeightNotesStatus.Ongo))
                       ).CreateMapper();
                 case (nameof(VE_PurchaseIngredient), nameof(PurchaseIngredient)):
                     return new MapperConfiguration(cfg =>

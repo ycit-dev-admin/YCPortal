@@ -25,11 +25,11 @@ namespace PSI.Service.Service
             //_iEntityMapperProfile = iEntityMapperProfile;
         }
 
-        public List<DTO_SalesWeightNote> GetDTOOngoSalesWeightDocs()
+        public List<DTO_S_WeightNote> GetDTOOngoSalesWeightDocs()
         {
-            var needStatus = PSIWeightNoteEnum.GetOngoSalesWeightDocStatus()
+            var needStatus = S_Enum.GetOngoSalesWeightDocStatus()
                .Select(aa => (int)aa).ToList();
-            return this.GetDTOModels<DTO_SalesWeightNote>(aa => needStatus.Contains(aa.NOTE_STATUS));
+            return this.GetDTOModels<DTO_S_WeightNote>(aa => needStatus.Contains(aa.NOTE_STATUS));
         }
     }
 }

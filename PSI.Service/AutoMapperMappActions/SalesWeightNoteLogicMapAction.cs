@@ -6,7 +6,7 @@ using System;
 
 namespace PSI.Service.AutoMapperMappActions
 {
-    public class SalesWeightNoteLogicMapAction : IMappingAction<S_WeightNote, DTO_SalesWeightNote>
+    public class SalesWeightNoteLogicMapAction : IMappingAction<S_WeightNote, DTO_S_WeightNote>
     {
         private readonly ICustomerInfoService _iCustomerInfoService;
 
@@ -20,7 +20,7 @@ namespace PSI.Service.AutoMapperMappActions
             _iCustomerInfoService = iCustomerInfoService ?? throw new ArgumentNullException(nameof(iCustomerInfoService));
         }
 
-        public void Process(S_WeightNote source, DTO_SalesWeightNote destination, ResolutionContext context)
+        public void Process(S_WeightNote source, DTO_S_WeightNote destination, ResolutionContext context)
         {
             //destination.INVOICE_PRICE = _iSalesPriceCaculateHelper.GetInvoicePrice(source.LeaveWeight.Value,
             //        source.DefectiveWeight.Value,

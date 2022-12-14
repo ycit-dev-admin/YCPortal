@@ -47,7 +47,7 @@ namespace PSI.Service.Service
 
         public IQueryable<S_WeightNote> GetOngoSalesWeightDocs()
         {
-            var needStatus = PSIWeightNoteEnum.GetOngoSalesWeightDocStatus()
+            var needStatus = S_Enum.GetOngoSalesWeightDocStatus()
                 .Select(aa => (int)aa);
 
             return _salesWeightNoteRepository.GetAllAsync()

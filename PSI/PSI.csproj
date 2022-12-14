@@ -10,6 +10,7 @@
     <EmbeddedResource Remove="Areas\SysConfig\Models\BindModels\**" />
     <None Remove="Areas\SysConfig\Models\BindModels\**" />
     <TypeScriptCompile Remove="Areas\SysConfig\Models\BindModels\**" />
+    <TypeScriptCompile Remove="node_modules\tabulator-tables\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -315,6 +316,7 @@
     <Folder Include="wwwroot\lib\admin-lte\plugins\tempusdominus-bootstrap-4\js\" />
     <Folder Include="wwwroot\lib\admin-lte\plugins\toastr\" />
     <Folder Include="wwwroot\lib\admin-lte\plugins\uplot\" />
+    <Folder Include="wwwroot\lib\tabulator-tables\" />
     <Folder Include="wwwroot\lib\site-public\" />
   </ItemGroup>
 

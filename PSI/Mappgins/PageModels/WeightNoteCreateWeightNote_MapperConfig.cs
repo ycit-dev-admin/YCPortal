@@ -31,7 +31,7 @@ namespace PSI.Mappgins.PageModels
                       .ForMember(tar => tar.SALES_TIME, ss => ss.MapFrom(src => src.SalesTime))
                       .ForMember(tar => tar.SCALE_NO, ss => ss.MapFrom(src => src.ScaleNo))
                       .ForMember(tar => tar.EXCAVATOR_OPERATOR_UNID, ss => ss.MapFrom(src => src.ExcavatorOperUNID))
-                      .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))
+                      .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)S_Enum.WeightNotesStatus.CreateDoc))
                       .ForMember(tar => tar.INSIDE_SALES_WEIGHT, ss => ss.MapFrom(src => src.SalesWeight))
                       .ForMember(tar => tar.REMARK, ss => ss.MapFrom(src => src.Remark))
                       .ForMember(tar => tar.CREATE_TIME, ss => ss.MapFrom(src => DateTime.Now))

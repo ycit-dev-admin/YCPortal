@@ -6,7 +6,7 @@ namespace PSI.Core.Models.DTOModels
     public class DTO_CustomerContract : CustomerContract
     {
         // Rel DTOs
-        public List<DTO_SalesWeightNote> DTO_SalesWeightNotes { get; set; }
+        public List<DTO_S_WeightNote> DTO_SalesWeightNotes { get; set; }
 
         // DTO Values
         public double SumEffectivedSalesWeight { get; set; }  // 出貨重量

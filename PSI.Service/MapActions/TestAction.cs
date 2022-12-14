@@ -11,7 +11,7 @@ using PSI.Service.IService;
 
 namespace PSI.Service.MapActions
 {
-    public class TestAction : IMappingAction<DTO_SalesWeightNote, S_WeightNote>
+    public class TestAction : IMappingAction<DTO_S_WeightNote, S_WeightNote>
     {
         private readonly IPsiService _iPsiService;
         //private readonly UserManager<AppUser> _userManager;
@@ -27,7 +27,7 @@ namespace PSI.Service.MapActions
             //_userManager = userManager;
         }
 
-        public void Process(DTO_SalesWeightNote source, S_WeightNote destination, ResolutionContext context)
+        public void Process(DTO_S_WeightNote source, S_WeightNote destination, ResolutionContext context)
         {
             //var operUser = _userManager.GetUserAsync(User).Result;
             destination.DOC_NO = _iPsiService.GetWeightNoteDocNo("A", PSIEnum.PSIType.Sale);

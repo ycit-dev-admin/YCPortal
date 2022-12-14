@@ -141,7 +141,7 @@ namespace PSI.Service.Logic
         {
             switch (typeof(TEntity).Name, typeof(DTOModel).Name)
             {
-                case (nameof(WeightNoteCreateWeightNote), nameof(DTO_SalesWeightNote)):
+                case (nameof(WeightNoteCreateWeightNote), nameof(DTO_S_WeightNote)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, S_WeightNote>()
                        .ForMember(tar => tar.CUSTOMER_UNID, ss => ss.MapFrom(src => src.CustomerUNID))
@@ -166,7 +166,7 @@ namespace PSI.Service.Logic
                 case (nameof(WeightNoteCreateWeightNote), nameof(SalesWeightNoteStepData)):
                     return new MapperConfiguration(cfg =>
                     cfg.CreateMap<WeightNoteCreateWeightNote, SalesWeightNoteStepData>()
-                       .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))
+                       .ForMember(tar => tar.DATA_STEP, ss => ss.MapFrom(src => (int)S_Enum.WeightNotesStatus.CreateDoc))
                        .ForMember(tar => tar.INVOICEPRICE_HASTAX, ss => ss.MapFrom(src => src.InvoicePriceHasTax))
                        .ForMember(tar => tar.TRAFICFEE_HASTAX, ss => ss.MapFrom(src => src.TraficFeeHasTax)))
                        .CreateMapper();
@@ -196,7 +196,7 @@ namespace PSI.Service.Logic
 
             var userDerItemUNIDs = cSWeightNoteIngredients.Select(aa => aa.PRODUCT_UNID).ToList();
             var dtoPInventories = _iPInventoryService.GetDTOModels<DTO_P_Inventory>(aa => userDerItemUNIDs.Contains(aa.PRODUCT_UNID) &&
-               aa.STATUS == (int)PSIWeightNoteEnum.P_InventoryStatus.HasInventory &&
+               aa.STATUS == (int)P_Enum.P_InventoryStatus.HasInventory &&
                aa.REMAINING_WEIGHT > 0).ToList();
             var psWreteOffLogs = dtoPInventories.GroupBy(aa => aa.PRODUCT_UNID).SelectMany(inventoryGroup =>
             {
@@ -217,7 +217,7 @@ namespace PSI.Service.Logic
                         SALES_DOC_NO = saleWeightNoteDocNo,
                         PRODUCT_UNID = inventory.PRODUCT_UNID,
                         PRODUCT_NAME = inventory.PRODUCT_ITEM_NAME,
-                        WRITEOFF_STATUS = (int)PSIWeightNoteEnum.S_WriteOffLogStatus.Available
+                        WRITEOFF_STATUS = (int)S_Enum.WriteOffLogStatus.Available
                     };
                     partSellWeight = caculateRs;
 

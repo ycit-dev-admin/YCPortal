@@ -11,7 +11,7 @@ namespace PSI.Areas.Sales.Models.PageModels
         public string FacSite { get; set; }
         public int? UserAuthorityLevel { get; set; }
         // Entities
-        public List<DTO_SalesWeightNote> DTOSalesWeightNotes { get; set; }
+        public List<DTO_S_WeightNote> DTOSalesWeightNotes { get; set; }
 
         // Page
         //public List<SelectListItem> CustomerInfoItems { get; set; }

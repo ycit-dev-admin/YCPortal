@@ -12,7 +12,7 @@ namespace PSI.Core.Entities
         public Guid CARNO_UNID { get; set; }  // 出貨車輛 (狀態1)
         public DateTime SALES_TIME { get; set; } // 廠內出貨時間 (狀態1)
         public DateTime? UPDATE_SALES_TIME { get; set; } // 客戶收貨回填時間  (狀態2)
-        public int? SCALE_NO { get; set; }   // 磅單號碼  (狀態1)
+        public int? SCALE_NO { get; set; }   // 磅單號碼  (狀態1)    (1:大磅  2:小磅)
         public Guid EXCAVATOR_OPERATOR_UNID { get; set; }  // 怪手司機UNID  (狀態1)
         public Guid? CONTRACT_UNID { get; set; }  // 對應合約  (狀態2)
         public int NOTE_STATUS { get; set; }  // 磅單狀態   1:廠內出貨 2: 客戶資訊回填 3: 完成  90:單據異常   (所有狀態)

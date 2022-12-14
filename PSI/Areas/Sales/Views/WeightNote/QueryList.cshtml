@@ -93,7 +93,7 @@
             @foreach (var item in Model.DTOSalesWeightNotes)
             {
                 var etimateStepData = item.DTO_SalesWeightNoteStepDatas
-                          ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc);
+                          ?.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);
 
                 <tr>
                     <td>@item.SALES_TIME.ToString("yyyy/MM/dd HH:mm")</td>

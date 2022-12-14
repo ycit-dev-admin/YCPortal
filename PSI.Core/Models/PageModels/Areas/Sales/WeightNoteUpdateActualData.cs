@@ -25,6 +25,8 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
         public int ReceivedType { get; set; }
         public DateTime? ReceivedTime { get; set; }
         public string Remark { get; set; }
+        public int InspectMethord { get; set; }   // 客戶評級方式
+
 
 
 
@@ -35,7 +37,7 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
         // 原則3 SelectListItem先一律從controller那邊給 還是讓pagemodel 相依 SelectListItem (似乎找到解法)
         // 原則4 上述原則一律是For Page顯示的概念，若為 For Post的 PageModel成員 一律要於Page Model個別宣告
 
-        public DTO_SalesWeightNote DTOSalesWeightNote { get; set; }
+        public DTO_S_WeightNote DTO_SWeightNote { get; set; }
 
 
         public List<SelectListItem> ReceivedTypItems { get; set; }

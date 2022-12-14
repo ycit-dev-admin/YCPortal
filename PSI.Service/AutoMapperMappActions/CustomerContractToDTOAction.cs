@@ -32,13 +32,13 @@ namespace PSI.Service.AutoMapperMappActions
         {
             // Rel DTOs
             dest.DTO_SalesWeightNotes = _iSalesWeightNoteService
-                .GetDTOModels<DTO_SalesWeightNote>(aa => aa.CONTRACT_UNID == src.CONTRACT_GUID);
+                .GetDTOModels<DTO_S_WeightNote>(aa => aa.CONTRACT_UNID == src.CONTRACT_GUID);
 
             // DTO Values
             var docUNIDs = dest.DTO_SalesWeightNotes.Select(aa => aa.UNID);
             var dtoSalesWeightNoteStepDatas = _iSalesWeightNoteStepDataService
                 .GetDTOModels<DTO_SalesWeightNoteStepData>(aa => docUNIDs.Contains(aa.DOC_UNID) &&
-                                                                 aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.Customer);
+                                                                 aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.Customer);
             dest.SumEffectivedSalesWeight = dtoSalesWeightNoteStepDatas.Sum(aa => aa.SALES_WEIGHT - aa.DEFECTIVE_WEIGHT);
             //dest.DTO_ReceiveTypeInfo = _iCodeTableServiceNew.GetDTOModel<DTO_CodeTable>(aa => aa.CODE_VALUE == src.RECEIVED_TYPE.ToString());
 

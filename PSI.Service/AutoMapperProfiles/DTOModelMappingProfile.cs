@@ -22,7 +22,7 @@ namespace PSI.Service.Mappings
                 .ForMember(tar => tar.UPDATE_TIME, ss => ss.MapFrom(src => DateTime.Now));
 
 
-            this.CreateMap<DTO_SalesWeightNote, S_WeightNote>()
+            this.CreateMap<DTO_S_WeightNote, S_WeightNote>()
                .AfterMap<TestAction>();
 
 

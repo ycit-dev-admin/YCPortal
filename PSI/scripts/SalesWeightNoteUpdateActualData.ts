@@ -72,6 +72,13 @@
         })
 
 
+        var table = new Tabulator("#example1", {
+            //data: tabledata, //assign data to table
+           
+        });
+
+
+
         // jquery dialog
         $("#dialog-confirm").dialog({
             resizable: false,

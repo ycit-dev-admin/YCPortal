@@ -11,6 +11,6 @@ namespace PSI.Service.IService
     public interface ISalesWeightNoteService : IGenericService<S_WeightNote>
     {
 
-        List<DTO_SalesWeightNote> GetDTOOngoSalesWeightDocs();
+        List<DTO_S_WeightNote> GetDTOOngoSalesWeightDocs();
     }
 }

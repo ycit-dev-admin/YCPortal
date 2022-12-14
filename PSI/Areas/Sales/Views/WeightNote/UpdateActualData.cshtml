@@ -40,100 +40,70 @@
 
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
-            <legend class="scheduler-border">出貨磅單基本資訊</legend>
+            <legend class="scheduler-border">@($@"廠內出貨資訊 (單號:{Model.DTO_SWeightNote.DOC_NO})")</legend>
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="ownername">出貨對象</label>
-                        <p>@Model.DTOSalesWeightNote.DTO_CustomerInfo.CUSTOMER_NAME</p>
+                        <p>@Model.DTO_SWeightNote.DTO_CustomerInfo.CUSTOMER_NAME</p>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="form-control-label" for="CarNoId">磅秤類型</label>
+                        <p>@(Model.DTO_SWeightNote.SCALE_NO == 1 ? "大磅" : "小磅")</p>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="form-control-label" for="CarNoId">出貨車牌</label>
-                        <p>@Model.DTOSalesWeightNote.DTO_CustomerCar.CAR_NAME</p>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <label class="form-control-label" for="CarNoId">車牌類型</label>
                         @{
-                            var carNoTypeName = ((PSIEnum.PSIType)Model.DTOSalesWeightNote.DTO_CustomerCar.CAR_NO_TYPE).GetDescription();
+                            var carNoTypeName = ((PSIEnum.PSIType)Model.DTO_SWeightNote.DTO_CustomerCar.CAR_NO_TYPE).GetDescription();
+                            var carNoRs = $@"{Model.DTO_SWeightNote.DTO_CustomerCar.CAR_NAME} ({carNoTypeName})";
                         }
-                        <p>@carNoTypeName</p>
+                        <p>@carNoRs</p>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label class="form-control-label" for="ownername">出貨磅單時間</label>
-                        <p>@Model.DTOSalesWeightNote.SALES_TIME.ToString("yyyy/MM/dd  HH:mm")</p>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">出貨相關合約</legend>
-            @{
-                var bindContractInfo = Model.DTOSalesWeightNote.DTO_CustomerContracts?
-                    .FirstOrDefault(aa => aa.CONTRACT_GUID == Model.DTOSalesWeightNote.CONTRACT_UNID);
-            }
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <label class="form-control-label">合約名稱</label>
-                    <span>@bindContractInfo?.CONTRACT_NAME</span>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label">合約重量:</label>
-                            <span id="ShowContractWeight">@bindContractInfo?.DEAL_WEIGHT</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label">合約單價:</label>
-                            <span id="ShowContractUnitPrice">@bindContractInfo?.DEAL_UNIT_PRICE</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="form-row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label">已完成重量:</label>
-                            <span id="NowContractWeight">@bindContractInfo?.SumEffectivedSalesWeight</span>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="form-control-label"></label>
-                            <span id="NowContractActualPrice"></span>
-                        </div>
+                        <label class="form-control-label" for="ownername">廠內出貨時間</label>
+                        <p>@Model.DTO_SWeightNote.SALES_TIME.ToString("yyyy/MM/dd  HH:mm")</p>
                     </div>
                 </div>
             </div>
         </fieldset>
 
         <fieldset class="form-group col-sm-12 the-fieldset">
-            <legend class="scheduler-border">出貨資訊</legend>
+            <legend class="scheduler-border">客戶驗貨回填資訊</legend>
             @{
-                var etimateStepData = Model.DTOSalesWeightNote.DTO_SalesWeightNoteStepDatas
-                ?.FirstOrDefault(aa => aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc);
+                var etimateStepData = Model.DTO_SWeightNote.DTO_SalesWeightNoteStepDatas
+                ?.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);
             }
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
+                        <label class="form-control-label">客戶評級方式:</label>
+                        @{
+                            var srcInspectMethords = S_Enum.GetAllInspectMethords().ToPageSelectList();
+                        }
+                        <div class="form-group">
+                            <select asp-for="InspectMethord" asp-items="srcInspectMethords" class="select2bs4" style="width: 100%;">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
                         <label class="form-control-label">出貨認列品項:</label>
-                        <span>@etimateStepData.DTO_ProductItem.PRODUCT_NAME</span>
+                        @*<span>@etimateStepData.DTO_ProductItem.PRODUCT_NAME</span>*@
+                        <span>123</span>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="form-control-label">客戶判定品項:</label>
-                        @*<span>@Model.DTOSalesWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
+                        @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
                     </div>
                 </div>
                 <div class="col-sm-12">
@@ -142,7 +112,7 @@
                         <div class="form-row">
                             <div class="form-group col-sm-2">
                                 <ul id="evenProductLs">
-                                    @foreach (var item in Model.DTOSalesWeightNote.DTO_SalesIngredients.Where((item, index) => index % 2 == 0))
+                                    @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients.Where((item, index) => index % 2 == 0))
                                     {
                                         <li>@($@"{item.ITEM_NAME}_ {item.ITEM_PERCENT}%")</li>
                                     }
@@ -150,7 +120,7 @@
                             </div>
                             <div class="form-group col-sm-2">
                                 <ul id="oddProductLs">
-                                    @foreach (var item in Model.DTOSalesWeightNote.DTO_SalesIngredients.Where((item, index) => index % 2 != 0))
+                                    @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients.Where((item, index) => index % 2 != 0))
                                     {
                                         <li>@($@"{item.ITEM_NAME}_ {item.ITEM_PERCENT}%")</li>
                                     }
@@ -201,36 +171,38 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        @etimateStepData.SALES_WEIGHT
+                                        678
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        @etimateStepData.DEFECTIVE_WEIGHT
+                                        789
                                         @*<span asp-validation-for="DefectiveWeight" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        @etimateStepData.UNIT_PRICE
+                                        1.8
                                         @*<span asp-validation-for="UnitPrice" class="text-danger"></span>*@
                                     </div>
 
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        @etimateStepData.TRAFIC_UNIT_PRICE
+                                        2.6
                                         @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         @{
-                                            var taxStr = etimateStepData.INVOICEPRICE_HASTAX ? "(含發票)" : "(無發票)";
-                                            var taxPrice = etimateStepData.INVOICEPRICE_HASTAX ? Decimal.Multiply(etimateStepData.INVOICE_PRICE, 0.05m) : 0m;
+                                            @*var taxStr = etimateStepData.INVOICEPRICE_HASTAX ? "(含發票)" : "(無發票)";
+                                                var taxPrice = etimateStepData.INVOICEPRICE_HASTAX ? Decimal.Multiply(etimateStepData.INVOICE_PRICE, 0.05m) : 0m;*@
+                                            var taxStr = "gogo";
+                                            var taxPrice = "gogo2";
                                         }
                                         <span>
-                                            @etimateStepData.INVOICE_PRICE
+                                            @etimateStepData?.INVOICE_PRICE
                                         </span>
                                         <br />
                                         <span>
@@ -247,12 +219,15 @@
                                 <td>
                                     <div class="form-group">
                                         @{
-                                            var taxStr2 = etimateStepData.TRAFICFEE_HASTAX ? "(含發票)" : "(無發票)";
-                                            var taxPrice2 = etimateStepData.TRAFICFEE_HASTAX ? Decimal.Multiply(etimateStepData.TRAFIC_FEE, 0.05m) : 0m;
+                                            @*var taxStr2 = etimateStepData.TRAFICFEE_HASTAX ? "(含發票)" : "(無發票)";
+                                                var taxPrice2 = etimateStepData.TRAFICFEE_HASTAX ? Decimal.Multiply(etimateStepData.TRAFIC_FEE, 0.05m) : 0m;*@
+
+                                            var taxStr2 = "5789";
+                                            var taxPrice2 = "1234";
 
                                         }
                                         <span>
-                                            @etimateStepData.TRAFIC_FEE
+                                            654
                                         </span>
                                         <br />
                                         <span>
@@ -265,13 +240,13 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @etimateStepData.RECEIVED_PRICE
+                                    1234
                                 </td>
                                 <td>
-                                    @etimateStepData.DTO_ReceiveTypeInfo.CODE_TEXT
+                                    @etimateStepData?.DTO_ReceiveTypeInfo?.CODE_TEXT
                                 </td>
                                 <td>
-                                    @etimateStepData.RECEIVED_TIME.ToString("yyyy/MM/dd  HH: mm")
+                                    @etimateStepData?.RECEIVED_TIME.ToString("yyyy/MM/dd  HH: mm")
                                 </td>
                             </tr>
                             <tr class="table-warning">
@@ -282,26 +257,26 @@
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="ActualLeaveWeight" value="@etimateStepData.SALES_WEIGHT" class="form-control" type="text" placeholder="出貨重量">
+                                        <input asp-for="ActualLeaveWeight" value="@etimateStepData?.SALES_WEIGHT" class="form-control" type="text" placeholder="出貨重量">
                                         @*<span asp-validation-for="LeaveWeight" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="ActualDefectiveWeight" value="@etimateStepData.DEFECTIVE_WEIGHT" class="form-control" type="text" placeholder="扣重">
+                                        <input asp-for="ActualDefectiveWeight" value="@etimateStepData?.DEFECTIVE_WEIGHT" class="form-control" type="text" placeholder="扣重">
                                         @*<span asp-validation-for="DefectiveWeight" class="text-danger"></span>*@
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="ActualUnitPrice" value="@etimateStepData.UNIT_PRICE" class="form-control" type="text" placeholder="單價">
+                                        <input asp-for="ActualUnitPrice" value="@etimateStepData?.UNIT_PRICE" class="form-control" type="text" placeholder="單價">
                                         @*<span asp-validation-for="UnitPrice" class="text-danger"></span>*@
                                     </div>
 
                                 </td>
                                 <td>
                                     <div class="form-group">
-                                        <input asp-for="ActualTraficUnitPrice" value="@etimateStepData.TRAFIC_UNIT_PRICE" class="form-control" type="text" placeholder="運費單價">
+                                        <input asp-for="ActualTraficUnitPrice" value="@etimateStepData?.TRAFIC_UNIT_PRICE" class="form-control" type="text" placeholder="運費單價">
                                         @*<span asp-validation-for="TraficUnitPrice" class="text-danger"></span>*@
                                     </div>
                                 </td>

@@ -29,7 +29,7 @@ namespace PSI.Service.Service
         {
             return _salesWeightNoteResultPriceRepository
                     .GetAsync(aa => aa.DOC_UNID == salesWeightNoteDocGUID &&
-                                    aa.DATA_STEP == (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc).Result;
+                                    aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc).Result;
         }
 
 

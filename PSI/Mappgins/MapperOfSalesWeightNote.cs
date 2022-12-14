@@ -33,7 +33,7 @@ namespace PSI.Mappgins
                       //.ForMember(tar => tar.ESTIMATE_DEFECTIVE_WEIGHT, ss => ss.MapFrom(src => src.DefectiveWeight))
                       //.ForMember(tar => tar.ESTIMATE_UNIT_PRICE, ss => ss.MapFrom(src => src.UnitPrice))
                       //.ForMember(tar => tar.TRAFIC_UNIT_PRICE, ss => ss.MapFrom(src => src.TraficUnitPrice))
-                      .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)PSIWeightNoteEnum.SWeightNotesStatus.CreateDoc))
+                      .ForMember(tar => tar.NOTE_STATUS, ss => ss.MapFrom(src => (int)S_Enum.WeightNotesStatus.CreateDoc))
                       .ForMember(tar => tar.SCALE_NO, ss => ss.MapFrom(src => src.ScaleNo))
                       //.ForMember(tar => tar.ESTIMATE_RECEIVED_TYPE, ss => ss.MapFrom(src => src.ReceivedType))
                       //.ForMember(tar => tar.ESTIMATE_RECEIVED_TIME, ss => ss.MapFrom(src => src.ReceivedTime))
