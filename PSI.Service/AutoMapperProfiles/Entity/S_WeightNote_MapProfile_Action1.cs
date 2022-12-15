@@ -10,7 +10,6 @@ namespace PSI.Service.AutoMapperProfiles.Entity
     public class S_WeightNote_MapProfile_Action1 : IMappingAction<S_WeightNote, DTO_S_WeightNote>
     {
         private readonly ICustomerInfoServiceNew _iCustomerInfoServiceNew;
-        private readonly IProductItemService _iProductItemService;
         private readonly IProductItemServiceNew _iProductItemServiceNew;
         private readonly ISalesWeightNoteResultPriceService _iSalesWeightNoteResultPriceService;
         private readonly ISalesWeightNoteStepDataService _iSalesWeightNoteStepDataService;
@@ -27,7 +26,6 @@ namespace PSI.Service.AutoMapperProfiles.Entity
         }
 
         public S_WeightNote_MapProfile_Action1(ICustomerInfoServiceNew iCustomerInfoServiceNew
-            , IProductItemService iProductItemService
             , ISalesWeightNoteResultPriceService iSalesWeightNoteResultPriceService
             , ICodeTableServiceNew iCodeTableServiceNew
             , ICarNoServiceNew iCarNoServiceNew
@@ -40,16 +38,15 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             )
         {
             _iCustomerInfoServiceNew = iCustomerInfoServiceNew ?? throw new ArgumentNullException(nameof(iCustomerInfoServiceNew));
-            _iProductItemService = iProductItemService ?? throw new ArgumentNullException(nameof(iProductItemService));
             _iSalesWeightNoteResultPriceService = iSalesWeightNoteResultPriceService ?? throw new ArgumentNullException(nameof(iSalesWeightNoteResultPriceService));
             _iCodeTableServiceNew = iCodeTableServiceNew ?? throw new ArgumentNullException(nameof(iCodeTableServiceNew));
             _iCarNoServiceNew = iCarNoServiceNew ?? throw new ArgumentNullException(nameof(iCarNoServiceNew));
             _iSalesIngredientServiceNew = iSalesIngredientServiceNew ?? throw new ArgumentNullException(nameof(iSalesIngredientServiceNew));
-            _iProductItemServiceNew = iProductItemServiceNew ?? throw new ArgumentNullException(nameof(iProductItemServiceNew));
             _iSalesWeightNoteStepDataService = iSalesWeightNoteStepDataService ?? throw new ArgumentNullException(nameof(iSalesWeightNoteStepDataService));
             _iCustomerContractServiceNew = iCustomerContractServiceNew ?? throw new ArgumentNullException(nameof(iCustomerContractServiceNew));
             _iPsWriteOffLogService = ipsWriteOffLogService;
             _iPInventoryService = iPInventoryService;
+            _iProductItemServiceNew = iProductItemServiceNew;
         }
 
         public void Process(S_WeightNote src, DTO_S_WeightNote dest, ResolutionContext context)
@@ -64,7 +61,7 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             //dest.RECEIVED_PRICE = dest.INVOICE_PRICE - dest.TRAFIC_FEE;
             dest.DTO_SWeightNoteIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_S_WeightNote_Ingredient>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
             dest.DTO_CustomerInfo = _iCustomerInfoServiceNew.GetDTOModel<DTO_CustomerInfo>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
-            dest.DTO_SalesWeightNoteStepDatas = _iSalesWeightNoteStepDataService.GetDTOModels<DTO_SalesWeightNoteStepData>(aa => aa.DOC_UNID == src.UNID);
+            dest.DTO_ProductItem = _iProductItemServiceNew.GetDTOModel<DTO_ProductItem>(aa => aa.PRODUCT_UNID == src.PRODUCT_ITEM_UNID);
             dest.DTO_CustomerCar = _iCarNoServiceNew.GetDTOModel<DTO_CustomerCar>(aa => aa.CAR_GUID == src.CARNO_UNID);
             dest.DTO_CustomerContracts = _iCustomerContractServiceNew.GetDTOModels<DTO_CustomerContract>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
             dest.DTO_PSWriteOffLog = _iPsWriteOffLogService.GetDTOModels<DTO_PS_WriteOff_Log>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);

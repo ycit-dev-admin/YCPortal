@@ -26,7 +26,7 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
         public DateTime? ReceivedTime { get; set; }
         public string Remark { get; set; }
         public int InspectMethord { get; set; }   // 客戶評級方式
-
+        public List<DTO_S_WeightNote_Ingredient> UpdateSWeightNoteIngredients { get; set; }  // 更新各品項實際單價
 
 
 
@@ -44,7 +44,7 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
 
         public DTO_SalesWeightNoteStepData EastimateResultPrice { get; set; }
         public DTO_SalesWeightNoteStepData ActualResultPrice { get; set; }
-        public List<DTO_S_WeightNote_Ingredient> SalesIngredients { get; set; }
+  
 
         ////
         //public List<DTO_CustomerCar> DTOCustomerCarItems { get; set; }

@@ -36,7 +36,7 @@
 }
 
 
-<form id="create-form" asp-action="CreateWeightNote" method="post" autocomplete="off">
+<form id="create-form" asp-action="UpdateActualData" method="post" autocomplete="off">
 
     <div class="row">
         <fieldset class="col-sm-12 the-fieldset">
@@ -117,28 +117,33 @@
                     <legend class="scheduler-border">整批評級填寫</legend>
                     <div class="row">
                         <div class="col-sm-12">
+                            <label class="form-control-label">廠內判定整批品項:</label>
+                            <p>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</p>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-control-label">客戶判定整批品項:</label>
+                            @{
+                                var srcInspectMethords2 = S_Enum.GetAllInspectMethords().ToPageSelectList();
+                            }
                             <div class="form-group">
-                                <label class="form-control-label">廠內判定整批品項:</label>
-                                @*<span>@etimateStepData.DTO_ProductItem.PRODUCT_NAME</span>*@
-                                <span>123</span>
+                                <select asp-items="srcInspectMethords2" class="select2bs4" style="width: 100%;">
+                                    <option value=""></option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="form-control-label">客戶判定整批品項:</label>
-                                @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
-                            </div>
+                            <label class="form-control-label">客戶收貨整批單價:</label>
+                            <input asp-for="ActualDefectiveWeight" class="form-control" type="text" placeholder="整批單價">
                         </div>
                         <div class="col-sm-12">
+                            <label class="form-control-label">客戶判定整批等級:</label>
+                            @{
+                                var srcInspectLevels = S_Enum.GetAllInspectLevels().ToPageSelectList();
+                            }
                             <div class="form-group">
-                                <label class="form-control-label">客戶判定整批單價:</label>
-                                @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="form-control-label">客戶判定整批等級:</label>
-                                @*<span>@Model.DTO_SWeightNote.DTO_ProductItem.PRODUCT_NAME</span>*@
+                                <select asp-items="srcInspectLevels" class="select2bs4" style="width: 100%;">
+                                    <option value=""></option>
+                                </select>
                             </div>
                         </div>
 
@@ -152,8 +157,8 @@
                                 <tr>
                                     <th class="col-sm-1">品項名稱</th>
                                     <th class="col-sm-1">品項比重</th>
-                                    <th class="col-sm-1">成本單價(看沖銷表)</th>
-                                    <th class="col-sm-1">實際單價(客戶回填)(是否要記錄)</th>
+                                    <th class="col-sm-1">成本單價</th>
+                                    <th class="col-sm-1">實際單價</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -174,9 +179,9 @@
                                            pInventory.UNIT_PRICE
                                        });
                                 }
-                                @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients)
+                                @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients.Select((value, index) => (value, index)))
                                 {
-                                    var relWriteOfffLogs = writeOffLogJoinRs.Where(aa => aa.PRODUCT_UNID == item.PRODUCT_UNID);
+                                    var relWriteOfffLogs = writeOffLogJoinRs.Where(aa => aa.PRODUCT_UNID == item.value.PRODUCT_UNID);
                                     var sumWriteOffWeight = relWriteOfffLogs.Sum(aa => aa.WRITEOFF_WEIGHT);
                                     var sumWriteOffPrice = relWriteOfffLogs.Sum(aa => aa.WRITEOFF_WEIGHT * aa.UNIT_PRICE);
                                     var costUnitPrice = sumWriteOffPrice / sumWriteOffWeight;
@@ -185,18 +190,18 @@
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                @item.ITEM_NAME
+                                                @item.value.ITEM_NAME
                                             </div>
                                         </td>
                                         <td>
-                                            @($@"{sumWriteOffWeight}kg  ({item.ITEM_PERCENT}%)")
+                                            @($@"{sumWriteOffWeight}kg  ({item.value.ITEM_PERCENT}%)")
                                         </td>
                                         <td>
                                             @costUnitPrice
                                             <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="@($@"沖銷進貨單號:{relPurcheaseDocNos}")"></i>
                                         </td>
                                         <td>
-                                            <input class="form-control" type="text" placeholder="出貨單價">
+                                            <input name="@($@"{nameof(Model.UpdateSWeightNoteIngredients)}[{item.index}].{nameof(DTO_S_WeightNote_Ingredient.REAL_UNIT_PRICE) }")" class="form-control" type="text" placeholder="出貨單價">
                                             @*<span asp-validation-for="LeaveWeight" class="text-danger"></span>*@
 
                                         </td>
@@ -208,7 +213,7 @@
                 </fieldset>
 
                 <fieldset class="col-sm-12 the-fieldset">
-                    <legend class="scheduler-border">出貨金額相關</legend>
+                    <legend class="scheduler-border">金額結算</legend>
                     <div class="form-row">
                         <div class="col-sm-12">
                             <table id="example1" class="table table-bordered">
@@ -363,7 +368,7 @@
             const pageMain = new SalesWeightNoteUpdateActualData(window.baseApiUrl);
             pageMain.PagePluginInit();
             pageMain.PageEventInit();
-            pageMain.PageValidateInit();
+            @*pageMain.PageValidateInit();*@
 
 
 

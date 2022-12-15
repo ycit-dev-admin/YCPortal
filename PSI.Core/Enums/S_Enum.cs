@@ -33,6 +33,14 @@ namespace PSI.Core.Enums
             ItemInspection = 2
         }
 
+        public enum InspectLevel // 客戶驗收評級
+        {
+            [Description("A級")]
+            A_Level = 1,
+            [Description("B級")]
+            B_Level = 2
+        }
+
 
         public static IQueryable<WeightNotesStatus> GetOngoSalesWeightDocStatus()
         {
@@ -42,6 +50,11 @@ namespace PSI.Core.Enums
         {
             return Enum.GetValues(typeof(InspectMethord))
                         .Cast<InspectMethord>().AsQueryable();
+        }
+        public static IQueryable<InspectLevel> GetAllInspectLevels()
+        {
+            return Enum.GetValues(typeof(InspectLevel))
+                        .Cast<InspectLevel>().AsQueryable();
         }
     }
 }

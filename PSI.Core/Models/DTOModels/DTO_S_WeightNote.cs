@@ -14,6 +14,8 @@ namespace PSI.Core.Models.DTOModels
         public List<DTO_P_Inventory> DTO_PInventories { get; set; }
         public List<DTO_SalesWeightNoteStepData> DTO_SalesWeightNoteStepDatas { get; set; }
         public List<DTO_CustomerContract> DTO_CustomerContracts { get; set; }
+        public DTO_ProductItem DTO_ProductItem { get; set; }
+
 
 
 

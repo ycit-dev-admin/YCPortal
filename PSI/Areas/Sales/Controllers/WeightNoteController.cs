@@ -246,6 +246,22 @@ namespace PSI.Areas.Sales.Controllers
 
         [HttpPost]
         [Authorize()]
+        public IActionResult UpdateActualData(WeightNoteUpdateActualData pageModel)
+        {
+
+            //if (!createRs.Success)
+            //{
+            //    TempData["pageMsg"] = createRs.ErrorMessage;
+            //    return View(PageModelOfCreateWeightNote(pageModel));
+            //}
+
+            // Successed
+            TempData["pageMsg"] = $@"磅單:回填 建立成功!!";
+            return RedirectToAction(nameof(WeightNoteController.QueryList));
+        }
+
+        [HttpPost]
+        [Authorize()]
         public IActionResult CreateWeightNote(WeightNoteCreateWeightNote pageModel)
         {
             // 之後要做後端檢核 在這邊
@@ -258,87 +274,87 @@ namespace PSI.Areas.Sales.Controllers
                 operUser); ;
 
 
-            var dddde = createRs.Success;
-
-            // 建立出貨組成表(含比例)(出貨重量 optional)(根據沖銷結果的品項平均成本單價)(客戶回填單價)
-            var sWeightNoteIngredients = _iMapperHelper.MapTo<DTO_S_WeightNote_Ingredient, S_WeightNote_Ingredient>(pageModel.DTOSWeightNoteIngredients).Where(aa => aa.ITEM_PERCENT != 0m).ToList();
 
 
-            // 建立出貨單
-            var saleWeightNote = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, S_WeightNote>(pageModel);
-            saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);
-            saleWeightNote.CREATE_EMPNO = operUser.EMPLOYEE_NO;
-            saleWeightNote.UPDATE_EMPNO = operUser.EMPLOYEE_NO;
-            saleWeightNote.PRODUCT_ITEM_UNID = sWeightNoteIngredients.OrderByDescending(aa => aa.ITEM_PERCENT)
-                                                                             .FirstOrDefault().PRODUCT_UNID;
-
-            // 建立沖銷紀錄表
-            var sellOutWeightNoteDic = sWeightNoteIngredients.ToDictionary(x => x.PRODUCT_UNID, x => _iWeightCaculateHelper.GetProportionWeight(x.ITEM_PERCENT, saleWeightNote.INSIDE_SALES_WEIGHT));
-
-            var userDerItemUNIDs = sWeightNoteIngredients.Select(aa => aa.PRODUCT_UNID).ToList();
-            var dtoPInventories = _pInventoryService.GetDTOModels<DTO_P_Inventory>(aa => userDerItemUNIDs.Contains(aa.PRODUCT_UNID) &&
-               aa.STATUS == (int)P_Enum.P_InventoryStatus.HasInventory &&
-               aa.REMAINING_WEIGHT > 0).ToList();
-            var dtoPSWreteOffRecordRs = dtoPInventories.GroupBy(aa => aa.PRODUCT_UNID).SelectMany(inventoryGroup =>
-            {
-                var partSellWeight = sellOutWeightNoteDic[inventoryGroup.Key];
-                var dtoPSWreiteOffRecordCols = inventoryGroup.OrderBy(bb => bb.PURCHASE_DOC_NO).Select
-                (inventory =>
-                {
-                    if (partSellWeight <= 0)
-                        return null;
-
-                    var caculateRs = partSellWeight - inventory.REMAINING_WEIGHT;
-                    var dtoPSWreiteOffRecord = new DTO_PS_WriteOff_Log
-                    {
-                        WRITEOFF_WEIGHT = caculateRs > 0 ? inventory.REMAINING_WEIGHT : partSellWeight,
-                        PURCHASE_WEIGHTNOTE_UNID = inventory.PURCHASE_WEIGHTNOTE_UNID,
-                        //PURCHASE_DOC_NO = inventory.PURCHASE_DOC_NO,
-                        SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID,
-                        //SALES_DOC_NO = saleWeightNote.DOC_NO,
-                        PRODUCT_UNID = inventory.PRODUCT_UNID,
-                        PRODUCT_NAME = inventory.PRODUCT_ITEM_NAME,
-                        WRITEOFF_STATUS = (int)S_Enum.WriteOffLogStatus.Available
-                    };
-                    partSellWeight = caculateRs;
-
-                    return dtoPSWreiteOffRecord;
-                });
-                return dtoPSWreiteOffRecordCols;
-            }).Where(aa => aa != null).ToList();
+            //// 建立出貨組成表(含比例)(出貨重量 optional)(根據沖銷結果的品項平均成本單價)(客戶回填單價)
+            //var sWeightNoteIngredients = _iMapperHelper.MapTo<DTO_S_WeightNote_Ingredient, S_WeightNote_Ingredient>(pageModel.DTOSWeightNoteIngredients).Where(aa => aa.ITEM_PERCENT != 0m).ToList();
 
 
-            // 相關金額計算 & 相依資料處裡
-            var saleUnitPrice = dtoPSWreteOffRecordRs.Sum(aa => aa.WRITEOFF_WEIGHT * dtoPInventories.FirstOrDefault(bb => bb.PURCHASE_WEIGHTNOTE_UNID == aa.PURCHASE_WEIGHTNOTE_UNID).UNIT_PRICE) / saleWeightNote.INSIDE_SALES_WEIGHT;
-            saleWeightNote.SALES_UNIT_PRICE = Math.Round(saleUnitPrice, 2);
+            //// 建立出貨單
+            //var saleWeightNote = _iMapperHelper.MapTo<WeightNoteCreateWeightNote, S_WeightNote>(pageModel);
+            //saleWeightNote.DOC_NO = _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale);
+            //saleWeightNote.CREATE_EMPNO = operUser.EMPLOYEE_NO;
+            //saleWeightNote.UPDATE_EMPNO = operUser.EMPLOYEE_NO;
+            //saleWeightNote.PRODUCT_ITEM_UNID = sWeightNoteIngredients.OrderByDescending(aa => aa.ITEM_PERCENT)
+            //                                                                 .FirstOrDefault().PRODUCT_UNID;
 
-            sWeightNoteIngredients.ForEach(item =>
-            {
-                item.SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID;
-                item.CREATE_EMPNO = operUser.NICK_NAME;
-                item.UPDATE_EMPNO = operUser.NICK_NAME;
-            });
+            //// 建立沖銷紀錄表
+            //var sellOutWeightNoteDic = sWeightNoteIngredients.ToDictionary(x => x.PRODUCT_UNID, x => _iWeightCaculateHelper.GetProportionWeight(x.ITEM_PERCENT, saleWeightNote.INSIDE_SALES_WEIGHT));
+
+            //var userDerItemUNIDs = sWeightNoteIngredients.Select(aa => aa.PRODUCT_UNID).ToList();
+            //var dtoPInventories = _pInventoryService.GetDTOModels<DTO_P_Inventory>(aa => userDerItemUNIDs.Contains(aa.PRODUCT_UNID) &&
+            //   aa.STATUS == (int)P_Enum.P_InventoryStatus.HasInventory &&
+            //   aa.REMAINING_WEIGHT > 0).ToList();
+            //var dtoPSWreteOffRecordRs = dtoPInventories.GroupBy(aa => aa.PRODUCT_UNID).SelectMany(inventoryGroup =>
+            //{
+            //    var partSellWeight = sellOutWeightNoteDic[inventoryGroup.Key];
+            //    var dtoPSWreiteOffRecordCols = inventoryGroup.OrderBy(bb => bb.PURCHASE_DOC_NO).Select
+            //    (inventory =>
+            //    {
+            //        if (partSellWeight <= 0)
+            //            return null;
+
+            //        var caculateRs = partSellWeight - inventory.REMAINING_WEIGHT;
+            //        var dtoPSWreiteOffRecord = new DTO_PS_WriteOff_Log
+            //        {
+            //            WRITEOFF_WEIGHT = caculateRs > 0 ? inventory.REMAINING_WEIGHT : partSellWeight,
+            //            PURCHASE_WEIGHTNOTE_UNID = inventory.PURCHASE_WEIGHTNOTE_UNID,
+            //            //PURCHASE_DOC_NO = inventory.PURCHASE_DOC_NO,
+            //            SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID,
+            //            //SALES_DOC_NO = saleWeightNote.DOC_NO,
+            //            PRODUCT_UNID = inventory.PRODUCT_UNID,
+            //            PRODUCT_NAME = inventory.PRODUCT_ITEM_NAME,
+            //            WRITEOFF_STATUS = (int)S_Enum.WriteOffLogStatus.Available
+            //        };
+            //        partSellWeight = caculateRs;
+
+            //        return dtoPSWreiteOffRecord;
+            //    });
+            //    return dtoPSWreiteOffRecordCols;
+            //}).Where(aa => aa != null).ToList();
 
 
-            // 更新庫存
-            var updateInventories2 = dtoPSWreteOffRecordRs.Select(aa =>
-            {
-                var updateInventory = dtoPInventories.FirstOrDefault(bb => bb.PURCHASE_WEIGHTNOTE_UNID == aa.PURCHASE_WEIGHTNOTE_UNID &&
-                                                 bb.PRODUCT_UNID == aa.PRODUCT_UNID);
-                updateInventory.REMAINING_WEIGHT = updateInventory.REMAINING_WEIGHT - aa.WRITEOFF_WEIGHT;
-                return updateInventory;
-            }).ToList();
+            //// 相關金額計算 & 相依資料處裡
+            //var saleUnitPrice = dtoPSWreteOffRecordRs.Sum(aa => aa.WRITEOFF_WEIGHT * dtoPInventories.FirstOrDefault(bb => bb.PURCHASE_WEIGHTNOTE_UNID == aa.PURCHASE_WEIGHTNOTE_UNID).UNIT_PRICE) / saleWeightNote.INSIDE_SALES_WEIGHT;
+            //saleWeightNote.SALES_UNIT_PRICE = Math.Round(saleUnitPrice, 2);
 
-            var psWriteOffLogs = _iMapperHelper.MapTo<DTO_PS_WriteOff_Log, PS_WriteOff_Log>(dtoPSWreteOffRecordRs);
-            var updatePInventories = _iMapperHelper.MapTo<DTO_P_Inventory, P_Inventory>(updateInventories2);
+            //sWeightNoteIngredients.ForEach(item =>
+            //{
+            //    item.SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID;
+            //    item.CREATE_EMPNO = operUser.NICK_NAME;
+            //    item.UPDATE_EMPNO = operUser.NICK_NAME;
+            //});
 
 
-            _pInventoryService.UpdateViewModelToDatabasesNoSave(updatePInventories);
-            _iSalesWeightNoteService.CreateEntityByDTOModelNoSave(saleWeightNote);
-            _psWriteOffLogService.CreateEntityByDTOModelNoSave(dtoPSWreteOffRecordRs);
-            _iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOSWeightNoteIngredients);
+            //// 更新庫存
+            //var updateInventories2 = dtoPSWreteOffRecordRs.Select(aa =>
+            //{
+            //    var updateInventory = dtoPInventories.FirstOrDefault(bb => bb.PURCHASE_WEIGHTNOTE_UNID == aa.PURCHASE_WEIGHTNOTE_UNID &&
+            //                                     bb.PRODUCT_UNID == aa.PRODUCT_UNID);
+            //    updateInventory.REMAINING_WEIGHT = updateInventory.REMAINING_WEIGHT - aa.WRITEOFF_WEIGHT;
+            //    return updateInventory;
+            //}).ToList();
 
-            var commitRs = _unitOfWork.SaveChange();  // 都沒有問題在建立
+            //var psWriteOffLogs = _iMapperHelper.MapTo<DTO_PS_WriteOff_Log, PS_WriteOff_Log>(dtoPSWreteOffRecordRs);
+            //var updatePInventories = _iMapperHelper.MapTo<DTO_P_Inventory, P_Inventory>(updateInventories2);
+
+
+            //_pInventoryService.UpdateViewModelToDatabasesNoSave(updatePInventories);
+            //_iSalesWeightNoteService.CreateEntityByDTOModelNoSave(saleWeightNote);
+            //_psWriteOffLogService.CreateEntityByDTOModelNoSave(dtoPSWreteOffRecordRs);
+            //_iSalesIngredientServiceNew.CreateEntityByDTOModelNoSave(pageModel.DTOSWeightNoteIngredients);
+
+            //var commitRs = _unitOfWork.SaveChange();  // 都沒有問題在建立
 
             //var costAPICtrl = new CostController();
             //var inventoryAPCtrl = new InventoryController(_pInventoryService);
@@ -444,14 +460,14 @@ namespace PSI.Areas.Sales.Controllers
             //    _psiService.GetWeightNoteDocNo(operUser.FAC_SITE, PSIEnum.PSIType.Sale), // 單號 (驗證完後再給)
             //    operUser);
 
-            if (!commitRs.Success)
+            if (!createRs.Success)
             {
-                TempData["pageMsg"] = commitRs.ErrorMessage;
+                TempData["pageMsg"] = createRs.ErrorMessage;
                 return View(PageModelOfCreateWeightNote(pageModel));
             }
 
             // Successed
-            TempData["pageMsg"] = $@"磅單:{ saleWeightNote.DOC_NO } 建立成功!!";
+            TempData["pageMsg"] = $@"磅單:{ createRs.ResultValue.DOC_NO } 建立成功!!";
             return RedirectToAction(nameof(WeightNoteController.QueryList));
         }
 
@@ -785,8 +801,8 @@ namespace PSI.Areas.Sales.Controllers
             // DTO type property
 
 
-            pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);
-            pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.Customer);
+            //pageModel.EastimateResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);
+            //pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.Customer);
             //pageModel.DTOSalesWeightNote = dtoSalesWeightNote;
             //pageModel.DTOCustomerCarItems = dtoCustomerCars;
             pageModel.ReceivedTypItems = dtoReceivedTypeCodeTables.ToPageSelectList(nameof(DTO_CodeTable.CODE_TEXT),
