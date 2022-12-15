@@ -72,10 +72,10 @@
         })
 
 
-        var table = new Tabulator("#example1", {
-            //data: tabledata, //assign data to table
+        //var table = new Tabulator("#example1", {
+        //    //data: tabledata, //assign data to table
 
-        });
+        //});
 
 
 

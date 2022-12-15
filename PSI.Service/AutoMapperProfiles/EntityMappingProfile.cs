@@ -22,7 +22,6 @@ namespace PSI.Service.Mappings
             this.CreateMap<S_WeightNote_Ingredient, DTO_S_WeightNote_Ingredient>();
             this.CreateMap<ProductItem, DTO_ProductItem>();
             this.CreateMap<CustomerContract, DTO_CustomerContract>();
-            this.CreateMap<P_Inventory, DTO_P_Inventory>();
 
 
             //this.CreateMap<CardSearchInfo, CardSearchCondition>();

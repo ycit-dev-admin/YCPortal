@@ -212,9 +212,9 @@ namespace PSI.Service.Logic
                     {
                         WRITEOFF_WEIGHT = caculateRs > 0 ? inventory.REMAINING_WEIGHT : partSellWeight,
                         PURCHASE_WEIGHTNOTE_UNID = inventory.PURCHASE_WEIGHTNOTE_UNID,
-                        PURCHASE_DOC_NO = inventory.PURCHASE_DOC_NO,
+                        //PURCHASE_DOC_NO = inventory.PURCHASE_DOC_NO,
                         SALES_WEIGHTNOTE_UNID = cSWeightNote.UNID,
-                        SALES_DOC_NO = saleWeightNoteDocNo,
+                        //SALES_DOC_NO = saleWeightNoteDocNo,
                         PRODUCT_UNID = inventory.PRODUCT_UNID,
                         PRODUCT_NAME = inventory.PRODUCT_ITEM_NAME,
                         WRITEOFF_STATUS = (int)S_Enum.WriteOffLogStatus.Available

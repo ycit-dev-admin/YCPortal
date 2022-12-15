@@ -7,9 +7,9 @@ namespace PSI.Core.Entities
     public class PS_WriteOff_Log : Entity
     {
         public Guid PURCHASE_WEIGHTNOTE_UNID { get; set; }   // (狀態1)
-        public string PURCHASE_DOC_NO { get; set; }    // (狀態1)
+        //public string PURCHASE_DOC_NO { get; set; }    // (狀態1)
         public Guid SALES_WEIGHTNOTE_UNID { get; set; }    // (狀態1)
-        public string SALES_DOC_NO { get; set; }    // (狀態1)
+        //public string SALES_DOC_NO { get; set; }    // (狀態1)
         public Guid PRODUCT_UNID { get; set; }    // (狀態1)
         public string PRODUCT_NAME { get; set; }    // (狀態1)
         public decimal WRITEOFF_WEIGHT { get; set; }    // (狀態1)

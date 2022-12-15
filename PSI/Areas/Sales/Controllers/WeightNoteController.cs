@@ -293,9 +293,9 @@ namespace PSI.Areas.Sales.Controllers
                     {
                         WRITEOFF_WEIGHT = caculateRs > 0 ? inventory.REMAINING_WEIGHT : partSellWeight,
                         PURCHASE_WEIGHTNOTE_UNID = inventory.PURCHASE_WEIGHTNOTE_UNID,
-                        PURCHASE_DOC_NO = inventory.PURCHASE_DOC_NO,
+                        //PURCHASE_DOC_NO = inventory.PURCHASE_DOC_NO,
                         SALES_WEIGHTNOTE_UNID = saleWeightNote.UNID,
-                        SALES_DOC_NO = saleWeightNote.DOC_NO,
+                        //SALES_DOC_NO = saleWeightNote.DOC_NO,
                         PRODUCT_UNID = inventory.PRODUCT_UNID,
                         PRODUCT_NAME = inventory.PRODUCT_ITEM_NAME,
                         WRITEOFF_STATUS = (int)S_Enum.WriteOffLogStatus.Available

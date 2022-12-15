@@ -10,6 +10,8 @@ namespace PSI.Core.Models.DTOModels
         public DTO_CustomerInfo DTO_CustomerInfo { get; set; }
         public DTO_CustomerCar DTO_CustomerCar { get; set; }
         public List<DTO_S_WeightNote_Ingredient> DTO_SWeightNoteIngredients { get; set; }
+        public List<DTO_PS_WriteOff_Log> DTO_PSWriteOffLog { get; set; }
+        public List<DTO_P_Inventory> DTO_PInventories { get; set; }
         public List<DTO_SalesWeightNoteStepData> DTO_SalesWeightNoteStepDatas { get; set; }
         public List<DTO_CustomerContract> DTO_CustomerContracts { get; set; }
 

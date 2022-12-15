@@ -18,6 +18,8 @@ namespace PSI.Service.AutoMapperProfiles.Entity
         private readonly ICarNoServiceNew _iCarNoServiceNew;
         private readonly ISalesIngredientServiceNew _iSalesIngredientServiceNew;
         private readonly ICustomerContractServiceNew _iCustomerContractServiceNew;
+        private readonly IGenericService<PS_WriteOff_Log> _iPsWriteOffLogService;
+        private readonly IGenericService<P_Inventory> _iPInventoryService;
 
         public S_WeightNote_MapProfile_Action1()
         {
@@ -33,6 +35,8 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             , IProductItemServiceNew iProductItemServiceNew
             , ISalesWeightNoteStepDataService iSalesWeightNoteStepDataService
             , ICustomerContractServiceNew iCustomerContractServiceNew
+            , IGenericService<PS_WriteOff_Log> ipsWriteOffLogService
+            , IGenericService<P_Inventory> iPInventoryService
             )
         {
             _iCustomerInfoServiceNew = iCustomerInfoServiceNew ?? throw new ArgumentNullException(nameof(iCustomerInfoServiceNew));
@@ -44,6 +48,8 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             _iProductItemServiceNew = iProductItemServiceNew ?? throw new ArgumentNullException(nameof(iProductItemServiceNew));
             _iSalesWeightNoteStepDataService = iSalesWeightNoteStepDataService ?? throw new ArgumentNullException(nameof(iSalesWeightNoteStepDataService));
             _iCustomerContractServiceNew = iCustomerContractServiceNew ?? throw new ArgumentNullException(nameof(iCustomerContractServiceNew));
+            _iPsWriteOffLogService = ipsWriteOffLogService;
+            _iPInventoryService = iPInventoryService;
         }
 
         public void Process(S_WeightNote src, DTO_S_WeightNote dest, ResolutionContext context)
@@ -61,7 +67,9 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             dest.DTO_SalesWeightNoteStepDatas = _iSalesWeightNoteStepDataService.GetDTOModels<DTO_SalesWeightNoteStepData>(aa => aa.DOC_UNID == src.UNID);
             dest.DTO_CustomerCar = _iCarNoServiceNew.GetDTOModel<DTO_CustomerCar>(aa => aa.CAR_GUID == src.CARNO_UNID);
             dest.DTO_CustomerContracts = _iCustomerContractServiceNew.GetDTOModels<DTO_CustomerContract>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
-            //dest.DTO_ProductItem = _iProductItemServiceNew.GetDTOModel<DTO_ProductItem>(aa => aa.PRODUCT_UNID == src.PRODUCT_ITEM_UNID);
+            dest.DTO_PSWriteOffLog = _iPsWriteOffLogService.GetDTOModels<DTO_PS_WriteOff_Log>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
+            var relPurchaseUNIDs = dest.DTO_PSWriteOffLog.Select(aa => aa.PURCHASE_WEIGHTNOTE_UNID).ToList();
+            dest.DTO_PInventories = _iPInventoryService.GetDTOModels<DTO_P_Inventory>(aa => relPurchaseUNIDs.Contains(aa.PURCHASE_WEIGHTNOTE_UNID));
 
 
 
@@ -71,9 +79,7 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             //                       .FirstOrDefault(aa => aa.CODE_VALUE == src.ESTIMATE_RECEIVED_TYPE.ToString()).CODE_TEXT;
 
 
-            //.ForMember(tar => tar.PayTypeName,
-            //           arg => arg.MapFrom(src => _iCodeTableServiceNew.GetReceivedTypeItems()
-            //                  .FirstOrDefault(aa => aa.CODE_VALUE == src.ESTIMATE_RECEIVED_TYPE.ToString()).CODE_TEXT))
+
 
 
         }

@@ -15,10 +15,10 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
         public Guid? ContractUNID { get; set; }
         public Guid ProductItemUNID { get; set; }   // 廠內磅單主要認列品項
         //public List<PE_SalesIngredient> PESalesIngredientList { get; set; }
-        public double? ActualLeaveWeight { get; set; }  // 出貨重量
-        public double? ActualDefectiveWeight { get; set; }
+        public decimal? ActualLeaveWeight { get; set; }  // 出貨重量
+        public decimal? ActualDefectiveWeight { get; set; }  // 客戶端扣重
         public decimal? ActualUnitPrice { get; set; }
-        public decimal ActualTraficUnitPrice { get; set; }  // 運費單價
+        public decimal? ActualTraficFee { get; set; }  // 運費
         public bool ActualInvoicePriceHasTax { get; set; } // 請款金額是否含稅
         public bool ActualTraficHasTax { get; set; } // 運費是否含稅
         public int? ScaleNo { get; set; }
