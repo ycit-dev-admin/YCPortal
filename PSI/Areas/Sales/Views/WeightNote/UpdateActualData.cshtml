@@ -123,17 +123,15 @@
                         <div class="col-sm-12">
                             <label class="form-control-label">客戶判定整批品項:</label>
                             @{
-                                var srcInspectMethords2 = S_Enum.GetAllInspectMethords().ToPageSelectList();
+                                var productDerSelectListItems = Model.DTO_ProductItems
+                                    .ToPageSelectList(nameof(DTO_ProductItem.PRODUCT_NAME),
+                                                     nameof(DTO_ProductItem.PRODUCT_UNID));
                             }
                             <div class="form-group">
-                                <select asp-items="srcInspectMethords2" class="select2bs4" style="width: 100%;">
+                                <select asp-items="productDerSelectListItems" class="select2bs4" style="width: 100%;">
                                     <option value=""></option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <label class="form-control-label">客戶收貨整批單價:</label>
-                            <input asp-for="ActualDefectiveWeight" class="form-control" type="text" placeholder="整批單價">
                         </div>
                         <div class="col-sm-12">
                             <label class="form-control-label">客戶判定整批等級:</label>
@@ -146,6 +144,11 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <label class="form-control-label">客戶收貨整批單價:</label>
+                            <input asp-for="ActualDefectiveWeight" class="form-control" type="text" placeholder="整批單價">
+                        </div>
+
 
                     </div>
                 </fieldset>
@@ -197,7 +200,7 @@
                                             @($@"{sumWriteOffWeight}kg  ({item.value.ITEM_PERCENT}%)")
                                         </td>
                                         <td>
-                                            @costUnitPrice
+                                            @Math.Round(costUnitPrice, 2)
                                             <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="@($@"沖銷進貨單號:{relPurcheaseDocNos}")"></i>
                                         </td>
                                         <td>

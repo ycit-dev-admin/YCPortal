@@ -41,6 +41,7 @@ namespace PSI.Core.Models.PageModels.Areas.Sales
 
 
         public List<SelectListItem> ReceivedTypItems { get; set; }
+        public List<DTO_ProductItem> DTO_ProductItems { get; set; }
 
         public DTO_SalesWeightNoteStepData EastimateResultPrice { get; set; }
         public DTO_SalesWeightNoteStepData ActualResultPrice { get; set; }
