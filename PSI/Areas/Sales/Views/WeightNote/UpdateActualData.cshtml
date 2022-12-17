@@ -165,31 +165,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @{
-                                    var writeOffLogInfo = Model.DTO_SWeightNote.DTO_PSWriteOffLog;
-                                    var pInventoriesInfo = Model.DTO_SWeightNote.DTO_PInventories;
-                                    var writeOffLogJoinRs = writeOffLogInfo.Join(pInventoriesInfo,
-                                   o => new { o.PURCHASE_WEIGHTNOTE_UNID, o.PRODUCT_UNID },
-
-                                    p => new { p.PURCHASE_WEIGHTNOTE_UNID, p.PRODUCT_UNID },
-                                       (writeOffLog, pInventory) => new
-                                       {
-                                           writeOffLog.PRODUCT_UNID,
-                                           writeOffLog.PURCHASE_WEIGHTNOTE_UNID,
-                                           writeOffLog.WRITEOFF_WEIGHT,
-                                           PurchaseUNID = pInventory.PURCHASE_WEIGHTNOTE_UNID,
-                                           pInventory.PURCHASE_DOC_NO,
-                                           pInventory.UNIT_PRICE
-                                       });
-                                }
                                 @foreach (var item in Model.DTO_SWeightNote.DTO_SWeightNoteIngredients.Select((value, index) => (value, index)))
                                 {
-                                    var relWriteOfffLogs = writeOffLogJoinRs.Where(aa => aa.PRODUCT_UNID == item.value.PRODUCT_UNID);
-                                    var sumWriteOffWeight = relWriteOfffLogs.Sum(aa => aa.WRITEOFF_WEIGHT);
-                                    var sumWriteOffPrice = relWriteOfffLogs.Sum(aa => aa.WRITEOFF_WEIGHT * aa.UNIT_PRICE);
-                                    var costUnitPrice = sumWriteOffPrice / sumWriteOffWeight;
-                                    var relPurcheaseDocNos = string.Join(";", relWriteOfffLogs.Select(aa => $@"({aa.PURCHASE_DOC_NO} => {aa.WRITEOFF_WEIGHT}kg , 單價:{aa.UNIT_PRICE})"));
-
+                                    var relPDocNoMsg = string.Join(";", item.value.RelPDocNoWithKgAndPrice);
                                     <tr>
                                         <td>
                                             <div class="form-group">
@@ -197,11 +175,11 @@
                                             </div>
                                         </td>
                                         <td>
-                                            @($@"{sumWriteOffWeight}kg  ({item.value.ITEM_PERCENT}%)")
+                                            @($@"{item.value.SumWriteOffWeight}kg  ({item.value.ITEM_PERCENT}%)")
                                         </td>
                                         <td>
-                                            @Math.Round(costUnitPrice, 2)
-                                            <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="@($@"沖銷進貨單號:{relPurcheaseDocNos}")"></i>
+                                            @Math.Round(item.value.CostUnitPrice, 2)
+                                            <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="@($@"沖銷進貨單號:{relPDocNoMsg}")"></i>
                                         </td>
                                         <td>
                                             <input name="@($@"{nameof(Model.UpdateSWeightNoteIngredients)}[{item.index}].{nameof(DTO_S_WeightNote_Ingredient.REAL_UNIT_PRICE) }")" class="form-control" type="text" placeholder="出貨單價">
@@ -249,7 +227,7 @@
                                             <h1 id="show_invoice_price">成本</h1>
                                         </td>
                                         <td>
-                                            Yes
+                                            @Model.DTO_SWeightNote.AvgCostUnitPrice
                                         </td>
                                         <td>
                                             <h1 style="color:red" id="show_invoice_price"></h1>

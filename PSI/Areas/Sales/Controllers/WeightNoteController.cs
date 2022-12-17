@@ -788,6 +788,7 @@ namespace PSI.Areas.Sales.Controllers
             var dtoReceivedTypeCodeTables = _codeTableServiceNew.GetReceivedTypeItems();
             var dtoCustomerContract = _iCustomerContractServiceNew.GetSalesCustomerContracts();
 
+           
 
             /* Set to page model */
             pageModel ??= new WeightNoteUpdateActualData();
@@ -805,7 +806,7 @@ namespace PSI.Areas.Sales.Controllers
             //pageModel.ActualResultPrice = dtoSalesWeightNote.DTO_SalesWeightNoteStepDatas.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.Customer);
             //pageModel.DTOSalesWeightNote = dtoSalesWeightNote;
             //pageModel.DTOCustomerCarItems = dtoCustomerCars;
-            pageModel.DTO_ProductItems = _iProductItemServiceNew.GetDTOSalesProductItems(); 
+            pageModel.DTO_ProductItems = _iProductItemServiceNew.GetDTOSalesProductItems();
 
             pageModel.ReceivedTypItems = dtoReceivedTypeCodeTables.ToPageSelectList(nameof(DTO_CodeTable.CODE_TEXT),
                                                                nameof(DTO_CodeTable.CODE_VALUE));

@@ -51,6 +51,20 @@ namespace PSI.Service.AutoMapperProfiles.Entity
 
         public void Process(S_WeightNote src, DTO_S_WeightNote dest, ResolutionContext context)
         {
+            // Rel DTOs
+            dest.DTO_SWeightNoteIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_S_WeightNote_Ingredient>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
+            dest.DTO_CustomerInfo = _iCustomerInfoServiceNew.GetDTOModel<DTO_CustomerInfo>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
+            dest.DTO_ProductItem = _iProductItemServiceNew.GetDTOModel<DTO_ProductItem>(aa => aa.PRODUCT_UNID == src.PRODUCT_ITEM_UNID);
+            dest.DTO_CustomerCar = _iCarNoServiceNew.GetDTOModel<DTO_CustomerCar>(aa => aa.CAR_GUID == src.CARNO_UNID);
+            dest.DTO_CustomerContracts = _iCustomerContractServiceNew.GetDTOModels<DTO_CustomerContract>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
+
+            // For DTO Useful
+            dest.AvgCostUnitPrice = dest.DTO_SWeightNoteIngredients.Sum(aa => aa.ITEM_PERCENT / 100 * aa.CostUnitPrice);
+
+            //dest.DTO_PSWriteOffLog = _iPsWriteOffLogService.GetDTOModels<DTO_PS_WriteOff_Log>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
+            //var relPurchaseUNIDs = dest.DTO_PSWriteOffLog.Select(aa => aa.PURCHASE_WEIGHTNOTE_UNID).ToList();
+            //dest.DTO_PInventories = _iPInventoryService.GetDTOModels<DTO_P_Inventory>(aa => relPurchaseUNIDs.Contains(aa.PURCHASE_WEIGHTNOTE_UNID));
+
             //destination.INVOICE_PRICE = _iSalesPriceCaculateHelper.GetInvoicePrice(source.LeaveWeight.Value,
             //        source.DefectiveWeight.Value,
             //        source.UnitPrice.Value,
@@ -59,14 +73,6 @@ namespace PSI.Service.AutoMapperProfiles.Entity
             //        source.TraficUnitPrice,
             //        source.TraficFeeHasTax);
             //dest.RECEIVED_PRICE = dest.INVOICE_PRICE - dest.TRAFIC_FEE;
-            dest.DTO_SWeightNoteIngredients = _iSalesIngredientServiceNew.GetDTOModels<DTO_S_WeightNote_Ingredient>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
-            dest.DTO_CustomerInfo = _iCustomerInfoServiceNew.GetDTOModel<DTO_CustomerInfo>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
-            dest.DTO_ProductItem = _iProductItemServiceNew.GetDTOModel<DTO_ProductItem>(aa => aa.PRODUCT_UNID == src.PRODUCT_ITEM_UNID);
-            dest.DTO_CustomerCar = _iCarNoServiceNew.GetDTOModel<DTO_CustomerCar>(aa => aa.CAR_GUID == src.CARNO_UNID);
-            dest.DTO_CustomerContracts = _iCustomerContractServiceNew.GetDTOModels<DTO_CustomerContract>(aa => aa.CUSTOMER_GUID == src.CUSTOMER_UNID);
-            dest.DTO_PSWriteOffLog = _iPsWriteOffLogService.GetDTOModels<DTO_PS_WriteOff_Log>(aa => aa.SALES_WEIGHTNOTE_UNID == src.UNID);
-            var relPurchaseUNIDs = dest.DTO_PSWriteOffLog.Select(aa => aa.PURCHASE_WEIGHTNOTE_UNID).ToList();
-            dest.DTO_PInventories = _iPInventoryService.GetDTOModels<DTO_P_Inventory>(aa => relPurchaseUNIDs.Contains(aa.PURCHASE_WEIGHTNOTE_UNID));
 
 
 

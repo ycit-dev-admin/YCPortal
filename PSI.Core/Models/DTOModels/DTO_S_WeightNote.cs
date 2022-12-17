@@ -21,7 +21,7 @@ namespace PSI.Core.Models.DTOModels
 
 
         //public decimal EstimateInvoicePrice { get; set; }  // 預估請款金額
-        public string EstimateReceivedTypePayTypeName { get; set; }
+        public decimal AvgCostUnitPrice { get; set; }
 
     }
 }
