@@ -80,26 +80,6 @@
                     ?.FirstOrDefault(aa => aa.DATA_STEP == (int)S_Enum.WeightNotesStatus.CreateDoc);*@
             }
             <div class="row">
-                <div class="col-sm-3">
-                    <label class="form-control-label">出貨重量:(客戶那邊磅的重量要記錄嗎?)</label>
-                    <p>@Model.DTO_SWeightNote.INSIDE_SALES_WEIGHT</p>
-                </div>
-                <div class="col-sm-3">
-                    <label class="form-control-label">客戶扣重:</label>
-                    <input asp-for="ActualDefectiveWeight" class="form-control" type="text" placeholder="客戶扣重">
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <label class="form-control-label">運費:</label>
-                        <input asp-for="ActualTraficFee" class="form-control" type="text" placeholder="運費">
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group">
-                        <label class="form-control-label">運費單價:</label>
-                        <span>前端計算</span>
-                    </div>
-                </div>
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label class="form-control-label">客戶評級方式:</label>
@@ -192,7 +172,6 @@
                         </table>
                     </div>
                 </fieldset>
-
                 <fieldset class="col-sm-12 the-fieldset">
                     <legend class="scheduler-border">金額結算</legend>
                     <div class="form-row">
@@ -201,65 +180,84 @@
                                 <thead>
                                     <tr>
                                         <th class="col-sm-1">階段</th>
-                                        <th class="col-sm-1">平均單價</th>
+                                        <th class="col-sm-1">重車重</th>
+                                        <th class="col-sm-1">扣重</th>
                                         <th class="col-sm-1">
                                             請款金額
                                             <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="請款金額 = (出貨重量 - 扣重) * 單價 * 稅率"></i>
                                         </th>
                                         <th class="col-sm-1">
-
                                             <input asp-for="ActualInvoicePriceHasTax" type="checkbox" />(需開發票?)
-
                                         </th>
                                         <th class="col-sm-1">
                                             運費
                                             <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="運費 = (出貨重量 - 扣重) * 運費單價"></i>
                                         </th>
+                                        <th class="col-sm-1">運費單價</th>
                                         <th class="col-sm-1">
                                             售貨金額
                                             <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="售貨金額 = (請款金額 - 運費)"></i>
                                         </th>
+                                        <th class="col-sm-1">平均單價</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <h1 id="show_invoice_price">成本</h1>
+                                            <h4 id="show_invoice_price">廠內出貨</h4>
                                         </td>
                                         <td>
-                                            @Model.DTO_SWeightNote.AvgCostUnitPrice
+                                            @Model.DTO_SWeightNote.INSIDE_SALES_WEIGHT
                                         </td>
                                         <td>
-                                            <h1 style="color:red" id="show_invoice_price"></h1>
+                                            比照客戶
                                         </td>
                                         <td>
-                                            Yes
+                                           系統計算
                                         </td>
                                         <td>
-                                            <h1 id="show_trafic_price"></h1>
+                                            系統計算
                                         </td>
                                         <td>
-                                            Yes
+                                            比照客戶
+                                        </td>
+                                        <td>
+                                            比照客戶
+                                        </td>
+                                        <td>
+                                            系統計算
+                                        </td>
+                                        <td>
+                                            @Math.Round(Model.DTO_SWeightNote.AvgCostUnitPrice, 2)
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <h1 style="color:red" id="show_invoice_price">實際</h1>
+                                            <h4 style="color:red" id="show_invoice_price">客戶回填</h4>
                                         </td>
                                         <td>
-                                            Yes
+                                            <input asp-for="ActualLeaveWeight" class="form-control" type="text" placeholder="客戶重車重量">
                                         </td>
                                         <td>
-                                            <h1 style="color:red" id="show_invoice_price"></h1>
+                                            <input asp-for="ActualDefectiveWeight" class="form-control" type="text" placeholder="客戶扣重">
                                         </td>
                                         <td>
-                                            Yes
+                                            系統計算
                                         </td>
                                         <td>
-                                            <h1 id="show_trafic_price"></h1>
+                                            系統計算
                                         </td>
                                         <td>
-                                            Yes
+                                            <input asp-for="ActualTraficFee" class="form-control" type="text" placeholder="運費">
+                                        </td>
+                                        <td>
+                                            系統計算
+                                        </td>
+                                        <td>
+                                            系統計算
+                                        </td>
+                                        <td>
+                                            系統計算
                                         </td>
                                     </tr>
                                 </tbody>

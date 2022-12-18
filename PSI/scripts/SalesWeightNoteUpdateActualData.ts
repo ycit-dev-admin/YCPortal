@@ -58,13 +58,13 @@
     public PageEventInit() {
         const curObj = this;
 
-        $(curObj.DomOfUnitPrice).trigger("input");
+        //$(curObj.DomOfUnitPrice).trigger("input");
 
-        /* Page Events */
-        // 表單建立
-        $(curObj.DomOfFormCreate).on('input', function () {
-            $("#dialog-confirm").dialog("open");
-        })
+        ///* Page Events */
+        //// 表單建立
+        //$(curObj.DomOfFormCreate).on('input', function () {
+        //    $("#dialog-confirm").dialog("open");
+        //})
 
         
 
